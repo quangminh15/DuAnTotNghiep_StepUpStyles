@@ -227,6 +227,16 @@ CREATE TABLE direct_discount(
 )
 go
 
+INSERT INTO users (full_name, [address], phone, birthday, [role], created_date, [status], email, [password], [image], deleted, activaties)
+VALUES 
+    (N'Bùi Thanh Bùi', '123 Main St', 0123123123, '1990-01-15', 'User', '2023-08-10', 1, 'BTB@gmail.com', '202cb962ac59075b964b07152d234b70', 'image1.jpg', 0, 1),
+    (N'Đi Bộ Vuốt Râu', '456 Elm St', 09879879897, '1985-03-20', 'Admin', '2023-08-11', 1, 'DBVR@gnail.com', '202cb962ac59075b964b07152d234b70', 'image2.jpg', 0, 1),
+    (N'RiChaRiCon', '789 Oak St', 0456456456, '1995-07-05', 'User', '2023-08-12', 1, 'RCRC@gmail.com', '202cb962ac59075b964b07152d234b70', 'image3.jpg', 0, 1),
+    (N'Trần Thanh Hải', '101 Pine St', 0977866511, '1980-11-30', 'User', '2023-08-13', 1, 'bob@gmail.com', '202cb962ac59075b964b07152d234b70', 'image4.jpg', 0, 1),
+    (N'Nguyễn Lê Văn Thi', '202 Cedar St', 0986543166, '1988-09-25', 'Admin', '2023-08-14', 1, 'NLVT@gmail.com', '202cb962ac59075b964b07152d234b70', 'image5.jpg', 0, 1),
+    ('Jack5M', '303 Spruce St', 0919919918, '1992-05-10', 'User', '2023-08-15', 1, 'jack5milion@example.com', '202cb962ac59075b964b07152d234b70', 'image6.jpg', 0, 1);
+
+
 INSERT INTO favorite( product_id,[users_id],date_like)
 VALUES (3,4,'2022-12-12'),
 	   (2,2,'2023-08-05'),
