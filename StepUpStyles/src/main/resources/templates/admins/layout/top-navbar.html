@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand fixed-top be-top-header">
+            <div class="container-fluid">
+                <div class="be-navbar-header"><a class="navbar-brand" href="index.html"></a>
+                </div>
+                <div class="page-title"><span></span></div>
+                <link rel="stylesheet">
+                <div ng-controller="MyController">
+                    <div ng-if="userDetails" class="header__top__right__authNew">
+                        <div>
+                            <a style="color: #000 !important;">
+                                <i class="fa fa-user"></i> {{ userDetails.username }}</a>
+                        </div>
+                        <ul style="white-space: nowrap;">
+                            <li><a href="/user/profile">Thông tin</a></li>
+                            <li sec:authorize="hasRole('ADMIN')"><a href="/home">Trang người dùng</a></li>
+                            <!-- <li sec:authorize="hasAnyRole('USER', 'ADMIN')"><a href="/admin">Giao diện quản lý</a></li> -->
+                            <li><a href="/logout">Đăng Xuất</a></li>
+                        </ul>
+                    </div>
+                    <div ng-if="!userDetails" class="header__top__right__auth">
+                        <a sec:authorize="!isAuthenticated" href="/login">
+                            <i class="fa fa-user"></i> Đăng Nhập</a>
+                    </div>
+                </div>
+            </div>
+        </nav>

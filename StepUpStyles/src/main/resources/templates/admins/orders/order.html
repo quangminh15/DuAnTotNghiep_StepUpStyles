@@ -1,0 +1,120 @@
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">CHI TIẾT ĐƠN HÀNG</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                <tr>
+                	<th>Mã đơn hàng chi tiết</th>
+                	<th>Tên sản phẩm</th>
+                	<th>Mã đơn hàng</th>
+                	<th>Màu sắc</th>
+                	<th>Số lượng</th>
+                	<th>Giá</th>                	
+                </tr>
+ 				<tr ng-repeat="orderdetailitem in orderdetailitems">
+                                 <td>{{orderdetailitem.orderDetailID}}</td> 
+                                 <td>{{orderdetailitem.product.productName}}</td> 
+                                 <td>{{orderdetailitem.order.orderID}}</td>
+                                 <td>{{orderdetailitem.color.colorName}}</td> 
+                                 <td>{{orderdetailitem.quantity}}</td> 
+                                 <td>{{orderdetailitem.price | number:'':'.'}}</td> 
+                </tr>                                                     
+ 				</table>
+ 				<div class="text-right" ng-repeat="orderdetailitem in orderdetailitems" ng-if="$first">
+                    <p>Phí Ship: {{orderdetailitem.order.shippingFee | number:'':'.'}} VNĐ</p>
+					<p>Giảm Giá: {{orderdetailitem.discount | number:'':'.'}} VNĐ</p>
+					<p>Tổng Thanh Toán: {{orderdetailitem.order.totalAmount | number:'':'.'}} VNĐ</p>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="card card-table m-3">
+                <div class="card-header" style="font-size: 30px">Đơn hàng
+                </div>
+	<div class="col-sm-4">
+ 		<label style="font-size: 15px">Trạng thái đơn hàng</label> 
+           <select class="form-control mr-2" ng-model="selectedOrder"
+				ng-change="filterByOrderStatus()"
+				ng-options="orderStatus.orderStatusID as orderStatus.orderStatusName for orderStatus in orderstatusitems"
+				style="width: 200px; margin-bottom: 10px">
+				<option value="">Tất cả</option>
+			</select>
+	</div>
+	<div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Tên khách hàng</th>
+                                <th>Phương thức thanh toán</th>
+                                <th>Ngày đặt</th>
+                                <th>Ngày giao</th>
+                                <th>Trạng thái thanh toán</th>
+                                <th>Trạng thái giao hàng</th>
+                                <th>Trạng thái đơn hàng</th>
+                                <th class="actions"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="order in pager.orderitems">
+                                <td>{{order.orderID}}</td>
+                                <td>{{order.user.fullName}}</td>
+                                <td>{{order.paymentMethod.paymentMethodName}}</td>
+                                <td>{{order.orderDate | date:'dd-MM-yyyy' }}</td>
+                                <td>{{order.deliveryDate | date:'dd-MM-yyyy' }}</td>
+                                <td>{{order.paymentStatus?'Đã thanh toán': 'Chưa thanh toán'}}</td>
+                                <td>{{order.deliveryStatus?'Đã giao hàng':'Chưa giao hàng'}}</td>
+                                <td>{{order.orderStatus.orderStatusName}}</td>                              
+                                <style>
+                                    button {
+                                        margin: 2px;
+                                    }
+                                </style>
+                                <td class="actions">
+                                    <button class="btn btn-primary" ng-show="order.orderStatus.orderStatusName === 'Chờ xử lý'" ng-click="updateStatus(order)">Xác nhận</button>
+                                    <button class="btn btn-warning" ng-click="getOrderID(order.orderID)">Chi tiết</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="card-header d-flex justify-content-end">
+			<div>
+				<ul class="pagination">
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.first()"
+							class="page-link">
+							<span class="mdi mdi-skip-previous"></span>
+						</button>
+					</li>
+
+					<li class="page-item" ng-repeat="page in visiblePages"
+						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+						class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							page.value }}</a></li>
+
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.last()"
+							class="page-link">
+							<span class="mdi mdi-skip-next"></span>
+						</button>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+                </div>
+            </div>
+            <div style="color: #eee;">123</div>

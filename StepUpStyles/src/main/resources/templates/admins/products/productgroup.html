@@ -1,0 +1,224 @@
+<div class="card card-border-color card-border-color-primary m-3">
+	<div class="modal fade modal-full-color modal-full-color-danger"
+		id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close modal-close" type="button"
+						data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body" style="color: white;">
+					<div class="text-center">
+						<span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span>
+						<b>
+							<h4 style="color: white;">{{ errorMessage }}</h4>
+						</b>
+						<div class="mt-8">
+							<button class="btn btn-secondary btn-space modal-close"
+								type="button" data-dismiss="modal"
+								style="background-color: white; color: red;">Đóng</button>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal for displaying error messages -->
+	<div class="modal fade modal-full-color modal-full-color-success"
+		id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close modal-close" type="button"
+						data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="text-center">
+						<span class="modal-main-icon mdi mdi-check mb-3"></span><b>
+							<h4 style="color: white;">{{ messageSuccess }}</h4>
+						</b>
+						<div class="mt-8">
+							<button class="btn btn-secondary btn-space modal-close"
+								type="button" data-dismiss="modal"
+								style="background-color: white; color: green;">Đóng</button>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal xác nhận -->
+	<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmDeleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
+						xóa</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa nhóm sản
+					phẩm "{{ form.productGroupName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Hủy</button>
+					<button type="button" class="btn btn-danger"
+						ng-click="confirmDelete()">Xóa</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="card-header card-header-divider">Nhóm sản phẩm</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label for="inputUserName">Mã nhóm sản phẩm:</label> <input
+					class="form-control" id="inputUserName" type="number"
+					ng-model="form.productGroupID" readonly="true">
+			</div>
+			<div class="form-group col-md-6">
+				<label for="inputPassword">Tên nhóm sản phẩm:</label> <input
+					class="form-control" id="inputPassword" type="text"
+					placeholder="Tên nhóm sản phẩm" ng-model="form.productGroupName">
+			</div>
+		</div>
+
+		<div class="row pt-0 pt-sm-5">
+			<div class="col-sm-12 pl-0">
+				<p class="text-right">
+					<button class="btn btn-space btn btn-success" ng-click="create()"
+						type="submit">
+						<i class="bi bi-file-plus-fill"></i> Thêm
+					</button>
+					<button class="btn btn-space btn btn-primary" ng-click="update()">
+						<i class="bi bi-pencil-square"></i> Sửa
+					</button>
+					<button class="btn btn-space btn btn-danger"
+						ng-click="confirmDeleteModal()" type="submit">
+						<i class="bi bi-trash3-fill"></i> Xóa
+					</button>
+					<button class="btn btn-space btn btn-dark" ng-click="reset()">
+						<i class="bi bi-arrow-clockwise"></i> Làm mới
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card card-table m-3">
+	<div
+		class="card-header d-flex justify-content-between align-items-center">
+		<h4 class="mb-0">Danh sách nhóm sản phẩm</h4>
+		<!-- tìm kiếm theo tên bắt đầu  -->
+		<div class="d-flex">
+			<!-- Nút tìm kiếm -->
+			<button class="btn btn-space btn-success md-trigger"
+				ng-click="openSearchForm()" style="width: 50px; height: 43px">
+				<span class="mdi mdi-search"></span>
+			</button>
+		</div>
+	</div>
+	<div class="modal fade" id="searchModal" tabindex="-1"
+		aria-labelledby="searchModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" style="background-color: #eee;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="searchModalLabel">Tìm kiếm</h5>
+					<button class="close modal-close" type="button"
+						data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form method="post">
+						<div class="form-group">
+							<label for="searchKeyword">Tên sản phẩm</label> <input
+								class="form-control" type="text" id="searchKeyword"
+								ng-model="searchKeyword" placeholder="Nhập tên nhóm sản phẩm mà bạn muốn tìm kiếm">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer" style="background-color: #eee;">
+					<button class="btn btn-secondary modal-close" type="button"
+						data-dismiss="modal">Hủy</button>
+					<button class="btn btn-success modal-close" type="button"
+						ng-click="searchProductGroupByName()">Tìm kiếm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- tìm kiếm theo tên kết thúc -->
+	<div class="card-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th ng-repeat="column in sortableColumns"
+						ng-click="sortByColumn(column.name)">{{ column.label }} <span
+						ng-if="sortColumn === column.name"> <span
+							ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+							ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+					</span>
+					</th>
+					<th class="actions"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="productgroupitem in pager.productgroupitems">
+					<td>{{productgroupitem.productGroupID}}</td>
+					<td>{{productgroupitem.productGroupName}}</td>
+					<td class="actions">
+                        <button class="btn btn-space btn btn-primary " ng-click="edit(productgroupitem)"><i class="bi bi-pencil-square"></i> </button>
+                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(productgroupitem)"><i class="bi bi-trash3-fill"></i></button>
+                    </td>
+				</tr>
+
+			</tbody>
+		</table>
+		<div class="card-header d-flex justify-content-end">
+			<div>
+				<ul class="pagination">
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.first()"
+							class="page-link">
+							<span class="mdi mdi-skip-previous"></span>
+						</button>
+					</li>
+
+					<li class="page-item" ng-repeat="page in visiblePages"
+						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+						class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							page.value }}</a></li>
+
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.last()"
+							class="page-link">
+							<span class="mdi mdi-skip-next"></span>
+						</button>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<div style="color: #eee;">123</div>

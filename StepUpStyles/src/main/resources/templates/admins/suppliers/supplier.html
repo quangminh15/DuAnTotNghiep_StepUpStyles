@@ -1,0 +1,194 @@
+<div class="card card-border-color card-border-color-primary m-3">
+    <div class="modal fade modal-full-color modal-full-color-danger" id="errorModal" tabindex="-1"
+        aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="color: white;">
+                    <div class="text-center">
+                        <span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
+                            <h4 style="color: white;">{{ errorMessage }}</h4>
+                        </b>
+                        <div class="mt-8">
+                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
+                                style="background-color: white; color: red;">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for displaying error messages -->
+    <div class="modal fade modal-full-color modal-full-color-success" id="errorModal1" tabindex="-1"
+        aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <span class="modal-main-icon mdi mdi-check mb-3"></span><b>
+                            <h4 style="color: white;">{{ messageSuccess }}</h4>
+                        </b>
+                        <div class="mt-8">
+                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
+                                style="background-color: white; color: green;">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal xác nhận -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+        aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
+                        xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Bạn có chắc chắn muốn xóa nhà cung cấp
+                    "{{ form.supplierName }}" này không?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-header card-header-divider">Quản lý nhà cung cấp</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword3">Tên nhà cung cấp</label>
+                <input class="form-control" id="inputPassword3" type="text" placeholder="Tên nhà cung cấp" required=""
+                    ng-model="form.supplierName">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword3">Tên doanh nghiệp</label>
+                <input class="form-control" id="inputPassword3" type="text" placeholder="Tên doanh nghiệp" required=""
+                    ng-model="form.businessName">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword3">Số điện thoại</label>
+                <input class="form-control" id="inputPassword3" type="text" placeholder="Số điện thoại" required=""
+                    ng-model="form.phoneNumber">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Email</label>
+                <input class="form-control" id="inputPassword4" type="text" placeholder="Email" required=""
+                    ng-model="form.email">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword3">Hiển thị</label><br>
+                <input type="radio" name="status" ng-model="form.display" ng-value="true"> <b>Bật</b>
+                <input type="radio" name="status" ng-model="form.display" ng-value="false"> <b>Tắt</b>
+            </div>
+        </div>
+
+
+
+        <div class="row pt-0 pt-sm-5">
+            <div class="col-sm-12 pl-0">
+                <p class="text-right">
+                    <button class="btn btn-space btn btn-success" ng-click="create()" type="submit"><i
+                            class="bi bi-file-plus-fill"></i>Thêm</button>
+                    <button class="btn btn-space btn btn-primary" ng-click="update()"><i
+                            class="bi bi-pencil-square"></i>Sửa</button>
+                    <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal()" type="submit"><i
+                            class="bi bi-trash3-fill"></i>Xóa</button>
+                    <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
+                            class="bi bi-arrow-clockwise"></i>Làm mới</button>
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card card-table m-3">
+    <div class="card-header">Danh sách nhà cung cấp
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên nhà cung cấp</th>
+                    <th>Tên doanh nghiệp</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                    <th>Hiển thị</th>
+                    <th class="actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in pager.items">
+                    <td>{{item.supplierID}}</td>
+                    <td>{{item.supplierName}}</td>
+                    <td>{{item.businessName}}</td>
+                    <td>{{item.phoneNumber}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.display? 'Bật':'Tắt'}}</td>
+                    <td class="actions">
+                        <button class="btn btn-space btn btn-primary" ng-click="edit(item)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal1(item)">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="card-header d-flex justify-content-end">
+            <div>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <button style="font-size: 25px" ng-click="pager.first()" class="page-link">
+                            <span class="mdi mdi-skip-previous"></span>
+                        </button>
+                    </li>
+
+                    <li class="page-item" ng-repeat="page in visiblePages"
+                        ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+                            ng-click="pager.goto(page.value)">{{
+                            page.value }}</a></li>
+
+                    <li class="page-item">
+                        <button style="font-size: 25px" ng-click="pager.last()" class="page-link">
+                            <span class="mdi mdi-skip-next"></span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div style="color: #eee;">123</div>

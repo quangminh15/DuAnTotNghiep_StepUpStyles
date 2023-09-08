@@ -1,0 +1,176 @@
+<div class="card card-border-color card-border-color-primary m-3">
+<div class="modal fade modal-full-color modal-full-color-danger"
+	id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close modal-close" type="button" data-dismiss="modal"
+					aria-hidden="true">
+					<span class="mdi mdi-close"></span>
+				</button>
+			</div>
+			<div class="modal-body" style="color: white;">
+				<div class="text-center">
+					<span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
+						<h4 style="color: white;">{{ errorMessage }}</h4>
+					</b>
+					<div class="mt-8">
+						<button class="btn btn-secondary btn-space modal-close"
+							type="button" data-dismiss="modal"
+							style="background-color: white; color: red;">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for displaying error messages -->
+<div class="modal fade modal-full-color modal-full-color-success"
+	id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close modal-close" type="button" data-dismiss="modal"
+					aria-hidden="true">
+					<span class="mdi mdi-close"></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="text-center">
+					<span class="modal-main-icon mdi mdi-check mb-3"></span><b>
+					<h4 style="color: white;">{{ messageSuccess }}</h4>
+					</b>
+					<div class="mt-8">
+						<button class="btn btn-secondary btn-space modal-close"
+							type="button" data-dismiss="modal"
+							style="background-color: white; color: green;">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+
+                <div class="card-header card-header-divider">Cấu hình máy tính</div>
+                <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="inputUserName">Laptop ID:</label>
+                                <input class="form-control" id="inputUserName" type="text" ng-model="form.laptopID"
+                                    readonly="true">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Sản phẩm</label>
+                                <div>
+                                    <select class="select2 form-control" ng-model="form.product.productID">
+                                        <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+                                        <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword3">Màn hình</label>
+                                <input class="form-control" id="inputPassword3" type="text" placeholder="Màn hình"
+                                    required="" ng-model="form.screen">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Ổ cứng</label>
+                                <input class="form-control" id="inputPassword4" type="text" placeholder="Ổ cứng"
+                                    required="" ng-model="form.hardDrive">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="inputPassword">Card đồ họa</label>
+                                <input class="form-control" id="inputPassword" type="text" placeholder="Camera"
+                                    required="" ng-model="form.graphicsCard">
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="inputPassword1">CPU</label>
+                                <input class="form-control" id="inputPassword1" type="text" placeholder="CPU"
+                                    required="" ng-model="form.cpu">
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="inputPassword2">RAM</label>
+                                <input class="form-control" id="inputPassword2" type="text" placeholder="RAM"
+                                    required="" ng-model="form.ram">
+                            </div>
+                        </div>
+
+
+
+                        <div class="row pt-0 pt-sm-5">
+                            <div class="col-sm-12 pl-0">
+                                <p class="text-right">
+                                    <button class="btn btn-space btn btn-secondary" ng-click="create()" type="submit">Thêm</button>
+                                    <button class="btn btn-space btn btn-secondary" ng-click="update()">Sửa</button>
+                                    <button class="btn btn-space btn btn-secondary" ng-click="delete(form)" type="submit">Xóa</button>
+                                    <button class="btn btn-space btn btn-secondary" ng-click="reset()">Làm mới</button>
+                                </p>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+
+            <div class="card card-table m-3">
+                <div class="card-header">Basic Tables
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Laptop ID</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Màn hình</th>
+                                <th>Ổ cứng</th>
+                                <th>Card đồ họa</th>
+                                <th>CPU</th>
+                                <th>RAM</th>
+                                <th class="actions"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="laptopconfigitem in pager.laptopconfigitems">
+                                <td>{{laptopconfigitem.laptopID}}</td>
+                                <td>{{laptopconfigitem.product.productName}}</td>
+                                <td>{{laptopconfigitem.screen}}</td>
+                                <td>{{laptopconfigitem.hardDrive}}</td>
+                                <td>{{laptopconfigitem.graphicsCard}}</td>
+                                <td>{{laptopconfigitem.cpu}}</td>
+                                <td>{{laptopconfigitem.ram}}</td>
+                                <td class="actions">
+                                    <button class="icon" ng-click="edit(laptopconfigitem)"><i class="mdi mdi-edit mx-2"></i></button>
+                                    <button class="icon" ng-click="delete(laptopconfigitem)"><i class="mdi mdi-delete"></i></button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="card-header d-flex justify-content-end">
+                        <div>
+                            <ul class="pagination">
+								<li class="page-item"><button ng-click="pager.first()" class="page-link">First</button></li>
+								<li class="page-item"><button ng-click="pager.prev()" class="page-link">Pre</button></li>
+								<li class="page-item"><button class="page-link">{{pager.page + 1}} of {{pager.count}}</button></li>
+								<li class="page-item"><button ng-click="pager.next()" class="page-link">Next</button></li>
+								<li class="page-item"><button ng-click="pager.last()" class="page-link">Last</button></li>
+							</ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="color: #eee;">123</div>

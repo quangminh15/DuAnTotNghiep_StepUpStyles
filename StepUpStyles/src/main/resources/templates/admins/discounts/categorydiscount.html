@@ -1,0 +1,178 @@
+<div class="card card-border-color card-border-color-primary m-3">
+    <div class="modal fade modal-full-color modal-full-color-danger" id="errorModal" tabindex="-1"
+        aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="color: white;">
+                    <div class="text-center">
+                        <span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
+                            <h4 style="color: white;">{{ errorMessage }}</h4>
+                        </b>
+                        <div class="mt-8">
+                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
+                                style="background-color: white; color: red;">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for displaying error messages -->
+    <div class="modal fade modal-full-color modal-full-color-success" id="errorModal1" tabindex="-1"
+        aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <span class="modal-main-icon mdi mdi-check mb-3"></span><b>
+                            <h4 style="color: white;">{{ messageSuccess }}</h4>
+                        </b>
+                        <div class="mt-8">
+                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
+                                style="background-color: white; color: green;">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+    role="dialog" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
+                    xóa</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">Bạn có chắc chắn muốn xóa giảm giá này không?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger"
+                    ng-click="confirmDelete()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="card-header card-header-divider">Giảm giá danh mục</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>Danh mục</label>
+                <div>
+                    <select class="select2 form-control" ng-model="form.productCategory.productCategoryID">
+                        <option value="" disabled selected>Vui lòng chọn danh mục</option>
+                        <option ng-repeat="c in cates" ng-value="c.productCategoryID">{{c.productCategoryName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Giảm giá</label>
+                <div>
+                    <select class="select2 form-control" ng-model="form.discount.discountID">
+                        <option value="" disabled selected>Vui lòng chọn giảm giá</option>
+                        <option ng-repeat="d in discounts" ng-value="d.discountID">{{d.discountName}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-0 pt-sm-5">
+            <div class="col-sm-12 pl-0">
+                <p class="text-right">
+                    <p class="text-right">
+                        <button class="btn btn-space btn btn-success" ng-click="create()" type="submit"><i class="bi bi-file-plus-fill"></i> Thêm</button>
+                        <button class="btn btn-space btn btn-primary" ng-click="update()"><i class="bi bi-pencil-square"></i> Sửa</button>
+                        <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal()" type="submit"><i class="bi bi-trash3-fill"></i> Xóa</button>
+                        <button class="btn btn-space btn btn-dark" ng-click="reset()"><i class="bi bi-arrow-clockwise"></i> Làm mới</button>
+                    </p>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="card card-table m-3">
+    <div class="card-header">Danh sách giảm giá doanh mục
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Tên giảm giá</th>
+                    <th>Mức giảm </th>
+                    <th>Thời gian bắt đầu</th>
+                    <th>Thời gian kết thúc</th>
+                    <th>Mô tả</th>
+
+
+                    <th class="actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="d in pager.discountCateItem">
+                    <td>{{d.productCategory.productCategoryName}}</td>
+                    <td>{{d.discount.discountName}}</td>
+                    <td>{{d.discount.discountRate * 100|number}}%</td>
+                    <td>{{d.formattedStartDate}}</td>
+                    <td>{{d.formattedEndDate}}</td>
+                    <td>{{d.discount.description}}</td>
+
+                    <td class="actions">
+                        <button class="btn btn-space btn btn-primary " ng-click="edit(d)"><i class="bi bi-pencil-square"></i> </button>
+                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(d)"><i class="bi bi-trash3-fill"></i></button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="card-header d-flex justify-content-end">
+			<div>
+				<ul class="pagination">
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.first()"
+							class="page-link">
+							<span class="mdi mdi-skip-previous"></span>
+						</button>
+					</li>
+
+					<li class="page-item" ng-repeat="page in visiblePages"
+						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+						class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							page.value }}</a></li>
+
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.last()"
+							class="page-link">
+							<span class="mdi mdi-skip-next"></span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+    </div>
+</div>
+
+<div style="color: #eee;">123</div>

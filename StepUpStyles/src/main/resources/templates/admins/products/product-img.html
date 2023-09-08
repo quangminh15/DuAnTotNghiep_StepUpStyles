@@ -1,0 +1,163 @@
+<div class="card card-border-color card-border-color-primary m-3">
+<div class="modal fade modal-full-color modal-full-color-danger"
+	id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close modal-close" type="button" data-dismiss="modal"
+					aria-hidden="true">
+					<span class="mdi mdi-close"></span>
+				</button>
+			</div>
+			<div class="modal-body" style="color: white;">
+				<div class="text-center">
+					<span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
+						<h4 style="color: white;">{{ errorMessage }}</h4>
+					</b>
+					<div class="mt-8">
+						<button class="btn btn-secondary btn-space modal-close"
+							type="button" data-dismiss="modal"
+							style="background-color: white; color: red;">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for displaying error messages -->
+<div class="modal fade modal-full-color modal-full-color-success"
+	id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close modal-close" type="button" data-dismiss="modal"
+					aria-hidden="true">
+					<span class="mdi mdi-close"></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="text-center">
+					<span class="modal-main-icon mdi mdi-check mb-3"></span><b>
+					<h4 style="color: white;">{{ messageSuccess }}</h4>
+					</b>
+					<div class="mt-8">
+						<button class="btn btn-secondary btn-space modal-close"
+							type="button" data-dismiss="modal"
+							style="background-color: white; color: green;">Đóng</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+
+	<div class="card-header card-header-divider">Hình ảnh của sản
+		phẩm</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="inputUserName">Mã hình ảnh:</label> <input
+					class="form-control" id="inputUserName" type="text"
+					ng-model="form.productImageID" readonly="true">
+			</div>
+			<div class="form-group col-md-12">
+				<label>Sản phẩm</label>
+				<div>
+					<select class="select2 form-control"
+						ng-model="form.product.productID">
+						<option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+						<option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group col-md-12">
+				<label for="inputPassword3">Hình ảnh</label> <input
+					class="form-control" id="photo" type="file" >
+			</div>
+			<div class="form-group col-md-12" ng-if="form.imagePath">
+				<label>Hình ảnh</label> <img style="height: 100px; width: 100px;"
+					alt="" src="{{ form.imagePath }}">
+			</div>
+			<div class="form-group col-md-12" ng-if="form.imagePath">
+				<label>Đường dẫn ảnh</label> <p {{ form.imagePath }}
+					target="_blank">{{ form.imagePath }}</p>
+			</div>
+		</div>
+
+
+		<div class="row pt-0 pt-sm-5">
+			<div class="col-sm-12 pl-0">
+				<p class="text-right">
+					<button class="btn btn-space btn btn-secondary" ng-click="create()"
+						type="submit">Thêm</button>
+					<button class="btn btn-space btn btn-secondary" ng-click="update()">Sửa</button>
+					<button class="btn btn-space btn btn-secondary"
+						ng-click="delete(form)" type="submit">Xóa</button>
+					<button class="btn btn-space btn btn-secondary" ng-click="reset()">Làm
+						mới</button>
+				</p>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="card card-table m-3">
+	<div class="card-header">Danh sách</div>
+	<div class="card-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Mã hình ảnh</th>
+					<th>Tên sản phẩm</th>
+					<th>Hình ảnh</th>
+					<th>Đường dẫn</th>
+					<th class="actions"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="productimageitem in pager.productimageitems">
+					<td>{{productimageitem.productImageID}}</td>
+					<td>{{productimageitem.product.productName}}</td>
+					<td><img style="height: 100px; width: 100px;" alt=""
+						src="{{productimageitem.imagePath}}"></td>
+					<td><p {{ productimageitem.imagePath }} target="_blank"
+							ng-bind="truncateUrl(productimageitem.imagePath)"></p></td>
+					<td class="actions">
+						<button class="icon" ng-click="edit(productimageitem)">
+							<i class="mdi mdi-edit mx-2"></i>
+						</button>
+						<button class="icon" ng-click="delete(productimageitem)">
+							<i class="mdi mdi-delete"></i>
+						</button>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		<div class="card-header d-flex justify-content-end">
+			<div>
+				<ul class="pagination">
+					<li class="page-item"><button ng-click="pager.first()"
+							class="page-link">First</button></li>
+					<li class="page-item"><button ng-click="pager.prev()"
+							class="page-link">Pre</button></li>
+					<li class="page-item"><button class="page-link">{{pager.page
+							+ 1}} of {{pager.count}}</button></li>
+					<li class="page-item"><button ng-click="pager.next()"
+							class="page-link">Next</button></li>
+					<li class="page-item"><button ng-click="pager.last()"
+							class="page-link">Last</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</div>
+<div style="color: #eee;">123</div>

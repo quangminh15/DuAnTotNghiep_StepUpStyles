@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Select Dropdown with Angular Material</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.22/angular-material.min.css">
+    <style>
+        .md-container.md-default-theme .md-chip {
+            background-color: #1976D2;
+            color: white;
+        }
+        .md-container.md-default-theme md-select > .md-select-value {
+            color: #1976D2;
+        }
+        .md-container.md-default-theme md-select .md-select-icon {
+            fill: #1976D2;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.2/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-aria/1.8.2/angular-aria.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.8.2/angular-messages.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.22/angular-material.min.js"></script>
+</head>
+<body ng-app="myApp">
+
+<div ng-controller="MyController" class="container mt-5">
+    <h2>Multi-Select Dropdown with Angular Material</h2>
+    <md-select ng-model="selectedItems" multiple>
+        <md-option ng-value="item.id" ng-repeat="item in items">{{item.name}}</md-option>
+    </md-select>
+    <br>
+    <button class="btn btn-primary" ng-click="showSelected()">Show Selected</button>
+</div>
+
+<script>
+    var app = angular.module('myApp', ['ngMaterial']);
+    app.controller('MyController', function($scope) {
+        $scope.items = [
+            { id: 1, name: 'Item 1' },
+            { id: 2, name: 'Item 2' },
+            { id: 3, name: 'Item 3' },
+            { id: 4, name: 'Item 4' }
+        ];
+
+        $scope.selectedItems = [];
+
+        $scope.showSelected = function() {
+            console.log('Selected items:', $scope.selectedItems);
+        };
+    });
+</script>
+</body>
+</html>
