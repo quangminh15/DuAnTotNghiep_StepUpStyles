@@ -227,7 +227,7 @@ CREATE TABLE direct_discount(
 )
 go
 
-INSERT INTO favorite( product_id,[user_id],date_like)
+INSERT INTO favorite( product_id,[users_id],date_like)
 VALUES (3,4,'2022-12-12'),
 	   (2,2,'2023-08-05'),
 	   (5,2,'2023-03-20'),
@@ -239,7 +239,7 @@ VALUES (3,4,'2022-12-12'),
 	   (3,2,'2023-04-01'),
 	   (4,2,'2023-01-01')
 
-INSERT INTO review (product_id, title, [user_id], review_date, display, rating)
+INSERT INTO review (product_id, title, [users_id], review_date, display, rating)
 VALUES
     (1, N'Sản phẩm tuyệt vời!', 3, '2023-08-15', 1, 5),
     (2, N'Chất lượng tốt', 2, '2023-08-14', 1, 4),
