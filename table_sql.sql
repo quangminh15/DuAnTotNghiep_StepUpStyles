@@ -245,3 +245,32 @@ CREATE TABLE direct_discount(
 	CONSTRAINT fk_direct_discount FOREIGN KEY (product_id) REFERENCES product(product_id)
 )
 go
+
+INSERT INTO favorite( product_id,[user_id],date_like)
+VALUES (3,4,'2022-12-12'),
+	   (2,2,'2023-08-05'),
+	   (5,2,'2023-03-20'),
+	   (2,5,'2023-07-20'),
+	   (1,3,'2023-05-12'),
+	   (3,2,'2023-06-30'),
+	   (4,3,'2023-08-01'),
+	   (2,4,'2023-09-03'),
+	   (3,2,'2023-04-01'),
+	   (4,2,'2023-01-01')
+
+INSERT INTO review (product_id, title, [user_id], review_date, display, rating)
+VALUES
+    (1, N'Sản phẩm tuyệt vời!', 3, '2023-08-15', 1, 5),
+    (2, N'Chất lượng tốt', 2, '2023-08-14', 1, 4),
+    (1, N'Dịch vụ xuất sắc', 3, '2023-08-13', 1, 5),
+    (3, N'Không được khuyến nghị', 4, '2023-08-12', 1, 2),
+    (2, N'Trung bình', 5, '2023-08-11', 1, 3),
+    (4, N'Đề xuất cao', 2, '2023-08-10', 1, 5),
+    (3, N'Chất lượng kém', 2, '2023-08-09', 1, 1),
+    (4, N'Giao hàng nhanh', 4, '2023-08-07', 1, 4),
+    (6, N'Không đáng giá giá tiền', 5, '2023-08-06', 1, 2),
+    (5, N'Tuyệt vời', 5, '2023-08-05', 1, 5),
+    (7, N'Terrible', 2, '2023-08-04', 1, 1),
+    (6, N'Sản phẩm trung bình', 3, '2023-08-03', 1, 3),
+    (8, N'Giá trị tốt', 4, '2023-08-02', 1, 4),
+    (7, N'Kinh khủng', 5, '2023-08-01', 1, 1);
