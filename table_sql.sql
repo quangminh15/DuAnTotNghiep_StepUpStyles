@@ -208,32 +208,13 @@ CREATE TABLE import_receipt(
 go
 CREATE TABLE import_receipt_detail(
 	import_receipt_detail_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	product_id BIGINT,
+	product_detail_id BIGINT,
 	import_receipt_id BIGINT,
 	quantity INT,
 	price FLOAT,
 	deleted BIT NOT NULL DEFAULT 0,
 	CONSTRAINT fk_import_receipt_detail_import FOREIGN KEY (import_receipt_id) REFERENCES import_receipt(import_receipt_id),
-	CONSTRAINT fk_import_receipt_detale_product FOREIGN KEY (product_id) REFERENCES product(product_id)
-)
-go
-CREATE TABLE discount(
-	discount_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	discount_name NVARCHAR(100),
-	[description] NVARCHAR(250),
-	[start_date] DATETIME,
-	end_date DATETIME,
-	discount_rate DECIMAL(5,2),
-	display BIT,
-	[status] NVARCHAR(100)
-)
-go
-CREATE TABLE product_discount(
-	product_discount_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	discount_id BIGINT,
-	product_id BIGINT,
-	CONSTRAINT fk_product_discount_discount FOREIGN KEY (discount_id) REFERENCES discount(discount_id),
-	CONSTRAINT fk_product_discount_product FOREIGN KEY (product_id) REFERENCES product(product_id)
+	CONSTRAINT fk_import_receipt_detale_product FOREIGN KEY (product_detail_id) REFERENCES product_detail(product_detail_id)
 )
 go
 CREATE TABLE direct_discount(
@@ -274,3 +255,4 @@ VALUES
     (6, N'Sản phẩm trung bình', 3, '2023-08-03', 1, 3),
     (8, N'Giá trị tốt', 4, '2023-08-02', 1, 4),
     (7, N'Kinh khủng', 5, '2023-08-01', 1, 1);
+go
