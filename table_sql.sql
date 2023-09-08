@@ -152,7 +152,7 @@ CREATE TABLE shipping_address (
 	users_id bigint
 	FOREIGN KEY (users_id) REFERENCES users(users_id),
 );
-
+go
 
 CREATE TABLE [order](
 	order_id bigint IDENTITY(1,1) NOT NULL primary key,
@@ -208,32 +208,13 @@ CREATE TABLE import_receipt(
 go
 CREATE TABLE import_receipt_detail(
 	import_receipt_detail_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	product_id BIGINT,
+	product_detail_id BIGINT,
 	import_receipt_id BIGINT,
 	quantity INT,
 	price FLOAT,
 	deleted BIT NOT NULL DEFAULT 0,
 	CONSTRAINT fk_import_receipt_detail_import FOREIGN KEY (import_receipt_id) REFERENCES import_receipt(import_receipt_id),
-	CONSTRAINT fk_import_receipt_detale_product FOREIGN KEY (product_id) REFERENCES product(product_id)
-)
-go
-CREATE TABLE discount(
-	discount_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	discount_name NVARCHAR(100),
-	[description] NVARCHAR(250),
-	[start_date] DATETIME,
-	end_date DATETIME,
-	discount_rate DECIMAL(5,2),
-	display BIT,
-	[status] NVARCHAR(100)
-)
-go
-CREATE TABLE product_discount(
-	product_discount_id BIGINT PRIMARY KEY IDENTITY(1,1),
-	discount_id BIGINT,
-	product_id BIGINT,
-	CONSTRAINT fk_product_discount_discount FOREIGN KEY (discount_id) REFERENCES discount(discount_id),
-	CONSTRAINT fk_product_discount_product FOREIGN KEY (product_id) REFERENCES product(product_id)
+	CONSTRAINT fk_import_receipt_detale_product FOREIGN KEY (product_detail_id) REFERENCES product_detail(product_detail_id)
 )
 go
 CREATE TABLE direct_discount(
@@ -249,29 +230,38 @@ go
 
 -- Dữ liệu
 --Users
-
+go
+INSERT INTO users (full_name, [address], phone, birthday, [role], created_date, [status], email, [password], [image], deleted, activaties)
+VALUES 
+    (N'Bùi Thanh Bùi', '123 Main St', 0123123123, '1990-01-15', 'User', '2023-08-10', 1, 'BTB@gmail.com', '202cb962ac59075b964b07152d234b70', 'image1.jpg', 0, 1),
+    (N'Đi Bộ Vuốt Râu', '456 Elm St', 09879879897, '1985-03-20', 'Admin', '2023-08-11', 1, 'DBVR@gnail.com', '202cb962ac59075b964b07152d234b70', 'image2.jpg', 0, 1),
+    (N'RiChaRiCon', '789 Oak St', 0456456456, '1995-07-05', 'User', '2023-08-12', 1, 'RCRC@gmail.com', '202cb962ac59075b964b07152d234b70', 'image3.jpg', 0, 1),
+    (N'Trần Thanh Hải', '101 Pine St', 0977866511, '1980-11-30', 'User', '2023-08-13', 1, 'bob@gmail.com', '202cb962ac59075b964b07152d234b70', 'image4.jpg', 0, 1),
+    (N'Nguyễn Lê Văn Thi', '202 Cedar St', 0986543166, '1988-09-25', 'Admin', '2023-08-14', 1, 'NLVT@gmail.com', '202cb962ac59075b964b07152d234b70', 'image5.jpg', 0, 1),
+    ('Jack5M', '303 Spruce St', 0919919918, '1992-05-10', 'User', '2023-08-15', 1, 'jack5milion@example.com', '202cb962ac59075b964b07152d234b70', 'image6.jpg', 0, 1);
 --Brand
+go
 INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Converse', N'3294d63f.png', 1, 0)
 INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Nike', N'b66762fa.png', 0, 0)
 INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Puma', N'7315656b.jpg', 1, 0)
 INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Reebok', N'd211e981.png', 0, 0)
 INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'New Balance', N'f477e2d8.png', 1, 1)
-
 --Category
+go
 INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (1, N'Giày nam', N'f62a6d0f.jpg', 1, 0)
 INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (2, N'Giày nữ', N'337baa95.jpg', 0, 0)
 INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (3, N'Giày thể thao', N'92e775d.jpg', 1, 0)
 INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (4, N'Giày chạy bộ', N'47266f7.jpg', 0, 0)
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (5, N'Giày đi bộ', N'26a75d10.jpg', 1, 1)
-																					   
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES (5, N'Giày đi bộ', N'26a75d10.jpg', 1, 1)														   
 --Size
+go
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (1, 38.5, 1, 0)
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (2, 39.5, 1, 0)
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (3, 40, 0, 0)
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (4, 41, 1, 0)
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (5, 42, 0, 1)
-
 --Product
+go
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (1, N'Converse 01', 1, 1,1, 5000000, N'Converse Renew Canvas, phiên bản giới hạn mang mục đích bảo vệ môi trường sẽ được chính thức mở bán tại hệ thống Converse VN từ ngày 5/7 với số lượng giới hạn.', 1, 1, CAST(N'2022-07-12T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (2, N'Converse 02', 2, 1,2, 1500000, N'huyền thoại hợp thời trang khiến đôi VANS này thật sự trở thành mẫu giày classic bất bại, là fan hâm mộ của VANS nói chung và những skaters nói riêng', 1, 1, CAST(N'2021-08-21T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (3, N'Converse 03', 3, 1,3, 2000000, N'huyền thoại hợp thời trang khiến đôi VANS này thật sự trở thành mẫu giày classic bất bại, là fan hâm mộ của VANS nói chung và những skaters nói riêng', 1, 0, CAST(N'2020-05-24T00:00:00.000' AS DateTime),0)
@@ -322,9 +312,8 @@ INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (48, N'New Balance 08', 5, 5, 3, 8789000, N'huyền thoại hợp thời trang khiến đôi VANS này thật sự trở thành mẫu giày classic bất bại, là fan hâm mộ của VANS nói chung và những skaters nói riêng', 0, 1, CAST(N'2015-01-21T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (49, N'New Balance 09', 1, 5, 3, 6543000, N'Tới nay đôi giày chỉ với phối màu đen trắng này vẫn nằm trong top “Best Seller” của VANS trên toàn thế giới, với kiểu dáng cổ điển cùng “sọc Jazz”', 0, 0, CAST(N'2023-07-21T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES (50, N'New Balance 10', 5, 5, 3, 2098908, 0, 1, N'Converse 1970s là 1 trong những dòng sản phẩm bán chạy nhất của Converse.Phần đế màu trắng ngà vintage được phủ 1 lớp bóng bên ngoài là điểm nhấn riêng cho dòng 1970s, dễ vệ sinh hơn.', CAST(N'2020-07-05T00:00:00.000' AS DateTime),0)
-
-
 --Color
+go
 INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities]) VALUES (1, 1, N'Ðen', N'img.png',1, 0)
 INSERT [dbo].[color] ([produt_id], [color_name], [color_image], [activities]) VALUES (3, 3, N'Xanh lá',N'img.png' ,1, 0)
 INSERT [dbo].[color] ([producct_id], [color_name], [color_image], [activities]) VALUES (2, 2, N'Xanh lam',N'img.png' ,0, 0)
@@ -333,6 +322,7 @@ INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities]) V
 INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities]) VALUES (8, 6, N'Tím', N'img.png',1, 1)
 
 --Product Detail
+go
 INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 1, 3, 1, 50, 0)
 INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (2, 1, 1, 2, 24, 0)
 INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (3, 1, 1, 3, 50, 0)
@@ -345,12 +335,36 @@ INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], 
 INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (10, 1, 2, 5, 50, 1)
 
 --Favorite
-
-
+go
+INSERT INTO favorite( product_id,[users_id],date_like)
+VALUES (3,4,'2022-12-12'),
+	   (2,2,'2023-08-05'),
+	   (5,2,'2023-03-20'),
+	   (2,5,'2023-07-20'),
+	   (1,3,'2023-05-12'),
+	   (3,2,'2023-06-30'),
+	   (4,3,'2023-08-01'),
+	   (2,4,'2023-09-03'),
+	   (3,2,'2023-04-01'),
+	   (4,2,'2023-01-01')
 --Review
-
-
-
+go
+INSERT INTO review (product_id, title, [users_id], review_date, display, rating)
+VALUES
+    (1, N'Sản phẩm tuyệt vời!', 3, '2023-08-15', 1, 5),
+    (2, N'Chất lượng tốt', 2, '2023-08-14', 1, 4),
+    (1, N'Dịch vụ xuất sắc', 3, '2023-08-13', 1, 5),
+    (3, N'Không được khuyến nghị', 4, '2023-08-12', 1, 2),
+    (2, N'Trung bình', 5, '2023-08-11', 1, 3),
+    (4, N'Đề xuất cao', 2, '2023-08-10', 1, 5),
+    (3, N'Chất lượng kém', 2, '2023-08-09', 1, 1),
+    (4, N'Giao hàng nhanh', 4, '2023-08-07', 1, 4),
+    (6, N'Không đáng giá giá tiền', 5, '2023-08-06', 1, 2),
+    (5, N'Tuyệt vời', 5, '2023-08-05', 1, 5),
+    (7, N'Terrible', 2, '2023-08-04', 1, 1),
+    (6, N'Sản phẩm trung bình', 3, '2023-08-03', 1, 3),
+    (8, N'Giá trị tốt', 4, '2023-08-02', 1, 4),
+    (7, N'Kinh khủng', 5, '2023-08-01', 1, 1);
 --Cart
 
 
@@ -369,14 +383,58 @@ INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], 
 
 
 --supplier
-
-
+go
+INSERT INTO supplier (supplier_name, addresss, phone, email, display)
+VALUES
+    (N'Nhà cung cấp 1', N'Địa chỉ 1', N'123456789', N'email1@example.com', 1),
+    (N'Nhà cung cấp 2', N'Địa chỉ 2', N'987654321', N'email2@example.com', 1),
+    (N'Nhà cung cấp 3', N'Địa chỉ 3', N'555555555', N'email3@example.com', 1),
+    (N'Nhà cung cấp 4', N'Địa chỉ 4', N'111111111', N'email4@example.com', 0),
+    (N'Nhà cung cấp 5', N'Địa chỉ 5', N'222222222', N'email5@example.com', 1),
+    (N'Nhà cung cấp 6', N'Địa chỉ 6', N'333333333', N'email6@example.com', 0),
+    (N'Nhà cung cấp 7', N'Địa chỉ 7', N'444444444', N'email7@example.com', 1),
+    (N'Nhà cung cấp 8', N'Địa chỉ 8', N'666666666', N'email8@example.com', 0),
+    (N'Nhà cung cấp 9', N'Địa chỉ 9', N'777777777', N'email9@example.com', 1),
+    (N'Nhà cung cấp 10', N'Địa chỉ 10', N'999999999', N'email10@example.com', 1);
 --import_receipt
-
-
+go
+INSERT INTO import_receipt (supplier_id, users_id, total_amount, import_date)
+VALUES
+    (1, 1, 100.50, '2023-09-08 10:00:00'),
+    (2, 2, 150.25, '2023-09-08 11:15:00'),
+    (3, 3, 200.75, '2023-09-08 12:30:00'),
+    (4, 4, 75.20, '2023-09-08 14:00:00'),
+    (5, 5, 300.00, '2023-09-08 15:45:00'),
+    (6, 6, 50.75, '2023-09-08 16:30:00'),
+    (7, 7, 180.90, '2023-09-08 17:20:00'),
+    (8, 8, 90.60, '2023-09-08 18:10:00'),
+    (9, 9, 250.30, '2023-09-08 19:00:00'),
+    (10, 10, 120.15, '2023-09-08 20:00:00');
 --import_receipt_detail
-
-
+go
+INSERT INTO import_receipt_detail (product_detail_id, import_receipt_id, quantity, price)
+VALUES
+    (1, 1, 10, 15.50),
+    (2, 2, 8, 20.25),
+    (3, 3, 12, 30.75),
+    (4, 4, 5, 10.20),
+    (5, 5, 15, 45.00),
+    (6, 6, 3, 5.75),
+    (7, 7, 9, 18.90),
+    (8, 8, 6, 9.60),
+    (9, 9, 14, 25.30),
+    (10, 10, 7, 12.15);
 --direct_discount
-
-
+go
+INSERT INTO direct_discount (product_id, direct_discount, [start_date], end_date)
+VALUES
+    (1, 10.50, '2023-09-08 10:00:00', '2023-09-08 12:00:00'),
+    (2, 5.25, '2023-09-08 11:00:00', '2023-09-08 13:00:00'),
+    (3, 8.75, '2023-09-08 12:00:00', '2023-09-08 14:00:00'),
+    (4, 3.20, '2023-09-08 13:00:00', '2023-09-08 15:00:00'),
+    (5, 15.00, '2023-09-08 14:00:00', '2023-09-08 16:00:00'),
+    (6, 2.75, '2023-09-08 15:00:00', '2023-09-08 17:00:00'),
+    (7, 9.90, '2023-09-08 16:00:00', '2023-09-08 18:00:00'),
+    (8, 4.60, '2023-09-08 17:00:00', '2023-09-08 19:00:00'),
+    (9, 12.30, '2023-09-08 18:00:00', '2023-09-08 20:00:00'),
+    (10, 6.15, '2023-09-08 19:00:00', '2023-09-08 21:00:00');
