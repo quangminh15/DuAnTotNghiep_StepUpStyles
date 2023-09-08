@@ -142,9 +142,22 @@ CREATE TABLE payment_menthod(
 	display bit
 )
 go
+CREATE TABLE shipping_address (
+    shipping_address_id bigint IDENTITY(1,1) NOT NULL primary key,
+    province NVARCHAR(255),
+    district NVARCHAR(255),
+    ward NVARCHAR(255),
+    address_details VARCHAR(10),
+	default_address bit ,
+	users_id bigint
+	FOREIGN KEY (users_id) REFERENCES users(users_id),
+);
+
+
 CREATE TABLE [order](
 	order_id bigint IDENTITY(1,1) NOT NULL primary key,
 	users_id bigint ,
+	shipping_address_id bigint,
 	payment_method_id bigint ,
 	shiping_address nvarchar(255) ,
 	delivery_date date , 
@@ -155,8 +168,11 @@ CREATE TABLE [order](
 	shipping_fee float,
 	total_amount float,
 	order_status nvarchar(50)
-	FOREIGN KEY (users_id) REFERENCES users(users_id),
+
+	FOREIGN KEY (shipping_address_id) REFERENCES shipping_address(shipping_address_id),
+	FOREIGN KEY (users_id) REFERENCES [user](users_id),
 	FOREIGN KEY (payment_method_id) REFERENCES payment_menthod(payment_method_id),
+
 )
 go
 CREATE TABLE order_detail(
