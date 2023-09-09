@@ -1,9 +1,9 @@
 ﻿go
 Use master;
 go
-create database db11;
+create database db14;
 go
-use db11;
+use db14;
 go
 CREATE TABLE users (
     users_id BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -147,7 +147,7 @@ CREATE TABLE shipping_address (
     province NVARCHAR(255),
     district NVARCHAR(255),
     ward NVARCHAR(255),
-    address_details VARCHAR(10),
+    address_details NVARCHAR(255),
 	default_address bit ,
 	users_id bigint
 	FOREIGN KEY (users_id) REFERENCES users(users_id),
@@ -159,7 +159,6 @@ CREATE TABLE [order](
 	users_id bigint ,
 	shipping_address_id bigint,
 	payment_method_id bigint ,
-	shiping_address nvarchar(255) ,
 	delivery_date date , 
 	payment_status bit ,
 	delivery_status bit,
@@ -366,19 +365,52 @@ VALUES
     (8, N'Giá trị tốt', 4, '2023-08-02', 1, 4),
     (7, N'Kinh khủng', 5, '2023-08-01', 1, 1);
 --Cart
-
+insert into cart(users_id)
+values (1),
+	   (2),
+	   (3),
+	   (4),
+	   (5);
 
 --Cart detail
-
+insert into cart_detail(cart_id,product_detail_id,product_id,quantity)
+values (1,1,1,1),
+	   (2,1,2,2),
+	   (3,1,3,2),
+	   (4,2,3,1),
+	   (5,1,2,4);
 
 --payment_menthod
+insert into payment_menthod(payment_menthod_name,[description],display)
+values (N'Thanh toán khi nhân hàng',N'Thanh toán tiền mặt',1),
+	   (N'VNPAY',N'Thanh toán online',1),
+	   (N'PayPal',N'Thanh toán online',1);
 
-
-
+--shipping_address
+INSERT INTO shipping_address (province, district, ward, address_details, default_address, users_id)
+VALUES
+    (N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng Hậu', N'123 Đường ABC', 1, 1),
+    (N'TPHCM', N'Quận 1', N'Bến Nghé', N'456 Đường XYZ', 0, 2),
+    (N'Hải Phòng', N'Hồng Bàng', N'Ngô Quyền', N'789 Đường DEF', 0, 3),
+    (N'Đà Nẵng', N'Hải Châu', N'Hòa Cường Nam', N'101 Đường GHI', 0, 4),
+    (N'Cần Thơ', N'Ninh Kiều', N'Tân An', N'202 Đường JKL', 0, 5);
 --Order
 
-
+INSERT INTO [order] (users_id, payment_method_id, shipping_address_id, delivery_date, payment_status, delivery_status, order_date, initial_price, shipping_fee, total_amount, order_status)
+VALUES
+    (1, 1, 1, '2023-09-10', 1, 0, '2023-09-07 08:00:00', 100.00, 10.00, 110.00, 'Processing'),
+    (2, 2, 2, '2023-09-10',1, 0, '2023-09-07 09:30:00', 150.00, 12.50, 162.50, 'Shipped'),
+	(3, 3, 3, '2023-09-12', 1, 0, '2023-09-07 10:45:00', 75.00, 7.50, 82.50, 'Delivered'),
+    (4, 1, 4, '2023-09-13', 1, 0, '2023-09-07 12:15:00', 200.00, 15.00, 215.00, 'Processing'),
+    (5, 1, 5, '2023-09-14', 1, 0, '2023-09-07 13:45:00', 90.00, 8.00, 98.00, 'Pending');
 --order_detail
+INSERT INTO order_detail (order_id, product_detail_id, quantity, price)
+VALUES
+    (1, 2, 3, 25.00),
+    (1, 3, 2, 15.00),
+    (2, 1, 4, 30.00),
+    (3, 2, 1, 10.00),
+    (4, 3, 5, 50.00);
 
 
 
