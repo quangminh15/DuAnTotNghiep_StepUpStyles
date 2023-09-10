@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -32,7 +33,7 @@ public class Order implements Serializable {
 	private Integer orderId;
 
 	@Column(name="delivery_date")
-	private Object deliveryDate;
+	private String deliveryDate;
 
 	@Column(name="delivery_status")
 	private boolean deliveryStatus;
@@ -40,11 +41,12 @@ public class Order implements Serializable {
 	@Column(name="initial_price")
 	private double initialPrice;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="order_date")
-	private Timestamp orderDate;
+	private Date orderDate;
 
 	@Column(name="order_status")
-	private Object orderStatus;
+	private String orderStatus;
 
 	@Column(name="payment_status")
 	private boolean paymentStatus;

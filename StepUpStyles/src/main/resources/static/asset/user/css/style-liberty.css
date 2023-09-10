@@ -4112,7 +4112,7 @@ Author URL: http://w3layouts.com
  }
  
  .w3l-banner-slider-main .right-banner {
-   background: url(../images/N-Banner_logo5.png) no-repeat center;
+   background: url(/asset/user/img/banner/loogo2.jpg) no-repeat center;
    background-size: cover;
    display: grid;
    align-items: center;
