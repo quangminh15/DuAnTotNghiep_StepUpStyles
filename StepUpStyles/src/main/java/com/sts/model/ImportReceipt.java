@@ -48,21 +48,4 @@ public class ImportReceipt implements Serializable {
 	//bi-directional many-to-one association to ImportReceiptDetail
 	@OneToMany(mappedBy="importReceipt")
 	private List<ImportReceiptDetail> importReceiptDetails;
-
-	
-
-	public ImportReceiptDetail addImportReceiptDetail(ImportReceiptDetail importReceiptDetail) {
-		getImportReceiptDetails().add(importReceiptDetail);
-		importReceiptDetail.setImportReceipt(this);
-
-		return importReceiptDetail;
-	}
-
-	public ImportReceiptDetail removeImportReceiptDetail(ImportReceiptDetail importReceiptDetail) {
-		getImportReceiptDetails().remove(importReceiptDetail);
-		importReceiptDetail.setImportReceipt(null);
-
-		return importReceiptDetail;
-	}
-
 }
