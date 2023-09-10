@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedQuery(name="OrderDetail.findAll", query="SELECT o FROM OrderDetail o")
 public class OrderDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="order_detail_id")
-	private long orderDetailId;
+	private Integer orderDetailId;
 
 	private double price;
 

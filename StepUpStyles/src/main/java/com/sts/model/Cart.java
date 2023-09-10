@@ -3,6 +3,8 @@ package com.sts.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +26,9 @@ public class Cart implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="cart_id")
-	private long cartId;
+	private Integer cartId;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
@@ -33,6 +36,7 @@ public class Cart implements Serializable {
 	private User user;
 
 	//bi-directional many-to-one association to CartDetail
+	@JsonIgnore
 	@OneToMany(mappedBy="cart")
 	private List<CartDetail> cartDetails;
 
