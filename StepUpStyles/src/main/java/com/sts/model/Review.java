@@ -24,12 +24,13 @@ public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="review_id")
-	private long reviewId;
+	private Integer reviewId;
 
 	private boolean display;
 
-	private int rating;
+	private Integer rating;
 
 	@Column(name="review_date")
 	private Timestamp reviewDate;
