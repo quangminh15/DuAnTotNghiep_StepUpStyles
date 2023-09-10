@@ -3,6 +3,8 @@ package com.sts.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +37,7 @@ public class PaymentMenthod implements Serializable {
 	private Object paymentMenthodName;
 
 	//bi-directional many-to-one association to Order
+	@JsonIgnore
 	@OneToMany(mappedBy="paymentMenthod")
 	private List<Order> orders;
 

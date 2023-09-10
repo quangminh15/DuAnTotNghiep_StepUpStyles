@@ -3,6 +3,8 @@ package com.sts.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +21,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedQuery(name="ShippingAddress.findAll", query="SELECT s FROM ShippingAddress s")
 public class ShippingAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="shipping_address_id")
-	private long shippingAddressId;
+	private Integer shippingAddressId;
 
 	@Column(name="address_details")
 	private String addressDetails;
@@ -40,6 +42,7 @@ public class ShippingAddress implements Serializable {
 	private String ward;
 
 	//bi-directional many-to-one association to Order
+	@JsonIgnore
 	@OneToMany(mappedBy="shippingAddress")
 	private List<Order> orders;
 
