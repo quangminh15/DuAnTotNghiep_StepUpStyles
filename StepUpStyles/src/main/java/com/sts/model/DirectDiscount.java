@@ -24,6 +24,7 @@ public class DirectDiscount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="direct_discount_id")
 	private Long directDiscountId;
 

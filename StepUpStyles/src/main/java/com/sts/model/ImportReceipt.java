@@ -3,6 +3,8 @@ package com.sts.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,7 @@ public class ImportReceipt implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="import_receipt_id")
 	private Long importReceiptId;
 
@@ -46,6 +49,7 @@ public class ImportReceipt implements Serializable {
 	private User user;
 
 	//bi-directional many-to-one association to ImportReceiptDetail
+	@JsonIgnore
 	@OneToMany(mappedBy="importReceipt")
 	private List<ImportReceiptDetail> importReceiptDetails;
 }
