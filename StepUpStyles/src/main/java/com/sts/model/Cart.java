@@ -2,6 +2,11 @@ package com.sts.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 
@@ -11,6 +16,9 @@ import java.util.List;
  */
 @Entity
 @Table(name="cart")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @NamedQuery(name="Cart.findAll", query="SELECT c FROM Cart c")
 public class Cart implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,45 +36,45 @@ public class Cart implements Serializable {
 	@OneToMany(mappedBy="cart")
 	private List<CartDetail> cartDetails;
 
-	public Cart() {
-	}
+	// public Cart() {
+	// }
 
-	public long getCartId() {
-		return this.cartId;
-	}
+	// public long getCartId() {
+	// 	return this.cartId;
+	// }
 
-	public void setCartId(long cartId) {
-		this.cartId = cartId;
-	}
+	// public void setCartId(long cartId) {
+	// 	this.cartId = cartId;
+	// }
 
-	public User getUser() {
-		return this.user;
-	}
+	// public User getUser() {
+	// 	return this.user;
+	// }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+	// public void setUser(User user) {
+	// 	this.user = user;
+	// }
 
-	public List<CartDetail> getCartDetails() {
-		return this.cartDetails;
-	}
+	// public List<CartDetail> getCartDetails() {
+	// 	return this.cartDetails;
+	// }
 
-	public void setCartDetails(List<CartDetail> cartDetails) {
-		this.cartDetails = cartDetails;
-	}
+	// public void setCartDetails(List<CartDetail> cartDetails) {
+	// 	this.cartDetails = cartDetails;
+	// }
 
-	public CartDetail addCartDetail(CartDetail cartDetail) {
-		getCartDetails().add(cartDetail);
-		cartDetail.setCart(this);
+	// public CartDetail addCartDetail(CartDetail cartDetail) {
+	// 	getCartDetails().add(cartDetail);
+	// 	cartDetail.setCart(this);
 
-		return cartDetail;
-	}
+	// 	return cartDetail;
+	// }
 
-	public CartDetail removeCartDetail(CartDetail cartDetail) {
-		getCartDetails().remove(cartDetail);
-		cartDetail.setCart(null);
+	// public CartDetail removeCartDetail(CartDetail cartDetail) {
+	// 	getCartDetails().remove(cartDetail);
+	// 	cartDetail.setCart(null);
 
-		return cartDetail;
-	}
+	// 	return cartDetail;
+	// }
 
 }

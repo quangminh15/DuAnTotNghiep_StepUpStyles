@@ -2,6 +2,11 @@ package com.sts.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 
@@ -10,6 +15,9 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="review")
 @NamedQuery(name="Review.findAll", query="SELECT r FROM Review r")
 public class Review implements Serializable {
@@ -26,7 +34,7 @@ public class Review implements Serializable {
 	@Column(name="review_date")
 	private Timestamp reviewDate;
 
-	private Object title;
+	private String title;
 
 	//bi-directional many-to-one association to Product
 	@ManyToOne
@@ -37,64 +45,5 @@ public class Review implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private User user;
-
-	public Review() {
-	}
-
-	public long getReviewId() {
-		return this.reviewId;
-	}
-
-	public void setReviewId(long reviewId) {
-		this.reviewId = reviewId;
-	}
-
-	public boolean getDisplay() {
-		return this.display;
-	}
-
-	public void setDisplay(boolean display) {
-		this.display = display;
-	}
-
-	public int getRating() {
-		return this.rating;
-	}
-
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
-
-	public Timestamp getReviewDate() {
-		return this.reviewDate;
-	}
-
-	public void setReviewDate(Timestamp reviewDate) {
-		this.reviewDate = reviewDate;
-	}
-
-	public Object getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(Object title) {
-		this.title = title;
-	}
-
-	public Product getProduct() {
-		return this.product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 }
