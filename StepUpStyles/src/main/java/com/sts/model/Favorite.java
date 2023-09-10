@@ -2,6 +2,11 @@ package com.sts.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 
@@ -10,6 +15,9 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="favorite")
 @NamedQuery(name="Favorite.findAll", query="SELECT f FROM Favorite f")
 public class Favorite implements Serializable {
@@ -31,40 +39,5 @@ public class Favorite implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private User user;
-
-	public Favorite() {
-	}
-
-	public long getFavoriteId() {
-		return this.favoriteId;
-	}
-
-	public void setFavoriteId(long favoriteId) {
-		this.favoriteId = favoriteId;
-	}
-
-	public Timestamp getDateLike() {
-		return this.dateLike;
-	}
-
-	public void setDateLike(Timestamp dateLike) {
-		this.dateLike = dateLike;
-	}
-
-	public Product getProduct() {
-		return this.product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 }
