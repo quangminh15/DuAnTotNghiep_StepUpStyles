@@ -47,4 +47,15 @@ public class UserController {
 
 		return "users/single_product";
 	}
+
+	@RequestMapping("/cart")
+	public String cart(Model model) {
+
+		return "users/cart";
+	}
+	@RequestMapping("/checkout")
+	public String checkout(Model model) {
+
+		return "users/checkout";
+	}
 }
