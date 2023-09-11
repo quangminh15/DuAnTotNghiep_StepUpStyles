@@ -7,11 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/**
- * The persistent class for the import_receipt_detail database table.
- * 
- */
 @Entity
 @Data
 @NoArgsConstructor
@@ -32,12 +27,10 @@ public class ImportReceiptDetail implements Serializable {
 
 	private Integer quantity;
 
-	//bi-directional many-to-one association to ImportReceipt
 	@ManyToOne
 	@JoinColumn(name="import_receipt_id")
 	private ImportReceipt importReceipt;
 
-	//bi-directional many-to-one association to ProductDetail
 	@ManyToOne
 	@JoinColumn(name="product_detail_id")
 	private ProductDetail productDetail;

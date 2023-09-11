@@ -9,11 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-
-/**
- * The persistent class for the direct_discount database table.
- * 
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,7 +32,12 @@ public class DirectDiscount implements Serializable {
 	@Column(name="start_date")
 	private String startDate;
 
-	//bi-directional many-to-one association to Product
+	@Column(name = "status")
+	private String status;
+
+	@Column(name = "price_discount")
+	private Double priceDiscount;
+
 	@ManyToOne
 	@JoinColumn(name="product_id")
 	private Product product;
