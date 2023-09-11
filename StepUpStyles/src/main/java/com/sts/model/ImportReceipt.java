@@ -11,11 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
-/**
- * The persistent class for the import_receipt database table.
- * 
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,17 +33,14 @@ public class ImportReceipt implements Serializable {
 	@Column(name="total_amount")
 	private Double totalAmount;
 
-	//bi-directional many-to-one association to Supplier
 	@ManyToOne
 	@JoinColumn(name="supplier_id")
 	private Supplier supplier;
 
-	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private User user;
 
-	//bi-directional many-to-one association to ImportReceiptDetail
 	@JsonIgnore
 	@OneToMany(mappedBy="importReceipt")
 	private List<ImportReceiptDetail> importReceiptDetails;

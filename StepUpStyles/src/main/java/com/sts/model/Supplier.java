@@ -11,11 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
-/**
- * The persistent class for the supplier database table.
- * 
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,7 +38,6 @@ public class Supplier implements Serializable {
 	@Column(name="supplier_name")
 	private String supplierName;
 
-	//bi-directional many-to-one association to ImportReceipt
 	@JsonIgnore
 	@OneToMany(mappedBy="supplier")
 	private List<ImportReceipt> importReceipts;
