@@ -3,6 +3,8 @@ package com.sts.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,7 @@ public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="category_id")
-	private Integer categoryId;
+	private Integer categoryID;
 
 	private Boolean activities;
 
@@ -31,7 +33,8 @@ public class Category implements Serializable {
 	private String categoryName;
 
 	private Boolean deleted;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy="category")
 	private List<Product> products;
 }

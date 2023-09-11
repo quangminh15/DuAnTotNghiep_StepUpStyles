@@ -58,37 +58,40 @@ public class User implements Serializable {
 	private Boolean status;
 
 	//bi-directional many-to-one association to Cart
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	
 	private List<Cart> carts;
 
 	//bi-directional many-to-one association to Favorite
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
 	private List<Favorite> favorites;
 
 	//bi-directional many-to-one association to ImportReceipt
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	
 	private List<ImportReceipt> importReceipts;
 
 	//bi-directional many-to-one association to Order
+	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Order> orders;
 
 	//bi-directional many-to-one association to Product
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
 	private List<Product> products;
 
 	//bi-directional many-to-one association to Review
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
 	private List<Review> reviews;
 
 	//bi-directional many-to-one association to ShippingAddress
-	@OneToMany(mappedBy="user")
 	@JsonIgnore
+	@OneToMany(mappedBy="user")
 	private List<ShippingAddress> shippingAddresses;
 
 	
