@@ -18,7 +18,8 @@ CREATE TABLE users (
     [password] NVARCHAR(250),
     [image] NVARCHAR(250),
     deleted BIT,
-    activaties BIT
+    activaties BIT,
+	origin NVARCHAR(50)
 );
 go
 -- Tạo bảng Brand
