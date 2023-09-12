@@ -22,7 +22,7 @@ public class Size implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "size_id")
-	private Integer sizeId;
+	private Integer sizeID;
 
 	private Boolean activities;
 

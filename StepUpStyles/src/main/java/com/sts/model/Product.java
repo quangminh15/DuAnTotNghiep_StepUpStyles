@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="product")
+@Table(name = "product")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,13 +23,13 @@ public class Product implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="product_id")
-	private Integer productId;
+	@Column(name = "product_id")
+	private Integer productID;
 
 	private Boolean activities;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="created_date")
+	@Column(name = "created_date")
 	private Date createdDate = new Date();
 
 	private Boolean deleted;
@@ -38,45 +38,46 @@ public class Product implements Serializable {
 
 	private Double price;
 
-	@Column(name="product_description")
+	@Column(name = "product_description")
 	private String description;
 
-	@Column(name="product_name")
+	@Column(name = "product_name")
 	private String productName;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product")
 	private List<CartDetail> cartDetails;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
 	private List<Color> colors;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product")
 	private List<DirectDiscount> directDiscounts;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product")
 	private List<Favorite> favorites;
 
 	@ManyToOne
-	@JoinColumn(name="brand_id")
+	@JoinColumn(name = "brand_id")
 	private Brand brand;
 
 	@ManyToOne
-	@JoinColumn(name="category_id")
+	@JoinColumn(name = "category_id")
 	private Category category;
 
 	@ManyToOne
-	@JoinColumn(name="users_id")
+	@JoinColumn(name = "users_id")
 	private User user;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product" )
 	private List<ProductDetail> productDetails;
 
 	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
+
 }

@@ -18,7 +18,8 @@ CREATE TABLE users (
     [password] NVARCHAR(250),
     [image] NVARCHAR(250),
     deleted BIT,
-    activaties BIT
+    activaties BIT,
+	origin NVARCHAR(50)
 );
 go
 -- Tạo bảng Brand
@@ -126,6 +127,7 @@ CREATE TABLE cart_detail(
 	product_detail_id bigint ,
 	product_id bigint ,
 	quantity int ,
+	check_buy bit
 
 	FOREIGN KEY (cart_id) REFERENCES cart(cart_id),
 
@@ -166,7 +168,8 @@ CREATE TABLE [order](
 	initial_price float,
 	shipping_fee float,
 	total_amount float,
-	order_status nvarchar(50)
+	order_status nvarchar(50),
+	discount_price float
 
 	FOREIGN KEY (shipping_address_id) REFERENCES shipping_address(shipping_address_id),
 	FOREIGN KEY (users_id) REFERENCES users(users_id),
@@ -242,18 +245,18 @@ VALUES
     ('Jack5M', '303 Spruce St', 0919919918, '1992-05-10', 'User', '2023-08-15', 1, 'jack5milion@example.com', '202cb962ac59075b964b07152d234b70', 'image6.jpg', 0, 1);
 --Brand
 go
-INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Converse', N'3294d63f.png', 1, 0)
-INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Nike', N'b66762fa.png', 0, 0)
-INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Puma', N'7315656b.jpg', 1, 0)
-INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Reebok', N'd211e981.png', 0, 0)
-INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'New Balance', N'f477e2d8.png', 1, 1)
+INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Converse', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Brand%2FN.png?alt=media&token=ee468e27-b9cb-4d44-a7aa-d9ce44edc563', 1, 0)
+INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Nike', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Brand%2FN2.jpg?alt=media&token=2fa25ee7-6298-40ee-a1af-298473e69ff3', 0, 0)
+INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Puma', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Brand%2FN3.jpg?alt=media&token=0c3bd08a-bbd3-4a40-8b49-cf119db4d232', 1, 0)
+INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'Reebok', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Brand%2FN4.jpg?alt=media&token=1a5454e3-1eb9-43c1-aaee-93c652e4b523', 0, 0)
+INSERT [dbo].[brand] ([brand_name], [brand_image], [activities], [deleted]) VALUES (N'New Balance', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Brand%2FN5.jpg?alt=media&token=c7bb3a37-6673-4248-9cc8-412b8c6d6f96', 1, 1)
 --Category
 go
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày nam', N'f62a6d0f.jpg', 1, 0)
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày nữ', N'337baa95.jpg', 0, 0)
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày thể thao', N'92e775d.jpg', 1, 0)
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày chạy bộ', N'47266f7.jpg', 0, 0)
-INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày đi bộ', N'26a75d10.jpg', 1, 1)														   
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày nam', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid2.jpg?alt=media&token=c1c66f85-eff7-44c6-a393-00a5199bd31e', 1, 0)
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày nữ', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid3.jpg?alt=media&token=3301b61a-fbc3-461a-8146-e393e3088f8a', 0, 0)
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày thể thao', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid4.jpg?alt=media&token=127d7bd7-808d-407a-8fbc-11a1f697f21c', 1, 0)
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày chạy bộ', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid5.jpg?alt=media&token=b9b8ea55-468a-4af1-8ecc-55b4df6561a7', 0, 0)
+INSERT [dbo].[category] ([category_name], [category_image], [activities], [deleted]) VALUES ( N'Giày đi bộ', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid6.jpg?alt=media&token=ef1773b3-bf5f-4087-a8c6-45fddc0f85d4', 1, 1)														   
 --Size
 go
 INSERT [dbo].[size] ([size_number], [activities], [deleted]) VALUES (38.5, 1, 0)
@@ -315,12 +318,12 @@ INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES ( N'New Balance 10', 5, 5, 3, 2098908, N'Converse 1970s là 1 trong những dòng sản phẩm bán chạy nhất của Converse.Phần đế màu trắng ngà vintage được phủ 1 lớp bóng bên ngoài là điểm nhấn riêng cho dòng 1970s, dễ vệ sinh hơn.', 0, 1, CAST(N'2020-07-05T00:00:00.000' AS DateTime),0)
 --Color
 go
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (1, N'Ðen', N'img.png',1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (3, N'Xanh lá',N'img.png' ,1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (2, N'Xanh lam',N'img.png' ,0, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (4, N'Vàng',N'img.png' ,0, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (5, N'Đỏ',N'img.png' ,1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (6, N'Tím', N'img.png',1, 1)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (1, N'Ðen', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-11.jpg?alt=media&token=18d95f47-b2d6-4e81-95c6-8c510e8a6b93',1, 0)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (3, N'Xanh lá',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c' ,1, 0)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (2, N'Xanh lam',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc' ,0, 0)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (4, N'Vàng',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-66.jpg?alt=media&token=d5e75b21-cca8-4b5d-a9ab-6e5c69e964bb' ,0, 0)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (5, N'Đỏ',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc' ,1, 0)
+INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (6, N'Tím', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c',1, 1)
 
 --Product Detail
 go

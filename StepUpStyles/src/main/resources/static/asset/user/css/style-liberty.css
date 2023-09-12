@@ -3801,8 +3801,19 @@ Author URL: http://w3layouts.com
  }
  
  .w3l-banner-slider-main nav.navbar {
-   background-color: transparent;
+  background: rgba(0,0,0,0.5);
    padding: 10px 0;
+   position: fixed;
+   z-index: 999;
+   width: 100%;
+   transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Apply transition to box-shadow */
+
+ }
+
+ .w3l-banner-slider-main nav.navbar-scrolled{
+    background-color: #333;   
+     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2); /* Add a box shadow */
+
  }
  
  .w3l-banner-slider-main a.navbar-brand {
@@ -9974,7 +9985,7 @@ Author URL: http://w3layouts.com
  }
  
  .flex-direction-nav {
-   *height: 0;
+   height: 0;
  }
  
  .flex-direction-nav .flex-disabled {

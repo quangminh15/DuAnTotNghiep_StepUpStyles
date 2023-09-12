@@ -57,6 +57,9 @@ public class Order implements Serializable {
 	@Column(name="total_amount")
 	private double totalAmount;
 
+	@Column(name="discount_price")
+	private double discountPrice;
+
 	//bi-directional many-to-one association to PaymentMenthod
 	@ManyToOne
 	@JoinColumn(name="payment_method_id")
@@ -77,125 +80,6 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy="order")
 	private List<OrderDetail> orderDetails;
 
-	// public Order() {
-	// }
-
-	// public long getOrderId() {
-	// 	return this.orderId;
-	// }
-
-	// public void setOrderId(long orderId) {
-	// 	this.orderId = orderId;
-	// }
-
-	// public Object getDeliveryDate() {
-	// 	return this.deliveryDate;
-	// }
-
-	// public void setDeliveryDate(Object deliveryDate) {
-	// 	this.deliveryDate = deliveryDate;
-	// }
-
-	// public boolean getDeliveryStatus() {
-	// 	return this.deliveryStatus;
-	// }
-
-	// public void setDeliveryStatus(boolean deliveryStatus) {
-	// 	this.deliveryStatus = deliveryStatus;
-	// }
-
-	// public double getInitialPrice() {
-	// 	return this.initialPrice;
-	// }
-
-	// public void setInitialPrice(double initialPrice) {
-	// 	this.initialPrice = initialPrice;
-	// }
-
-	// public Timestamp getOrderDate() {
-	// 	return this.orderDate;
-	// }
-
-	// public void setOrderDate(Timestamp orderDate) {
-	// 	this.orderDate = orderDate;
-	// }
-
-	// public Object getOrderStatus() {
-	// 	return this.orderStatus;
-	// }
-
-	// public void setOrderStatus(Object orderStatus) {
-	// 	this.orderStatus = orderStatus;
-	// }
-
-	// public boolean getPaymentStatus() {
-	// 	return this.paymentStatus;
-	// }
-
-	// public void setPaymentStatus(boolean paymentStatus) {
-	// 	this.paymentStatus = paymentStatus;
-	// }
-
-	// public double getShippingFee() {
-	// 	return this.shippingFee;
-	// }
-
-	// public void setShippingFee(double shippingFee) {
-	// 	this.shippingFee = shippingFee;
-	// }
-
-	// public double getTotalAmount() {
-	// 	return this.totalAmount;
-	// }
-
-	// public void setTotalAmount(double totalAmount) {
-	// 	this.totalAmount = totalAmount;
-	// }
-
-	// public PaymentMenthod getPaymentMenthod() {
-	// 	return this.paymentMenthod;
-	// }
-
-	// public void setPaymentMenthod(PaymentMenthod paymentMenthod) {
-	// 	this.paymentMenthod = paymentMenthod;
-	// }
-
-	// public ShippingAddress getShippingAddress() {
-	// 	return this.shippingAddress;
-	// }
-
-	// public void setShippingAddress(ShippingAddress shippingAddress) {
-	// 	this.shippingAddress = shippingAddress;
-	// }
-
-	// public User getUser() {
-	// 	return this.user;
-	// }
-
-	// public void setUser(User user) {
-	// 	this.user = user;
-	// }
-
-	// public List<OrderDetail> getOrderDetails() {
-	// 	return this.orderDetails;
-	// }
-
-	// public void setOrderDetails(List<OrderDetail> orderDetails) {
-	// 	this.orderDetails = orderDetails;
-	// }
-
-	// public OrderDetail addOrderDetail(OrderDetail orderDetail) {
-	// 	getOrderDetails().add(orderDetail);
-	// 	orderDetail.setOrder(this);
-
-	// 	return orderDetail;
-	// }
-
-	// public OrderDetail removeOrderDetail(OrderDetail orderDetail) {
-	// 	getOrderDetails().remove(orderDetail);
-	// 	orderDetail.setOrder(null);
-
-	// 	return orderDetail;
-	// }
+	
 
 }

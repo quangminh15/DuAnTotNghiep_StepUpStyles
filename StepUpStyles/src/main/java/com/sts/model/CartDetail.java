@@ -25,6 +25,7 @@ public class CartDetail implements Serializable {
 	@Column(name="cart_detail_id")
 	private Integer cartDetailId;
 
+	private boolean checkbuy;
 	private int quantity;
 
 	//bi-directional many-to-one association to Cart
@@ -42,47 +43,6 @@ public class CartDetail implements Serializable {
 	@JoinColumn(name="product_detail_id")
 	private ProductDetail productDetail;
 
-	// public CartDetail() {
-	// }
-
-	// public long getCartDetailId() {
-	// 	return this.cartDetailId;
-	// }
-
-	// public void setCartDetailId(long cartDetailId) {
-	// 	this.cartDetailId = cartDetailId;
-	// }
-
-	// public int getQuantity() {
-	// 	return this.quantity;
-	// }
-
-	// public void setQuantity(int quantity) {
-	// 	this.quantity = quantity;
-	// }
-
-	// public Cart getCart() {
-	// 	return this.cart;
-	// }
-
-	// public void setCart(Cart cart) {
-	// 	this.cart = cart;
-	// }
-
-	// public Product getProduct() {
-	// 	return this.product;
-	// }
-
-	// public void setProduct(Product product) {
-	// 	this.product = product;
-	// }
-
-	// public ProductDetail getProductDetail() {
-	// 	return this.productDetail;
-	// }
-
-	// public void setProductDetail(ProductDetail productDetail) {
-	// 	this.productDetail = productDetail;
-	// }
+	
 
 }

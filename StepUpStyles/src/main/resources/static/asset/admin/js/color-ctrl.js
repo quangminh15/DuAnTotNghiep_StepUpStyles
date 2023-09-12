@@ -11,7 +11,7 @@ app.controller("color-ctrl", function($scope, $http) {
 		{ name: 'colorID', label: 'Mã màu' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'colorName', label: 'Tên màu' },
-		{ name: 'imagePath', label: 'Hình ảnh' },
+		{ name: 'colorImage', label: 'Hình ảnh' },
 	];
 
 
@@ -207,8 +207,8 @@ app.controller("color-ctrl", function($scope, $http) {
 
 		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
 			.then(url => {
-				// Lưu đường dẫn ảnh vào biến $scope.form.imagePath
-				$scope.form.imagePath = url;
+				// Lưu đường dẫn ảnh vào biến $scope.form.colorImage
+				$scope.form.colorImage = url;
 			});
 	};
 
@@ -241,7 +241,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	}
 
 	//	Thêm mới 
-	$scope.create = async function() {
+	$scope.create =  function() {
 
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
@@ -271,14 +271,14 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Bạn chưa chọn ảnh";
 			$('#errorModal').modal('show');
 			return; // Dừng tiến trình nếu không chọn ảnh
-		}
+		};
 
 		try {
-			await $scope.uploadImages(); // Tải ảnh lên Firebase
+			 $scope.uploadImages(); // Tải ảnh lên Firebase
 
 			// Thực hiện việc lưu vào db
 			var coloritem = angular.copy($scope.form);
-			coloritem.imagePath = $scope.form.imagePath;
+			coloritem.colorImage = $scope.form.colorImage;
 			$http.post('/rest/colors/create', coloritem).then(resp => {
 				$scope.coloritems.push(resp.data);
 				$scope.reset();
@@ -304,8 +304,8 @@ app.controller("color-ctrl", function($scope, $http) {
 		}
 	}
 
-	//	Cập nhật  
-	$scope.update = async function() {
+ 	//Cập nhật
+	$scope.update =  function() {
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
 			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
@@ -328,10 +328,10 @@ app.controller("color-ctrl", function($scope, $http) {
 		}
 
 		try {
-			await $scope.uploadImages(); // Tải ảnh lên Firebase
+			 $scope.uploadImages(); // Tải ảnh lên Firebase
 
 			var coloritem = angular.copy($scope.form);
-			coloritem.imagePath = $scope.form.imagePath;
+			coloritem.colorImage = $scope.form.colorImage;
 			$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 				var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
 				$scope.coloritems[index] = coloritem;
