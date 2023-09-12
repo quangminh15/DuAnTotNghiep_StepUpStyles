@@ -2,29 +2,25 @@ app = angular.module("admin-app", ["ngRoute"]);
 
 app.config(function($routeProvider) {
 	$routeProvider
+		.when("/indexAdmin", {
+			templateUrl: "/templates/admins/index.html",
+			controller: "indexAdmin-ctrl"
+		})
 		.when("/product", {
 			templateUrl: "/templates/admins/products/product.html",
 			controller: "product-ctrl"
 		})
-		.when("/product-img", {
-			templateUrl: "/templates/admins/products/product-img.html",
-			controller: "product-img-ctrl"
+		.when("/productsize", {
+			templateUrl: "/templates/admins/products/size.html",
+			controller: "size-ctrl"
 		})
-		.when("/phoneConfiguration", {
-			templateUrl: "/templates/admins/products/phoneconfiguration.html",
-			controller: "phoneconfiguration-ctrl"
+		.when("/brand", {
+			templateUrl: "/templates/admins/products/brand.html",
+			controller: "brand-ctrl"
 		})
-		.when("/latopConfiguration", {
-			templateUrl: "/templates/admins/products/laptopconfiguration.html",
-			controller: "laptopconfiguration-ctrl"
-		})
-		.when("/productGroup", {
-			templateUrl: "/templates/admins/products/productgroup.html",
-			controller: "productgroup-ctrl"
-		})
-		.when("/productCategory", {
-			templateUrl: "/templates/admins/products/productcategory.html",
-			controller: "productcategory-ctrl"
+		.when("/category", {
+			templateUrl: "/templates/admins/products/category.html",
+			controller: "category-ctrl"
 		})
 		.when("/subCategory", {
 			templateUrl: "/templates/admins/products/subcategory.html",
@@ -73,21 +69,13 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/ImportReceipt/ImportReceiptDetail.html",
 			controller: "ImportReceiptDetail-ctrl"
 		})
-		.when("/statistical", {
-			templateUrl: "/templates/statistical.html",
-			controller: "statistical"
-		})
 		.when("/user", {
 			templateUrl: "/templates/admins/user/user.html",
 			controller: "user-ctrl"
 		})
-		.when("/productTK", {
-			templateUrl: "/templates/product.html",
-			controller: "product"
-		})
 		.otherwise({
-			templateUrl: "/templates/admins/products/product.html",
-			controller: "product-ctrl"
+			templateUrl: "/templates/admins/index.html",
+			controller: "indexAdmin-ctrl"
 		});
 })
 

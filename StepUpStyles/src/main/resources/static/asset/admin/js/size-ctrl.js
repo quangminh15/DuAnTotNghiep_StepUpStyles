@@ -1,11 +1,14 @@
-app.controller("productgroup-ctrl", function($scope, $http) {
-	$scope.productgroupitems = [];
+app.controller("size-ctrl", function($scope, $http) {
+	$scope.sizeitems = [];
+	$scope.prods = [];
 	$scope.form = {};
+	$scope.form.products = {};
 	$scope.errorMessage = '';
-	
+
 	$scope.sortableColumns = [
-		{ name: 'productGroupID', label: 'Mã nhóm' },
-		{ name: 'productGroupName', label: 'Tên nhóm sản phẩm' },
+		{ name: 'sizeID', label: 'Mã cấu hình' },
+		{ name: 'sizeNumber', label: 'Tên sản phẩm' },
+		{ name: 'activities', label: 'Màn hình' },
 	];
 
 
@@ -17,7 +20,7 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 			$scope.sortReverse = false;
 		}
 
-		$scope.productgroupitems.sort(function(a, b) {
+		$scope.sizeitems.sort(function(a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
 			if (typeof aValue === 'string') {
@@ -35,6 +38,7 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 			return 0;
 		});
 	};
+
 
 	//	Phân trang
 	$scope.pager = {
@@ -60,12 +64,12 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 			}
 			return visiblePages;
 		},
-		get productgroupitems() {
+		get sizeitems() {
 			var start = this.page * this.size;
-			return $scope.productgroupitems.slice(start, start + this.size);
+			return $scope.sizeitems.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.productgroupitems.length / this.size);
+			return Math.ceil(1.0 * $scope.sizeitems.length / this.size);
 		},
 		first() {
 			this.page = 0;
@@ -98,26 +102,11 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 	};
 
 	$scope.initialize = function() {
-		//load productgroups
-		$http.get("/rest/productgroups/loadall").then(resp => {
-			$scope.productgroupitems = resp.data;
+		//load sizeitems
+		$http.get("/rest/sizes/loadall").then(resp => {
+			$scope.sizeitems = resp.data;
 			$scope.pager.first();
 		});
-	}
-
-	//	Xóa form
-	$scope.reset = function() {
-		$scope.form = {
-
-		};
-	}
-	//	Khởi đầu
-	$scope.initialize();
-	$scope.reset();
-
-	//	Hiển thị lên form
-	$scope.edit = function(productgroupitem) {
-		$scope.form = angular.copy(productgroupitem);
 	}
 
 	//Mở modal tìm kiếm
@@ -128,21 +117,21 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 	};
 
 	// Tìm kiếm màu 
-	$scope.searchProductGroupByName = function() {
+	$scope.searchPhoneConFigByName = function() {
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
-			$http.get("/rest/productgroups/search", {
+			$http.get("/rest/sizes/search", {
 				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
-				$scope.productgroupitems = resp.data;
+				$scope.sizeitems = resp.data;
 				$scope.pager.first();
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					$scope.errorMessage = `Không tìm thấy nhóm sản phẩm có tên "${$scope.searchKeyword}"`;
+					$scope.errorMessage = `Không tìm thấy size "${$scope.searchKeyword}"`;
 					$('#errorModal').modal('show');
 				}
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tìm kiếm nhóm sản phẩm!";
+				$scope.errorMessage = "Lỗi khi tìm kiếm size!";
 				$('#errorModal').modal('show'); // Hiển thị modal lỗi
 				console.log("Error", error);
 				$scope.pager.first();
@@ -150,37 +139,67 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 		} else {
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
-			$scope.errorMessage = "Không tìm thấy tên nhóm sản phẩm mà bạn mong muốn!";
+			$scope.errorMessage = "Không tìm thấy size mà bạn mong muốn!";
 			$('#errorModal').modal('show'); // Hiển thị modal lỗi
 		}
 		$('#searchModal').modal('hide');
 	};
 
+	//	Xóa form
+	$scope.reset = function() {
+		$scope.form = {
+			activities: false,
+			deleted: false,
+		};
+	}
+	//	Khởi đầu
+	$scope.initialize();
+	$scope.reset();
+
+	//	Hiển thị lên form
+	$scope.edit = function(sizeitem) {
+		$scope.form = angular.copy(sizeitem);
+	}
 
 	//	Thêm mới 
 	$scope.create = function() {
-		//Lỗi trùng tên nhóm sản phẩm
-		let existingProductGroupName = $scope.productgroupitems.find(productgroupitem => productgroupitem.productGroupName === $scope.form.productGroupName);
-		if (existingProductGroupName) {
-			$scope.errorMessage = "Tên nhóm sản phẩm đã tồn tại!!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
-
 		//Lỗi bỏ trống 
-		if (!$scope.form.productGroupName) {
-			$scope.errorMessage = "Vui lòng nhập tên nhóm sảm phẩm!!";
+		if (!$scope.form.sizeNumber) {
+			$scope.errorMessage = "Vui lòng số size!!";
+			$('#errorModal').modal('show'); 
+			return;
+		}
+		
+		//Lỗi trùng tên nhóm sản phẩm
+		let existingsizeitemNumber = $scope.sizeitems.find(sizeitem => sizeitem.sizeNumber === $scope.form.sizeNumber);
+		if (existingsizeitemNumber) {
+			$scope.errorMessage = "size đã tồn tại!!";
+			$('#errorModal').modal('show'); // Show the modal
+			return;
+		}
+		
+		//Lỗi sizeitem < 0
+		if ($scope.form.sizeitemNumber < 0) {
+			$scope.errorMessage = "Vui lòng nhập size lớn hơn 0!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
-		var productgroupitem = angular.copy($scope.form);
-		$http.post('/rest/productgroups/create', productgroupitem).then(resp => {
-			$scope.productgroupitems.push(resp.data);
+		//Lỗi sizeitem > 100
+		if ($scope.form.sizeitemNumber > 100) {
+			$scope.errorMessage = "Vui lòng nhập size nhỏ hơn 100!!";
+			$('#errorModal').modal('show'); // Show the modal
+			return;
+		}
+
+		var sizeitem = angular.copy($scope.form);
+		sizeitem.deleted = false;
+		$http.post('/rest/sizes/create', sizeitem).then(resp => {
+			$scope.sizeitems.push(resp.data);
 			$scope.reset();
 			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
 			$scope.messageSuccess = "Thêm mới thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+			$('#errorModal1').modal('show'); 
 			$scope.initialize();
 		}).catch(error => {
 			if (error.status === 400) {
@@ -188,7 +207,7 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 				$scope.initialize();
 			} else {
 				$scope.errorMessage = "Thêm mới thất bại";
-				$('#errorModal').modal('show'); // Show the modal
+				$('#errorModal').modal('show'); 
 				console.log("Error", error);
 				$scope.initialize();
 			}
@@ -198,24 +217,46 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 	//	Cập nhật  
 	$scope.update = function() {
 		//Lỗi bỏ trống 
-		if (!$scope.form.productGroupName) {
-			$scope.errorMessage = "Vui lòng nhập tên nhóm sảm phẩm!!";
+		if (!$scope.form.sizeNumber) {
+			$scope.errorMessage = "Vui lòng số size!!";
+			$('#errorModal').modal('show'); 
+			return;
+		}
+		
+		//Lỗi trùng tên nhóm sản phẩm
+//		let existingsizeitemNumber = $scope.sizeitems.find(sizeitem => sizeitem.sizeitemNumber === $scope.form.sizeitemNumber);
+//		if (existingsizeitemNumber) {
+//			$scope.errorMessage = "sizeitem đã tồn tại!!";
+//			$('#errorModal').modal('show'); // Show the modal
+//			return;
+//		}
+		
+		//Lỗi sizeitem < 0
+		if ($scope.form.sizeNumber < 0) {
+			$scope.errorMessage = "Vui lòng nhập size lớn hơn 0!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
-		var productgroupitem = angular.copy($scope.form);
-		$http.put('/rest/productgroups/update/' + productgroupitem.productGroupID, productgroupitem).then(resp => {
-			var index = $scope.productgroupitems.findIndex(p => p.productGroupID == productgroupitem.productGroupID);
-			$scope.productgroupitems[index] = productgroupitem;
+		//Lỗi sizeitem > 100
+		if ($scope.form.sizeNumber > 100) {
+			$scope.errorMessage = "Vui lòng nhập size nhỏ hơn 100!!";
+			$('#errorModal').modal('show'); // Show the modal
+			return;
+		}
+
+		var sizeitem = angular.copy($scope.form);
+		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+			$scope.sizeitems[index] = sizeitem;
 			$scope.messageSuccess = "Cập nhật thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+			$('#errorModal1').modal('show'); 
 			$scope.initialize();
 		}).catch(error => {
 			$scope.errorMessage = "Cập nhật thất bại";
-			$('#errorModal').modal('show'); // Show the modal
-			console.log("Error", error);
+			$('#errorModal').modal('show'); 
 			$scope.initialize();
+			console.log("Error", error);
 		})
 	}
 
@@ -229,25 +270,23 @@ app.controller("productgroup-ctrl", function($scope, $http) {
 		$('#confirmDeleteModal').modal('show');
 	}
 
-
 	//sau khi xác nhận thành công thì xóa
 	$scope.confirmDelete = function() {
-		// Thực hiện xóa 
-		$http.delete('/rest/productgroups/delete/' + $scope.form.productGroupID).then(resp => {
-			var index = $scope.productgroupitems.findIndex(p => p.productGroupID == $scope.form.productGroupID);
-			$scope.productgroupitems.splice(index, 1);
+		// Thực hiện xóa
+		$http.delete('/rest/sizes/delete/' + $scope.form.sizeID).then(resp => {
+			var index = $scope.sizeitems.findIndex(p => p.sizeID == $scope.form.sizeID);
+			$scope.sizeitems.splice(index, 1);
 			$scope.reset();
+			$scope.initialize();
 			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show'); // Hiển thị modal thành công
+			$('#errorModal1').modal('show'); 
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show'); // Hiển thị modal lỗi
+			$('#errorModal').modal('show'); 
 			console.log("Error", error);
 		});
 
 		// Đóng modal xác nhận xóa
 		$('#confirmDeleteModal').modal('hide');
 	}
-
 });
-

@@ -87,31 +87,22 @@
 	<div class="card-header card-header-divider">Sản phẩm</div>
 	<div class="card-body">
 		<div class="row">
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-4">
 				<label for="inputUserName">Mã sản phẩm:</label> <input
 					class="form-control" id="inputUserName" type="number"
 					placeholder="Mã sản phẩm" ng-model="form.productID" readonly="true">
 			</div>
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-4">
 				<label for="inputPassword3">Người tạo</label> <input
 					class="form-control" id="inputPassword3" type="text" required=""
 					ng-model="form.user.fullName" placeholder="Người tạo"
 					readonly="true">
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-4">
 				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
 				<div ng-model="form.createdDate" class="form-control" id="ngaytao"
 					readonly="true" placeholder="dd-MM-yyyy">{{ form.createdDate
 					| date:'dd-MM-yyyy' }}</div>
-			</div>
-
-			<div class="form-group col-md-6">
-				<label for="inputPassword2">Lượt xem</label> <input
-					class="form-control" id="inputPassword2" type="number"
-					readonly="readonly" ng-model="form.viewCount">
 			</div>
 		</div>
 
@@ -120,25 +111,29 @@
 				<label>Danh mục</label>
 				<div>
 					<select class="select2 form-control"
-						ng-model="form.productCategory.productCategoryID">
+						ng-model="form.category.categoryID">
 						<option value="" disabled selected>Vui lòng chọn danh mục</option>
-						<option ng-repeat="p in prodcates" ng-value="p.productCategoryID">{{p.productCategoryName}}</option>
+						<option ng-repeat="p in cates" ng-value="p.categoryID">{{p.categoryName}}</option>
 					</select>
 				</div>
 			</div>
-
 			<div class="form-group col-md-6">
-				<label for="inputPassword4">Tên sản phẩm</label> <input
-					class="form-control" id="inputPassword4" type="text" required=""
-					placeholder="Tên sản phẩm" ng-model="form.productName">
+				<label>Thương hiệu</label>
+				<div>
+					<select class="select2 form-control" ng-model="form.brand.brandID">
+						<option value="" disabled selected>Vui lòng chọn thương
+							hiệu</option>
+						<option ng-repeat="p in brans" ng-value="p.brandID">{{p.brandName}}</option>
+					</select>
+				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="form-group col-md-6">
-				<label for="inputPassword">Nguồn gốc</label> <input
-					class="form-control" id="inputPassword" type="text"
-					placeholder="Nguồn gốc" required="" ng-model="form.origin">
+				<label for="inputPassword4">Tên sản phẩm</label> <input
+					class="form-control" id="inputPassword4" type="text" required=""
+					placeholder="Tên sản phẩm" ng-model="form.productName">
 			</div>
 
 			<div class="form-group col-md-6">
@@ -151,33 +146,22 @@
 		</div>
 
 		<div class="row">
-			<div class="form-group col-md-12">
-				<label class="col-form-label text-sm-left" for="inputTextarea3">Mô
-					tả</label>
-				<div class="">
-					<textarea class="form-control" id="inputTextarea3"
-						ng-model="form.description" rows="5"></textarea>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label class="col-form-label text-sm-left">Trạng thái</label>
 				<div class="form-check mt-1">
 					<label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.available" class="custom-control-input"
+						<input ng-model="form.activities" class="custom-control-input"
 						ng-value="true" type="radio" name="available" checked=""><span
 						class="custom-control-label custom-control-color">Bật</span>
 					</label> <label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.available" class="custom-control-input"
+						<input ng-model="form.activities" class="custom-control-input"
 						ng-value="false" type="radio" name="available"><span
 						class="custom-control-label custom-control-color">Tắt</span>
 					</label>
 				</div>
 			</div>
 
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label class="col-form-label text-sm-left">Sản phẩm nổi bật</label>
 				<div class="form-check mt-1">
 					<label class="custom-control custom-radio custom-control-inline">
@@ -191,45 +175,41 @@
 					</label>
 				</div>
 			</div>
+		</div>
 
-			<div class="form-group col-md-4">
-				<label class="col-form-label text-sm-left">Trưng bày</label>
-				<div class="form-check mt-1">
-					<label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.display" class="custom-control-input"
-						ng-value="true" type="radio" name="display" checked=""><span
-						class="custom-control-label custom-control-color">Bật</span>
-					</label> <label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.display" class="custom-control-input"
-						ng-value="false" type="radio" name="display"><span
-						class="custom-control-label custom-control-color">Tắt</span>
-					</label>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label class="col-form-label text-sm-left" for="inputTextarea3">Mô
+					tả</label>
+				<div class="">
+					<textarea class="form-control" id="inputTextarea3"
+						ng-model="form.description" rows="5"></textarea>
 				</div>
 			</div>
 		</div>
+	</div>
 
-
-		<div class="row pt-0 pt-sm-5">
-			<div class="col-sm-12 pl-0">
-				<p class="text-right">
-					<button class="btn btn-space btn btn-success" ng-click="create()"
-						type="submit">
-						<i class="bi bi-file-plus-fill"></i> Thêm
-					</button>
-					<button class="btn btn-space btn btn-primary" ng-click="update()">
-						<i class="bi bi-pencil-square"></i> Sửa
-					</button>
-					<button class="btn btn-space btn btn-danger"
-						ng-click="confirmDeleteModal()" type="submit">
-						<i class="bi bi-trash3-fill"></i> Xóa
-					</button>
-					<button class="btn btn-space btn btn-dark" ng-click="reset()">
-						<i class="bi bi-arrow-clockwise"></i> Làm mới
-					</button>
-				</p>
-			</div>
+	<div class="row pt-0 pt-sm-5">
+		<div class="col-sm-12 pl-0">
+			<p class="text-right">
+				<button class="btn btn-space btn btn-success" ng-click="create()"
+					type="submit">
+					<i class="bi bi-file-plus-fill"></i> Thêm
+				</button>
+				<button class="btn btn-space btn btn-primary" ng-click="update()">
+					<i class="bi bi-pencil-square"></i> Sửa
+				</button>
+				<button class="btn btn-space btn btn-danger"
+					ng-click="confirmDeleteModal()" type="submit">
+					<i class="bi bi-trash3-fill"></i> Xóa
+				</button>
+				<button class="btn btn-space btn btn-dark" ng-click="reset()">
+					<i class="bi bi-arrow-clockwise"></i> Làm mới
+				</button>
+			</p>
 		</div>
 	</div>
+</div>
 </div>
 
 <div class="card card-table m-3">
@@ -296,14 +276,12 @@
 				<tr ng-repeat="productitem in pager.productitems">
 					<td>{{productitem.productID}}</td>
 					<td>{{productitem.createdDate | date: 'dd-MM-yyyy'}}</td>
-					<td>{{productitem.productCategory.productCategoryName}}</td>
 					<td>{{productitem.productName}}</td>
-					<td>{{productitem.origin}}</td>
 					<td>{{productitem.price | number: 0 }}đ</td>
-					<td>{{productitem.viewCount}}</td>
-					<td>{{productitem.available ? 'Đang bật' : 'Đang tắt' }}</td>
+					<td>{{productitem.category.categoryName}}</td>
+					<td>{{productitem.brand.brandName}}</td>
+					<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
-					<td>{{productitem.display ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "
 							ng-click="edit(productitem)">
