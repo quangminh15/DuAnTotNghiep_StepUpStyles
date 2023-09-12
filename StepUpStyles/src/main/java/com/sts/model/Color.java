@@ -22,7 +22,7 @@ public class Color implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "color_id")
-	private Integer colorId;
+	private Integer colorID;
 
 	private Boolean activities;
 
@@ -39,6 +39,6 @@ public class Color implements Serializable {
 	private Product product;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "color")
+	@OneToMany(mappedBy = "color", fetch = FetchType.EAGER)
 	private List<ProductDetail> productDetails;
 }

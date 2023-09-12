@@ -22,7 +22,7 @@ public class Brand implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "brand_id")
-	private Integer brandId;
+	private Integer brandID;
 
 	private Boolean activities;
 

@@ -116,14 +116,14 @@
 					class="form-control" id="photo" type="file">
 			</div>
 		</div>
-		<div class="form-group col-md-12" ng-if="form.imagePath">
+		<div class="form-group col-md-12" ng-if="form.colorImage">
 			<label>Hình ảnh</label> <img style="height: 20%; width: 20%;" alt=""
-				src="{{ form.imagePath }}">
+				src="{{ form.colorImage }}">
 		</div>
-		<div class="form-group col-md-12" ng-if="form.imagePath">
+		<div class="form-group col-md-12" ng-if="form.colorImage">
 			<label>Đường dẫn ảnh</label>
-			<p {{ form.imagePath }} 
-					target="_blank">{{ form.imagePath
+			<p {{ form.colorImage }} 
+					target="_blank">{{ form.colorImage
 				}}</p>
 		</div>
 
@@ -228,7 +228,7 @@
 					<td>
 						<div class="image-container">
 							<img class="image-content" alt="{{coloritem.colorName}}"
-								src="{{coloritem.imagePath}}">
+								src="{{coloritem.colorImage}}">
 						</div>
 					</td>
 					<td class="actions">
