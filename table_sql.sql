@@ -127,6 +127,7 @@ CREATE TABLE cart_detail(
 	product_detail_id bigint ,
 	product_id bigint ,
 	quantity int ,
+	check_buy bit
 
 	FOREIGN KEY (cart_id) REFERENCES cart(cart_id),
 
@@ -167,7 +168,8 @@ CREATE TABLE [order](
 	initial_price float,
 	shipping_fee float,
 	total_amount float,
-	order_status nvarchar(50)
+	order_status nvarchar(50),
+	discount_price float
 
 	FOREIGN KEY (shipping_address_id) REFERENCES shipping_address(shipping_address_id),
 	FOREIGN KEY (users_id) REFERENCES users(users_id),

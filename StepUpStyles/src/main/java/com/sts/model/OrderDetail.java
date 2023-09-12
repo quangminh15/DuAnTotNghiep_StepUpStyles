@@ -39,47 +39,6 @@ public class OrderDetail implements Serializable {
 	@JoinColumn(name="product_detail_id")
 	private ProductDetail productDetail;
 
-	// public OrderDetail() {
-	// }
-
-	// public long getOrderDetailId() {
-	// 	return this.orderDetailId;
-	// }
-
-	// public void setOrderDetailId(long orderDetailId) {
-	// 	this.orderDetailId = orderDetailId;
-	// }
-
-	// public double getPrice() {
-	// 	return this.price;
-	// }
-
-	// public void setPrice(double price) {
-	// 	this.price = price;
-	// }
-
-	// public int getQuantity() {
-	// 	return this.quantity;
-	// }
-
-	// public void setQuantity(int quantity) {
-	// 	this.quantity = quantity;
-	// }
-
-	// public Order getOrder() {
-	// 	return this.order;
-	// }
-
-	// public void setOrder(Order order) {
-	// 	this.order = order;
-	// }
-
-	// public ProductDetail getProductDetail() {
-	// 	return this.productDetail;
-	// }
-
-	// public void setProductDetail(ProductDetail productDetail) {
-	// 	this.productDetail = productDetail;
-	// }
+	
 
 }
