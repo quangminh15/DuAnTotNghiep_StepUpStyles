@@ -2,15 +2,16 @@ app.controller("supplier-ctrl", function($scope, $http){
     $scope.items = [];
 	$scope.form = {
         supplierName: '',
-        businessName: '',
-        phoneNumber: '',
+        phone: '',
         email: '',
-        display: true
+		addresss: '',
+        display: true,
+		deleted: false
     };
 
     $scope.initialize = function () {
 		// Load suppliers
-		$http.get("/rest/supplier").then(resp => {
+		$http.get("/rest/supplier/deleted").then(resp => {
 			$scope.items = resp.data;
 			$scope.pager.first();
 			
@@ -37,32 +38,19 @@ app.controller("supplier-ctrl", function($scope, $http){
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
-		//bo trong ten dn
-		if (!$scope.form.businessName) {
-			$scope.errorMessage = "Vui lòng nhập tên nhà doanh nghiệp!!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
-		//loi nhap trung ten doanh nghiep
-		let existingbusiness = $scope.items.find(item => item.businessName === $scope.form.businessName);
-		if (existingbusiness) {
-			$scope.errorMessage = "Tên doanh nghiệp đã tồn tại!!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
 		//bo trong so dien thoai
-		if (!$scope.form.phoneNumber) {
+		if (!$scope.form.phone) {
 			$scope.errorMessage = "Vui lòng nhập số điện thoại!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
-		} else if (!/^0\d{9}$/.test($scope.form.phoneNumber)) {
+		} else if (!/^0\d{9}$/.test($scope.form.phone)) {
 			$scope.errorMessage = "Số điện thoại không hợp lệ!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		// Kiểm tra trùng số điện thoại
-		let existingPhone = $scope.items.find(item => item.phoneNumber === $scope.form.phoneNumber);
+		let existingPhone = $scope.items.find(item => item.phone === $scope.form.phone);
 		if (existingPhone) {
 			$scope.errorMessage = "Số điện thoại đã tồn tại!!";
 			$('#errorModal').modal('show'); // Show the modal
@@ -87,7 +75,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 		}
 
         let newItem = angular.copy($scope.form);
-		$http.post(`/rest/supplier/createSup`, newItem).then(response => {
+		newItem.deleted = false;
+		$http.post(`/rest/supplier/createSupp`, newItem).then(response => {
 			let data = response.data;
 			$scope.items.push(data);
 			$scope.reset();
@@ -107,14 +96,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
-		//bo trong ten dn
-		if (!$scope.form.businessName) {
-			$scope.errorMessage = "Vui lòng nhập tên nhà doanh nghiệp!!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
 		//bo trong so dien thoai
-		if (!$scope.form.phoneNumber) {
+		if (!$scope.form.phone) {
 			$scope.errorMessage = "Vui lòng nhập số điện thoại!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
@@ -131,8 +114,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 		}
 
 		var item = angular.copy($scope.form);
-		$http.put(`/rest/supplier/updateSup/${item.supplierID}`, item).then(resp => {
-			var index = $scope.items.findIndex(p => p.supplierID == item.supplierID);
+		$http.put(`/rest/supplier/updateSupp/${item.supplierId}`, item).then(resp => {
+			var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
 			$scope.items[index] = item;
 			$scope.messageSuccess = "Cập nhật thành công nhà cung cấp";
 			$('#errorModal1').modal('show'); // Show the modal
@@ -141,6 +124,20 @@ app.controller("supplier-ctrl", function($scope, $http){
 			console.log("Error", error);
 		})
 	}
+
+	//hàm xóa tạm thời
+	$scope.deleted = function(supplierId) {
+		$http.put('/rest/supplier/deletedSupplier/' + supplierId).then(resp => {
+			var index = $scope.items.findIndex(p => p.supplierId == supplierId);
+			$scope.items.splice(index, 1); // Xóa mục khỏi danh sách
+			$scope.messageSuccess = "Xóa thành công nhà cung cấp";
+			$('#errorModal1').modal('show'); // Hiển thị modal
+		}).catch(error => {
+			alert("Lỗi xóa");
+			console.log("Error", error);
+		});
+	};
+	
 
 	//Gọi đến modal xác nhận
 	$scope.confirmDeleteModal = function() {
@@ -156,17 +153,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 	$scope.confirmDelete = function() {
 
 		// Thực hiện xóa nhóm sản phẩm
-		$http.delete('/rest/supplier/deleteSup/' + $scope.form.supplierID).then(resp => {
-			var index = $scope.items.findIndex(p => p.supplierID == $scope.form.supplierID);
-			$scope.items.splice(index, 1);
-			$scope.reset();
-			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show'); // Show the modal
-		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show'); // Show the modal
-			console.log("Error", error);
-		})
+		var supplierId = $scope.form.supplierId; // Lấy supplierId từ form
+    	$scope.deleted(supplierId); // Gọi hàm deleted với supplierId
 
 		// Đóng modal xác nhận xóa
 		$('#confirmDeleteModal').modal('hide');

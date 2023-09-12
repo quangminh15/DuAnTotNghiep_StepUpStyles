@@ -82,9 +82,9 @@
                     ng-model="form.supplierName">
             </div>
             <div class="form-group col-md-6">
-                <label for="inputPassword3">Tên doanh nghiệp</label>
-                <input class="form-control" id="inputPassword3" type="text" placeholder="Tên doanh nghiệp" required=""
-                    ng-model="form.businessName">
+                <label for="inputPassword3">Địa chỉ</label>
+                <input class="form-control" id="inputPassword3" type="text" placeholder="Địa chỉ" required=""
+                    ng-model="form.addresss">
             </div>
         </div>
 
@@ -92,7 +92,7 @@
             <div class="form-group col-md-6">
                 <label for="inputPassword3">Số điện thoại</label>
                 <input class="form-control" id="inputPassword3" type="text" placeholder="Số điện thoại" required=""
-                    ng-model="form.phoneNumber">
+                    ng-model="form.phone">
             </div>
 
             <div class="form-group col-md-6">
@@ -137,9 +137,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>STT</th>
                     <th>Tên nhà cung cấp</th>
-                    <th>Tên doanh nghiệp</th>
+                    <th>Địa chỉ</th>
                     <th>Số điện thoại</th>
                     <th>Email</th>
                     <th>Hiển thị</th>
@@ -148,10 +148,10 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in pager.items">
-                    <td>{{item.supplierID}}</td>
+                    <td>{{$index + 1}}</td>
                     <td>{{item.supplierName}}</td>
-                    <td>{{item.businessName}}</td>
-                    <td>{{item.phoneNumber}}</td>
+                    <td>{{item.addresss}}</td>
+                    <td>{{item.phone}}</td>
                     <td>{{item.email}}</td>
                     <td>{{item.display? 'Bật':'Tắt'}}</td>
                     <td class="actions">
@@ -163,7 +163,6 @@
                         </button>
                     </td>
                 </tr>
-
             </tbody>
         </table>
         <div class="card-header d-flex justify-content-end">
