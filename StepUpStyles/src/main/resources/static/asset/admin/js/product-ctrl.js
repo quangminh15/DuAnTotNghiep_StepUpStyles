@@ -196,16 +196,16 @@ app.controller("product-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(productitem);
 	}
 
-//	function checkDuplicateProduct(productitem) {
-//		var isDuplicate = $scope.productitems.some(function(item) {
-//			return (
-//				item.category.categoryID === productitem.category.categoryID &&
-//				item.productName === productitem.productName
-//			);
-//		});
-//
-//		return isDuplicate;
-//	}
+	//	function checkDuplicateProduct(productitem) {
+	//		var isDuplicate = $scope.productitems.some(function(item) {
+	//			return (
+	//				item.category.categoryID === productitem.category.categoryID &&
+	//				item.productName === productitem.productName
+	//			);
+	//		});
+	//
+	//		return isDuplicate;
+	//	}
 
 	//	Thêm sản phẩm mới 
 	$scope.create = function() {
@@ -215,7 +215,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			$('#errorModal').modal('show');
 			return;
 		}
-		
+
 		//Không chọn thương hiệu
 		if (!$scope.form.brand || !$scope.form.brand.brandID) {
 			$scope.errorMessage = "Vui lòng chọn thương hiệu!";
@@ -231,12 +231,12 @@ app.controller("product-ctrl", function($scope, $http) {
 		}
 
 		// Kiểm tra sự trùng lặp
-//		var isDuplicate = checkDuplicateProduct($scope.form);
-//		if (isDuplicate) {
-//			$scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
-//			$('#errorModal').modal('show');
-//			return;
-//		}
+		//		var isDuplicate = checkDuplicateProduct($scope.form);
+		//		if (isDuplicate) {
+		//			$scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
+		//			$('#errorModal').modal('show');
+		//			return;
+		//		}
 
 		//Lỗi bỏ trống giá sản phẩm 
 		if (!$scope.form.price) {
@@ -273,7 +273,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			$http.get("/rest/users/by-email/" + email).then(userResp => {
 				var userID = userResp.data.userID;
 				$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
-				
+
 				var currentDate = new Date(); // Lấy ngày hiện tại
 				$scope.form.createdDate = currentDate; // Gán ngày hiện tại cho createdDate
 
@@ -319,7 +319,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			$('#errorModal').modal('show');
 			return;
 		}
-		
+
 		//Không chọn thương hiệu
 		if (!$scope.form.brand || !$scope.form.brand.brandID) {
 			$scope.errorMessage = "Vui lòng chọn thương hiệu!";
@@ -335,12 +335,12 @@ app.controller("product-ctrl", function($scope, $http) {
 		}
 
 		// Kiểm tra sự trùng lặp
-//		var isDuplicate = checkDuplicateProduct($scope.form);
-//		if (isDuplicate) {
-//			$scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
-//			$('#errorModal').modal('show');
-//			return;
-//		}
+		//		var isDuplicate = checkDuplicateProduct($scope.form);
+		//		if (isDuplicate) {
+		//			$scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
+		//			$('#errorModal').modal('show');
+		//			return;
+		//		}
 
 		//Lỗi bỏ trống giá sản phẩm 
 		if (!$scope.form.price) {

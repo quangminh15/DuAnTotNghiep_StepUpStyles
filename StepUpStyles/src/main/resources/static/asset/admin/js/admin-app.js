@@ -10,6 +10,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/products/product.html",
 			controller: "product-ctrl"
 		})
+		.when("/productImage", {
+			templateUrl: "/templates/admins/products/productimage.html",
+			controller: "productimage-ctrl"
+		})
 		.when("/productsize", {
 			templateUrl: "/templates/admins/products/size.html",
 			controller: "size-ctrl"

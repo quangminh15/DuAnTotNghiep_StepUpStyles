@@ -93,16 +93,7 @@
 					class="form-control" id="inputUserName" type="text"
 					ng-model="form.colorID" readonly="true">
 			</div>
-			<div class="form-group col-md-6">
-				<label>Sản phẩm</label>
-				<div>
-					<select class="select2 form-control"
-						ng-model="form.product.productID">
-						<option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-						<option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-					</select>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="row">
@@ -112,20 +103,22 @@
 					placeholder="Tên màu" required="" ng-model="form.colorName">
 			</div>
 			<div class="form-group col-md-6">
-				<label for="inputPassword3">Hình ảnh</label> <input
-					class="form-control" id="photo" type="file">
+				<label class="col-form-label text-sm-left">Trạng thái</label>
+				<div class="form-check mt-1">
+					<label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="true" type="radio" name="available" checked=""><span
+						class="custom-control-label custom-control-color">Bật</span>
+					</label> <label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="false" type="radio" name="available"><span
+						class="custom-control-label custom-control-color">Tắt</span>
+					</label>
+				</div>
 			</div>
 		</div>
-		<div class="form-group col-md-12" ng-if="form.colorImage">
-			<label>Hình ảnh</label> <img style="height: 20%; width: 20%;" alt=""
-				src="{{ form.colorImage }}">
-		</div>
-		<div class="form-group col-md-12" ng-if="form.colorImage">
-			<label>Đường dẫn ảnh</label>
-			<p {{ form.colorImage }} 
-					target="_blank">{{ form.colorImage
-				}}</p>
-		</div>
+
+
 
 
 		<div class="row pt-0 pt-sm-5">
@@ -223,14 +216,8 @@
 			<tbody>
 				<tr ng-repeat="coloritem in pager.coloritems">
 					<td>{{coloritem.colorID}}</td>
-					<td>{{coloritem.product.productName}}</td>
 					<td>{{coloritem.colorName}}</td>
-					<td>
-						<div class="image-container">
-							<img class="image-content" alt="{{coloritem.colorName}}"
-								src="{{coloritem.colorImage}}">
-						</div>
-					</td>
+					<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "
 							ng-click="edit(coloritem)">

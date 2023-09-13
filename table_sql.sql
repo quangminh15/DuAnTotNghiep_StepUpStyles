@@ -66,16 +66,22 @@ CREATE TABLE product (
   CONSTRAINT fk_brand FOREIGN KEY (brand_id) REFERENCES brand(brand_id),
   CONSTRAINT fk_userr FOREIGN KEY (users_id) REFERENCES users(users_id)
 );
+
+--Tạo bảng image_path
+go 
+CREATE TABLE product_image (
+  product_image_id BIGINT PRIMARY KEY IDENTITY(1,1),
+  product_id BIGINT NOT NULL,
+  image_path NVARCHAR(MAX) NOT NULL,
+  CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product(product_id),
+);
 go
 -- Tạo bảng Color
 CREATE TABLE color (
   color_id BIGINT PRIMARY KEY IDENTITY(1,1),
-  product_id BIGINT NOT NULL,
   color_name NVARCHAR(50) NOT NULL,
-  color_image NVARCHAR(MAX) NOT NULL,
   activities BIT NOT NULL DEFAULT 0,
   deleted BIT NOT NULL DEFAULT 0,
-  CONSTRAINT fk_products FOREIGN KEY (product_id) REFERENCES product(product_id),
 );
 
 go
@@ -87,7 +93,7 @@ CREATE TABLE product_detail (
   color_id BIGINT NOT NULL,
   quantity BIGINT NOT NULL,
   deleted BIT NOT NULL DEFAULT 0,
-  CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product(product_id),
+  CONSTRAINT fk_productqw FOREIGN KEY (product_id) REFERENCES product(product_id),
   CONSTRAINT fk_size FOREIGN KEY (size_id) REFERENCES size(size_id),
   CONSTRAINT fk_color FOREIGN KEY (color_id) REFERENCES color(color_id)
 );
@@ -316,27 +322,36 @@ INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES ( N'New Balance 08', 5, 5, 3, 8789000, N'huyền thoại hợp thời trang khiến đôi VANS này thật sự trở thành mẫu giày classic bất bại, là fan hâm mộ của VANS nói chung và những skaters nói riêng', 0, 1, CAST(N'2015-01-21T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES ( N'New Balance 09', 1, 5, 3, 6543000, N'Tới nay đôi giày chỉ với phối màu đen trắng này vẫn nằm trong top “Best Seller” của VANS trên toàn thế giới, với kiểu dáng cổ điển cùng “sọc Jazz”', 0, 0, CAST(N'2023-07-21T00:00:00.000' AS DateTime),0)
 INSERT [dbo].[product] ([product_name], [category_id], [brand_id], [users_id], [price], [product_description], [activities], [featured], [created_date], [deleted]) VALUES ( N'New Balance 10', 5, 5, 3, 2098908, N'Converse 1970s là 1 trong những dòng sản phẩm bán chạy nhất của Converse.Phần đế màu trắng ngà vintage được phủ 1 lớp bóng bên ngoài là điểm nhấn riêng cho dòng 1970s, dễ vệ sinh hơn.', 0, 1, CAST(N'2020-07-05T00:00:00.000' AS DateTime),0)
+--[product_image]
+go
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (1, N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-11.jpg?alt=media&token=18d95f47-b2d6-4e81-95c6-8c510e8a6b93')
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (3,N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c')
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (2,N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc')
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (4,N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-66.jpg?alt=media&token=d5e75b21-cca8-4b5d-a9ab-6e5c69e964bb')
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (5,N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc')
+INSERT [dbo].[product_image] ([product_id],[image_path]) VALUES (6, N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c')
+
 --Color
 go
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (1, N'Ðen', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-11.jpg?alt=media&token=18d95f47-b2d6-4e81-95c6-8c510e8a6b93',1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (3, N'Xanh lá',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c' ,1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (2, N'Xanh lam',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc' ,0, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (4, N'Vàng',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-66.jpg?alt=media&token=d5e75b21-cca8-4b5d-a9ab-6e5c69e964bb' ,0, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (5, N'Đỏ',N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-4.jpg?alt=media&token=d30a1129-ad2b-4a27-a0c4-0a5ff61ed1cc' ,1, 0)
-INSERT [dbo].[color] ([product_id], [color_name], [color_image], [activities], [deleted]) VALUES (6, N'Tím', N'https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/images%2Fshop-22.jpg?alt=media&token=94c0a4ed-69e6-4827-9163-fd8f4b1a427c',1, 1)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Ðen',1, 0)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Xanh lá' ,1, 0)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Xanh lam' ,0, 0)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Vàng' ,0, 0)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Đỏ',1, 0)
+INSERT [dbo].[color] ([color_name],[activities], [deleted]) VALUES (N'Tím',1, 1)
 
 --Product Detail
 go
 INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 3, 1, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 1, 2, 24, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 1, 3, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 1, 4, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 1, 5, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 2, 1, 47, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 2, 2, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 2, 3, 8, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 2, 4, 50, 0)
-INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (1, 2, 5, 50, 1)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (2, 1, 2, 24, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (3, 1, 3, 50, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (4, 1, 4, 50, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (5, 1, 5, 50, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (6, 2, 1, 47, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (7, 2, 2, 50, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (8, 2, 3, 8, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (9, 2, 4, 50, 0)
+INSERT [dbo].[product_detail] ([product_id], [size_id], [color_id], [quantity], [deleted]) VALUES (10, 2, 5, 50, 1)
 
 --Favorite
 go

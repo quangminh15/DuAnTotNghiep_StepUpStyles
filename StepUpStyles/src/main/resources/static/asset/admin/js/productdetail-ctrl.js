@@ -2,6 +2,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	$scope.productdetailitems = [];
 	$scope.prods = [];
 	$scope.cols = [];
+	$scope.sizs = [];
 	$scope.form = {};
 	$scope.form.product = {};
 	$scope.form.color = {};
@@ -11,8 +12,8 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		{ name: 'productDetailID', label: 'Mã chi tiết' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'color.colorName', label: 'Tên màu' },
-		{ name: 'quantityInStock', label: 'Số lượng' },
-		{ name: 'storageLocation', label: 'Nơi lưu trữ' },
+		{ name: 'size.sizeNumber', label: 'Size' },
+		{ name: 'quantity', label: 'Số lượng' },
 	];
 
 
@@ -243,29 +244,22 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		}
 
 		//Lỗi bỏ trống 
-		if (!$scope.form.quantityInStock) {
+		if (!$scope.form.quantity) {
 			$scope.errorMessage = "Vui lòng nhập số lượng!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		//Lỗi số lượng sản phẩm < 0
-		if ($scope.form.quantityInStock < 0) {
+		if ($scope.form.quantity < 0) {
 			$scope.errorMessage = "Vui lòng nhập số lượng sản phẩm lớn hơn 0!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		//Lỗi số lượng sản phẩm > 10.000
-		if ($scope.form.quantityInStock > 10000) {
+		if ($scope.form.quantity > 10000) {
 			$scope.errorMessage = "Số lượng quá lớn. Vui lòng nhập nhỏ hơn 10.000 !!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
-
-
-		if (!$scope.form.storageLocation) {
-			$scope.errorMessage = "Vui lòng nhập nơi lưu trữ!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
@@ -308,31 +302,26 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		}
 
 		//Lỗi bỏ trống 
-		if (!$scope.form.quantityInStock) {
+		if (!$scope.form.quantity) {
 			$scope.errorMessage = "Vui lòng nhập số lượng!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		//Lỗi số lượng sản phẩm < 0
-		if ($scope.form.quantityInStock < 0) {
+		if ($scope.form.quantity < 0) {
 			$scope.errorMessage = "Vui lòng nhập số lượng sản phẩm lớn hơn 0!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		//Lỗi số lượng sản phẩm > 10.000
-		if ($scope.form.quantityInStock > 10000) {
+		if ($scope.form.quantity > 10000) {
 			$scope.errorMessage = "Số lượng quá lớn. Vui lòng nhập nhỏ hơn 10.000 !!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
-		if (!$scope.form.storageLocation) {
-			$scope.errorMessage = "Vui lòng nhập nơi lưu trữ!!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
 
 		var productdetailitem = angular.copy($scope.form);
 		$http.put('/rest/productdetails/update/' + productdetailitem.productDetailID, productdetailitem).then(resp => {

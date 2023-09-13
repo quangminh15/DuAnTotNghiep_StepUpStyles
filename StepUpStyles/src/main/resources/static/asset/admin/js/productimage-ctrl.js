@@ -1,5 +1,5 @@
-app.controller("color-ctrl", function($scope, $http) {
-	$scope.coloritems = [];
+app.controller("productimage-ctrl", function($scope, $http) {
+	$scope.productimageitems = [];
 	$scope.prods = [];
 	$scope.productNames = [];
 	$scope.form = {};
@@ -8,9 +8,9 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.messageSuccess = '';
 
 	$scope.sortableColumns = [
-		{ name: 'colorID', label: 'Mã màu' },
-		{ name: 'colorName', label: 'Tên màu' },
-		{ name: 'activities', label: 'Trạng thái' },
+		{ name: 'productImageID', label: 'Mã ảnh' },
+		{ name: 'product.productName', label: 'Tên sản phẩm' },
+		{ name: 'imagePath', label: 'Hình ảnh' },
 	];
 
 
@@ -22,9 +22,13 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.sortReverse = false;
 		}
 
-		$scope.coloritems.sort(function(a, b) {
+		$scope.productimageitems.sort(function(a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
+			if (columnName === 'product.productName') {
+				aValue = a.product.productName;
+				bValue = b.product.productName;
+			}
 			if (typeof aValue === 'string') {
 				aValue = aValue.toLowerCase();
 			}
@@ -65,12 +69,12 @@ app.controller("color-ctrl", function($scope, $http) {
 			}
 			return visiblePages;
 		},
-		get coloritems() {
+		get productimageitems() {
 			var start = this.page * this.size;
-			return $scope.coloritems.slice(start, start + this.size);
+			return $scope.productimageitems.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.coloritems.length / this.size);
+			return Math.ceil(1.0 * $scope.productimageitems.length / this.size);
 		},
 		first() {
 			this.page = 0;
@@ -103,10 +107,20 @@ app.controller("color-ctrl", function($scope, $http) {
 	};
 
 	$scope.initialize = function() {
-		//load colors
-		$http.get("/rest/colors/loadall").then(resp => {
-			$scope.coloritems = resp.data;
-			console.log($scope.coloritems)
+		//load productimages
+		$http.get("/rest/productimages/loadall").then(resp => {
+			$scope.productimageitems = resp.data;
+			console.log($scope.productimageitems)
+			$scope.pager.first();
+		});
+
+		//load product
+		$http.get("/rest/products/loadall").then(resp => {
+			$scope.prods = resp.data;
+			console.log($scope.prods)
+			$scope.productimageitems.forEach(productitem => {
+				productitem.createDate = new Date(productitem.createDate)
+			})
 			$scope.pager.first();
 		});
 	}
@@ -121,10 +135,10 @@ app.controller("color-ctrl", function($scope, $http) {
 	// Tìm kiếm màu 
 	$scope.searchColorByName = function() {
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
-			$http.get("/rest/colors/search", {
+			$http.get("/rest/productimages/search", {
 				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
-				$scope.coloritems = resp.data;
+				$scope.productimageitems = resp.data;
 				$scope.pager.first();
 
 				if (resp.data.length === 0) {
@@ -150,8 +164,8 @@ app.controller("color-ctrl", function($scope, $http) {
 
 	$scope.filterByProduct = function() {
 		if ($scope.selectedProduct) {
-			$http.get("/rest/colors/loadbyproduct/" + $scope.selectedProduct).then(resp => {
-				$scope.coloritems = resp.data;
+			$http.get("/rest/productimages/loadbyproduct/" + $scope.selectedProduct).then(resp => {
+				$scope.productimageitems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
 				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo sản phẩm!";
@@ -178,11 +192,29 @@ app.controller("color-ctrl", function($scope, $http) {
 		}
 	};
 
+	// Tải ảnh lên Firebase	
+	$scope.uploadImages = function() {
+		var ref = firebase.storage().ref();
+		var folder = 'productImage';
+		var file = document.querySelector('#photo').files[0];
+		var metadata = {
+			contentType: file.type
+		};
+		var name = folder + '/' + file.name; // Tạo tên file với thư mục
+
+		var uploadIMG = ref.child(name).put(file, metadata);
+
+		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
+			.then(url => {
+				// Lưu đường dẫn ảnh vào biến $scope.form.imagePath
+				$scope.form.imagePath = url;
+			});
+	};
+
+
 	//	Xóa form
 	$scope.reset = function() {
 		$scope.form = {
-			activities: false,
-			deleted: false,
 		};
 	}
 	//	Khởi đầu
@@ -190,16 +222,16 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.reset();
 
 	//	Hiển thị lên form
-	$scope.edit = function(coloritem) {
-		$scope.form = angular.copy(coloritem);
+	$scope.edit = function(productimageitem) {
+		$scope.form = angular.copy(productimageitem);
 	}
 
-	function checkDuplicateColor(coloritem) {
-		// Kiểm tra sự trùng lặp dựa trên productID, sizeID và colorID
-		var isDuplicate = $scope.coloritems.some(function(item) {
+	function checkDuplicateColor(productimageitem) {
+		// Kiểm tra sự trùng lặp dựa trên productID, sizeID và productImageID
+		var isDuplicate = $scope.productimageitems.some(function(item) {
 			return (
-				item.product.productID === coloritem.product.productID &&
-				item.colorName === coloritem.colorName
+				item.product.productID === productimageitem.product.productID &&
+				item.colorName === productimageitem.colorName
 			);
 		});
 
@@ -207,7 +239,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	}
 
 	//	Thêm mới 
-	$scope.create = function() {
+	$scope.create = async function() {
 
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
@@ -216,20 +248,14 @@ app.controller("color-ctrl", function($scope, $http) {
 			return;
 		}
 
-		//Lỗi bỏ trống tên màu
-		if (!$scope.form.colorName) {
-			$scope.errorMessage = "Vui lòng nhập tên màu!!";
-			$('#errorModal').modal('show');
-			return;
-		}
 
 		// Kiểm tra sự trùng lặp
-		var isDuplicate = checkDuplicateColor($scope.form);
-		if (isDuplicate) {
-			$scope.errorMessage = "Sản phẩm mà bạn chọn đã có màu này rồi. Vui lòng nhập màu khác!";
-			$('#errorModal').modal('show');
-			return;
-		}
+//		var isDuplicate = checkDuplicateColor($scope.form);
+//		if (isDuplicate) {
+//			$scope.errorMessage = "Sản phẩm mà bạn chọn đã có màu này rồi. Vui lòng nhập màu khác!";
+//			$('#errorModal').modal('show');
+//			return;
+//		}
 
 
 		//Lỗi không chọn ảnh
@@ -239,44 +265,44 @@ app.controller("color-ctrl", function($scope, $http) {
 			return; // Dừng tiến trình nếu không chọn ảnh
 		};
 
-		// Thực hiện việc lưu vào db
-		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
-		coloritem.deleted = false;
-		$http.post('/rest/colors/create', coloritem).then(resp => {
-			$scope.coloritems.push(resp.data);
-			$scope.reset();
-			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-			$scope.messageSuccess = "Thêm mới thành công";
-			$('#errorModal1').modal('show');
+		try {
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
+
+			// Thực hiện việc lưu vào db
+			var productimageitem = angular.copy($scope.form);
+			productimageitem.imagePath = $scope.form.imagePath;
+			$http.post('/rest/productimages/create', productimageitem).then(resp => {
+				$scope.productimageitems.push(resp.data);
+				$scope.reset();
+				$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
+				$scope.messageSuccess = "Thêm mới thành công";
+				$('#errorModal1').modal('show');
+				$scope.initialize();
+			}).catch(error => {
+				if (error.status === 400) {
+					$scope.errorMessage = error.data;
+					$scope.initialize();
+				} else {
+					$scope.errorMessage = "Thêm mới thất bại";
+					$('#errorModal').modal('show');
+					$scope.initialize();
+					console.log("Error", error);
+				}
+			});
+		} catch (error) {
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
-		}).catch(error => {
-			if (error.status === 400) {
-				$scope.errorMessage = error.data;
-				$scope.initialize();
-			} else {
-				$scope.errorMessage = "Thêm mới thất bại";
-				$('#errorModal').modal('show');
-				$scope.initialize();
-				console.log("Error", error);
-			}
-		});
+		}
 	}
 
 	//Cập nhật
-	$scope.update = function() {
+	$scope.update = async function() {
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
 			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
 			$('#errorModal').modal('show');
 			return; // Dừng tiến trình nếu không chọn sản phẩm
-		}
-
-		//Lỗi bỏ trống tên màu
-		if (!$scope.form.colorName) {
-			$scope.errorMessage = "Vui lòng nhập tên màu!!";
-			$('#errorModal').modal('show');
-			return;
 		}
 
 		//Lỗi không chọn ảnh 
@@ -286,20 +312,28 @@ app.controller("color-ctrl", function($scope, $http) {
 			return; // Dừng tiến trình nếu không chọn ảnh
 		}
 
-		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
-		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
-			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-			$scope.coloritems[index] = coloritem;
-			$scope.messageSuccess = "Cập nhật thành công";
-			$('#errorModal1').modal('show');
-			$scope.initialize();
-		}).catch(error => {
-			$scope.errorMessage = "Cập nhật thất bại";
+		try {
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
+
+			var productimageitem = angular.copy($scope.form);
+			productimageitem.imagePath = $scope.form.imagePath;
+			$http.put('/rest/productimages/update/' + productimageitem.productImageID, productimageitem).then(resp => {
+				var index = $scope.productimageitems.findIndex(p => p.productImageID == productimageitem.productImageID);
+				$scope.productimageitems[index] = productimageitem;
+				$scope.messageSuccess = "Cập nhật thành công";
+				$('#errorModal1').modal('show');
+				$scope.initialize();
+			}).catch(error => {
+				$scope.errorMessage = "Cập nhật thất bại";
+				$('#errorModal').modal('show');
+				$scope.initialize();
+				console.log("Error", error);
+			})
+		} catch (error) {
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
-			console.log("Error", error);
-		})
+		}
 	}
 
 	//Gọi đến modal xác nhận để xóa
@@ -307,17 +341,17 @@ app.controller("color-ctrl", function($scope, $http) {
 		$('#confirmDeleteModal').modal('show');
 	}
 
-	$scope.confirmDeleteModal1 = function(coloritem) {
-		$scope.form = angular.copy(coloritem);
+	$scope.confirmDeleteModal1 = function(productimageitem) {
+		$scope.form = angular.copy(productimageitem);
 		$('#confirmDeleteModal').modal('show');
 	}
 
 	//sau khi xác nhận thành công thì xóa
 	$scope.confirmDelete = function() {
 		// Thực hiện xóa 
-		$http.delete('/rest/colors/delete/' + $scope.form.colorID).then(resp => {
-			var index = $scope.coloritems.findIndex(p => p.colorID == $scope.form.colorID);
-			$scope.coloritems.splice(index, 1);
+		$http.delete('/rest/productimages/delete/' + $scope.form.productImageID).then(resp => {
+			var index = $scope.productimageitems.findIndex(p => p.productImageID == $scope.form.productImageID);
+			$scope.productimageitems.splice(index, 1);
 			$scope.reset();
 			$scope.initialize();
 			$scope.messageSuccess = "Xóa thành công";

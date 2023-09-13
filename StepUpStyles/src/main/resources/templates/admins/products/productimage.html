@@ -71,8 +71,8 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa chi tiết sản
-					phẩm "{{ form.product.productName }}" này không?</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa hình ảnh của
+					sản phẩm "{{ form.imagePath }}" này không?</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Hủy</button>
@@ -82,15 +82,18 @@
 			</div>
 		</div>
 	</div>
-	<div class="card-header card-header-divider">Sản phẩm chi tiết</div>
+
+
+	<div class="card-header card-header-divider">Hình ảnh</div>
 	<div class="card-body">
+
 		<div class="row">
-			<div class="form-group col-md-4">
-				<label for="inputUserName">Mã chi tiết:</label> <input
+			<div class="form-group col-md-6">
+				<label for="inputUserName">Mã màu:</label> <input
 					class="form-control" id="inputUserName" type="text"
-					ng-model="form.laptopID" readonly="true">
+					ng-model="form.productImageID" readonly="true">
 			</div>
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label>Sản phẩm</label>
 				<div>
 					<select class="select2 form-control"
@@ -100,36 +103,22 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-group col-md-4">
-				<label>Màu sắc</label>
-				<div>
-					<select class="select2 form-control" ng-model="form.color.colorID">
-						<option value="" disabled selected>Vui lòng chọn màu sắc
-							cho sản phẩm</option>
-						<option ng-repeat="p in cols" ng-value="p.colorID">{{p.colorName}} : {{p.product.productName}}</option>
-					</select>
-				</div>
-			</div>
 		</div>
 
 		<div class="row">
-			<div class="form-group col-md-6">
-				<label for="inputPassword3">Số lượng</label> <input
-					class="form-control" id="inputPassword3" type="text"
-					placeholder="Số lượng" required="" ng-model="form.quantityInStock">
+
+			<div class="form-group col-md-12">
+				<label for="inputPassword3">Hình ảnh</label> <input
+					class="form-control" id="photo" type="file">
 			</div>
 
-			<div class="form-group col-md-6">
-				<label>Size</label>
-				<div>
-					<select class="select2 form-control"
-						ng-model="form.product.productID">
-						<option value="" disabled selected>Vui lòng chọn size sản phẩm</option>
-						<option ng-repeat="p in sizs" ng-value="p.sizeID">{{p.sizeNumber}}</option>
-					</select>
-				</div>
-			</div>
 		</div>
+		<div class="form-group col-md-12" ng-if="form.imagePath">
+			<label>Hình ảnh</label> <img style="height: 20%; width: 20%;" alt=""
+				src="{{ form.imagePath }}">
+		</div>
+
+
 
 		<div class="row pt-0 pt-sm-5">
 			<div class="col-sm-12 pl-0">
@@ -157,20 +146,20 @@
 <div class="card card-table m-3">
 	<div
 		class="card-header d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Danh sách sản phẩm chi tiết</h4>
+		<h4 class="mb-0">Danh sách màu sắc</h4>
 		<!-- tìm kiếm theo tên bắt đầu  -->
 		<div class="d-flex">
-		<!-- Thẻ select box -->
+			<!-- Thẻ select box -->
 			<select class="form-control mr-2" ng-model="selectedProduct"
 				ng-change="filterByProduct()"
 				ng-options="product.productID as product.productName for product in prods"
 				style="width: 200px;">
 				<option value="">Tất cả sản phẩm</option>
 			</select>
-			
+
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
-				ng-click="openSearchForm()" style="width: 50px;height: 47px">
+				ng-click="openSearchForm()" style="width: 50px;">
 				<span class="mdi mdi-search"></span>
 			</button>
 		</div>
@@ -189,9 +178,10 @@
 				<div class="modal-body">
 					<form method="post">
 						<div class="form-group">
-							<label for="searchKeyword">Tên sản phẩm</label> <input
+							<label for="searchKeyword">Tên màu</label> <input
 								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword" placeholder="Nhập tên sản phẩm mà bạn muốn tìm kiếm">
+								ng-model="searchKeyword"
+								placeholder="Nhập tên màu mà bạn muốn tìm kiếm">
 						</div>
 					</form>
 				</div>
@@ -199,7 +189,7 @@
 					<button class="btn btn-secondary modal-close" type="button"
 						data-dismiss="modal">Hủy</button>
 					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchProductDetailByName()">Tìm kiếm</button>
+						ng-click="searchColorByName()">Tìm kiếm</button>
 				</div>
 			</div>
 		</div>
@@ -207,6 +197,7 @@
 
 
 	<!-- tìm kiếm theo tên kết thúc -->
+
 	<div class="card-body">
 		<table class="table">
 			<thead>
@@ -222,16 +213,25 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="productdetailitem in pager.productdetailitems">
-					<td>{{productdetailitem.productDetailID}}</td>
-					<td>{{productdetailitem.product.productName}}</td>
-					<td>{{productdetailitem.color.colorName}}</td>
-					<td>{{productdetailitem.size.sizeNumber}}</td>
-					<td>{{productdetailitem.quantity}}</td>
+				<tr ng-repeat="productimageitem in pager.productimageitems">
+					<td>{{productimageitem.productImageID}}</td>
+					<td>{{productimageitem.product.productName}}</td>
+					<td>
+						<div class="image-container">
+							<img class="image-content" alt="{{productimageitem.imagePath}}"
+								src="{{productimageitem.imagePath}}">
+						</div>
+					</td>
 					<td class="actions">
-                        <button class="btn btn-space btn btn-primary " ng-click="edit(productdetailitem)"><i class="bi bi-pencil-square"></i> </button>
-                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(productdetailitem)"><i class="bi bi-trash3-fill"></i></button>
-                    </td>
+						<button class="btn btn-space btn btn-primary "
+							ng-click="edit(productimageitem)">
+							<i class="bi bi-pencil-square"></i>
+						</button>
+						<button class="btn btn-space btn btn-danger "
+							ng-click="confirmDeleteModal1(productimageitem)">
+							<i class="bi bi-trash3-fill"></i>
+						</button>
+					</td>
 				</tr>
 
 			</tbody>
@@ -258,9 +258,9 @@
 						</button>
 					</li>
 				</ul>
-
 			</div>
 		</div>
+
 	</div>
 
 </div>
