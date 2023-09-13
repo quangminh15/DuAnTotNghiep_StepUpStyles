@@ -9,11 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-
-/**
- * The persistent class for the review database table.
- * 
- */
 @Entity
 @Data
 @AllArgsConstructor
@@ -37,14 +32,11 @@ public class Review implements Serializable {
 
 	private String title;
 
-	//bi-directional many-to-one association to Product
 	@ManyToOne
 	@JoinColumn(name="product_id")
 	private Product product;
 
-	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private User user;
-
 }

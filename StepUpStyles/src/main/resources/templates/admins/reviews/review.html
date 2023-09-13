@@ -1,145 +1,142 @@
-<div class="card card-border-color card-border-color-primary m-3">
-<!-- Modal for displaying error messages -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="text-align: center;">
-            <div class="modal-header" style="background-color: #FF6666; color: white;">
-                <h5 class="modal-title" id="errorModalLabel"><b>Lỗi</b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="color: red">
-                <b>{{ errorMessage }}</b><br>
-                <span style="font-size: 30px"><i class="bi bi-exclamation-triangle"></i></span>
-                 <!-- Display the error message here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #FF6666">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
+<style>
 
-<!-- Modal for displaying error messages -->
-<div class="modal fade" id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="text-align: center;">
-            <div class="modal-header" style="background-color: #00CC66; color: white;">
-                <h5 class="modal-title" id="errorModalLabel"><b>Thông báo</b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="color: green;">
-                <b>{{ messageSuccess }}</b><br>
-                <span style="font-size:50px"><i class="bi bi-check"></i></span>
-                 <!-- Display the error message here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #00CC66">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-                <div class="card-header card-header-divider">Đánh giá</div>
-                <div class="card-body">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="inputUserName">Mã đánh giá:</label>
-                                <input class="form-control" id="inputUserName" type="text" ng-model="form.reviewID"
-                                    readonly="true">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Sản phẩm</label>
-                                <div>
-                                    <select class="select2 form-control" ng-model="form.product.productID">
-                                        <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-                                        <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+.star-rating {
+    font-size: 24px; /* Kích thước của biểu tượng sao */
+}
 
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword3">Người dùng</label>
-                                <div>
-                                    <select class="select2 form-control" ng-model="form.user.userID">
-                                        <option value="" disabled selected>Vui lòng chọn người dùng</option>
-                                        <option ng-repeat="u in users" ng-value="u.userID">{{u.fullName}}</option>
-                                    </select>
-                                </div>
-                            </div>
+.fa-star {
+    color: #ccc; /* Màu mặc định của sao chưa được chọn */
+}
 
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Ngày đánh giá</label>
-                                <input class="form-control" id="inputPassword4" type="date" placeholder="Ngày đánh giá"
-                                    required="" ng-model="form.reviewDate">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label for="inputPassword">Nội dung</label>
-                                <textarea class="form-control" id="inputPassword" type="text" placeholder="Nội dung"
-                                    required="" ng-model="form.title" rows="5"></textarea>
-                            </div>
-                            </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="inputPassword1">Hiển thị</label>
-                                <label>
-                                            <input type="radio" ng-model="form.display" ng-value="true" name="display"> Hiện</label>
-                                            <label><input type="radio"ng-model="form.display" ng-value="false" name="display" checked> Ẩn</label>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="inputPassword2">Sao đánh giá</label> 
-                                <select id="ratingSelect">
-                                    <option value="">Sao đánh giá</option>
-									<option value="1">1 sao</option>
-									<option value="2">2 sao</option>
-									<option value="3">3 sao</option>
-									<option value="4">4 sao</option>
-									<option value="5">5 sao</option>
-								</select>
-			</div>
-                        </div>
-                        <div class="row pt-0 pt-sm-5">
-                            <div class="col-sm-12 pl-0">
-                                <p class="text-right">
-                                    <button class="btn btn-space btn btn-secondary" ng-click="delete(form)" type="submit">Xóa</button>
-                                </p>
-                            </div>
-                        </div>
-                    
+.checked {
+    color: #f7d825; /* Màu của sao đã được chọn */
+}
+/* Định dạng body của modal */
+.modal-body {
+    padding: 20px; /* Khoảng cách bên trong modal body */
+}
+
+/* Định dạng label */
+label {
+    font-weight: bold; /* Đậm để nổi bật label */
+}
+
+/* Định dạng phần hiển thị sao đánh giá */
+.star-rating {
+    font-size: 24px; /* Kích thước của biểu tượng sao */
+    margin-top: 10px; /* Khoảng cách giữa label và sao đánh giá */
+}
+
+.fa-star {
+    color: #ccc; /* Màu mặc định của sao chưa được chọn */
+    margin-right: 5px; /* Khoảng cách giữa các sao */
+}
+
+.checked {
+    color: #f7d825; /* Màu của sao đã được chọn */
+}
+
+/* Định dạng nội dung text của sản phẩm và người dùng */
+p {
+    margin-top: 5px; /* Khoảng cách giữa các phần tử p */
+}
+/* Định dạng bảng */
+table {
+    width: 100%; /* Chiều rộng 100% của bảng */
+    border-collapse: collapse; /* Gộp đường viền của các ô */
+}
+
+/* Định dạng các ô header */
+th {
+    text-align: left; /* Căn lề trái cho nội dung trong các ô header */
+    background-color: #f2f2f2; /* Màu nền cho các ô header */
+    padding: 8px; /* Khoảng cách bên trong các ô header */
+}
+
+/* Định dạng các ô dữ liệu */
+td {
+    text-align: left; /* Căn lề trái cho nội dung trong các ô dữ liệu */
+    padding: 8px; /* Khoảng cách bên trong các ô dữ liệu */
+    border-bottom: 1px solid #ddd; /* Đường viền dưới cho từng ô */
+}
+
+/* Định dạng hàng chẵn của bảng */
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Màu nền cho hàng chẵn */
+}
+
+
+
+</style>
+
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">ĐÁNH GIÁ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <table>
+                    <tr>
+                       <th>Sản phẩm</th>
+                       <th>Người dùng</th> 
+                    </tr>
+                    <tr>
+                        <td>{{reviewdetails.product.productName}}</td>
+                        <td>{{reviewdetails.user.fullName}}</td>
+                    </tr>                   
+                </table> -->
+                <div class="row col-sm-6">
+                    <label for="">Sản phẩm</label>
+                    <h5>{{reviewdetails.product.productName}}</h5>
+                </div>
+                <label>Nội dung</label>
+                <p>{{reviewdetails.title}}</p>
+                <label>Sao đánh giá</label>
+                <div class="star-rating">
+                    <span class="fa fa-star {{ reviewdetails.rating >= 1 ? 'checked' : '' }}"></span>
+                    <span class="fa fa-star {{ reviewdetails.rating >= 2 ? 'checked' : '' }}"></span>
+                    <span class="fa fa-star {{ reviewdetails.rating >= 3 ? 'checked' : '' }}"></span>
+                    <span class="fa fa-star {{ reviewdetails.rating >= 4 ? 'checked' : '' }}"></span>
+                    <span class="fa fa-star {{ reviewdetails.rating >= 5 ? 'checked' : '' }}"></span>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+            <div class="card-header card-header-divider">Đánh giá</div>
             <div class="card card-table m-3">
-                <div class="card-header">Basic Tables
-                </div>
                 <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Mã đánh giá</th>
-                                <th>Sản phẩm</th>
-                                <th>Người dùng</th>
+                                <!-- <th>Sản phẩm</th>
+                                <th>Người dùng</th> -->
                                 <th>Nội dung</th>
                                 <th>Ngày đánh giá</th>
-                                <th>Hiển thị</th>
-                                <th>Số sao</th>
+                                <th>Trạng thái</th>
                                 <th class="actions"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="reviewitem in pager.reviewitems">
-                                <td>{{reviewitem.reviewID}}</td>
-                                <td>{{reviewitem.product.productName}}</td>
-                                <td>{{reviewitem.user.fullName}}</td>
+                                <td>{{reviewitem.reviewId}}</td>
+                                <!-- <td>{{reviewitem.product.productName}}</td>
+                                <td>{{reviewitem.user.fullName}}</td> -->
                                 <td>{{reviewitem.title}}</td>
-                                <td>{{reviewitem.reviewDate}}</td>
-                                <td>{{reviewitem.display}}</td>
-                                <td>{{reviewitem.rating}}</td>
+                                <td>{{reviewitem.reviewDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{reviewitem.display?'Hiển thị' : 'Ẩn'}}</td>
                                 <td class="actions">
-                                    <button class="icon" ng-click="edit(reviewitem)"><i class="mdi mdi-edit mx-2"></i></button>
-                                    <button class="icon" ng-click="delete(reviewitem)"><i class="mdi mdi-delete"></i></button>
+                                    <button class="button btn-success" ng-click="showReview(reviewitem.reviewId)"><i class="mdi mdi-eye mx-2"></i></button>
+                                    <button class="button btn-primary" ng-click="hideReview(reviewitem.reviewId)">{{ reviewitem.display ? 'Ẩn' : 'Hiện' }}</button>
                                 </td>
                             </tr>
 
@@ -148,12 +145,26 @@
                     <div class="card-header d-flex justify-content-end">
                         <div>
                             <ul class="pagination">
-								<li class="page-item"><button ng-click="pager.first()" class="page-link">First</button></li>
-								<li class="page-item"><button ng-click="pager.prev()" class="page-link">Pre</button></li>
-								<li class="page-item"><button class="page-link">{{pager.page + 1}} of {{pager.count}}</button></li>
-								<li class="page-item"><button ng-click="pager.next()" class="page-link">Next</button></li>
-								<li class="page-item"><button ng-click="pager.last()" class="page-link">Last</button></li>
-							</ul>
+                                <li class="page-item">
+                                    <button style="font-size: 25px" ng-click="pager.first()"
+                                        class="page-link">
+                                        <span class="mdi mdi-skip-previous"></span>
+                                    </button>
+                                </li>
+            
+                                <li class="page-item" ng-repeat="page in visiblePages"
+                                    ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+                                    class="page-link" href="" ng-click="pager.goto(page.value)">{{
+                                        page.value }}</a></li>
+            
+                                <li class="page-item">
+                                    <button style="font-size: 25px" ng-click="pager.last()"
+                                        class="page-link">
+                                        <span class="mdi mdi-skip-next"></span>
+                                    </button>
+                                </li>
+                            </ul>
+            
                         </div>
                     </div>
                 </div>
