@@ -46,7 +46,8 @@ public class Order implements Serializable {
 	private Date orderDate;
 
 	@Column(name="order_status")
-	private String orderStatus;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus orderStatus;
 
 	@Column(name="payment_status")
 	private boolean paymentStatus;

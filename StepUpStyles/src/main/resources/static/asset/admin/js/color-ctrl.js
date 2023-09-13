@@ -9,9 +9,8 @@ app.controller("color-ctrl", function($scope, $http) {
 
 	$scope.sortableColumns = [
 		{ name: 'colorID', label: 'Mã màu' },
-		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'colorName', label: 'Tên màu' },
-		{ name: 'colorImage', label: 'Hình ảnh' },
+		{ name: 'activities', label: 'Trạng thái' },
 	];
 
 
@@ -26,10 +25,6 @@ app.controller("color-ctrl", function($scope, $http) {
 		$scope.coloritems.sort(function(a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
-			if (columnName === 'product.productName') {
-				aValue = a.product.productName;
-				bValue = b.product.productName;
-			}
 			if (typeof aValue === 'string') {
 				aValue = aValue.toLowerCase();
 			}
@@ -114,16 +109,6 @@ app.controller("color-ctrl", function($scope, $http) {
 			console.log($scope.coloritems)
 			$scope.pager.first();
 		});
-
-		//load product
-		$http.get("/rest/products/loadall").then(resp => {
-			$scope.prods = resp.data;
-			console.log($scope.prods)
-			$scope.coloritems.forEach(productitem => {
-				productitem.createDate = new Date(productitem.createDate)
-			})
-			$scope.pager.first();
-		});
 	}
 
 	//Mở modal tìm kiếm
@@ -149,7 +134,7 @@ app.controller("color-ctrl", function($scope, $http) {
 				}
 			}).catch(error => {
 				$scope.errorMessage = "Lỗi khi tìm kiếm màu sản phẩm!";
-				$('#errorModal').modal('show'); // Hiển thị modal lỗi
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -157,7 +142,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
 			$scope.errorMessage = "Không tìm thấy màu mà bạn mong muốn!";
-			$('#errorModal').modal('show'); // Hiển thị modal lỗi
+			$('#errorModal').modal('show');
 		}
 		$('#searchModal').modal('hide');
 	};
@@ -170,7 +155,7 @@ app.controller("color-ctrl", function($scope, $http) {
 				$scope.pager.first();
 			}).catch(error => {
 				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo sản phẩm!";
-				$('#errorModal').modal('show'); // Show the modal
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -193,30 +178,11 @@ app.controller("color-ctrl", function($scope, $http) {
 		}
 	};
 
-	// Tải ảnh lên Firebase	
-	$scope.uploadImages = function() {
-		var ref = firebase.storage().ref();
-		var folder = 'productColor';
-		var file = document.querySelector('#photo').files[0];
-		var metadata = {
-			contentType: file.type
-		};
-		var name = folder + '/' + file.name; // Tạo tên file với thư mục
-
-		var uploadIMG = ref.child(name).put(file, metadata);
-
-		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
-			.then(url => {
-				// Lưu đường dẫn ảnh vào biến $scope.form.colorImage
-				$scope.form.colorImage = url;
-			});
-	};
-
-
 	//	Xóa form
 	$scope.reset = function() {
 		$scope.form = {
-
+			activities: false,
+			deleted: false,
 		};
 	}
 	//	Khởi đầu
@@ -241,19 +207,19 @@ app.controller("color-ctrl", function($scope, $http) {
 	}
 
 	//	Thêm mới 
-	$scope.create =  function() {
+	$scope.create = function() {
 
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
 			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
 			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn sản phẩm
+			return;
 		}
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
 			$scope.errorMessage = "Vui lòng nhập tên màu!!";
-			$('#errorModal').modal('show'); // Show the modal
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -261,7 +227,7 @@ app.controller("color-ctrl", function($scope, $http) {
 		var isDuplicate = checkDuplicateColor($scope.form);
 		if (isDuplicate) {
 			$scope.errorMessage = "Sản phẩm mà bạn chọn đã có màu này rồi. Vui lòng nhập màu khác!";
-			$('#errorModal').modal('show'); // Show the modal
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -273,39 +239,32 @@ app.controller("color-ctrl", function($scope, $http) {
 			return; // Dừng tiến trình nếu không chọn ảnh
 		};
 
-		try {
-			 $scope.uploadImages(); // Tải ảnh lên Firebase
-
-			// Thực hiện việc lưu vào db
-			var coloritem = angular.copy($scope.form);
-			coloritem.colorImage = $scope.form.colorImage;
-			$http.post('/rest/colors/create', coloritem).then(resp => {
-				$scope.coloritems.push(resp.data);
-				$scope.reset();
-				$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-				$scope.messageSuccess = "Thêm mới thành công";
-				$('#errorModal1').modal('show'); // Show the modal
-				$scope.initialize();
-			}).catch(error => {
-				if (error.status === 400) {
-					$scope.errorMessage = error.data;
-					$scope.initialize();
-				} else {
-					$scope.errorMessage = "Thêm mới thất bại";
-					$('#errorModal').modal('show'); // Show the modal
-					$scope.initialize();
-					console.log("Error", error);
-				}
-			});
-		} catch (error) {
-			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
-			$('#errorModal').modal('show'); // Show the modal
+		// Thực hiện việc lưu vào db
+		var coloritem = angular.copy($scope.form);
+		coloritem.colorImage = $scope.form.colorImage;
+		coloritem.deleted = false;
+		$http.post('/rest/colors/create', coloritem).then(resp => {
+			$scope.coloritems.push(resp.data);
+			$scope.reset();
+			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
+			$scope.messageSuccess = "Thêm mới thành công";
+			$('#errorModal1').modal('show');
 			$scope.initialize();
-		}
+		}).catch(error => {
+			if (error.status === 400) {
+				$scope.errorMessage = error.data;
+				$scope.initialize();
+			} else {
+				$scope.errorMessage = "Thêm mới thất bại";
+				$('#errorModal').modal('show');
+				$scope.initialize();
+				console.log("Error", error);
+			}
+		});
 	}
 
- 	//Cập nhật
-	$scope.update =  function() {
+	//Cập nhật
+	$scope.update = function() {
 		//Lỗi không chọn sản phẩm 
 		if (!$scope.form.product.productID) {
 			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
@@ -316,7 +275,7 @@ app.controller("color-ctrl", function($scope, $http) {
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
 			$scope.errorMessage = "Vui lòng nhập tên màu!!";
-			$('#errorModal').modal('show'); // Show the modal
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -327,28 +286,20 @@ app.controller("color-ctrl", function($scope, $http) {
 			return; // Dừng tiến trình nếu không chọn ảnh
 		}
 
-		try {
-			 $scope.uploadImages(); // Tải ảnh lên Firebase
-
-			var coloritem = angular.copy($scope.form);
-			coloritem.colorImage = $scope.form.colorImage;
-			$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
-				var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-				$scope.coloritems[index] = coloritem;
-				$scope.messageSuccess = "Cập nhật thành công";
-				$('#errorModal1').modal('show'); // Show the modal
-				$scope.initialize();
-			}).catch(error => {
-				$scope.errorMessage = "Cập nhật thất bại";
-				$('#errorModal').modal('show'); // Show the modal
-				$scope.initialize();
-				console.log("Error", error);
-			})
-		} catch (error) {
-			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
-			$('#errorModal').modal('show'); // Show the modal
+		var coloritem = angular.copy($scope.form);
+		coloritem.colorImage = $scope.form.colorImage;
+		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
+			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
+			$scope.coloritems[index] = coloritem;
+			$scope.messageSuccess = "Cập nhật thành công";
+			$('#errorModal1').modal('show');
 			$scope.initialize();
-		}
+		}).catch(error => {
+			$scope.errorMessage = "Cập nhật thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
 	}
 
 	//Gọi đến modal xác nhận để xóa
@@ -370,10 +321,10 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.reset();
 			$scope.initialize();
 			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+			$('#errorModal1').modal('show');
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show'); // Show the modal
+			$('#errorModal').modal('show');
 			console.log("Error", error);
 			$scope.initialize();
 		});

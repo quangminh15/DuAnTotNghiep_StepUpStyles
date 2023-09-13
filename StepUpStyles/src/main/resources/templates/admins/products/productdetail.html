@@ -120,10 +120,14 @@
 			</div>
 
 			<div class="form-group col-md-6">
-				<label for="inputPassword4">Nơi lưu trữ</label> <input
-					class="form-control" id="inputPassword4" type="text"
-					placeholder="Nơi lưu trữ" required=""
-					ng-model="form.storageLocation">
+				<label>Size</label>
+				<div>
+					<select class="select2 form-control"
+						ng-model="form.product.productID">
+						<option value="" disabled selected>Vui lòng chọn size sản phẩm</option>
+						<option ng-repeat="p in sizs" ng-value="p.sizeID">{{p.sizeNumber}}</option>
+					</select>
+				</div>
 			</div>
 		</div>
 
@@ -222,8 +226,8 @@
 					<td>{{productdetailitem.productDetailID}}</td>
 					<td>{{productdetailitem.product.productName}}</td>
 					<td>{{productdetailitem.color.colorName}}</td>
-					<td>{{productdetailitem.quantityInStock}}</td>
-					<td>{{productdetailitem.storageLocation}}</td>
+					<td>{{productdetailitem.size.sizeNumber}}</td>
+					<td>{{productdetailitem.quantity}}</td>
 					<td class="actions">
                         <button class="btn btn-space btn btn-primary " ng-click="edit(productdetailitem)"><i class="bi bi-pencil-square"></i> </button>
                         <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(productdetailitem)"><i class="bi bi-trash3-fill"></i></button>

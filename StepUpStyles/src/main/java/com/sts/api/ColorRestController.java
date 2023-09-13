@@ -50,9 +50,4 @@ public class ColorRestController {
 	public List<Color> searchColorByName(@RequestParam("keyword") String keyword) {
 		return colorService.searchByName(keyword);
 	}
-
-	@GetMapping("/rest/colors/loadbyproduct/{productId}")
-	public List<Color> getColorsByProduct(@PathVariable Integer productId) {
-		return colorService.getColorsByProductId(productId);
-	}
 }
