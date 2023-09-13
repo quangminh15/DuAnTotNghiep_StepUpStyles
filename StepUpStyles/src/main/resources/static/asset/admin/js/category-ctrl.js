@@ -1,14 +1,15 @@
-app.controller("productcategory-ctrl", function($scope, $http) {
-	$scope.productcategoryitems = [];
+app.controller("category-ctrl", function($scope, $http) {
+	$scope.categoryitems = [];
 	$scope.prodgroups = [];
 	$scope.form = {};
 	$scope.form.productGroup = {};
 	$scope.errorMessage = '';
-	
+
 	$scope.sortableColumns = [
-		{ name: 'productCategoryID', label: 'Mã nhóm' },
-		{ name: 'productGroup.productGroupName', label: 'Tên nhóm sản phẩm' },
-		{ name: 'productCategoryName', label: 'Tên danh mục' },
+		{ name: 'categoryID', label: 'Mã danh mục' },
+		{ name: 'categoryName', label: 'Tên danh mục' },
+		{ name: 'categoryImage', label: 'Hình ảnh' },
+		{ name: 'activities', label: 'Trang thái' },
 	];
 
 
@@ -20,7 +21,7 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 			$scope.sortReverse = false;
 		}
 
-		$scope.productcategoryitems.sort(function(a, b) {
+		$scope.categoryitems.sort(function(a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
 			if (columnName === 'productGroup.productGroupName') {
@@ -67,12 +68,12 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 			}
 			return visiblePages;
 		},
-		get productcategoryitems() {
+		get categoryitems() {
 			var start = this.page * this.size;
-			return $scope.productcategoryitems.slice(start, start + this.size);
+			return $scope.categoryitems.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.productcategoryitems.length / this.size);
+			return Math.ceil(1.0 * $scope.categoryitems.length / this.size);
 		},
 		first() {
 			this.page = 0;
@@ -104,10 +105,29 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 		},
 	};
 
+	// Tải ảnh lên Firebase	
+	$scope.uploadImages = function() {
+		var ref = firebase.storage().ref();
+		var folder = 'Brand';
+		var file = document.querySelector('#photo').files[0];
+		var metadata = {
+			contentType: file.type
+		};
+		var name = folder + '/' + file.name; // Tạo tên file với thư mục
+
+		var uploadIMG = ref.child(name).put(file, metadata);
+
+		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
+			.then(url => {
+				$scope.form.categoryImage = url;
+				console.log($scope.form.categoryImage)
+			});
+	};
+
 	$scope.initialize = function() {
-		//load productcategories
-		$http.get("/rest/productcategories/loadall").then(resp => {
-			$scope.productcategoryitems = resp.data;
+		//load categories
+		$http.get("/rest/categories/loadall").then(resp => {
+			$scope.categoryitems = resp.data;
 			$scope.pager.first();
 		});
 
@@ -117,7 +137,7 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 			$scope.pager.first();
 		});
 	}
-	
+
 	//Mở modal tìm kiếm
 	$scope.openSearchForm = function() {
 		// Reset searchKeyword
@@ -128,10 +148,10 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 	// Tìm kiếm màu 
 	$scope.searchProductCateByName = function() {
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
-			$http.get("/rest/productcategories/search", {
+			$http.get("/rest/categories/search", {
 				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
-				$scope.productcategoryitems = resp.data;
+				$scope.categoryitems = resp.data;
 				$scope.pager.first();
 
 				if (resp.data.length === 0) {
@@ -157,7 +177,8 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 	//	Xóa form
 	$scope.reset = function() {
 		$scope.form = {
-
+			activities: false,
+			deleted: false,
 		};
 	}
 	//	Khởi đầu
@@ -165,96 +186,99 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 	$scope.reset();
 
 	//	Hiển thị lên form
-	$scope.edit = function(productcategoryitem) {
-		$scope.form = angular.copy(productcategoryitem);
+	$scope.edit = function(categoryitem) {
+		$scope.form = angular.copy(categoryitem);
 	}
 
-	function checkDuplicateCategory(productcategoryitem) {
-		// Kiểm tra sự trùng lặp dựa trên productGroupID, productCategoryID 
-		var isDuplicate = $scope.productcategoryitems.some(function(item) {
-			return (
-				item.productCategoryName === productcategoryitem.productCategoryName &&
-				item.productGroup.productGroupID === productcategoryitem.productGroup.productGroupID
-			);
-		});
 
-		return isDuplicate;
-	}
 	//	Thêm mới 
-	$scope.create = function() {
-		//Không chọn nhóm sản phẩm
-		if (!$scope.form.productGroup || !$scope.form.productGroup.productGroupID) {
-			$scope.errorMessage = "Vui lòng chọn nhóm sản phẩm!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
-
+	$scope.create = async function() {
 		//Lỗi bỏ trống 
-		if (!$scope.form.productCategoryName) {
+		if (!$scope.form.categoryName) {
 			$scope.errorMessage = "Vui lòng nhập tên danh mục sản phẩm!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
-		
-		// Kiểm tra sự trùng lặp
-		var isDuplicate = checkDuplicateCategory($scope.form);
-		if (isDuplicate) {
-			$scope.errorMessage = "Tên danh mục này đã tồn tại với nhóm mà bạn đã chọn!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
 
+		//Lỗi không chọn ảnh
+		if (!document.querySelector('#photo').files[0]) {
+			$scope.errorMessage = "Bạn chưa chọn ảnh";
+			$('#errorModal').modal('show');
+			return; // Dừng tiến trình nếu không chọn ảnh
+		};
 
-		var productcategoryitem = angular.copy($scope.form);
-		$http.post('/rest/productcategories/create', productcategoryitem).then(resp => {
-			$scope.productcategoryitems.push(resp.data);
-			$scope.reset();
-			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-			$scope.messageSuccess = "Thêm mới thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+		try {
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
+
+			// Thực hiện việc lưu vào db
+			var categoryitem = angular.copy($scope.form);
+			categoryitem.categoryImage = $scope.form.categoryImage;
+			categoryitem.deleted = false;
+			$http.post('/rest/categories/create', categoryitem).then(resp => {
+				$scope.categoryitems.push(resp.data);
+				$scope.reset();
+				$scope.errorMessage = '';
+				$scope.messageSuccess = "Thêm mới thành công";
+				$('#errorModal1').modal('show');
+				$scope.initialize();
+				console.log(resp)
+			}).catch(error => {
+				if (error.status === 400) {
+					$scope.errorMessage = error.data;
+					$scope.initialize();
+				} else {
+					$scope.errorMessage = "Thêm mới thất bại";
+					$('#errorModal').modal('show');
+					$scope.initialize();
+					console.log("Error", error);
+				}
+			});
+		} catch (error) {
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
-		}).catch(error => {
-			if (error.status === 400) {
-				$scope.errorMessage = error.data;
-				$scope.initialize();
-			} else {
-				$scope.errorMessage = "Thêm mới thất bại";
-				$('#errorModal').modal('show'); // Show the modal
-				console.log("Error", error);
-				$scope.initialize();
-			}
-		});
+		}
 	}
 
 	//	Cập nhật  
-	$scope.update = function() {
-		//Không chọn nhóm sản phẩm
-		if (!$scope.form.productGroup || !$scope.form.productGroup.productGroupID) {
-			$scope.errorMessage = "Vui lòng chọn nhóm sản phẩm!";
-			$('#errorModal').modal('show'); // Show the modal
-			return;
-		}
-
+	$scope.update = async function() {
 		//Lỗi bỏ trống 
-		if (!$scope.form.productCategoryName) {
+		if (!$scope.form.categoryName) {
 			$scope.errorMessage = "Vui lòng nhập tên danh mục sản phẩm!!";
 			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
-		var productcategoryitem = angular.copy($scope.form);
-		$http.put('/rest/productcategories/update/' + productcategoryitem.productCategoryID, productcategoryitem).then(resp => {
-			var index = $scope.productcategoryitems.findIndex(p => p.productCategoryID == productcategoryitem.productCategoryID);
-			$scope.productcategoryitems[index] = productcategoryitem;
-			$scope.messageSuccess = "Cập nhật thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+		//Lỗi không chọn ảnh 
+		if (!document.querySelector('#photo').files[0]) {
+			$scope.errorMessage = "Bạn chưa chọn ảnh";
+			$('#errorModal').modal('show');
+			return; // Dừng tiến trình nếu không chọn ảnh
+		}
+
+		try {
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
+
+			var categoryitem = angular.copy($scope.form);
+			categoryitem.categoryImage = $scope.form.categoryImage;
+			$http.put('/rest/categories/update/' + categoryitem.categoryID, categoryitem).then(resp => {
+				var index = $scope.categoryitems.findIndex(p => p.categoryID == categoryitem.categoryID);
+				$scope.categoryitems[index] = categoryitem;
+				$scope.messageSuccess = "Cập nhật thành công";
+				$('#errorModal1').modal('show');
+				$scope.initialize();
+				console.log("categoryitem", categoryitem);
+			}).catch(error => {
+				$scope.errorMessage = "Cập nhật thất bại";
+				$('#errorModal').modal('show');
+				$scope.initialize();
+				console.log("Error", error);
+			})
+		} catch (error) {
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
-		}).catch(error => {
-			$scope.errorMessage = "Cập nhật thất bại";
-			$('#errorModal').modal('show'); // Show the modal
-			console.log("Error", error);
-			$scope.initialize();
-		})
+		}
 	}
 
 	//Gọi đến modal xác nhận để xóa
@@ -262,8 +286,8 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 		$('#confirmDeleteModal').modal('show');
 	}
 
-	$scope.confirmDeleteModal1 = function(productcategoryitem) {
-		$scope.form = angular.copy(productcategoryitem);
+	$scope.confirmDeleteModal1 = function(categoryitem) {
+		$scope.form = angular.copy(categoryitem);
 		$('#confirmDeleteModal').modal('show');
 	}
 
@@ -271,9 +295,9 @@ app.controller("productcategory-ctrl", function($scope, $http) {
 	//sau khi xác nhận thành công thì xóa
 	$scope.confirmDelete = function() {
 		// Thực hiện xóa 
-		$http.delete('/rest/productcategories/delete/' + $scope.form.productCategoryID).then(resp => {
-			var index = $scope.productcategoryitems.findIndex(p => p.productCategoryID == $scope.form.productCategoryID);
-			$scope.productcategoryitems.splice(index, 1);
+		$http.delete('/rest/categories/delete/' + $scope.form.categoryID).then(resp => {
+			var index = $scope.categoryitems.findIndex(p => p.categoryID == $scope.form.categoryID);
+			$scope.categoryitems.splice(index, 1);
 			$scope.reset();
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show'); // Show the modal

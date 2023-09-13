@@ -30,7 +30,7 @@ public class ProductDetail implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="product_detail_id")
-	private Integer productDetailId;
+	private Integer productDetailID;
 
 	private Boolean deleted;
 

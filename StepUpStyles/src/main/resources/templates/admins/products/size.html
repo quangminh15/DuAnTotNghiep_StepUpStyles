@@ -71,8 +71,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa danh mục sản
-					phẩm "{{ form.productCategoryName }}" này không?</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa size "{{ form.sizeNumber }}" này không?</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Hủy</button>
@@ -83,34 +82,35 @@
 		</div>
 	</div>
 
-	<div class="card-header card-header-divider">Danh mục sản phẩm</div>
+	<div class="card-header card-header-divider">Size sản phẩm</div>
 	<div class="card-body">
 		<div class="row">
-			<div class="form-group col-md-12">
-				<label for="inputUserName">Mã danh mục:</label> <input
-					class="form-control" id="inputUserName" type="number"
-					ng-model="form.productCategoryID" readonly="true">
+			<div class="form-group col-md-4">
+				<label for="inputUserName">SizeID:</label> <input
+					class="form-control" id="inputUserName" type="text"
+					ng-model="form.sizeID" readonly="true">
 			</div>
-			<div class="form-group col-md-12">
-				<label>Nhóm sản phẩm</label>
-				<div>
-					<select class="select2 form-control"
-						ng-model="form.productGroup.productGroupID">
-						<option value="" disabled selected>Vui lòng chọn nhóm sản
-							phẩm</option>
-						<option ng-repeat="p in prodgroups" ng-value="p.productGroupID">{{p.productGroupName}}</option>
-					</select>
+			<div class="form-group col-md-4">
+				<label for="inputPassword3">Size giày</label> <input
+					class="form-control" id="inputPassword3" type="number"
+					placeholder="Size giày" required="" ng-model="form.sizeNumber">
+			</div>
+
+			<div class="form-group col-md-4">
+				<label class="col-form-label text-sm-left">Trạng thái</label>
+				<div class="form-check mt-1">
+					<label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="true" type="radio" name="available" checked=""><span
+						class="custom-control-label custom-control-color">Bật</span>
+					</label> <label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="false" type="radio" name="available"><span
+						class="custom-control-label custom-control-color">Tắt</span>
+					</label>
 				</div>
 			</div>
-
-			<div class="form-group col-md-12">
-				<label for="inputPassword3">Tên danh mục</label> <input
-					class="form-control" id="inputPassword3" type="text"
-					placeholder="Tên danh mục" required=""
-					ng-model="form.productCategoryName">
-			</div>
 		</div>
-
 		<div class="row pt-0 pt-sm-5">
 			<div class="col-sm-12 pl-0">
 				<p class="text-right">
@@ -137,12 +137,12 @@
 <div class="card card-table m-3">
 	<div
 		class="card-header d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Danh sách danh mục sản phẩm</h4>
+		<h4 class="mb-0">Danh sách size giày</h4>
 		<!-- tìm kiếm theo tên bắt đầu  -->
 		<div class="d-flex">
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
-				ng-click="openSearchForm()" style="width: 50px;height: 43px">
+				ng-click="openSearchForm()" style="width: 50px; height: 43px">
 				<span class="mdi mdi-search"></span>
 			</button>
 		</div>
@@ -161,9 +161,10 @@
 				<div class="modal-body">
 					<form method="post">
 						<div class="form-group">
-							<label for="searchKeyword">Tên danh muc</label> <input
+							<label for="searchKeyword">Size giày</label> <input
 								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword" placeholder="Nhập tên danh mục mà bạn muốn tìm kiếm">
+								ng-model="searchKeyword"
+								placeholder="Nhập size giày mà bạn muốn tìm kiếm">
 						</div>
 					</form>
 				</div>
@@ -171,7 +172,7 @@
 					<button class="btn btn-secondary modal-close" type="button"
 						data-dismiss="modal">Hủy</button>
 					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchProductCateByName()">Tìm kiếm</button>
+						ng-click="searchPhoneConFigByName()">Tìm kiếm</button>
 				</div>
 			</div>
 		</div>
@@ -190,18 +191,25 @@
 							ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
 					</span>
 					</th>
+
 					<th class="actions"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="productcategoryitem in pager.productcategoryitems">
-					<td>{{productcategoryitem.productCategoryID}}</td>
-					<td>{{productcategoryitem.productGroup.productGroupName}}</td>
-					<td>{{productcategoryitem.productCategoryName}}</td>
+				<tr ng-repeat="sizeitem in pager.sizeitems">
+					<td>{{sizeitem.sizeID}}</td>
+					<td>{{sizeitem.sizeNumber}}</td>
+					<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
-                        <button class="btn btn-space btn btn-primary " ng-click="edit(productcategoryitem)"><i class="bi bi-pencil-square"></i> </button>
-                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(productcategoryitem)"><i class="bi bi-trash3-fill"></i></button>
-                    </td>
+						<button class="btn btn-space btn btn-primary "
+							ng-click="edit(sizeitem)">
+							<i class="bi bi-pencil-square"></i>
+						</button>
+						<button class="btn btn-space btn btn-danger "
+							ng-click="confirmDeleteModal1(sizeitem)">
+							<i class="bi bi-trash3-fill"></i>
+						</button>
+					</td>
 				</tr>
 
 			</tbody>
@@ -229,7 +237,6 @@
 						</button>
 					</li>
 				</ul>
-
 			</div>
 		</div>
 	</div>

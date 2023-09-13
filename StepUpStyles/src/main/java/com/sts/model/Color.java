@@ -26,17 +26,10 @@ public class Color implements Serializable {
 
 	private Boolean activities;
 
-	@Column(name = "color_image")
-	private String colorImage;
-
 	@Column(name = "color_name")
 	private String colorName;
 
 	private Boolean deleted;
-
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "color", fetch = FetchType.EAGER)
