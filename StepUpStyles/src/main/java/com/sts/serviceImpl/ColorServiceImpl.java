@@ -44,9 +44,4 @@ public class ColorServiceImpl implements ColorService  {
 	public List<Color> searchByName(String keyword) {
 		return ColorDAO.findByColorNameContaining(keyword);
 	}
-
-	@Override
-	public List<Color> getColorsByProductId(Integer productId) {
-		return ColorDAO.findByProduct_ProductID(productId);
-	}
 }

@@ -40,45 +40,6 @@ public class Cart implements Serializable {
 	@OneToMany(mappedBy="cart")
 	private List<CartDetail> cartDetails;
 
-	// public Cart() {
-	// }
-
-	// public long getCartId() {
-	// 	return this.cartId;
-	// }
-
-	// public void setCartId(long cartId) {
-	// 	this.cartId = cartId;
-	// }
-
-	// public User getUser() {
-	// 	return this.user;
-	// }
-
-	// public void setUser(User user) {
-	// 	this.user = user;
-	// }
-
-	// public List<CartDetail> getCartDetails() {
-	// 	return this.cartDetails;
-	// }
-
-	// public void setCartDetails(List<CartDetail> cartDetails) {
-	// 	this.cartDetails = cartDetails;
-	// }
-
-	// public CartDetail addCartDetail(CartDetail cartDetail) {
-	// 	getCartDetails().add(cartDetail);
-	// 	cartDetail.setCart(this);
-
-	// 	return cartDetail;
-	// }
-
-	// public CartDetail removeCartDetail(CartDetail cartDetail) {
-	// 	getCartDetails().remove(cartDetail);
-	// 	cartDetail.setCart(null);
-
-	// 	return cartDetail;
-	// }
+	
 
 }

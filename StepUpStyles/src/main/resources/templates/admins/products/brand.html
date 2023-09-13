@@ -71,8 +71,8 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa cấu hình của
-					sản phẩm "{{ form.product.productName }}" này không?</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa thương hiệu sản
+					phẩm "{{ form.brandName }}" này không?</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Hủy</button>
@@ -83,62 +83,48 @@
 		</div>
 	</div>
 
-	<div class="card-header card-header-divider">Cấu hình điện thoại</div>
+
+	<div class="card-header card-header-divider">Thương hiệu sản phẩm</div>
 	<div class="card-body">
 		<div class="row">
 			<div class="form-group col-md-6">
-				<label for="inputUserName">Phone ID:</label> <input
-					class="form-control" id="inputUserName" type="text"
-					ng-model="form.phoneID" readonly="true">
+				<label for="inputUserName">Mã thương hiệu:</label> <input
+					class="form-control" id="inputUserName" type="number"
+					ng-model="form.brandID" readonly="true">
 			</div>
 			<div class="form-group col-md-6">
-				<label>Sản phẩm</label>
-				<div>
-					<select class="select2 form-control"
-						ng-model="form.product.productID">
-						<option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-						<option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-					</select>
+				<label for="inputPassword">Tên thương hiệu:</label> <input
+					class="form-control" id="inputPassword" type="text"
+					placeholder="Tên thương hiệu" ng-model="form.brandName">
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label for="inputPassword3">Hình ảnh</label> <input
+					class="form-control" id="photo" type="file">
+			</div>
+			
+		<div class="form-group col-md-6">
+				<label class="col-form-label text-sm-left">Trạng thái</label>
+				<div class="form-check mt-1">
+					<label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="true" type="radio" name="available" checked=""><span
+						class="custom-control-label custom-control-color">Bật</span>
+					</label> <label class="custom-control custom-radio custom-control-inline">
+						<input ng-model="form.activities" class="custom-control-input"
+						ng-value="false" type="radio" name="available"><span
+						class="custom-control-label custom-control-color">Tắt</span>
+					</label>
 				</div>
 			</div>
 		</div>
-
 		<div class="row">
-			<div class="form-group col-md-6">
-				<label for="inputPassword3">Màn hình</label> <input
-					class="form-control" id="inputPassword3" type="text"
-					placeholder="Màn hình" required="" ng-model="form.screen">
-			</div>
-
-			<div class="form-group col-md-6">
-				<label for="inputPassword4">Bộ nhớ trong</label> <input
-					class="form-control" id="inputPassword4" type="text"
-					placeholder="Bộ nhớ trong" required=""
-					ng-model="form.internalMemory">
-			</div>
+		<div class="form-group col-md-12" ng-if="form.brandImage">
+		<img style="height: 60%; width: 20%;" alt=""
+				src="{{ form.brandImage }}">
 		</div>
-
-		<div class="row">
-			<div class="form-group col-md-4">
-				<label for="inputPassword">Camera</label> <input
-					class="form-control" id="inputPassword" type="text"
-					placeholder="Camera" required="" ng-model="form.camera">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="inputPassword1">CPU</label> <input class="form-control"
-					id="inputPassword1" type="text" placeholder="CPU" required=""
-					ng-model="form.cpu">
-			</div>
-
-			<div class="form-group col-md-4">
-				<label for="inputPassword2">RAM</label> <input class="form-control"
-					id="inputPassword2" type="text" placeholder="RAM" required=""
-					ng-model="form.ram">
-			</div>
 		</div>
-
-
 
 		<div class="row pt-0 pt-sm-5">
 			<div class="col-sm-12 pl-0">
@@ -157,6 +143,7 @@
 					<button class="btn btn-space btn btn-dark" ng-click="reset()">
 						<i class="bi bi-arrow-clockwise"></i> Làm mới
 					</button>
+					
 				</p>
 			</div>
 		</div>
@@ -166,7 +153,7 @@
 <div class="card card-table m-3">
 	<div
 		class="card-header d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Danh sách cấu hình điện thoại</h4>
+		<h4 class="mb-0">Danh sách thương hiệu</h4>
 		<!-- tìm kiếm theo tên bắt đầu  -->
 		<div class="d-flex">
 			<!-- Nút tìm kiếm -->
@@ -192,8 +179,7 @@
 						<div class="form-group">
 							<label for="searchKeyword">Tên sản phẩm</label> <input
 								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword"
-								placeholder="Nhập tên sản phẩm mà bạn muốn tìm kiếm">
+								ng-model="searchKeyword" placeholder="Nhập tên nhóm sản phẩm mà bạn muốn tìm kiếm">
 						</div>
 					</form>
 				</div>
@@ -201,7 +187,7 @@
 					<button class="btn btn-secondary modal-close" type="button"
 						data-dismiss="modal">Hủy</button>
 					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchPhoneConFigByName()">Tìm kiếm</button>
+						ng-click="searchProductGroupByName()">Tìm kiếm</button>
 				</div>
 			</div>
 		</div>
@@ -220,29 +206,24 @@
 							ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
 					</span>
 					</th>
-
 					<th class="actions"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="phoneconfigitem in pager.phoneconfigitems">
-					<td>{{phoneconfigitem.phoneID}}</td>
-					<td>{{phoneconfigitem.product.productName}}</td>
-					<td>{{phoneconfigitem.screen}}</td>
-					<td>{{phoneconfigitem.internalMemory}}</td>
-					<td>{{phoneconfigitem.camera}}</td>
-					<td>{{phoneconfigitem.cpu}}</td>
-					<td>{{phoneconfigitem.ram}}</td>
-					<td class="actions">
-						<button class="btn btn-space btn btn-primary "
-							ng-click="edit(phoneconfigitem)">
-							<i class="bi bi-pencil-square"></i>
-						</button>
-						<button class="btn btn-space btn btn-danger "
-							ng-click="confirmDeleteModal1(phoneconfigitem)">
-							<i class="bi bi-trash3-fill"></i>
-						</button>
+				<tr ng-repeat="branditem in pager.branditems">
+					<td>{{branditem.brandID}}</td>
+					<td>{{branditem.brandName}}</td>
+					<td>
+						<div class="image-container">
+							<img class="image-content" alt="{{branditem.brandName}}"
+								src="{{branditem.brandImage}}">
+						</div>
 					</td>
+					<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+					<td class="actions">
+                        <button class="btn btn-space btn btn-primary " ng-click="edit(branditem)"><i class="bi bi-pencil-square"></i> </button>
+                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(branditem)"><i class="bi bi-trash3-fill"></i></button>
+                    </td>
 				</tr>
 
 			</tbody>
@@ -262,7 +243,6 @@
 						class="page-link" href="" ng-click="pager.goto(page.value)">{{
 							page.value }}</a></li>
 
-
 					<li class="page-item">
 						<button style="font-size: 25px" ng-click="pager.last()"
 							class="page-link">
@@ -270,6 +250,7 @@
 						</button>
 					</li>
 				</ul>
+
 			</div>
 		</div>
 	</div>
