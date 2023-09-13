@@ -25,7 +25,9 @@ public class CartDetail implements Serializable {
 	@Column(name="cart_detail_id")
 	private Integer cartDetailId;
 
-	private boolean checkbuy;
+	@JoinColumn(name="check_buy")
+	private boolean checkBuy;
+
 	private int quantity;
 
 	//bi-directional many-to-one association to Cart

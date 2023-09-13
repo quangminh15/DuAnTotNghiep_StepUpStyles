@@ -17,7 +17,8 @@
 		<div class="ecomrhny-content-inf py-5">
 			<div class="container py-lg-5">
 				<!--/row1-->
-				<div class="sp-store-single-page row">
+				<!-- NG-APP CART -->
+				<div  ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
 
@@ -40,6 +41,7 @@
 										type="hidden" name="transmitv_item" value="Yellow T-Shirt">
 									<input type="hidden" name="amount" value="599.99">
 									<button type="submit"
+									th:attr="ng-click=@{|addToCart(${productitem.productID},size,color,qty)|}"
 										class="transmitv-cart ptransmitv-cart add-to-cart read-2">
 										Add to Cart</button>
 								</form>
@@ -80,7 +82,7 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select class="form-select select-custom">
+								<select ng-model="size" class="form-select select-custom">
 									<option value="" disabled selected>Vui lòng chọn size</option>
 									<option th:each="s: ${sizs}" th:value="${s.sizeID}"
 										th:text="${s.sizeNumber}"></option>
@@ -90,11 +92,18 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select class="form-select select-custom">
+								<select ng-model="color" class="form-select select-custom">
 									<option value="" disabled selected>Vui lòng chọn màu sắc</option>
 									<option th:each="s: ${cols}" th:value="${s.colorID}"
 										th:text="${s.colorName}"></option>
 								</select>
+							</div>
+						</div>
+						<div class="desc_single my-4">
+							<span class="col-md-3 size1">Số lượng</span>
+							<div class="col-md-9">
+								<input ng-value="1" ng-model="qty" type="number"
+											class="form-control select-custom">
 							</div>
 						</div>
 						<div class="desc_single mb-4">
