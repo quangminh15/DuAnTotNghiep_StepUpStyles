@@ -10,7 +10,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
 
 	$scope.initialize = function () {
 		//load import
-		$http.get("/rest/ImportReceipt").then(resp => {
+		$http.get("/rest/importReceipt").then(resp => {
 			$scope.items = resp.data;
 			$scope.items.forEach(item => {
 				item.importDate = new Date(item.importDate)
@@ -189,6 +189,11 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
 		// Đóng modal xác nhận xóa
 		$('#confirmDeleteModal').modal('hide');
 	}
+
+	//Mở modal them chi tiet
+	$scope.openCreateDetail = function() {
+		$('#createDetail').modal('show');
+	};
 
 	//	Phân trang
 	$scope.pager = {

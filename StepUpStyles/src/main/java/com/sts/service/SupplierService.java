@@ -19,5 +19,6 @@ public interface SupplierService {
     boolean markSupplierAsDeleted(Long supplierId);
 
     List<Supplier> getDeletedSuppliers();
-    
+
+    List<Supplier> findBySupplierNameContaining(String keyword);
 }

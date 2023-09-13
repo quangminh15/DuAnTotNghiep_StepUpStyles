@@ -57,5 +57,10 @@ public class SupplierServiceImp implements SupplierService {
     @Override
     public List<Supplier> getDeletedSuppliers() {
         return supDao.findByDeletedFalse();
-    } 
+    }
+
+    @Override
+    public List<Supplier> findBySupplierNameContaining(String keyword) {
+        return supDao.findBySupplierNameContaining(keyword);
+    }
 }

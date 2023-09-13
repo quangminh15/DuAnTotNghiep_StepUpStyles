@@ -137,8 +137,25 @@ app.controller("supplier-ctrl", function($scope, $http){
 			console.log("Error", error);
 		});
 	};
-	
 
+	//search
+	$scope.searchByName = function(){
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+			$http.get("/rest/supplier/searchSupplier", {
+				params: { keyword: $scope.searchKeyword }
+			}).then(resp => {
+				$scope.items = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}else {
+			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
+			$scope.initialize();
+		}
+	}
+	
 	//Gọi đến modal xác nhận
 	$scope.confirmDeleteModal = function() {
 		$('#confirmDeleteModal').modal('show');

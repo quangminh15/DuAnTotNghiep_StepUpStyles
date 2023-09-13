@@ -71,56 +71,12 @@
         </div>
     </div>
 
-    <!-- Modal chi tiet phieu nhap -->
-    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel">Chi Tiết Hóa Đơn</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tr>
-                            <th>Mã hóa đơn chi tiết</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Mã hóa đơn</th>
-                            <th>Màu sắc</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
-                        </tr>
-                        <tr ng-repeat="orderdetailitem in orderdetailitems">
-                            <td>{{orderdetailitem.orderDetailID}}</td>
-                            <td>{{orderdetailitem.product.productName}}</td>
-                            <td>{{orderdetailitem.order.orderID}}</td>
-                            <td>{{orderdetailitem.color.colorName}}</td>
-                            <td>{{orderdetailitem.quantity}}</td>
-                            <td>{{orderdetailitem.price | number:'':'.'}}</td>
-                        </tr>
-                    </table>
-                    <div class="text-right" ng-repeat="orderdetailitem in orderdetailitems" ng-if="$first">
-                        <p>Phí Ship: {{orderdetailitem.order.shippingFee | number:'':'.'}} VNĐ</p>
-                        <p>Giảm Giá: {{orderdetailitem.discount | number:'':'.'}} VNĐ</p>
-                        <p>Tổng Thanh Toán: {{orderdetailitem.order.totalAmount | number:'':'.'}} VNĐ</p>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="card-header card-header-divider">Quản lý phiếu nhập</div>
     <div class="card-body">
         <div class="row">
             <div class="form-group col-md-6">
                 <label for="inputUserName">Tên người nhập:</label>
-                <input class="form-control" readonly="true" type="text" ng-model="form.user.fullName">
+                <input class="form-control" type="text" ng-model="form.user.fullName">
             </div>
             <div class="form-group col-md-6">
                 <label>Nhà cung cấp</label>
@@ -172,7 +128,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID phiếu nhập</th>
+                    <th>STT</th>
                     <th>Tên người nhập</th>
                     <th>Tên nhà cung cấp</th>
                     <th>Tổng tiền</th>
@@ -182,7 +138,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in pager.items">
-                    <td>{{item.importReceiptID}}</td>
+                    <td>{{$index + 1}}</td>
                     <td>{{item.user.fullName}}</td>
                     <td>{{item.supplier.supplierName}}</td>
                     <td>{{ formatToVND(item.totalAmount) }}</td>
@@ -194,9 +150,51 @@
                         <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal1(item)">
                             <i class="bi bi-trash3-fill"></i>
                         </button>
+                        <button class="btn btn-space btn btn-success" ng-click="openCreateDetail()">
+                            <i class="bi bi-brush"></i>
+                        </button>
+                        <button class="btn btn-space btn btn-dark">
+                            <i class="bi bi-eye"></i>
+                        </button>
                     </td>
                 </tr>
-
+                <!-- them chi tiet phieu nhap  -->
+                <div class="modal fade" id="createDetail" tabindex="-1" aria-labelledby="createDetail1"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header modal-header-colored" style="background-color: rgb(76, 186, 76);">
+                                <h3 class="modal-title" style="color: white;"><b>Nhập chi tiết phiếu nhập</b></h3>
+                                <button class="close md-close" type="button" data-dismiss="modal"
+                                    aria-hidden="true"><span class="mdi mdi-close"> </span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <h4><b>Phiếu nhập</b></h4>
+                                    <input class="form-control" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <h4><b>Sản phẩm</b></h4>
+                                    <input class="form-control" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <h4><b>Số lượng</b></h4>
+                                    <input class="form-control" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <h4><b>Đơn giá</b></h4>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary md-close" type="button"
+                                    data-dismiss="modal">Hủy</button>
+                                <button class="btn btn-primary md-close" style="background-color: rgb(76, 186, 76);" type="button"
+                                    data-dismiss="modal">Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </tbody>
         </table>
         <div class="card-header d-flex justify-content-end">
