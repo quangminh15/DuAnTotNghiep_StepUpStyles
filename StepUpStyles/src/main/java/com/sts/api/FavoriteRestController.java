@@ -2,6 +2,7 @@ package com.sts.api;
 
 import java.util.List;
 
+import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ public class FavoriteRestController {
     ProductService productService;
 
     @Autowired
-    UserService userService;
+	UserService userService;
 
 	@GetMapping("/rest/favorites/{favoriteID}")
 	public Favorite getFavorite(@PathVariable("favoriteID") Integer favoriteID) {
@@ -39,19 +40,19 @@ public class FavoriteRestController {
 		return favoriteService.findAll();
 	}
 
-	@PostMapping("/rest/favorites/{userId}/{productId}")
-	public Favorite addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
-		Product product = productService.findById(productId);
-        User user = userService.findById(userId);
-
-        if (product != null && user != null) {
-            Favorite favorite = new Favorite();
-            favorite.setUser(user);
-            favorite.setProduct(product);
-
-            favoriteService.create(favorite);
-        }
-	}
+//	@PostMapping("/rest/favorites/{userId}/{productId}")
+//	public Favorite addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
+//		Product product = productService.findById(productId);
+//        User user = userService.findById(userId);
+//
+//        if (product != null && user != null) {
+//            Favorite favorite = new Favorite();
+//            favorite.setUser(user);
+//            favorite.setProduct(product);
+//
+//            favoriteService.create(favorite);
+//        }
+//	}
 
 	@DeleteMapping("/rest/favorites/delete/{userId}/{productId}")
 	public void deleteFavorite(@PathVariable("userId") Integer userId, @PathVariable("productId") Integer productId) {

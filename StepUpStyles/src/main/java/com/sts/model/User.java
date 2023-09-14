@@ -57,6 +57,9 @@ public class User implements Serializable {
 
 	private Boolean status;
 
+	@Column(name="origin")
+	private String origin;
+
 	//bi-directional many-to-one association to Cart
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
