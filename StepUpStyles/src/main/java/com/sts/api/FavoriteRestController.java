@@ -46,7 +46,7 @@ public class FavoriteRestController {
 	}
 
 	@PostMapping("/rest/favorites/{userId}/{productId}")
-	public Favorite addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
+	public void addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
 		Product product = productService.findById(productId);
         User user = userService.findById(userId);
 
