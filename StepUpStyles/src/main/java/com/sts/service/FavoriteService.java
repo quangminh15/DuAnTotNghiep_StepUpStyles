@@ -9,6 +9,8 @@ import com.sts.model.User;
 public interface FavoriteService {
     Favorite findById(Integer favoriteID);
 
+    List<Favorite> findByUserId(Integer userID);
+
 	List<Favorite> findAll();
 
 	// Favorite create(Integer userId, Integer productId);

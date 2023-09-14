@@ -34,6 +34,11 @@ public class FavoriteRestController {
 		return favoriteService.findById(favoriteID);
 	}
 
+    @GetMapping("/rest/favorites/{userId}")
+	public List<Favorite> getFavoriteProduct(@PathVariable("userId") Integer userId) {
+		return favoriteService.findByUserId(userId);
+	}
+
 	@GetMapping("/rest/favorites/loadall")
 	public List<Favorite> getAllFavorite() {
 		return favoriteService.findAll();

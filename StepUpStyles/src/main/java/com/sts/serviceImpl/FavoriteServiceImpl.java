@@ -40,5 +40,10 @@ public class FavoriteServiceImpl implements FavoriteService{
     public void delete(User user, Product product) {
         favoriteDAO.deleteByUserAndProduct(user, product);
     }
+
+    @Override
+    public List<Favorite> findByUserId(Integer userID) {
+        return favoriteDAO.findByUserId(userID);
+    }
     
 }
