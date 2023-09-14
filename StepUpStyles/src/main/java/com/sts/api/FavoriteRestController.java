@@ -2,6 +2,7 @@ package com.sts.api;
 
 import java.util.List;
 
+import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ public class FavoriteRestController {
     ProductService productService;
 
     @Autowired
-    UserService userService;
+	UserService userService;
 
 	@GetMapping("/rest/favorites/{favoriteID}")
 	public Favorite getFavorite(@PathVariable("favoriteID") Integer favoriteID) {
