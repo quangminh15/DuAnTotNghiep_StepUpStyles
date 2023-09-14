@@ -40,19 +40,19 @@ public class FavoriteRestController {
 		return favoriteService.findAll();
 	}
 
-//	@PostMapping("/rest/favorites/{userId}/{productId}")
-//	public Favorite addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
-//		Product product = productService.findById(productId);
-//        User user = userService.findById(userId);
-//
-//        if (product != null && user != null) {
-//            Favorite favorite = new Favorite();
-//            favorite.setUser(user);
-//            favorite.setProduct(product);
-//
-//            favoriteService.create(favorite);
-//        }
-//	}
+	@PostMapping("/rest/favorites/{userId}/{productId}")
+	public Favorite addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
+		Product product = productService.findById(productId);
+        User user = userService.findById(userId);
+
+        if (product != null && user != null) {
+            Favorite favorite = new Favorite();
+            favorite.setUser(user);
+            favorite.setProduct(product);
+
+            favoriteService.create(favorite);
+        }
+	}
 
 	@DeleteMapping("/rest/favorites/delete/{userId}/{productId}")
 	public void deleteFavorite(@PathVariable("userId") Integer userId, @PathVariable("productId") Integer productId) {
