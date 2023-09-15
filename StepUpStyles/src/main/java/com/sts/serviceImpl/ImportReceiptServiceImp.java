@@ -50,5 +50,11 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
             return null;
         }
     }
+
+    @Override
+    public ImportReceipt findImportReceiptById(Long importReceiptID) {
+        return importDao.findById(importReceiptID)
+        .orElse(null);
+    }
     
 }

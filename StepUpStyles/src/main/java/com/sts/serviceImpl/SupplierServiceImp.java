@@ -63,4 +63,22 @@ public class SupplierServiceImp implements SupplierService {
     public List<Supplier> findBySupplierNameContaining(String keyword) {
         return supDao.findBySupplierNameContaining(keyword);
     }
+
+    @Override
+    public List<Supplier> getHistorySuppliers() {
+        return supDao.findByDeletedTrue();
+    }
+
+    @Override
+    public boolean markSupplierAsHistory(Long supplierId) {
+        Optional<Supplier> optionalSupplier = supDao.findById(supplierId);
+
+        if (optionalSupplier.isPresent()) {
+            Supplier supplier = optionalSupplier.get();
+            supplier.setDeleted(false);
+            supDao.save(supplier);
+            return true;
+        }
+        return false;
+    }
 }

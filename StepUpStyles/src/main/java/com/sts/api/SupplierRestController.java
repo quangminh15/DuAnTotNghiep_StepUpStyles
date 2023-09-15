@@ -61,9 +61,25 @@ public class SupplierRestController {
         }
     }
 
+    @PutMapping("/historySupplier/{supplierId}")
+    public ResponseEntity<String> historySupplier(@PathVariable Long supplierId) {
+        boolean markedAsHistory = supplierService.markSupplierAsHistory(supplierId);
+
+        if (markedAsHistory) {
+            return ResponseEntity.ok("Nhà cung cấp với ID " + supplierId + " đã được đánh dấu là đã khoi phuc.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/deleted")
     public List<Supplier> getActiveSuppliers() {
         return supplierService.getDeletedSuppliers();
+    }
+
+    @GetMapping("/history")
+    public List<Supplier> getHistorySuppliers() {
+        return supplierService.getHistorySuppliers();
     }
 
     @GetMapping("/searchSupplier")

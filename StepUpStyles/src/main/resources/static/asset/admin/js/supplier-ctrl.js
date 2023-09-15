@@ -1,5 +1,6 @@
 app.controller("supplier-ctrl", function($scope, $http){
     $scope.items = [];
+	$scope.itemss = [];
 	$scope.form = {
         supplierName: '',
         phone: '',
@@ -21,7 +22,21 @@ app.controller("supplier-ctrl", function($scope, $http){
 		});
 	}
 
+	$scope.historyinit = function () {
+		// Load suppliers
+		$http.get("/rest/supplier/history").then(resp => {
+			$scope.itemss = resp.data;
+			$scope.pager.first();
+			
+		}).catch(error => {
+			console.log("Error fetching suppliers:", error);
+			// Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi)
+		});
+	}
+
     $scope.initialize();
+
+	$scope.historyinit();
 
     //ham create
     $scope.create = function (){
@@ -154,6 +169,10 @@ app.controller("supplier-ctrl", function($scope, $http){
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
 		}
+	}
+
+	$scope.openHistoryModal = function(){
+		$('#historyModalLabel').modal('show');
 	}
 	
 	//Gọi đến modal xác nhận

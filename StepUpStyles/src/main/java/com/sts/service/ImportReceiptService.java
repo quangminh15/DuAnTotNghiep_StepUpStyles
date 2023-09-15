@@ -17,5 +17,7 @@ public interface ImportReceiptService {
     void deleteById(Long importReceiptId);
 
     ImportReceipt updateTotalAmount(Long importReceiptId, ImportReceipt importReceipt);
+
+    ImportReceipt findImportReceiptById(Long importReceiptID);
     
 }

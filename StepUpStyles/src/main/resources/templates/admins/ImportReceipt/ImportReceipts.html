@@ -150,9 +150,10 @@
                         <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal1(item)">
                             <i class="bi bi-trash3-fill"></i>
                         </button>
-                        <button class="btn btn-space btn btn-success" ng-click="openCreateDetail()">
-                            <i class="bi bi-brush"></i>
+                        <button class="btn btn-space btn btn-success" ng-click="openCreateDetail(item)">
+                            <i class="bi bi-brush"></i>Them chi tiet
                         </button>
+                        
                         <button class="btn btn-space btn btn-dark">
                             <i class="bi bi-eye"></i>
                         </button>
@@ -170,20 +171,21 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <h4><b>Phiếu nhập</b></h4>
-                                    <input class="form-control" type="text">
-                                </div>
-                                <div class="form-group">
                                     <h4><b>Sản phẩm</b></h4>
-                                    <input class="form-control" type="text">
+                                    <div>
+                                        <select class="select2 form-control" ng-model="form.product.productID">
+                                            <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+                                            <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <h4><b>Số lượng</b></h4>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" ng-model="form.quantity">
                                 </div>
                                 <div class="form-group">
                                     <h4><b>Đơn giá</b></h4>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" ng-model="form.price">
                                 </div>
                             </div>
                             <div class="modal-footer">

@@ -21,4 +21,8 @@ public interface SupplierService {
     List<Supplier> getDeletedSuppliers();
 
     List<Supplier> findBySupplierNameContaining(String keyword);
+
+    List<Supplier> getHistorySuppliers();
+
+    boolean markSupplierAsHistory(Long supplierId);
 }
