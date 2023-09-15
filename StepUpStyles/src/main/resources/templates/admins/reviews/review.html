@@ -40,32 +40,6 @@ label {
 p {
     margin-top: 5px; /* Khoảng cách giữa các phần tử p */
 }
-/* Định dạng bảng */
-table {
-    width: 100%; /* Chiều rộng 100% của bảng */
-    border-collapse: collapse; /* Gộp đường viền của các ô */
-}
-
-/* Định dạng các ô header */
-th {
-    text-align: left; /* Căn lề trái cho nội dung trong các ô header */
-    background-color: #f2f2f2; /* Màu nền cho các ô header */
-    padding: 8px; /* Khoảng cách bên trong các ô header */
-}
-
-/* Định dạng các ô dữ liệu */
-td {
-    text-align: left; /* Căn lề trái cho nội dung trong các ô dữ liệu */
-    padding: 8px; /* Khoảng cách bên trong các ô dữ liệu */
-    border-bottom: 1px solid #ddd; /* Đường viền dưới cho từng ô */
-}
-
-/* Định dạng hàng chẵn của bảng */
-tr:nth-child(even) {
-    background-color: #f2f2f2; /* Màu nền cho hàng chẵn */
-}
-
-
 
 </style>
 
@@ -79,22 +53,16 @@ tr:nth-child(even) {
                 </button>
             </div>
             <div class="modal-body">
-                <!-- <table>
-                    <tr>
-                       <th>Sản phẩm</th>
-                       <th>Người dùng</th> 
-                    </tr>
-                    <tr>
-                        <td>{{reviewdetails.product.productName}}</td>
-                        <td>{{reviewdetails.user.fullName}}</td>
-                    </tr>                   
-                </table> -->
-                <div class="row col-sm-6">
+                <div class="row">
+                <div class="col-sm-4">
                     <label for="">Sản phẩm</label>
                     <h5>{{reviewdetails.product.productName}}</h5>
+                </div>               
+                <div class="col-sm-4">
+                    <label for="">Người dùng</label>
+                    <h5>{{reviewdetails.user.fullName}}</h5>
                 </div>
-                <label>Nội dung</label>
-                <p>{{reviewdetails.title}}</p>
+                <div class="col-sm-4">
                 <label>Sao đánh giá</label>
                 <div class="star-rating">
                     <span class="fa fa-star {{ reviewdetails.rating >= 1 ? 'checked' : '' }}"></span>
@@ -103,6 +71,11 @@ tr:nth-child(even) {
                     <span class="fa fa-star {{ reviewdetails.rating >= 4 ? 'checked' : '' }}"></span>
                     <span class="fa fa-star {{ reviewdetails.rating >= 5 ? 'checked' : '' }}"></span>
                 </div>
+                </div>
+                </div>
+                
+                <label>Nội dung</label>
+                <p>{{reviewdetails.title}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -110,7 +83,7 @@ tr:nth-child(even) {
         </div>
     </div>
 </div>
-
+<div class="card card-border-color card-border-color-primary m-3">
             <div class="card-header card-header-divider">Đánh giá</div>
             <div class="card card-table m-3">
                 <div class="card-body">
@@ -169,5 +142,6 @@ tr:nth-child(even) {
                     </div>
                 </div>
 
+            </div>
             </div>
             <div style="color: #eee;">123</div>
