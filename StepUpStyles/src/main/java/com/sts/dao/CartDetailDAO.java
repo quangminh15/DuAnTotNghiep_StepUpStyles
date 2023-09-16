@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.sts.model.CartDetail;
+import com.sts.model.ProductDetail;
 
 public interface CartDetailDAO extends JpaRepository<CartDetail,Integer>{
     
@@ -23,6 +24,11 @@ public interface CartDetailDAO extends JpaRepository<CartDetail,Integer>{
         @Param("colorId") int colorId,
         @Param("quantity") int quantity
     );
+
+    @Transactional
+	@Modifying
+    @Query("UPDATE CartDetail cd SET cd.productDetail = :productDetail WHERE cd.cartDetailId = :cartDetailId")
+    void updateCartItem(@Param("cartDetailId") Integer cartDetailId, @Param("productDetail") ProductDetail productDetail);
 
     @Query("SELECT ci FROM CartDetail ci WHERE ci.cart.user.usersId=?1")
     List<CartDetail> findCartItemsByCustomerId(Integer usersId);
