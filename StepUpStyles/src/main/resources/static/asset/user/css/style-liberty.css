@@ -9496,7 +9496,7 @@ Author URL: http://w3layouts.com
  .w3l-ecommerce-main-inn .caption {
    display: grid;
    align-items: center;
-   grid-template-columns: 1fr 6fr;
+   grid-template-columns: 2fr 8fr;
    grid-gap: 4px;
  }
  
