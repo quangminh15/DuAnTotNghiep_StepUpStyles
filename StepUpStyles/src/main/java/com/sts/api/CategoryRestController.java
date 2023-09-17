@@ -32,6 +32,16 @@ public class CategoryRestController {
 	public List<Category> getAll() {
 		return categoryService.findAll();
 	}
+	
+	@GetMapping("/rest/categories/loadallDeleted")
+	public List<Category> getAllDeleted() {
+		return categoryService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/categories/loadallNoDeleted")
+	public List<Category> getAllNoDeleted() {
+		return categoryService.loadAllNoDeleted();
+	}
 
 	@PostMapping("/rest/categories/create")
 	public Category create(@RequestBody Category category) {

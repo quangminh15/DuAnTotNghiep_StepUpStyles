@@ -32,6 +32,16 @@ public class SizeRestController {
 	public List<Size> getAll() {
 		return sizeService.findAll();
 	}
+	
+	@GetMapping("/rest/sizes/loadallDeleted")
+	public List<Size> getAllDeleted() {
+		return sizeService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/sizes/loadallNoDeleted")
+	public List<Size> getAllNoDeleted() {
+		return sizeService.loadAllNoDeleted();
+	}
 
 	@PostMapping("/rest/sizes/create")
 	public Size create(@RequestBody Size size) {
@@ -49,7 +59,8 @@ public class SizeRestController {
 	}
 
 	@GetMapping("/rest/sizes/search")
-	public List<Size> searchSizeByName(@RequestParam("keyword") String keyword) {
-		return sizeService.searchByName(keyword);
+	public List<Size> searchSizeByName(@RequestParam("keyword") Float keyword) {
+	    return sizeService.searchByName(keyword);
 	}
+
 }

@@ -8,6 +8,10 @@ public interface CategoryService {
 	Category findById(Integer categoryID);
 
 	List<Category> findAll();
+	
+	List<Category> loadAllDeleted();
+
+	List<Category> loadAllNoDeleted();
 
 	Category create(Category category);
 

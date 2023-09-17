@@ -23,6 +23,16 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll() {
 		return cateDAO.findAll();
 	}
+	
+	@Override
+	public List<Category> loadAllDeleted() {
+		return cateDAO.loadAllDeleted();
+	}
+
+	@Override
+	public List<Category> loadAllNoDeleted() {
+		return cateDAO.loadAllNoDeleted();
+	}
 
 	@Override
 	public Category create(Category category) {

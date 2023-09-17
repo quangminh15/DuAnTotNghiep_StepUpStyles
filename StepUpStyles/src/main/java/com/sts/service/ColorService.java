@@ -18,4 +18,7 @@ public interface ColorService {
 	
 	List<Color> searchByName(String keyword);
 
+	List<Color> loadAllDeleted();
+
+	List<Color> loadAllNoDeleted();
 }

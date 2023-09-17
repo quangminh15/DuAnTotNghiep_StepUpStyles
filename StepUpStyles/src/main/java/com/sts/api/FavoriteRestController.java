@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Favorite;
@@ -30,10 +29,10 @@ public class FavoriteRestController {
     @Autowired
 	UserService userService;
 
-	@GetMapping("/rest/favorites/{favoriteID}")
-	public Favorite getFavorite(@PathVariable("favoriteID") Integer favoriteID) {
-		return favoriteService.findById(favoriteID);
-	}
+	// @GetMapping("/rest/favorites/{favoriteID}")
+	// public Favorite getFavorite(@PathVariable("favoriteID") Integer favoriteID) {
+	// 	return favoriteService.findById(favoriteID);
+	// }
 
     @GetMapping("/rest/favorites/{userId}")
 	public List<Favorite> getFavoriteProduct(@PathVariable("userId") Integer userId) {

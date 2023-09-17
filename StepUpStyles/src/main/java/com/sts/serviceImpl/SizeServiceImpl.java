@@ -23,7 +23,22 @@ public class SizeServiceImpl implements SizeService {
 	public List<Size> findAll() {
 		return sizeDAO.findAll();
 	}
-
+	
+	@Override
+	public List<Size> loadAllDeleted() {
+		return sizeDAO.loadAllDeleted();
+	}
+	
+	@Override
+	public List<Size> loadAllNoDeleted() {
+		return sizeDAO.loadAllNoDeleted();
+	}
+	
+	@Override
+    public List<Size> searchByName(Float keyword) {
+        return sizeDAO.findBySizeNumber(keyword);
+    }
+	
 	@Override
 	public Size create(Size size) {
 		return sizeDAO.save(size);
@@ -38,10 +53,4 @@ public class SizeServiceImpl implements SizeService {
 	public void delete(Integer sizeID) {
 		sizeDAO.deleteById(sizeID);
 	}
-
-	@Override
-	public List<Size> searchByName(String keyword) {
-		return sizeDAO.findBySizeNumberContaining(keyword);
-	}
-
 }

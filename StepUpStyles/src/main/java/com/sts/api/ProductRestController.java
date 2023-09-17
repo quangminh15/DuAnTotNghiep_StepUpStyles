@@ -32,6 +32,16 @@ public class ProductRestController {
 	public List<Product> getAll() {
 		return productService.findAll();
 	}
+	
+	@GetMapping("/rest/products/loadallDeleted")
+	public List<Product> getAllDeleted() {
+		return productService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/products/loadallNoDeleted")
+	public List<Product> getAllNoDeleted() {
+		return productService.loadAllNoDeleted();
+	}
 
 	@PostMapping("/rest/products/create")
 	public Product create(@RequestBody Product product) {

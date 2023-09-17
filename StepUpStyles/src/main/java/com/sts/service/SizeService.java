@@ -8,6 +8,10 @@ public interface SizeService {
 	Size findById(Integer sizeID);
 
 	List<Size> findAll();
+	
+	List<Size> loadAllDeleted();
+	
+	List<Size> loadAllNoDeleted();
 
 	Size create(Size size);
 
@@ -15,5 +19,9 @@ public interface SizeService {
 
 	void delete(Integer sizeID);
 	
-	List<Size> searchByName(String keyword);
+	List<Size> searchByName(Float keyword);
+
+	
+
+	
 }

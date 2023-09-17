@@ -23,6 +23,16 @@ public class ColorServiceImpl implements ColorService  {
 	public List<Color> findAll() {
 		return ColorDAO.findAll();
 	}
+	
+	@Override
+	public List<Color> loadAllDeleted() {
+		return ColorDAO.loadAllDeleted();
+	}
+
+	@Override
+	public List<Color> loadAllNoDeleted() {
+		return ColorDAO.loadAllNoDeleted();
+	}
 
 	@Override
 	public Color create(Color color) {

@@ -39,5 +39,15 @@ public class ProductImageServiceImpl implements ProductImageService {
 		ProductImageDAO.deleteById(productImageID);
 	}
 
+	@Override
+	public List<ProductImage> getImagesByProduct(Integer productId) {
+		return ProductImageDAO.findByProduct_ProductID(productId);
+	}
+
+	@Override
+	public List<ProductImage> searchByName(String keyword) {
+		return ProductImageDAO.findByProductImageName(keyword);
+	}
+
 
 }

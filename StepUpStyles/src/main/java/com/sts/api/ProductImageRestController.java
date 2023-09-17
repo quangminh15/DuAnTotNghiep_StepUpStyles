@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.ProductImage;
@@ -43,7 +44,18 @@ public class ProductImageRestController {
 	}
 
 	@DeleteMapping("/rest/productimages/delete/{productImageID}")
-	public void delete(@PathVariable("ProductImageID") Integer productImageID) {
+	public void delete(@PathVariable("productImageID") Integer productImageID) {
 		productImageService.delete(productImageID);
 	}
+	//Lọc danh sách hình ảnh theo sản phẩm
+	@GetMapping("/rest/productimages/loadbyproduct/{productId}")
+	public List<ProductImage> getImagesByProduct(@PathVariable Integer productId) {
+		return productImageService.getImagesByProduct(productId);
+	}
+	
+	//Tìm kiếm hình ảnh theo tên sản phẩm
+	@GetMapping("/rest/productimages/search")
+    public List<ProductImage> searchProductImageByName(@RequestParam("keyword") String keyword) {
+        return productImageService.searchByName(keyword);
+    }
 }

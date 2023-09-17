@@ -8,6 +8,10 @@ public interface ProductDetailService {
 	ProductDetail findById(Integer productDetailID);
 
 	List<ProductDetail> findAll();
+	
+	List<ProductDetail> loadAllDeleted();
+
+	List<ProductDetail> loadAllNoDeleted();
 
 	ProductDetail create(ProductDetail productDetail);
 
@@ -16,4 +20,6 @@ public interface ProductDetailService {
 	void delete(Integer productDetailID);
 	
 	List<ProductDetail> searchByName(String keyword);
+
+	List<ProductDetail> getProductDetailByProduct(Integer productId);
 }

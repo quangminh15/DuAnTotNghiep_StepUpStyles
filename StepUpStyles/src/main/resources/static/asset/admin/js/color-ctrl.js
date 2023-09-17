@@ -1,11 +1,14 @@
 app.controller("color-ctrl", function($scope, $http) {
 	$scope.coloritems = [];
+	$scope.coloritemss = [];
+	$scope.coloritemsLoadAll = [];
 	$scope.prods = [];
 	$scope.productNames = [];
 	$scope.form = {};
 	$scope.form.product = {};
 	$scope.errorMessage = '';
 	$scope.messageSuccess = '';
+	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
 		{ name: 'colorID', label: 'Mã màu' },
@@ -101,13 +104,88 @@ app.controller("color-ctrl", function($scope, $http) {
 			}
 		},
 	};
+	
+	//	Phân trang đã xóa
+	$scope.RestorePager = {
+		page: 0,
+		size: 5,
+		getRestorePageNumbers: function() {
+			var RestorePageCount = this.count;
+			var RestoreCurrentPage = this.page + 1;
+			var RestoreVisiblePages = [];
+
+			if (RestorePageCount <= 3) {
+				for (var i = 1; i <= RestorePageCount; i++) {
+					RestoreVisiblePages.push({ value: i });
+				}
+			} else {
+				if (RestoreCurrentPage <= 2) {
+					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
+				} else {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return RestoreVisiblePages;
+		},
+		get coloritemss() {
+			var start = this.page * this.size;
+			return $scope.coloritemss.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.coloritemss.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		RestoreGoto(RestorePageNumber) {
+			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
+				this.page = RestorePageNumber - 1;
+				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+			}
+		},
+	};
 
 	$scope.initialize = function() {
-		//load colors
+		//load coloritems hết luôn
 		$http.get("/rest/colors/loadall").then(resp => {
-			$scope.coloritems = resp.data;
-			console.log($scope.coloritems)
+			$scope.coloritemsLoadAll = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load coloritems 
+		$http.get("/rest/colors/loadallNoDeleted").then(resp => {
+			$scope.coloritems = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load coloritems đã xóa
+		$http.get("/rest/colors/loadallDeleted").then(resp => {
+			$scope.coloritemss = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 	}
 
@@ -126,14 +204,15 @@ app.controller("color-ctrl", function($scope, $http) {
 			}).then(resp => {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
+				console.log("Kết quả tìm kiếm ", resp.data);
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					$scope.errorMessage = `Không tìm thấy sản phẩm có tên "${$scope.searchKeyword}"`;
+					$scope.errorMessage = `Không tìm thấy màu có tên "${$scope.searchKeyword}"`;
 					$('#errorModal').modal('show');
 				}
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tìm kiếm màu sản phẩm!";
+				$scope.errorMessage = "Lỗi khi tìm kiếm màu!";
 				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
@@ -148,24 +227,32 @@ app.controller("color-ctrl", function($scope, $http) {
 	};
 
 
-	$scope.filterByProduct = function() {
-		if ($scope.selectedProduct) {
-			$http.get("/rest/colors/loadbyproduct/" + $scope.selectedProduct).then(resp => {
+
+	$scope.filterByActivities = function() {
+		if ($scope.selectedActivity === "all") {
+			$http.get("/rest/colors/loadallNoDeleted").then(resp => {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo sản phẩm!";
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc!";
 				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
-			// Nếu không có sản phẩm được chọn, hiển thị tất cả màu sắc
-			$scope.initialize();
+			$http.get("/rest/colors/loadallNoDeleted").then(resp => {
+				const selectedStatus = $scope.selectedActivity === "true";
+				const filteredColors = resp.data.filter(color => color.activities === selectedStatus);
+				$scope.coloritems = filteredColors;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo trạng thái!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
 		}
 	};
-
-
 
 
 	// Hàm giới hạn độ dài của đường dẫn
@@ -194,27 +281,8 @@ app.controller("color-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(coloritem);
 	}
 
-	function checkDuplicateColor(coloritem) {
-		// Kiểm tra sự trùng lặp dựa trên productID, sizeID và colorID
-		var isDuplicate = $scope.coloritems.some(function(item) {
-			return (
-				item.product.productID === coloritem.product.productID &&
-				item.colorName === coloritem.colorName
-			);
-		});
-
-		return isDuplicate;
-	}
-
 	//	Thêm mới 
 	$scope.create = function() {
-
-		//Lỗi không chọn sản phẩm 
-		if (!$scope.form.product.productID) {
-			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
-			$('#errorModal').modal('show');
-			return;
-		}
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
@@ -223,25 +291,8 @@ app.controller("color-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Kiểm tra sự trùng lặp
-		var isDuplicate = checkDuplicateColor($scope.form);
-		if (isDuplicate) {
-			$scope.errorMessage = "Sản phẩm mà bạn chọn đã có màu này rồi. Vui lòng nhập màu khác!";
-			$('#errorModal').modal('show');
-			return;
-		}
-
-
-		//Lỗi không chọn ảnh
-		if (!document.querySelector('#photo').files[0]) {
-			$scope.errorMessage = "Bạn chưa chọn ảnh";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn ảnh
-		};
-
 		// Thực hiện việc lưu vào db
 		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
 		coloritem.deleted = false;
 		$http.post('/rest/colors/create', coloritem).then(resp => {
 			$scope.coloritems.push(resp.data);
@@ -265,12 +316,6 @@ app.controller("color-ctrl", function($scope, $http) {
 
 	//Cập nhật
 	$scope.update = function() {
-		//Lỗi không chọn sản phẩm 
-		if (!$scope.form.product.productID) {
-			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn sản phẩm
-		}
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
@@ -279,15 +324,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			return;
 		}
 
-		//Lỗi không chọn ảnh 
-		if (!document.querySelector('#photo').files[0]) {
-			$scope.errorMessage = "Bạn chưa chọn ảnh";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn ảnh
-		}
-
 		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
 			$scope.coloritems[index] = coloritem;
@@ -302,19 +339,97 @@ app.controller("color-ctrl", function($scope, $http) {
 		})
 	}
 
-	//Gọi đến modal xác nhận để xóa
-	$scope.confirmDeleteModal = function() {
-		$('#confirmDeleteModal').modal('show');
+	//Mở modal thùng rác
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
+	};
+
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal = function() {
+		$('#confirmHideModal').modal('show');
 	}
 
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(coloritem) {
+		$scope.form = angular.copy(coloritem);
+		$('#confirmHideModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác
+	$scope.confirmHide = function() {
+		var coloritem = angular.copy($scope.form);
+		coloritem.deleted = true;
+		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
+			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
+			$scope.coloritems[index] = coloritem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(coloritem) {
+		$scope.form = angular.copy(coloritem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var coloritem = angular.copy($scope.form);
+		coloritem.deleted = false;
+		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
+			var index = $scope.coloritemsLoadAll.findIndex(p => p.colorID == coloritem.colorID);
+			$scope.coloritemsLoadAll[index] = coloritem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để xóa luôn
 	$scope.confirmDeleteModal1 = function(coloritem) {
 		$scope.form = angular.copy(coloritem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
 		$('#confirmDeleteModal').modal('show');
 	}
 
-	//sau khi xác nhận thành công thì xóa
+	//sau khi xác nhận thành công thì xóa luôn
 	$scope.confirmDelete = function() {
-		// Thực hiện xóa 
+		// Thực hiện xóa
 		$http.delete('/rest/colors/delete/' + $scope.form.colorID).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == $scope.form.colorID);
 			$scope.coloritems.splice(index, 1);
@@ -326,7 +441,6 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
 			console.log("Error", error);
-			$scope.initialize();
 		});
 
 		// Đóng modal xác nhận xóa

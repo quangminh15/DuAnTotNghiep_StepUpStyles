@@ -21,9 +21,9 @@ app.controller("review-ctrl", function($scope, $http){
 		});
 		
 		//load User
-		// $http.get("/rest/users/loadall").then(resp => {
-		// 	$scope.users = resp.data;
-		// });
+		$http.get("/rest/users/loadall").then(resp => {
+			$scope.users = resp.data;
+		});
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -110,5 +110,18 @@ app.controller("review-ctrl", function($scope, $http){
 			.catch(function (error) {
 				console.log('Error hiding review:', error);
 			});
+	};
+
+	$scope.filterByProduct = function() {
+		if ($scope.selectedProduct) {
+			$http.get("/rest/reviews/loadbyproducts/" + $scope.selectedProduct).then(resp => {
+				$scope.productitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
 	};
 })

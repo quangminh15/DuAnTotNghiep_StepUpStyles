@@ -15,4 +15,7 @@ public interface ProductImageService {
 
 	void delete(Integer productImageID);
 	
+	List<ProductImage> getImagesByProduct(Integer productId);
+
+	List<ProductImage> searchByName(String keyword);
 }

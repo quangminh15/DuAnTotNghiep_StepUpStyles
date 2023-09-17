@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sts.model.ProductDetail;
 import com.sts.service.ProductDetailService;
 
-
 @CrossOrigin("*")
 @RestController
 public class ProductDetailRestController {
@@ -32,6 +31,16 @@ public class ProductDetailRestController {
 	public List<ProductDetail> getAll() {
 		return productDetailService.findAll();
 	}
+	
+	@GetMapping("/rest/productdetails/loadallDeleted")
+	public List<ProductDetail> getAllDeleted() {
+		return productDetailService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/productdetails/loadallNoDeleted")
+	public List<ProductDetail> getAllNoDeleted() {
+		return productDetailService.loadAllNoDeleted();
+	}
 
 	@PostMapping("/rest/productdetails/create")
 	public ProductDetail create(@RequestBody ProductDetail productDetail) {
@@ -39,17 +48,25 @@ public class ProductDetailRestController {
 	}
 
 	@PutMapping("/rest/productdetails/update/{productDetailID}")
-	public ProductDetail update(@PathVariable("productDetailID") Integer productDetailID, @RequestBody ProductDetail productDetail) {
+	public ProductDetail update(@PathVariable("productDetailID") Integer productDetailID,
+			@RequestBody ProductDetail productDetail) {
 		return productDetailService.update(productDetail);
 	}
 
 	@DeleteMapping("/rest/productdetails/delete/{productDetailID}")
-	public void delete(@PathVariable("ProductDetailID") Integer productDetailID) {
+	public void delete(@PathVariable("productDetailID") Integer productDetailID) {
 		productDetailService.delete(productDetailID);
 	}
 
+	// Tìm kiếm hình ảnh theo tên sản phẩm
 	@GetMapping("/rest/productdetails/search")
 	public List<ProductDetail> searchProductDetailByName(@RequestParam("keyword") String keyword) {
 		return productDetailService.searchByName(keyword);
+	}
+
+	// Lọc danh sách hình ảnh theo sản phẩm
+	@GetMapping("/rest/productdetails/loadbyproduct/{productId}")
+	public List<ProductDetail> getProductDetailByProduct(@PathVariable Integer productId) {
+		return productDetailService.getProductDetailByProduct(productId);
 	}
 }

@@ -9,6 +9,10 @@ public interface BrandService {
 
 	List<Brand> findAll();
 
+	List<Brand> loadAllDeleted();
+
+	List<Brand> loadAllNoDeleted();
+
 	Brand create(Brand brand);
 
 	Brand update(Brand brand);
