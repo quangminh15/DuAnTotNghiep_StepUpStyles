@@ -679,6 +679,11 @@
                                     <li><a href="list_products.html" data-tip="Favorite"><span
                                                 class="fa fa-heart"></span></a>
                                     </li>
+                                    <li>
+                                        <button ng-click="toggleFavorite(product)" ng-class="{ 'active': product.isFavorite }">
+                                            <span class="fa fa-heart"></span>
+                                        </button>
+                                    </li>
                                 </ul>
                                 <div class="transmitv single-item">
                                     <form action="#" method="post">

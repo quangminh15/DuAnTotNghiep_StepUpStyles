@@ -8,4 +8,5 @@ public interface ReviewService {
     List<Review> findAll();
     Review findById(Integer reviewID);
     boolean hidReview (Integer reviewID);
+    List<Review> getProductByProductId(Integer productId);
 }

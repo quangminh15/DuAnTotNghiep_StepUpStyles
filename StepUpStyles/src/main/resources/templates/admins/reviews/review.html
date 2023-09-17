@@ -85,6 +85,15 @@ p {
 </div>
 <div class="card card-border-color card-border-color-primary m-3">
             <div class="card-header card-header-divider">Đánh giá</div>
+            <div class="col-sm-4">
+                <label style="font-size: 15px">Tên sản phẩm</label> 
+                  <select class="form-control mr-2" ng-model="selectedProduct"
+                       ng-change="filterByProduct()"
+                       ng-options="product.productID as product.productName for product in productitems"
+                       style="width: 200px; margin-bottom: 10px">
+                       <option value="">Tất cả</option>
+                   </select>
+           </div>
             <div class="card card-table m-3">
                 <div class="card-body">
                     <table class="table">
@@ -95,7 +104,6 @@ p {
                                 <th>Người dùng</th> -->
                                 <th>Nội dung</th>
                                 <th>Ngày đánh giá</th>
-                                <th>Trạng thái</th>
                                 <th class="actions"></th>
                             </tr>
                         </thead>
@@ -106,10 +114,9 @@ p {
                                 <td>{{reviewitem.user.fullName}}</td> -->
                                 <td>{{reviewitem.title}}</td>
                                 <td>{{reviewitem.reviewDate | date:'dd-MM-yyyy'}}</td>
-                                <td>{{reviewitem.display?'Hiển thị' : 'Ẩn'}}</td>
                                 <td class="actions">
                                     <button class="button btn-success" ng-click="showReview(reviewitem.reviewId)"><i class="mdi mdi-eye mx-2"></i></button>
-                                    <button class="button btn-primary" ng-click="hideReview(reviewitem.reviewId)">{{ reviewitem.display ? 'Ẩn' : 'Hiện' }}</button>
+                                    <!-- <button class="button btn-primary" ng-click="hideReview(reviewitem.reviewId)">{{ reviewitem.display ? 'Ẩn' : 'Hiện' }}</button> -->
                                 </td>
                             </tr>
 
