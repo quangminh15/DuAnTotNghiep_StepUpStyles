@@ -57,7 +57,59 @@
 		</div>
 	</div>
 
-	<!-- modal xác nhận -->
+	<!-- modal xác nhận xóa vào thùng rác-->
+	<div class="modal fade" id="confirmHideModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmHideModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
+						xóa</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa danh mục "{{
+					form.categoryName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Hủy</button>
+					<button type="button" class="btn btn-danger"
+						ng-click="confirmHide()">Xóa</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal xác nhận khôi phục item từ thùng rác-->
+	<div class="modal fade" id="confirmRestoreModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmRestoreModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmRestoreModalLabel">Xác nhận
+						khôi phục</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn khôi phục danh
+					mục "{{ form.categoryName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Hủy</button>
+					<button type="button" class="btn btn-danger" ng-click="restore()">Khôi
+						phục</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal xác nhận xóa luôn-->
 	<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
 		role="dialog" aria-labelledby="confirmDeleteModalLabel"
 		aria-hidden="true">
@@ -71,8 +123,8 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa danh mục sản
-					phẩm "{{ form.categoryName }}" này không?</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa danh mục "{{
+					form.categoryName }}" này không?</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Hủy</button>
@@ -91,21 +143,20 @@
 					class="form-control" id="inputUserName" type="number"
 					ng-model="form.categoryID" readonly="true">
 			</div>
-			
+
 			<div class="form-group col-md-6">
 				<label for="inputPassword3">Tên danh mục</label> <input
 					class="form-control" id="inputPassword3" type="text"
-					placeholder="Tên danh mục" required=""
-					ng-model="form.categoryName">
+					placeholder="Tên danh mục" required="" ng-model="form.categoryName">
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label for="inputPassword3">Hình ảnh</label> <input
 					class="form-control" id="photo" type="file">
 			</div>
-			
+
 			<div class="form-group col-md-6">
 				<label class="col-form-label text-sm-left">Trạng thái</label>
 				<div class="form-check mt-1">
@@ -121,12 +172,12 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="row">
-		<div class="form-group col-md-12" ng-if="form.categoryImage">
-		<img style="height: 60%; width: 20%;" alt=""
-				src="{{ form.categoryImage }}">
-		</div>
+			<div class="form-group col-md-12" ng-if="form.categoryImage">
+				<img style="height: 60%; width: 20%;" alt=""
+					src="{{ form.categoryImage }}">
+			</div>
 		</div>
 
 		<div class="row pt-0 pt-sm-5">
@@ -140,7 +191,7 @@
 						<i class="bi bi-pencil-square"></i> Sửa
 					</button>
 					<button class="btn btn-space btn btn-danger"
-						ng-click="confirmDeleteModal()" type="submit">
+						ng-click="confirmHideModal()" type="submit">
 						<i class="bi bi-trash3-fill"></i> Xóa
 					</button>
 					<button class="btn btn-space btn btn-dark" ng-click="reset()">
@@ -156,9 +207,9 @@
 	<div
 		class="card-header d-flex justify-content-between align-items-center">
 		<h4 class="mb-0">Danh sách danh mục sản phẩm</h4>
-		<!-- tìm kiếm theo tên bắt đầu  -->
+
 		<div class="d-flex">
-		<!-- Thẻ select box -->
+			<!-- Thẻ select box -->
 			<select class="form-control mr-2" ng-model="selectedActivity"
 				ng-change="filterByActivities()" style="width: 200px;">
 				<option value="all">Tất cả</option>
@@ -167,11 +218,18 @@
 			</select>
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
-				ng-click="openSearchForm()" style="width: 50px;height: 43px">
+				ng-click="openSearchForm()" style="width: 50px; height: 43px">
 				<span class="mdi mdi-search"></span>
+			</button>
+
+			<!-- Nút thùng rác -->
+			<button class="btn btn-space btn-danger md-trigger"
+				ng-click="openRecycleBinForm()" style="width: 50px; height: 43px">
+				<span class="mdi mdi-delete"></span>
 			</button>
 		</div>
 	</div>
+	<!-- tìm kiếm theo tên bắt đầu  -->
 	<div class="modal fade" id="searchModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
@@ -188,7 +246,8 @@
 						<div class="form-group">
 							<label for="searchKeyword">Tên danh muc</label> <input
 								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword" placeholder="Nhập tên danh mục mà bạn muốn tìm kiếm">
+								ng-model="searchKeyword"
+								placeholder="Nhập tên danh mục mà bạn muốn tìm kiếm">
 						</div>
 					</form>
 				</div>
@@ -201,9 +260,97 @@
 			</div>
 		</div>
 	</div>
-
-
 	<!-- tìm kiếm theo tên kết thúc -->
+
+	<!-- 	thùng rác bắt đầu -->
+	<div class="modal fade" id="recycleBinModal" tabindex="-1"
+		aria-labelledby="searchModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" style="background-color: #eee;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+					<button class="close modal-close" type="button"
+						data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th ng-repeat="column in sortableColumns"
+									ng-click="sortByColumn(column.name)">{{ column.label }} <span
+									ng-if="sortColumn === column.name"> <span
+										ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+										ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+								</span>
+								</th>
+
+								<th class="actions"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="categoryitem in RestorePager.categoryitemss">
+								<td>{{categoryitem.categoryID}}</td>
+								<td>{{categoryitem.categoryName}}</td>
+								<td>
+									<div class="image-container">
+										<img class="image-content" alt="{{categoryitem.categoryName}}"
+											src="{{categoryitem.categoryImage}}">
+									</div>
+								</td>
+								<td>{{categoryitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+								<td class="actions">
+									<button class="btn btn-space btn btn-primary "
+										ng-click="confirmRestoreModal1(categoryitem)">
+										<i class="mdi mdi-refresh-alt"></i>
+									</button>
+									<button class="btn btn-space btn btn-danger "
+										ng-click="confirmDeleteModal1(categoryitem)">
+										<i class="bi bi-trash3-fill"></i>
+									</button>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+					<div class="card-header d-flex justify-content-end">
+						<div>
+							<ul class="pagination">
+								<li class="page-item">
+									<button style="font-size: 25px" ng-click="RestorePager.first()"
+										class="page-link">
+										<span class="mdi mdi-skip-previous"></span>
+									</button>
+								</li>
+
+								<li class="page-item"
+									ng-repeat="RestorePage in RestoreVisiblePages"
+									ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
+									class="page-link" href=""
+									ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+										RestorePage.value }}</a></li>
+
+
+								<li class="page-item">
+									<button style="font-size: 25px" ng-click="RestorePager.last()"
+										class="page-link">
+										<span class="mdi mdi-skip-next"></span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" style="background-color: #eee;">
+					<button class="btn btn-secondary modal-close" type="button"
+						data-dismiss="modal">Hủy</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- thùng rác kết thúc -->
 	<div class="card-body">
 		<table class="table">
 			<thead>
@@ -230,9 +377,15 @@
 					</td>
 					<td>{{categoryitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
-                        <button class="btn btn-space btn btn-primary " ng-click="edit(categoryitem)"><i class="bi bi-pencil-square"></i> </button>
-                        <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(categoryitem)"><i class="bi bi-trash3-fill"></i></button>
-                    </td>
+						<button class="btn btn-space btn btn-primary "
+							ng-click="edit(categoryitem)">
+							<i class="bi bi-pencil-square"></i>
+						</button>
+						<button class="btn btn-space btn btn-danger "
+							ng-click="confirmHideModal1(categoryitem)">
+							<i class="bi bi-trash3-fill"></i>
+						</button>
+					</td>
 				</tr>
 
 			</tbody>

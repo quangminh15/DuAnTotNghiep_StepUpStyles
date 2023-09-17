@@ -1,5 +1,7 @@
 app.controller("brand-ctrl", function($scope, $http) {
 	$scope.branditems = [];
+	$scope.branditemss = [];
+	$scope.branditemsLoadAll = [];
 	$scope.form = {};
 	$scope.errorMessage = '';
 	$scope.selectedActivity = "all";
@@ -100,6 +102,67 @@ app.controller("brand-ctrl", function($scope, $http) {
 		},
 	};
 
+	//	Phân trang đã xóa
+	$scope.RestorePager = {
+		page: 0,
+		size: 5,
+		getRestorePageNumbers: function() {
+			var RestorePageCount = this.count;
+			var RestoreCurrentPage = this.page + 1;
+			var RestoreVisiblePages = [];
+
+			if (RestorePageCount <= 3) {
+				for (var i = 1; i <= RestorePageCount; i++) {
+					RestoreVisiblePages.push({ value: i });
+				}
+			} else {
+				if (RestoreCurrentPage <= 2) {
+					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
+				} else {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return RestoreVisiblePages;
+		},
+		get branditemss() {
+			var start = this.page * this.size;
+			return $scope.branditemss.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.branditemss.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		RestoreGoto(RestorePageNumber) {
+			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
+				this.page = RestorePageNumber - 1;
+				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+			}
+		},
+	};
+
 	// Tải ảnh lên Firebase	
 	$scope.uploadImages = function() {
 		var ref = firebase.storage().ref();
@@ -118,10 +181,10 @@ app.controller("brand-ctrl", function($scope, $http) {
 				console.log($scope.form.brandImage)
 			});
 	};
-	
+
 	$scope.filterByActivities = function() {
 		if ($scope.selectedActivity === "all") {
-			$http.get("/rest/brands/loadall").then(resp => {
+			$http.get("/rest/brands/loadallNoDeleted").then(resp => {
 				$scope.branditems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
@@ -131,7 +194,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 				$scope.pager.first();
 			});
 		} else {
-			$http.get("/rest/brands/loadall").then(resp => {
+			$http.get("/rest/brands/loadallNoDeleted").then(resp => {
 				const selectedStatus = $scope.selectedActivity === "true";
 				const filteredBrands = resp.data.filter(brand => brand.activities === selectedStatus);
 				$scope.branditems = filteredBrands;
@@ -146,10 +209,25 @@ app.controller("brand-ctrl", function($scope, $http) {
 	};
 
 	$scope.initialize = function() {
-		//load brands
+		//load branditems hết luôn
 		$http.get("/rest/brands/loadall").then(resp => {
+			$scope.branditemsLoadAll = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load branditems 
+		$http.get("/rest/brands/loadallNoDeleted").then(resp => {
 			$scope.branditems = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load branditems đã xóa
+		$http.get("/rest/brands/loadallDeleted").then(resp => {
+			$scope.branditemss = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 	}
 
@@ -303,19 +381,96 @@ app.controller("brand-ctrl", function($scope, $http) {
 			$scope.initialize();
 		}
 	}
-
-	//Gọi đến modal xác nhận để xóa
-	$scope.confirmDeleteModal = function() {
-		$('#confirmDeleteModal').modal('show');
+	
+	//Mở modal thùng rác
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
+	};
+	
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal = function() {
+		$('#confirmHideModal').modal('show');
 	}
+	
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(branditem) {
+		$scope.form = angular.copy(branditem);
+		$('#confirmHideModal').modal('show');
+	}
+	
+	//sau khi xác nhận thành công thì xóa vào thùng rác
+	$scope.confirmHide = function() {
+		var branditem = angular.copy($scope.form);
+		branditem.deleted = true;
+		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
+			var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
+			$scope.branditems[index] = branditem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
 
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+	
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(branditem) {
+		$scope.form = angular.copy(branditem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+	
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var branditem = angular.copy($scope.form);
+		branditem.deleted = false;
+		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
+			var index = $scope.branditemsLoadAll.findIndex(p => p.brandID == branditem.brandID);
+			$scope.branditemsLoadAll[index] = branditem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+	
+	//Gọi đến modal xác nhận để xóa luôn
 	$scope.confirmDeleteModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
 		$('#confirmDeleteModal').modal('show');
 	}
 
-
-	//sau khi xác nhận thành công thì xóa
+	//sau khi xác nhận thành công thì xóa luôn
 	$scope.confirmDelete = function() {
 		// Thực hiện xóa 
 		$http.delete('/rest/brands/delete/' + $scope.form.brandID).then(resp => {

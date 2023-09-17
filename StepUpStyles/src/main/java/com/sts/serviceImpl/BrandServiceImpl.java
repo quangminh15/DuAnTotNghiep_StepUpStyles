@@ -23,6 +23,16 @@ public class BrandServiceImpl implements BrandService {
 	public List<Brand> findAll() {
 		return brandDAO.findAll();
 	}
+	
+	@Override
+	public List<Brand> loadAllDeleted() {
+		return brandDAO.loadAllDeleted();
+	}
+
+	@Override
+	public List<Brand> loadAllNoDeleted() {
+		return brandDAO.loadAllNoDeleted();
+	}
 
 	@Override
 	public Brand create(Brand brand) {
@@ -43,5 +53,4 @@ public class BrandServiceImpl implements BrandService {
 	public List<Brand> searchByName(String keyword) {
 		return brandDAO.findByBrandNameContaining(keyword);
 	}
-
 }

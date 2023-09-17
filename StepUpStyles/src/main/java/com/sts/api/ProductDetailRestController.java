@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.ProductDetail;
-import com.sts.model.ProductImage;
 import com.sts.service.ProductDetailService;
 
 @CrossOrigin("*")
@@ -31,6 +30,16 @@ public class ProductDetailRestController {
 	@GetMapping("/rest/productdetails/loadall")
 	public List<ProductDetail> getAll() {
 		return productDetailService.findAll();
+	}
+	
+	@GetMapping("/rest/productdetails/loadallDeleted")
+	public List<ProductDetail> getAllDeleted() {
+		return productDetailService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/productdetails/loadallNoDeleted")
+	public List<ProductDetail> getAllNoDeleted() {
+		return productDetailService.loadAllNoDeleted();
 	}
 
 	@PostMapping("/rest/productdetails/create")

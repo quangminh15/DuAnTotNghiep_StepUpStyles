@@ -8,8 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.sts.model.Category;
 
-public interface CategoryDAO extends JpaRepository<Category, Integer>{
+public interface CategoryDAO extends JpaRepository<Category, Integer> {
 	@Query("SELECT c FROM Category c WHERE c.categoryName LIKE %:keyword%")
 	List<Category> findByCateNameContaining(@Param("keyword") String keyword);
-    
+
+	@Query("SELECT c FROM Category c WHERE c.deleted = true")
+	List<Category> loadAllDeleted();
+
+	@Query("SELECT c FROM Category c WHERE c.deleted = false")
+	List<Category> loadAllNoDeleted();
 }

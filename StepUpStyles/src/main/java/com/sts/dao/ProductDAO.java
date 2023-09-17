@@ -11,4 +11,10 @@ import com.sts.model.Product;
 public interface ProductDAO extends JpaRepository<Product, Integer>{
 	@Query("SELECT c FROM Product c WHERE c.productName LIKE %:keyword%")
 	List<Product> findByProductNameContaining(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM Product c WHERE c.deleted = true")
+	List<Product> loadAllDeleted();
+
+	@Query("SELECT c FROM Product c WHERE c.deleted = false")
+	List<Product> loadAllNoDeleted();
 }

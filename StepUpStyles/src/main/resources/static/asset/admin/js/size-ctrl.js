@@ -1,5 +1,7 @@
 app.controller("size-ctrl", function($scope, $http) {
 	$scope.sizeitems = [];
+	$scope.sizeitemss = [];
+	$scope.sizeitemsLoadAll = [];
 	$scope.prods = [];
 	$scope.form = {};
 	$scope.form.products = {};
@@ -103,28 +105,28 @@ app.controller("size-ctrl", function($scope, $http) {
 	};
 
 	//	Phân trang đã xóa
-	$scope.pagers = {
+	$scope.RestorePager = {
 		page: 0,
 		size: 5,
-		getPageNumbers: function() {
-			var pageCount = this.count;
-			var currentPage = this.page + 1;
-			var visiblePages = [];
+		getRestorePageNumbers: function() {
+			var RestorePageCount = this.count;
+			var RestoreCurrentPage = this.page + 1;
+			var RestoreVisiblePages = [];
 
-			if (pageCount <= 3) {
-				for (var i = 1; i <= pageCount; i++) {
-					visiblePages.push({ value: i });
+			if (RestorePageCount <= 3) {
+				for (var i = 1; i <= RestorePageCount; i++) {
+					RestoreVisiblePages.push({ value: i });
 				}
 			} else {
-				if (currentPage <= 2) {
-					visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
-				} else if (currentPage >= pageCount - 1) {
-					visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+				if (RestoreCurrentPage <= 2) {
+					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
 				} else {
-					visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
 				}
 			}
-			return visiblePages;
+			return RestoreVisiblePages;
 		},
 		get sizeitemss() {
 			var start = this.page * this.size;
@@ -135,45 +137,54 @@ app.controller("size-ctrl", function($scope, $http) {
 		},
 		first() {
 			this.page = 0;
-			$scope.visiblePages = this.getPageNumbers();
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 		},
 		prev() {
 			this.page--;
 			if (this.page < 0) {
 				this.last();
 			}
-			$scope.visiblePages = this.getPageNumbers();
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 		},
 		next() {
 			this.page++;
 			if (this.page >= this.count) {
 				this.first();
 			}
-			$scope.visiblePages = this.getPageNumbers();
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 		},
 		last() {
 			this.page = this.count - 1;
-			$scope.visiblePages = this.getPageNumbers();
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 		},
-		goto(pageNumber) {
-			if (pageNumber >= 1 && pageNumber <= this.count) {
-				this.page = pageNumber - 1;
-				$scope.visiblePages = this.getPageNumbers();
+		RestoreGoto(RestorePageNumber) {
+			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
+				this.page = RestorePageNumber - 1;
+				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 			}
 		},
 	};
 
 	$scope.initialize = function() {
+		//load sizeitems hết luôn
+		$http.get("/rest/sizes/loadall").then(resp => {
+			$scope.sizeitemsLoadAll = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
 		//load sizeitems 
 		$http.get("/rest/sizes/loadallNoDeleted").then(resp => {
 			$scope.sizeitems = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 
 		//load sizeitems đã xóa
 		$http.get("/rest/sizes/loadallDeleted").then(resp => {
 			$scope.sizeitemss = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 	}
 
@@ -201,13 +212,6 @@ app.controller("size-ctrl", function($scope, $http) {
 				$scope.pager.first();
 			});
 		}
-	};
-
-	//Mở modal thùng rác
-	$scope.openRecycleBinForm = function() {
-		// Reset searchKeyword
-		searchValue = '';
-		$('#recycleBinModal').modal('show');
 	};
 
 	//Mở modal tìm kiếm
@@ -275,7 +279,7 @@ app.controller("size-ctrl", function($scope, $http) {
 		}
 
 		//Lỗi trùng tên nhóm sản phẩm
-		let existingsizeitemNumber = $scope.sizeitems.find(sizeitem => sizeitem.sizeNumber === $scope.form.sizeNumber);
+		let existingsizeitemNumber = $scope.sizeitemsLoadAll.find(sizeitem => sizeitem.sizeNumber === $scope.form.sizeNumber);
 		if (existingsizeitemNumber) {
 			$scope.errorMessage = "size đã tồn tại!!";
 			$('#errorModal').modal('show'); // Show the modal
@@ -364,25 +368,91 @@ app.controller("size-ctrl", function($scope, $http) {
 		})
 	}
 
+	//Mở modal thùng rác
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
+	};
+
 	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmDeleteModal = function() {
+	$scope.confirmHideModal = function() {
 		$('#confirmHideModal').modal('show');
 	}
-	
+
 	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmDeleteModal1 = function(productgroupitem) {
-		$scope.form = angular.copy(productgroupitem);
+	$scope.confirmHideModal1 = function(sizeitem) {
+		$scope.form = angular.copy(sizeitem);
 		$('#confirmHideModal').modal('show');
 	}
-	
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác
+	$scope.confirmHide = function() {
+		var sizeitem = angular.copy($scope.form);
+		sizeitem.deleted = true;
+		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+			$scope.sizeitems[index] = sizeitem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(sizeitem) {
+		$scope.form = angular.copy(sizeitem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var sizeitem = angular.copy($scope.form);
+		sizeitem.deleted = false;
+		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+			var index = $scope.sizeitemsLoadAll.findIndex(p => p.sizeID == sizeitem.sizeID);
+			$scope.sizeitemsLoadAll[index] = sizeitem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+
 	//Gọi đến modal xác nhận để xóa luôn
-//	$scope.confirmDeleteModal = function() {
-//		$('#confirmDeleteModal').modal('show');
-//	}
-	
-	//Gọi đến modal xác nhận để xóa luôn
-	$scope.confirmDeleteModal1 = function(productgroupitem) {
-		$scope.form = angular.copy(productgroupitem);
+	$scope.confirmDeleteModal1 = function(sizeitem) {
+		$scope.form = angular.copy(sizeitem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
 		$('#confirmDeleteModal').modal('show');
 	}
 

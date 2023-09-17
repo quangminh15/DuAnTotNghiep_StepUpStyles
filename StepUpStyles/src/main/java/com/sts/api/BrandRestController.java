@@ -31,6 +31,16 @@ public class BrandRestController {
 	public List<Brand> getAll() {
 		return brandService.findAll();
 	}
+	
+	@GetMapping("/rest/brands/loadallDeleted")
+	public List<Brand> getAllDeleted() {
+		return brandService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/brands/loadallNoDeleted")
+	public List<Brand> getAllNoDeleted() {
+		return brandService.loadAllNoDeleted();
+	}
 
 	@PostMapping("/rest/brands/create")
 	public Brand create(@RequestBody Brand brand) {

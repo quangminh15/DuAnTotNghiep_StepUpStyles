@@ -23,6 +23,16 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findAll() {
 		return productDAO.findAll();
 	}
+	
+	@Override
+	public List<Product> loadAllDeleted() {
+		return productDAO.loadAllDeleted();
+	}
+
+	@Override
+	public List<Product> loadAllNoDeleted() {
+		return productDAO.loadAllNoDeleted();
+	}
 
 	@Override
 	public Product create(Product product) {
@@ -43,5 +53,4 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> searchByName(String keyword) {
 		return productDAO.findByProductNameContaining(keyword);
 	}
-
 }

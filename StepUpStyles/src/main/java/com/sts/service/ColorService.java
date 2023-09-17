@@ -17,4 +17,8 @@ public interface ColorService {
 	void delete(Integer colorID);
 	
 	List<Color> searchByName(String keyword);
+
+	List<Color> loadAllDeleted();
+
+	List<Color> loadAllNoDeleted();
 }

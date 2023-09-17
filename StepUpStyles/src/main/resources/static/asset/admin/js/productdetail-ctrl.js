@@ -1,5 +1,7 @@
 app.controller("productdetail-ctrl", function($scope, $http) {
 	$scope.productdetailitems = [];
+	$scope.productdetailitemss = [];
+	$scope.productdetailitemsLoadAll = [];
 	$scope.prods = [];
 	$scope.cols = [];
 	$scope.sizs = [];
@@ -114,16 +116,91 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		},
 	};
 	
+	//	Phân trang đã xóa
+	$scope.RestorePager = {
+		page: 0,
+		size: 5,
+		getRestorePageNumbers: function() {
+			var RestorePageCount = this.count;
+			var RestoreCurrentPage = this.page + 1;
+			var RestoreVisiblePages = [];
+
+			if (RestorePageCount <= 3) {
+				for (var i = 1; i <= RestorePageCount; i++) {
+					RestoreVisiblePages.push({ value: i });
+				}
+			} else {
+				if (RestoreCurrentPage <= 2) {
+					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
+				} else {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return RestoreVisiblePages;
+		},
+		get productdetailitemss() {
+			var start = this.page * this.size;
+			return $scope.productdetailitemss.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.productdetailitemss.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		RestoreGoto(RestorePageNumber) {
+			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
+				this.page = RestorePageNumber - 1;
+				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+			}
+		},
+	};
+	
 	$scope.initialize = function() {
-		//load productdetails
+		//load productdetailitems hết luôn
 		$http.get("/rest/productdetails/loadall").then(resp => {
-			$scope.productdetailitems = resp.data;
-			console.log($scope.productdetailitems)
+			$scope.productdetailitemsLoadAll = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load productdetailitems 
+		$http.get("/rest/productdetails/loadallNoDeleted").then(resp => {
+			$scope.productdetailitems = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
+		});
+
+		//load productdetailitems đã xóa
+		$http.get("/rest/productdetails/loadallDeleted").then(resp => {
+			$scope.productdetailitemss = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 
 		//load product
-		$http.get("/rest/products/loadall").then(resp => {
+		$http.get("/rest/products/loadallNoDeleted").then(resp => {
 			$scope.prods = resp.data;
 			console.log($scope.prods)
 			$scope.prods.forEach(productitem => {
@@ -133,13 +210,13 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		});
 
 		//load color
-		$http.get("/rest/colors/loadall").then(resp => {
+		$http.get("/rest/colors/loadallNoDeleted").then(resp => {
 			$scope.cols = resp.data;
 			$scope.pager.first();
 		});
 		
 		//load size
-		$http.get("/rest/sizes/loadall").then(resp => {
+		$http.get("/rest/sizes/loadallNoDeleted").then(resp => {
 			$scope.sizs = resp.data;
 			$scope.pager.first();
 		});
@@ -345,34 +422,111 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		})
 	}
 
-	//Gọi đến modal xác nhận để xóa
-	$scope.confirmDeleteModal = function() {
-		$('#confirmDeleteModal').modal('show');
+	//Mở modal thùng rác
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
+	};
+
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal = function() {
+		$('#confirmHideModal').modal('show');
 	}
 
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(productdetailitem) {
+		$scope.form = angular.copy(productdetailitem);
+		$('#confirmHideModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác
+	$scope.confirmHide = function() {
+		var productdetailitem = angular.copy($scope.form);
+		productdetailitem.deleted = true;
+		$http.put('/rest/productdetails/update/' + productdetailitem.productDetailID, productdetailitem).then(resp => {
+			var index = $scope.productdetailitems.findIndex(p => p.productDetailID == productdetailitem.productDetailID);
+			$scope.productdetailitems[index] = productdetailitem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(productdetailitem) {
+		$scope.form = angular.copy(productdetailitem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var productdetailitem = angular.copy($scope.form);
+		productdetailitem.deleted = false;
+		$http.put('/rest/productdetails/update/' + productdetailitem.productDetailID, productdetailitem).then(resp => {
+			var index = $scope.productdetailitemsLoadAll.findIndex(p => p.productDetailID == productdetailitem.productDetailID);
+			$scope.productdetailitemsLoadAll[index] = productdetailitem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để xóa luôn
 	$scope.confirmDeleteModal1 = function(productdetailitem) {
 		$scope.form = angular.copy(productdetailitem);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
 		$('#confirmDeleteModal').modal('show');
 	}
 
-
-	//sau khi xác nhận thành công thì xóa
+	//sau khi xác nhận thành công thì xóa luôn
 	$scope.confirmDelete = function() {
-		// Thực hiện xóa 
+		// Thực hiện xóa
 		$http.delete('/rest/productdetails/delete/' + $scope.form.productDetailID).then(resp => {
 			var index = $scope.productdetailitems.findIndex(p => p.productDetailID == $scope.form.productDetailID);
 			$scope.productdetailitems.splice(index, 1);
 			$scope.reset();
+			$scope.initialize();
 			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show'); // Show the modal
+			$('#errorModal1').modal('show');
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show'); // Show the modal
+			$('#errorModal').modal('show');
 			console.log("Error", error);
 		});
 
 		// Đóng modal xác nhận xóa
 		$('#confirmDeleteModal').modal('hide');
 	}
-
 });

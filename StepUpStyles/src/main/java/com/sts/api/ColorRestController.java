@@ -1,6 +1,7 @@
 package com.sts.api;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,16 @@ public class ColorRestController {
 	@GetMapping("/rest/colors/loadall")
 	public List<Color> getAll() {
 		return colorService.findAll();
+	}
+	
+	@GetMapping("/rest/colors/loadallDeleted")
+	public List<Color> getAllDeleted() {
+		return colorService.loadAllDeleted();
+	}
+	
+	@GetMapping("/rest/colors/loadallNoDeleted")
+	public List<Color> getAllNoDeleted() {
+		return colorService.loadAllNoDeleted();
 	}
 
 	@PostMapping("/rest/colors/create")

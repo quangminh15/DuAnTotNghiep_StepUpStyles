@@ -8,6 +8,10 @@ public interface ProductService {
 	Product findById(Integer productID);
 
 	List<Product> findAll();
+	
+	List<Product> loadAllDeleted();
+
+	List<Product> loadAllNoDeleted();
 
 	Product create(Product product);
 
