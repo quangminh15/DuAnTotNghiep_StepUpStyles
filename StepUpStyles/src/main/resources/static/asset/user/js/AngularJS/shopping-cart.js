@@ -6,7 +6,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.cartitems = [];
 	$scope.selectedColors = {};
 
-
+	//Load data
 	$scope.initialize = function () {
 
 		$http.get(`/rest/cart`)
@@ -39,11 +39,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 							if (!$scope.disabledSizes[productId]) {
 								$scope.disabledSizes[productId] = {};
 							}
-							
+
 							if (!$scope.disabledSizes[productId][colorId]) {
 								$scope.disabledSizes[productId][colorId] = [];
 							}
-							
+
 							$scope.disabledSizes[productId][colorId].push(sizeId);
 						})
 						.catch(function (error) {
@@ -59,11 +59,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 							if (!$scope.disabledColors[productId]) {
 								$scope.disabledColors[productId] = {};
 							}
-							
+
 							if (!$scope.disabledColors[productId][sizeId]) {
 								$scope.disabledColors[productId][sizeId] = [];
 							}
-							
+
 							$scope.disabledColors[productId][sizeId].push(colorId);
 						})
 						.catch(function (error) {
@@ -87,22 +87,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 	$scope.initialize();
 
-
-	// $scope.isColorDisabled = function (productId, colorId,sizeId) {
-	// 	if ($scope.disabledColors[productId]) {
-			
-	// 		return $scope.disabledColors[productId].includes(colorId);
-	// 	}
-	// 	return false;
-	// };
-
-	// $scope.isSizeDisabled = function (productId, sizeId,colorId) {
-	// 	if ($scope.disabledSizes[productId]) {
-	// 		return $scope.disabledSizes[productId].includes(sizeId);
-	// 	}
-	// 	return false;
-	// };
-
+	//Unique productDetai in cart
 	$scope.isColorDisabled = function (productId, colorId, sizeId) {
 		if ($scope.disabledColors[productId] && $scope.disabledColors[productId][sizeId]) {
 			// Check if the colorId is in the array of disabled colors for this size
@@ -110,7 +95,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		}
 		return false;
 	};
-	
+
 	$scope.isSizeDisabled = function (productId, sizeId, colorId) {
 		if ($scope.disabledSizes[productId] && $scope.disabledSizes[productId][colorId]) {
 			// Check if the sizeId is in the array of disabled sizes for this color
@@ -118,95 +103,62 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		}
 		return false;
 	};
-	
-	
-	
+	//------------------------------------
 
-	// $scope.isColorDisabled = function (productId, colorId, sizeId) {
-	// 	// Check if both the sizeId and colorId are included in disabledColors
-	// 	if (
-	// 		$scope.disabledColors[productId]
-	// 		&&
-	// 		// $scope.disabledColors[productId].includes(colorId)
-	// 		// &&
-	// 		 $scope.disabledSizes[productId] 
-	// 		 //&&
-	// 		// $scope.disabledSizes[productId].includes(sizeId)
-	// 	) {
-	// 		if (!$scope.disabledSizes[productId].includes(colorId) &&
-	// 			!$scope.disabledSizes[productId].includes(sizeId)
+	//Check cart 
+	$scope.checkOne = function (index) {
+		$scope.items[index].isSelected = !$scope.items[index].isSelected;
+		setTongTien()
+		checkCheck()
+	}
+	$scope.checkBox = function () {
+		var checkBox = document.getElementById("checkAll");
+		if (checkBox.checked == true) {
+			checkAll();
 
-	// 		){
-	// 			return true;
-	// 		}
-	// 			return false;
-	// 	} return true;
-	// };
-
-	// $scope.isSizeDisabled = function (productId, sizeId, colorId) {
-	// 	// Check if both the sizeId and colorId are included in disabledColors
-	// 	if (
-	// 		$scope.disabledSizes[productId]
-	// 		&&
-	// 		// $scope.disabledSizes[productId].includes(sizeId) 
-	// 		// &&
-	// 		$scope.disabledColors[productId]
-	// 		// $scope.disabledColors[productId].includes(colorId)
-
-	// 	) {
-			
-	// 		if (
-	// 			$scope.disabledSizes[productId].includes(sizeId)
-	// 			&&
-				
-	// 			$scope.disabledColors[productId].includes(colorId)) {
-	// 			console.log(1);
-	// 			return true;
-				
-	// 		}
-	// 		else if (
-				
-	// 			!$scope.disabledSizes[productId].includes(sizeId)
-	// 			&&
-				
-	// 			!$scope.disabledColors[productId].includes(colorId)) {
-	// 			console.log(2);
-	// 			return true;
-	// 		}
-	// 		else if (
-				
-	// 			!$scope.disabledSizes[productId].includes(sizeId)
-	// 			&&
-				
-	// 			$scope.disabledColors[productId].includes(colorId)) {
-	// 			console.log(3);
-	// 			return false;
-	// 		}
-	// 		else if (
-				
-	// 			$scope.disabledSizes[productId].includes(sizeId)
-	// 			&&
-	// 			!$scope.disabledColors[productId].includes(colorId)) {
-	// 			console.log(4);
-	// 			return false;
-	// 		}else
-	// 		return false
-			
-	// 	}
-	// 	return true
-	// };
-
-
-	$scope.isColorAvailable = function (productId, colorId, sizeId) {
-		// Check if the color is available for the specified size
-		if ($scope.disabledColors[productId] && $scope.disabledSizes[productId]) {
-			return !$scope.disabledColors[productId].includes(colorId) || !$scope.disabledSizes[productId].includes(sizeId);
+		} else {
+			unCheckAll();
 		}
-		return true;
-	};
+		 setTongTien();
+	}
 
+	function checkCheck() {
+		var checkAll = true;
+		angular.forEach($scope.items, function (value, key) {
+			
+			if (!value.isSelected) {
+				console.log(value.isSelected);
+				checkAll = false;
+				console.log(1,checkAll);
+			}
+		});
 
+		console.log(3,checkAll);
 
+		var check = document.getElementById("checkAll");
+
+		if (checkAll == true) {
+			check.checked = true;
+		} else {
+			check.checked = false;
+		}
+	}
+	function checkAll() {
+		angular.forEach($scope.items, function (value, key) {
+			// if (value.inventory >= value.quantity) {
+			value.isSelected = true;
+
+			// }
+		});
+	}
+
+	function unCheckAll() {
+		angular.forEach($scope.items, function (value, key) {
+			value.isSelected = false;
+		});
+	}
+
+	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
 
 		$http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
@@ -268,10 +220,6 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		var cartDetail = angular.copy($scope.items[index])
 		var colorID = cartDetail.productDetail.color.colorID
 		var prodID = cartDetail.product.productID
-
-
-
-
 		// Make an HTTP PUT request to the API endpoint
 		$http.put(`/rest/cart/updateCartItem?cartDetailID=${cartDetailID}&prodID=${prodID}&size=${sizeID}&color=${colorID}`)
 			.then(function (response) {
@@ -286,4 +234,80 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			});
 	};
 
+	$scope.updateQuantity = function (index, method) {
+		var item = angular.copy($scope.items[index])
+		if (method == 1) {
+			if (item.quantity < item.productDetail.quantity) {
+				item.quantity += 1;
+				console.log(item.quantity);
+			} else {
+
+				console.log("out of stock");
+				return
+			}
+		} else if (method == 0) {
+			item.quantity -= 1
+			console.log(item.quantity);
+		} else {
+			 var maxQuantity = item.productDetail.quantity;
+			 console.log(maxQuantity);
+			// var qty = item.quantity;
+
+			var newValue = $scope.items[index].quantity;
+			console.log("New value:", newValue);
+			
+
+			if (newValue > maxQuantity) {
+				item.quantity = maxQuantity;
+				console.log(item.quantity);
+			} else {
+				item.quantity = newValue;
+				console.log(newValue);
+			}
+
+			// Make an HTTP PUT request to update the quantity on the server
+			$http.put("/rest/cart/updateQuantity", item)
+				.then(resp => {
+					$scope.items[index].quantity = item.quantity;
+					console.log($scope.items[index].quantity);
+					setTongTien()
+					console.log("ok");
+				}).catch(error => {
+					console.log("Error update", error);
+				});
+
+			return
+		}
+		//$scope.initialize()
+		$http.put("/rest/cart/updateQuantity", item)
+			.then(resp => {
+				$scope.items[index].quantity = item.quantity
+				console.log($scope.items[index].quantity);
+				setTongTien()
+				console.log("ok");
+			}).catch(error => {
+				console.log("Error update", error)
+			});
+	}
+
+	$scope.updatetest = function (index) {
+		// The updated value of item.quantity is available here in real-time
+		var newValue = $scope.items[index].quantity;
+		console.log("New value:", newValue);
+		$scope.$apply();
+
+		// You can perform additional actions with the new value here
+	};
+	function setTongTien() {
+        var tongTien = 0;
+        angular.forEach($scope.items, function (value, key) {
+			console.log(1,value.isSelected);
+            if (value.isSelected == true) {
+				console.log(value.isSelected);
+                tongTien += value.product.price * value.quantity;
+            }
+        });
+		console.log(tongTien);
+        $scope.tongTien = tongTien;
+    }
 }])

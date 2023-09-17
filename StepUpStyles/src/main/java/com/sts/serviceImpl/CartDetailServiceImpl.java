@@ -79,5 +79,10 @@ public class CartDetailServiceImpl implements CartDetailService{
        // sizes.stream().map(Size::getSizeNumber).collect(Collectors.toList());
     }
 
+   @Override
+   public void upDateQtyCartItem(int carDetailId, int qty) {
+      cartDetailDao.updateQtyCartItem(carDetailId, qty);
+   }
+
     
 }

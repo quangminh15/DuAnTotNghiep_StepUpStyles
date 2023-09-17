@@ -30,6 +30,11 @@ public interface CartDetailDAO extends JpaRepository<CartDetail,Integer>{
     @Query("UPDATE CartDetail cd SET cd.productDetail = :productDetail WHERE cd.cartDetailId = :cartDetailId")
     void updateCartItem(@Param("cartDetailId") Integer cartDetailId, @Param("productDetail") ProductDetail productDetail);
 
+    @Transactional
+	@Modifying
+    @Query("UPDATE CartDetail cd SET cd.quantity = :quantity WHERE cd.cartDetailId = :cartDetailId")
+    void updateQtyCartItem(@Param("cartDetailId") Integer cartDetailId, @Param("quantity") Integer quantity);
+
     @Query("SELECT ci FROM CartDetail ci WHERE ci.cart.user.usersId=?1")
     List<CartDetail> findCartItemsByCustomerId(Integer usersId);
 }

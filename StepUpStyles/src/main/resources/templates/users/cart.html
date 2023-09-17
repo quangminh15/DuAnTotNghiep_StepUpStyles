@@ -59,7 +59,8 @@
 							<thead class="thead-primary">
 								<tr class="text-center">
 									<th>
-										<input type="checkbox" value="" id="defaultCheck1">
+										<input type="checkbox" ng-click="checkBox()" id="checkAll"
+											ng-model="item.isSelected">
 									</th>
 									<th></th>
 									<th>Tên Sản Phẩm</th>
@@ -72,39 +73,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="text-center">
-									<td>
-										<input type="checkbox" value="" id="defaultCheck1">
-									</td>
 
-									<td class="image-prod">
-										<div class="img" style="background-image:url(/asset/user/img/cartbg1.jpg);">
-										</div>
-									</td>
-
-									<td class="product-name">
-										<h3>Bell Pepper</h3>
-										<p>Far far away, behind the word mountains, far from the countries</p>
-									</td>
-									<td></td>
-									<td></td>
-									<td class="price">$4.90</td>
-
-									<td class="quantity">
-										<div class="input-group mb-3">
-											<input type="text" name="quantity"
-												class="quantity form-control input-number" value="1" min="1" max="100">
-										</div>
-									</td>
-
-									<td class="total">$4.90000</td>
-									<td class="product-remove"><a href="#">X</a></td>
-								</tr><!-- END TR-->
 
 
 								<tr class="text-center" ng-repeat="item in items">
 									<td>
-										<input type="checkbox" value="" id="defaultCheck1">
+										<input type="checkbox" ng-checked="item.isSelected" ng-click="checkOne($index)">
 									</td>
 
 									<td class="image-prod">
@@ -117,7 +91,7 @@
 									</td>
 									<td>
 										<div class="dropdown">
-											<a class="btn btn-primary dropdown-toggle"  role="button"
+											<a class="btn btn-primary dropdown-toggle" role="button"
 												id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 												aria-expanded="false">
 												{{item.productDetail.color.colorName}}
@@ -130,50 +104,124 @@
 													ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
 													{{c.colorName}}
 												</a>
-												
+
 											</div>
 										</div>
 
 
-										<!-- <div>
-											<button
-												ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
-												ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)"
-												type="submit" class="btn btn-primary ">{{c.colorID}}</button>
-										</div> -->
+										<!--  -->
+										<div class="container mt-5">
+											<!-- Dropdown container -->
+											<div class="dropdown">
+												<!-- Dropdown button -->
+												<a class="btn btn-primary dropdown-toggle" type="button"
+													id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">
+													{{item.productDetail.color.colorName}}
+												</a>
+
+												<!-- Dropdown menu -->
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<!-- Card 1 -->
+
+													<div class="card-body">
+														<div class="row ">
+
+															<a class="btn btn-primary  mb-2 mr-2"
+																ng-repeat="c in item.colors| unique:'colorName' "
+																ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
+																ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
+																{{c.colorName}}
+															</a>
+														</div>
+
+
+
+													</div>
+												</div>
+											</div>
+										</div>
 
 									</td>
 									<td>
 										<div class="dropdown">
-											<a class="btn btn-primary dropdown-toggle"  role="button"
+											<a class="btn btn-primary dropdown-toggle" role="button"
 												id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 												aria-expanded="false">
-												{{item.productDetail.size.sizeID}}
+												{{item.productDetail.size.sizeNumber}}
 											</a>
 
 											<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 												<a class="dropdown-item"
-												ng-repeat="s in item.sizes| unique:'sizeNumber'"
-												ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
-												ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
-												{{s.sizeNumber}}
+													ng-repeat="s in item.sizes| unique:'sizeNumber'"
+													ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
+													ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
+													{{s.sizeNumber}}
 												</a>
-												
+
 											</div>
 										</div>
 
+										<!--  -->
+										<div class="container mt-5">
+											<!-- Dropdown container -->
+											<div class="dropdown">
+												<!-- Dropdown button -->
+												<a class="btn btn-primary dropdown-toggle" type="button"
+													id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">
+													{{item.productDetail.size.sizeNumber}}
+												</a>
+
+												<!-- Dropdown menu -->
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<!-- Card 1 -->
+
+													<div class="card-body">
+														<div class="row ">
+
+															<a class="btn btn-primary mr-2 mb-2"
+																ng-repeat="s in item.sizes| unique:'sizeNumber'"
+																ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
+																ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
+																{{s.sizeNumber}}</a>
+
+														</div>
+
+
+
+													</div>
+												</div>
+											</div>
+										</div>
 									</td>
 
 									<td class="price">{{item.product.price}}</td>
 
-									<td class="quantity">
-										<div class="input-group mb-3">
-											<input type="text" name="quantity"
-												class="quantity form-control input-number" value="1" min="1" max="100">
+									<td class=" ftco-cart quantity">
+										<div class="input-group mb-7">
+											<button class="btn btn-primary quantity-left-minus"
+												ng-click="updateQuantity($index, 0)"
+												ng-disabled="item.quantity==1"><span>
+
+													<i class="fas fa-minus"></i>
+												</span>
+											</button>
+											<input type="number" name="quantity"
+												class="quantity form-control input-number" ng-model="item.quantity"
+												ng-value="item.quantity" min="1" max="100"
+												ng-change="updateQuantity($index, 2)">
+											<button class="btn btn-primary quantity-right-plus"
+												ng-click="updateQuantity($index, 1)"
+												ng-disabled="item.quantity==item.productDetail.quantity"><span>
+
+													<i class="fas fa-plus"></i>
+												</span>
+											</button>
 										</div>
 									</td>
 
-									<td class="total">$15.70</td>
+									<td class="total">{{item.product.price*item.quantity}}</td>
 									<td class="product-remove"><a href="#">X</a></td>
 								</tr><!-- END TR-->
 							</tbody>
@@ -196,7 +244,7 @@
 						<hr>
 						<p class="d-lg-flex total-price">
 							<span>Tổng Tiền</span>
-							<span>$17.60</span>
+							<span>{{tongTien}}</span>
 						</p>
 						<p><a th:href="@{/checkout}" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
 					</div>

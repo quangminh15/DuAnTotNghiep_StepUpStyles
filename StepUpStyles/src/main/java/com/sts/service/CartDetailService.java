@@ -14,6 +14,8 @@ public interface CartDetailService {
 
     public void upDateCartItem(int carDetailId, int productId, int sizeId, int colorId) ;
 
+    public void upDateQtyCartItem(int carDetailId, int qty) ;
+
     public List<Color> getColorNamesByProductId(Integer productId,Integer sizeId );
 
     public List<Size> getSizeNumbersByProductId(Integer productId,Integer colorId); 
