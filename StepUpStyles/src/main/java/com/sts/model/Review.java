@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Data
@@ -27,8 +28,9 @@ public class Review implements Serializable {
 
 	private Integer rating;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="review_date")
-	private Timestamp reviewDate;
+	private Date reviewDate = new Date();
 
 	private String title;
 

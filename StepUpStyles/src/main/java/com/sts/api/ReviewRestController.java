@@ -39,4 +39,8 @@ public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/rest/reviews/loadbyproducts/{productId}")
+	public List<Review> getProductByProduct(@PathVariable Integer productId) {
+		return reviewService.getProductByProductId(productId);
+	}
 }
