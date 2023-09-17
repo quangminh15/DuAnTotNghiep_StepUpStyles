@@ -115,7 +115,20 @@ app.controller("review-ctrl", function($scope, $http){
 	$scope.filterByProduct = function() {
 		if ($scope.selectedProduct) {
 			$http.get("/rest/reviews/loadbyproducts/" + $scope.selectedProduct).then(resp => {
-				$scope.productitems = resp.data;
+				$scope.reviewitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
+	};
+
+	$scope.filterByUser = function() {
+		if ($scope.selectedUser) {
+			$http.get("/rest/reviews/loadbyusers/" + $scope.selectedUser).then(resp => {
+				$scope.reviewitems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
 				$scope.pager.first();
