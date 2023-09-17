@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.ProductDetail;
+import com.sts.model.ProductImage;
 import com.sts.service.ProductDetailService;
-
 
 @CrossOrigin("*")
 @RestController
@@ -39,17 +39,25 @@ public class ProductDetailRestController {
 	}
 
 	@PutMapping("/rest/productdetails/update/{productDetailID}")
-	public ProductDetail update(@PathVariable("productDetailID") Integer productDetailID, @RequestBody ProductDetail productDetail) {
+	public ProductDetail update(@PathVariable("productDetailID") Integer productDetailID,
+			@RequestBody ProductDetail productDetail) {
 		return productDetailService.update(productDetail);
 	}
 
 	@DeleteMapping("/rest/productdetails/delete/{productDetailID}")
-	public void delete(@PathVariable("ProductDetailID") Integer productDetailID) {
+	public void delete(@PathVariable("productDetailID") Integer productDetailID) {
 		productDetailService.delete(productDetailID);
 	}
 
+	// Tìm kiếm hình ảnh theo tên sản phẩm
 	@GetMapping("/rest/productdetails/search")
 	public List<ProductDetail> searchProductDetailByName(@RequestParam("keyword") String keyword) {
 		return productDetailService.searchByName(keyword);
+	}
+
+	// Lọc danh sách hình ảnh theo sản phẩm
+	@GetMapping("/rest/productdetails/loadbyproduct/{productId}")
+	public List<ProductDetail> getProductDetailByProduct(@PathVariable Integer productId) {
+		return productDetailService.getProductDetailByProduct(productId);
 	}
 }

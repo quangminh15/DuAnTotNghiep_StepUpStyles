@@ -6,6 +6,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.form.product = {};
 	$scope.errorMessage = '';
 	$scope.messageSuccess = '';
+	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
 		{ name: 'colorID', label: 'Mã màu' },
@@ -126,14 +127,15 @@ app.controller("color-ctrl", function($scope, $http) {
 			}).then(resp => {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
+				console.log("Kết quả tìm kiếm ", resp.data);
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					$scope.errorMessage = `Không tìm thấy sản phẩm có tên "${$scope.searchKeyword}"`;
+					$scope.errorMessage = `Không tìm thấy màu có tên "${$scope.searchKeyword}"`;
 					$('#errorModal').modal('show');
 				}
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tìm kiếm màu sản phẩm!";
+				$scope.errorMessage = "Lỗi khi tìm kiếm màu!";
 				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
@@ -148,24 +150,34 @@ app.controller("color-ctrl", function($scope, $http) {
 	};
 
 
-	$scope.filterByProduct = function() {
-		if ($scope.selectedProduct) {
-			$http.get("/rest/colors/loadbyproduct/" + $scope.selectedProduct).then(resp => {
+
+	$scope.filterByActivities = function() {
+		if ($scope.selectedActivity === "all") {
+			// Nếu chọn "Tất cả", hiển thị toàn bộ danh sách màu sắc
+			$http.get("/rest/colors/loadall").then(resp => {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo sản phẩm!";
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc!";
 				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
-			// Nếu không có sản phẩm được chọn, hiển thị tất cả màu sắc
-			$scope.initialize();
+			// Nếu chọn giá trị trạng thái cụ thể, lọc theo trạng thái
+			$http.get("/rest/colors/loadall").then(resp => {
+				const selectedStatus = $scope.selectedActivity === "true";
+				const filteredColors = resp.data.filter(color => color.activities === selectedStatus);
+				$scope.coloritems = filteredColors;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo trạng thái!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
 		}
 	};
-
-
 
 
 	// Hàm giới hạn độ dài của đường dẫn
@@ -194,27 +206,8 @@ app.controller("color-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(coloritem);
 	}
 
-	function checkDuplicateColor(coloritem) {
-		// Kiểm tra sự trùng lặp dựa trên productID, sizeID và colorID
-		var isDuplicate = $scope.coloritems.some(function(item) {
-			return (
-				item.product.productID === coloritem.product.productID &&
-				item.colorName === coloritem.colorName
-			);
-		});
-
-		return isDuplicate;
-	}
-
 	//	Thêm mới 
 	$scope.create = function() {
-
-		//Lỗi không chọn sản phẩm 
-		if (!$scope.form.product.productID) {
-			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
-			$('#errorModal').modal('show');
-			return;
-		}
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
@@ -223,25 +216,8 @@ app.controller("color-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Kiểm tra sự trùng lặp
-		var isDuplicate = checkDuplicateColor($scope.form);
-		if (isDuplicate) {
-			$scope.errorMessage = "Sản phẩm mà bạn chọn đã có màu này rồi. Vui lòng nhập màu khác!";
-			$('#errorModal').modal('show');
-			return;
-		}
-
-
-		//Lỗi không chọn ảnh
-		if (!document.querySelector('#photo').files[0]) {
-			$scope.errorMessage = "Bạn chưa chọn ảnh";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn ảnh
-		};
-
 		// Thực hiện việc lưu vào db
 		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
 		coloritem.deleted = false;
 		$http.post('/rest/colors/create', coloritem).then(resp => {
 			$scope.coloritems.push(resp.data);
@@ -265,12 +241,6 @@ app.controller("color-ctrl", function($scope, $http) {
 
 	//Cập nhật
 	$scope.update = function() {
-		//Lỗi không chọn sản phẩm 
-		if (!$scope.form.product.productID) {
-			$scope.errorMessage = "Bạn chưa chọn sản phẩm";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn sản phẩm
-		}
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
@@ -279,15 +249,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			return;
 		}
 
-		//Lỗi không chọn ảnh 
-		if (!document.querySelector('#photo').files[0]) {
-			$scope.errorMessage = "Bạn chưa chọn ảnh";
-			$('#errorModal').modal('show');
-			return; // Dừng tiến trình nếu không chọn ảnh
-		}
-
 		var coloritem = angular.copy($scope.form);
-		coloritem.colorImage = $scope.form.colorImage;
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
 			$scope.coloritems[index] = coloritem;

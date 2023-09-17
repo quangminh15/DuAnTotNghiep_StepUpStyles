@@ -4,6 +4,7 @@ app.controller("category-ctrl", function($scope, $http) {
 	$scope.form = {};
 	$scope.form.productGroup = {};
 	$scope.errorMessage = '';
+	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
 		{ name: 'categoryID', label: 'Mã danh mục' },
@@ -137,6 +138,32 @@ app.controller("category-ctrl", function($scope, $http) {
 			$scope.pager.first();
 		});
 	}
+	
+	$scope.filterByActivities = function() {
+		if ($scope.selectedActivity === "all") {
+			$http.get("/rest/categories/loadall").then(resp => {
+				$scope.categoryitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách danh mục sản phẩm màu sắc!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		} else {
+			$http.get("/rest/categories/loadall").then(resp => {
+				const selectedStatus = $scope.selectedActivity === "true";
+				const filteredCategories = resp.data.filter(category => category.activities === selectedStatus);
+				$scope.categoryitems = filteredCategories;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách danh mục sản phẩm theo trạng thái!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}
+	};
 
 	//Mở modal tìm kiếm
 	$scope.openSearchForm = function() {

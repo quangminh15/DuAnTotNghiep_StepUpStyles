@@ -9,6 +9,13 @@ import org.springframework.data.repository.query.Param;
 import com.sts.model.Size;
 
 public interface SizeDAO extends JpaRepository<Size, Integer>{
-	@Query("SELECT c FROM Size c WHERE c.sizeNumber LIKE %:keyword%")
-	List<Size> findBySizeNumberContaining(@Param("keyword") String keyword);
+	@Query("SELECT c FROM Size c WHERE c.sizeNumber LIKE ?1")
+	List<Size> findBySizeNumber(Float keyword);
+	
+	@Query("SELECT c FROM Size c WHERE c.deleted = true")
+	List<Size> loadAllDeleted();
+	
+	@Query("SELECT c FROM Size c WHERE c.deleted = false")
+	List<Size> loadAllNoDeleted();
+
 }

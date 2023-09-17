@@ -16,4 +16,6 @@ public interface ProductDetailService {
 	void delete(Integer productDetailID);
 	
 	List<ProductDetail> searchByName(String keyword);
+
+	List<ProductDetail> getProductDetailByProduct(Integer productId);
 }

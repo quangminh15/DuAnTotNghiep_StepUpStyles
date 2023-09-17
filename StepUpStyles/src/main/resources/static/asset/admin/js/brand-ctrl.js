@@ -2,6 +2,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 	$scope.branditems = [];
 	$scope.form = {};
 	$scope.errorMessage = '';
+	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
 		{ name: 'brandID', label: 'Mã thương hiệu' },
@@ -113,10 +114,35 @@ app.controller("brand-ctrl", function($scope, $http) {
 
 		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
 			.then(url => {
-				// Lưu đường dẫn ảnh vào biến $scope.form.brandImage
 				$scope.form.brandImage = url;
 				console.log($scope.form.brandImage)
 			});
+	};
+	
+	$scope.filterByActivities = function() {
+		if ($scope.selectedActivity === "all") {
+			$http.get("/rest/brands/loadall").then(resp => {
+				$scope.branditems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách thương hiệu!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		} else {
+			$http.get("/rest/brands/loadall").then(resp => {
+				const selectedStatus = $scope.selectedActivity === "true";
+				const filteredBrands = resp.data.filter(brand => brand.activities === selectedStatus);
+				$scope.branditems = filteredBrands;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.errorMessage = "Lỗi khi tải danh sách thương hiệu theo trạng thái!";
+				$('#errorModal').modal('show');
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}
 	};
 
 	$scope.initialize = function() {

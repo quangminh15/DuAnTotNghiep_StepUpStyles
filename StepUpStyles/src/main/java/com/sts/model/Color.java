@@ -31,7 +31,7 @@ public class Color implements Serializable {
 
 	private Boolean deleted;
 
-	@JsonIgnore
+	@JsonIgnore														
 	@OneToMany(mappedBy = "color", fetch = FetchType.EAGER)
 	private List<ProductDetail> productDetails;
 }

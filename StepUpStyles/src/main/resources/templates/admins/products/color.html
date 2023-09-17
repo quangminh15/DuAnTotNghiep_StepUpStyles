@@ -93,7 +93,7 @@
 					class="form-control" id="inputUserName" type="text"
 					ng-model="form.colorID" readonly="true">
 			</div>
-			
+
 		</div>
 
 		<div class="row">
@@ -151,13 +151,12 @@
 		<!-- tìm kiếm theo tên bắt đầu  -->
 		<div class="d-flex">
 			<!-- Thẻ select box -->
-			<select class="form-control mr-2" ng-model="selectedProduct"
-				ng-change="filterByProduct()"
-				ng-options="product.productID as product.productName for product in prods"
-				style="width: 200px;">
-				<option value="">Tất cả sản phẩm</option>
+			<select class="form-control mr-2" ng-model="selectedActivity"
+				ng-change="filterByActivities()" style="width: 200px;">
+				<option value="all">Tất cả</option>
+				<option value="true">Đang bật</option>
+				<option value="false">Đang tắt</option>
 			</select>
-
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
 				ng-click="openSearchForm()" style="width: 50px;">
@@ -217,7 +216,7 @@
 				<tr ng-repeat="coloritem in pager.coloritems">
 					<td>{{coloritem.colorID}}</td>
 					<td>{{coloritem.colorName}}</td>
-					<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+					<td>{{coloritem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "
 							ng-click="edit(coloritem)">

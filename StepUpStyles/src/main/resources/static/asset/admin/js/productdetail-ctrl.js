@@ -137,6 +137,12 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 			$scope.cols = resp.data;
 			$scope.pager.first();
 		});
+		
+		//load size
+		$http.get("/rest/sizes/loadall").then(resp => {
+			$scope.sizs = resp.data;
+			$scope.pager.first();
+		});
 	}
 	
 	//Mở modal tìm kiếm
@@ -195,7 +201,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	//	Xóa form
 	$scope.reset = function() {
 		$scope.form = {
-
+			deleted: false,
 		};
 	}
 	//	Khởi đầu
@@ -265,6 +271,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		}
 
 		var productdetailitem = angular.copy($scope.form);
+		productdetailitem.deleted = false;
 		$http.post('/rest/productdetails/create', productdetailitem).then(resp => {
 			$scope.productdetailitems.push(resp.data);
 			$scope.reset();

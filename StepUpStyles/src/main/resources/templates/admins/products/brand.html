@@ -156,6 +156,13 @@
 		<h4 class="mb-0">Danh sách thương hiệu</h4>
 		<!-- tìm kiếm theo tên bắt đầu  -->
 		<div class="d-flex">
+		<!-- Thẻ select box -->
+			<select class="form-control mr-2" ng-model="selectedActivity"
+				ng-change="filterByActivities()" style="width: 200px;">
+				<option value="all">Tất cả</option>
+				<option value="true">Đang bật</option>
+				<option value="false">Đang tắt</option>
+			</select>
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
 				ng-click="openSearchForm()" style="width: 50px; height: 43px">

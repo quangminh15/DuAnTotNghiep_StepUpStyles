@@ -41,7 +41,12 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
 	@Override
 	public List<ProductDetail> searchByName(String keyword) {
-		return productDetailDAO.findByProductDetailNameContaining(keyword);
+		return productDetailDAO.findByProductDetailName(keyword);
+	}
+
+	@Override
+	public List<ProductDetail> getProductDetailByProduct(Integer productId) {
+		return productDetailDAO.findByProduct_ProductID(productId);
 	}
 
 }

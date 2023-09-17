@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.sts.model.ProductDetail;
+import com.sts.model.ProductImage;
 
 public interface ProductDetailDAO extends JpaRepository<ProductDetail, Integer>{
 	@Query("SELECT c FROM ProductDetail c WHERE c.product.productName LIKE %:keyword%")
-	List<ProductDetail> findByProductDetailNameContaining(@Param("keyword") String keyword);
+	List<ProductDetail> findByProductDetailName(@Param("keyword") String keyword);
+	
+	@Query("SELECT c FROM ProductDetail c WHERE c.product.productID = :productId")
+	List<ProductDetail> findByProduct_ProductID(@Param("productId") Integer productId);
 }

@@ -138,15 +138,29 @@
 	<div
 		class="card-header d-flex justify-content-between align-items-center">
 		<h4 class="mb-0">Danh sách size giày</h4>
-		<!-- tìm kiếm theo tên bắt đầu  -->
+		
 		<div class="d-flex">
+		<!-- Thẻ select box -->
+			<select class="form-control mr-2" ng-model="selectedActivity"
+				ng-change="filterByActivities()" style="width: 200px;">
+				<option value="all">Tất cả</option>
+				<option value="true">Đang bật</option>
+				<option value="false">Đang tắt</option>
+			</select>
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
 				ng-click="openSearchForm()" style="width: 50px; height: 43px">
 				<span class="mdi mdi-search"></span>
 			</button>
+			
+			<!-- Nút thùng rác -->
+			<button class="btn btn-space btn-danger md-trigger"
+				ng-click="openRecycleBinForm()" style="width: 50px; height: 43px">
+				<span class="mdi mdi-delete"></span>
+			</button>
 		</div>
 	</div>
+	<!-- tìm kiếm theo tên bắt đầu  -->
 	<div class="modal fade" id="searchModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
@@ -162,7 +176,7 @@
 					<form method="post">
 						<div class="form-group">
 							<label for="searchKeyword">Size giày</label> <input
-								class="form-control" type="text" id="searchKeyword"
+								class="form-control" type="number" id="searchKeyword"
 								ng-model="searchKeyword"
 								placeholder="Nhập size giày mà bạn muốn tìm kiếm">
 						</div>
@@ -172,14 +186,95 @@
 					<button class="btn btn-secondary modal-close" type="button"
 						data-dismiss="modal">Hủy</button>
 					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchPhoneConFigByName()">Tìm kiếm</button>
+						ng-click="searchSizeNumber()">Tìm kiếm</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 	<!-- tìm kiếm theo tên kết thúc -->
+	<!-- 	thùng rác bắt đầu -->
+	<div class="modal fade" id="recycleBinModal" tabindex="-1"
+		aria-labelledby="searchModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" style="background-color: #eee;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+					<button class="close modal-close" type="button"
+						data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+			<thead>
+				<tr>
+					<th ng-repeat="column in sortableColumns"
+						ng-click="sortByColumn(column.name)">{{ column.label }} <span
+						ng-if="sortColumn === column.name"> <span
+							ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+							ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+					</span>
+					</th>
+
+					<th class="actions"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="sizeitem in pagers.sizeitemss">
+					<td>{{sizeitem.sizeID}}</td>
+					<td>{{sizeitem.sizeNumber}}</td>
+					<td>{{sizeitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+					<td class="actions">
+						<button class="btn btn-space btn btn-primary "
+							ng-click="edit(sizeitem)">
+							<i class="mdi mdi-refresh-alt"></i>
+						</button>
+						<button class="btn btn-space btn btn-danger "
+							ng-click="confirmDeleteModal1(sizeitem)">
+							<i class="bi bi-trash3-fill"></i>
+						</button>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		<div class="card-header d-flex justify-content-end">
+			<div>
+				<ul class="pagination">
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.first()"
+							class="page-link">
+							<span class="mdi mdi-skip-previous"></span>
+						</button>
+					</li>
+
+					<li class="page-item" ng-repeat="page in visiblePages"
+						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+						class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							page.value }}</a></li>
+
+
+					<li class="page-item">
+						<button style="font-size: 25px" ng-click="pager.last()"
+							class="page-link">
+							<span class="mdi mdi-skip-next"></span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+				</div>
+				<div class="modal-footer" style="background-color: #eee;">
+					<button class="btn btn-secondary modal-close" type="button"
+						data-dismiss="modal">Hủy</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- thùng rác kết thúc -->
+
+	
 	<div class="card-body">
 		<table class="table">
 			<thead>
@@ -199,7 +294,7 @@
 				<tr ng-repeat="sizeitem in pager.sizeitems">
 					<td>{{sizeitem.sizeID}}</td>
 					<td>{{sizeitem.sizeNumber}}</td>
-					<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+					<td>{{sizeitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "
 							ng-click="edit(sizeitem)">
