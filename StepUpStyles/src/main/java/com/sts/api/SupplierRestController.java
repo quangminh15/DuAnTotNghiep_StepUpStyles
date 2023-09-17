@@ -66,7 +66,7 @@ public class SupplierRestController {
         boolean markedAsHistory = supplierService.markSupplierAsHistory(supplierId);
 
         if (markedAsHistory) {
-            return ResponseEntity.ok("Nhà cung cấp với ID " + supplierId + " đã được đánh dấu là đã khoi phuc.");
+            return ResponseEntity.ok("Nhà cung cấp với ID " + supplierId + " đã được đánh dấu là đã khôi phục.");
         } else {
             return ResponseEntity.notFound().build();
         }

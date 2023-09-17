@@ -153,6 +153,18 @@ app.controller("supplier-ctrl", function($scope, $http){
 		});
 	};
 
+	$scope.history = function(supplierId) {
+		$http.put('/rest/supplier/historySupplier/' + supplierId).then(resp => {
+			var index = $scope.items.findIndex(p => p.supplierId == supplierId);
+			$scope.itemss.splice(index, 1); // Xóa mục khỏi danh sách
+			$scope.messageSuccess = "Khôi phục thành công nhà cung cấp";
+			$('#errorModal1').modal('show'); // Hiển thị modal
+		}).catch(error => {
+			alert("Khôi phục lỗi");
+			console.log("Error", error);
+		});
+	};
+
 	//search
 	$scope.searchByName = function(){
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
