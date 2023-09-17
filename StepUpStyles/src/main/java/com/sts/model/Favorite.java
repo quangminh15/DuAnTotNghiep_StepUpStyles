@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Data
@@ -23,8 +24,9 @@ public class Favorite implements Serializable {
 	@Column(name="favorite_id")
 	private Integer favoriteId;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="date_like")
-	private Timestamp dateLike;
+	private Date dateLike = new Date();
 
 	@ManyToOne
 	@JoinColumn(name="product_id")
