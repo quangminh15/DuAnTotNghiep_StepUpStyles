@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
 
-<title>STS || CHI TIẾT</title>
+	<title>STS || CHI TIẾT</title>
 
 </head>
 
 <body>
-	
-	<div class="right-sidebar-panel-content animated fadeInRight"
-		tabindex="5003" style="overflow: hidden; outline: none;"></div>
+
+	<div class="right-sidebar-panel-content animated fadeInRight" tabindex="5003"
+		style="overflow: hidden; outline: none;"></div>
 	<section th:object="${productitem}" class="w3l-ecommerce-main-inn">
 		<!--/ecommerce-single-->
 		<div class="ecomrhny-content-inf py-5">
 			<div class="container py-lg-5">
 				<!--/row1-->
 				<!-- NG-APP CART -->
-				<div  ng-controller="cart-ctrl" class="sp-store-single-page row">
+				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
 
@@ -36,12 +35,11 @@
 
 							<div class="transmitv single-item">
 								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart"> <input
-										type="hidden" name="add" value="1"> <input
-										type="hidden" name="transmitv_item" value="Yellow T-Shirt">
+									<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
+										value="1"> <input type="hidden" name="transmitv_item" value="Yellow T-Shirt">
 									<input type="hidden" name="amount" value="599.99">
 									<button type="submit"
-									th:attr="ng-click=@{|addToCart(${productitem.productID},size,color,qty)|}"
+										th:attr="ng-click=@{|addToCart(${productitem.productID},size,color,qty)|}"
 										class="transmitv-cart ptransmitv-cart add-to-cart read-2">
 										Add to Cart</button>
 								</form>
@@ -57,22 +55,18 @@
 						<div class="caption">
 
 							<ul class="rating-single">
-								<li><a href="#"> <span class="fa fa-star yellow-star"
-										aria-hidden="true"></span>
-								</a></li>
-								<li><a href="#"> <span class="fa fa-star yellow-star"
-										aria-hidden="true"></span>
-								</a></li>
-								<li><a href="#"> <span class="fa fa-star yellow-star"
-										aria-hidden="true"></span>
-								</a></li>
-								<li><a href="#"> <span
-										class="fa fa-star-half-o yellow-star" aria-hidden="true"></span>
-								</a></li>
-								<li><a href="#"> <span
-										class="fa fa-star-half yellow-star" aria-hidden="true"></span>
-								</a></li>
+								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								</li>
+								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								</li>
+								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								</li>
+								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								</li>
+								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								</li>
 							</ul>
+							<a href="#">274 đánh giá</a>
 
 							<h6>
 								<span class="item_price" th:text="${productitem.price}"></span>
@@ -84,8 +78,8 @@
 							<div class="col-md-9">
 								<select ng-model="size" class="form-select select-custom">
 									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option th:each="s: ${sizs}" th:value="${s.sizeID}"
-										th:text="${s.sizeNumber}"></option>
+									<option th:each="s: ${sizs}" th:value="${s.sizeID}" th:text="${s.sizeNumber}">
+									</option>
 								</select>
 							</div>
 						</div>
@@ -94,16 +88,15 @@
 							<div class="col-md-9">
 								<select ng-model="color" class="form-select select-custom">
 									<option value="" disabled selected>Vui lòng chọn màu sắc</option>
-									<option th:each="s: ${cols}" th:value="${s.colorID}"
-										th:text="${s.colorName}"></option>
+									<option th:each="s: ${cols}" th:value="${s.colorID}" th:text="${s.colorName}">
+									</option>
 								</select>
 							</div>
 						</div>
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-model="qty" type="number"
-											class="form-control select-custom">
+								<input ng-value="1" ng-model="qty" type="number" class="form-control select-custom">
 							</div>
 						</div>
 						<div class="desc_single mb-4">
@@ -204,25 +197,23 @@
 					<div class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv">
 							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img
-									class="pic-1 img-fluid" src="assets/images/shop-1.jpg"> <img
-									class="pic-2 img-fluid" src="assets/images/shop-11.jpg">
+								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
+										src="assets/images/shop-1.jpg"> <img class="pic-2 img-fluid"
+										src="assets/images/shop-11.jpg">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
+									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
 
 									<li><a href="list_products.html" data-tip="Add to Cart"><span
-											class="fa fa-shopping-bag"></span></a></li>
+												class="fa fa-shopping-bag"></span></a></li>
 								</ul>
 								<div class="transmitv single-item">
 									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input
-											type="hidden" name="add" value="1"> <input
-											type="hidden" name="transmitv_item" value="Women Maroon Top">
+										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
+											value="1"> <input type="hidden" name="transmitv_item"
+											value="Women Maroon Top">
 										<input type="hidden" name="amount" value="899.99">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">
+										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 											Add to Cart</button>
 									</form>
 								</div>
@@ -238,25 +229,23 @@
 					<div class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2">
 							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img
-									class="pic-1 img-fluid" src="assets/images/shop-2.jpg"> <img
-									class="pic-2 img-fluid" src="assets/images/shop-22.jpg">
+								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
+										src="assets/images/shop-2.jpg"> <img class="pic-2 img-fluid"
+										src="assets/images/shop-22.jpg">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
+									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
 
 									<li><a href="list_products.html" data-tip="Add to Cart"><span
-											class="fa fa-shopping-bag"></span></a></li>
+												class="fa fa-shopping-bag"></span></a></li>
 								</ul>
 								<div class="transmitv single-item">
 									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input
-											type="hidden" name="add" value="1"> <input
-											type="hidden" name="transmitv_item" value="Men's Pink Shirt">
+										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
+											value="1"> <input type="hidden" name="transmitv_item"
+											value="Men's Pink Shirt">
 										<input type="hidden" name="amount" value="599.99">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">
+										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 											Add to Cart</button>
 									</form>
 								</div>
@@ -273,25 +262,22 @@
 					<div class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2">
 							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img
-									class="pic-1 img-fluid" src="assets/images/shop-3.jpg"> <img
-									class="pic-2 img-fluid" src="assets/images/shop-33.jpg">
+								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
+										src="assets/images/shop-3.jpg"> <img class="pic-2 img-fluid"
+										src="assets/images/shop-33.jpg">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
+									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
 
 									<li><a href="list_products.html" data-tip="Add to Cart"><span
-											class="fa fa-shopping-bag"></span></a></li>
+												class="fa fa-shopping-bag"></span></a></li>
 								</ul>
 								<div class="transmitv single-item">
 									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input
-											type="hidden" name="add" value="1"> <input
-											type="hidden" name="transmitv_item" value="Dark Blue Top">
+										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
+											value="1"> <input type="hidden" name="transmitv_item" value="Dark Blue Top">
 										<input type="hidden" name="amount" value="799.99">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">
+										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 											Add to Cart</button>
 									</form>
 								</div>
@@ -308,25 +294,22 @@
 					<div class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2">
 							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img
-									class="pic-1 img-fluid" src="assets/images/shop-4.jpg"> <img
-									class="pic-2 img-fluid" src="assets/images/shop-44.jpg">
+								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
+										src="assets/images/shop-4.jpg"> <img class="pic-2 img-fluid"
+										src="assets/images/shop-44.jpg">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
+									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
 
 									<li><a href="list_products.html" data-tip="Add to Cart"><span
-											class="fa fa-shopping-bag"></span></a></li>
+												class="fa fa-shopping-bag"></span></a></li>
 								</ul>
 								<div class="transmitv single-item">
 									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input
-											type="hidden" name="add" value="1"> <input
-											type="hidden" name="transmitv_item" value="Women Tunic">
+										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
+											value="1"> <input type="hidden" name="transmitv_item" value="Women Tunic">
 										<input type="hidden" name="amount" value="399.99">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">
+										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 											Add to Cart</button>
 									</form>
 								</div>
