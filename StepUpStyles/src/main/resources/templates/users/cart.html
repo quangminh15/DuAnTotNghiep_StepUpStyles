@@ -49,258 +49,249 @@
 			</div>
 		</div>
 	</div>
+	<div ng-show="items!=null">
+		<section class="ftco-section ftco-cart">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8  ftco-animate">
+						<div class="cart-list">
+							<table class="table">
+								<thead class="thead-primary">
+									<tr class="text-center">
+										<th>
+											<input type="checkbox" ng-click="checkBox()" id="checkAll"
+												ng-model="item.isSelected">
+										</th>
+										<th></th>
+										<th>Tên Sản Phẩm</th>
+										<th>Màu Sắc</th>
+										<th>Kích Thước</th>
+										<th>Đơn Giá</th>
+										<th>Số Lượng</th>
+										<th>Thành Tiền</th>
+										<th>&nbsp;</th>
+									</tr>
+								</thead>
+								<tbody>
 
-	<section class="ftco-section ftco-cart">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8  ftco-animate">
-					<div class="cart-list">
-						<table class="table">
-							<thead class="thead-primary">
-								<tr class="text-center">
-									<th>
-										<input type="checkbox" ng-click="checkBox()" id="checkAll"
-											ng-model="item.isSelected">
-									</th>
-									<th></th>
-									<th>Tên Sản Phẩm</th>
-									<th>Màu Sắc</th>
-									<th>Kích Thước</th>
-									<th>Đơn Giá</th>
-									<th>Số Lượng</th>
-									<th>Thành Tiền</th>
-									<th>&nbsp;</th>
-								</tr>
-							</thead>
-							<tbody>
 
 
+									<tr class="text-center" ng-repeat="item in items">
+										<td>
+											<input type="checkbox" ng-checked="item.isSelected"
+												ng-click="checkOne($index)">
+										</td>
 
-								<tr class="text-center" ng-repeat="item in items">
-									<td>
-										<input type="checkbox" ng-checked="item.isSelected" ng-click="checkOne($index)">
-									</td>
-
-									<td class="image-prod">
-										<div class="img" style="background-image:url(/asset/user/img/wave.jpg);"></div>
-									</td>
-
-									<td class="product-name">
-										<h3>{{item.product.productName}}</h3>
-										<!-- <p>Far far away, behind the word mountains, far from the countries</p> -->
-									</td>
-									<td>
-										<div class="dropdown">
-											<a class="btn btn-primary dropdown-toggle" role="button"
-												id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												{{item.productDetail.color.colorName}}
-											</a>
-
-											<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-												<a class="dropdown-item"
-													ng-repeat="c in item.colors| unique:'colorName' "
-													ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
-													ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
-													{{c.colorName}}
-												</a>
-
+										<td class="image-prod">
+											<div class="img" style="background-image:url(/asset/user/img/wave.jpg);">
 											</div>
-										</div>
+										</td>
 
-
-										<!--  -->
-										<div class="container mt-5">
-											<!-- Dropdown container -->
+										<td class="product-name">
+											<h3>{{item.product.productName}}</h3>
+											<!-- <p>Far far away, behind the word mountains, far from the countries</p> -->
+										</td>
+										<td>
 											<div class="dropdown">
-												<!-- Dropdown button -->
-												<a class="btn btn-primary dropdown-toggle" type="button"
-													id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+												<a class="btn btn-primary dropdown-toggle" role="button"
+													id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false">
 													{{item.productDetail.color.colorName}}
 												</a>
 
-												<!-- Dropdown menu -->
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<!-- Card 1 -->
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													<a class="dropdown-item"
+														ng-repeat="c in item.colors| unique:'colorName' "
+														ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
+														ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
+														{{c.colorName}}
+													</a>
 
-													<div class="card-body">
-														<div class="row ">
-
-															<a class="btn btn-primary  mb-2 mr-2"
-																ng-repeat="c in item.colors| unique:'colorName' "
-																ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
-																ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
-																{{c.colorName}}
-															</a>
-														</div>
-
-
-
-													</div>
 												</div>
 											</div>
-										</div>
 
-									</td>
-									<td>
-										<div class="dropdown">
-											<a class="btn btn-primary dropdown-toggle" role="button"
-												id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												{{item.productDetail.size.sizeNumber}}
-											</a>
-
-											<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-												<a class="dropdown-item"
-													ng-repeat="s in item.sizes| unique:'sizeNumber'"
-													ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
-													ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
-													{{s.sizeNumber}}
-												</a>
-
-											</div>
-										</div>
-
-										<!--  -->
-										<div class="container mt-5">
-											<!-- Dropdown container -->
+										</td>
+										<td>
 											<div class="dropdown">
-												<!-- Dropdown button -->
-												<a class="btn btn-primary dropdown-toggle" type="button"
-													id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+												<a class="btn btn-primary dropdown-toggle" role="button"
+													id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false">
 													{{item.productDetail.size.sizeNumber}}
 												</a>
 
-												<!-- Dropdown menu -->
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-													<!-- Card 1 -->
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													<a class="dropdown-item"
+														ng-repeat="s in item.sizes| unique:'sizeNumber'"
+														ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
+														ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
+														{{s.sizeNumber}}
+													</a>
 
-													<div class="card-body">
-														<div class="row ">
-
-															<a class="btn btn-primary mr-2 mb-2"
-																ng-repeat="s in item.sizes| unique:'sizeNumber'"
-																ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
-																ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
-																{{s.sizeNumber}}</a>
-
-														</div>
-
-
-
-													</div>
 												</div>
 											</div>
+											<!--  -->
+											<!-- <div class="container mt-5">
+
+												<div class="dropdown">
+
+													<a class="btn btn-primary dropdown-toggle" type="button"
+														id="dropdownMenuButton" data-toggle="dropdown"
+														aria-haspopup="true" aria-expanded="false">
+														{{item.productDetail.size.sizeNumber}}
+													</a>
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+														<div class="card-body">
+															<div class="row ">
+																<a class="btn btn-primary mr-2 mb-2"
+																	ng-repeat="s in item.sizes| unique:'sizeNumber'"
+																	ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
+																	ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
+																	{{s.sizeNumber}}</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> -->
+										</td>
+
+										<td class="price">{{item.product.price}}</td>
+
+										<td class=" ftco-cart quantity">
+											<div class="input-group mb-7">
+												<button class="btn btn-primary quantity-left-minus"
+													ng-click="updateQuantity($index, 0)"
+													ng-disabled="item.quantity==1"><span>
+
+														<i class="fas fa-minus"></i>
+													</span>
+												</button>
+												<input type="number" name="quantity"
+													class="quantity form-control input-number" ng-model="item.quantity"
+													ng-value="item.quantity" min="1" max="100"
+													ng-change="updateQuantity($index, 2)">
+												<button class="btn btn-primary quantity-right-plus"
+													ng-click="updateQuantity($index, 1)"
+													ng-disabled="item.quantity==item.productDetail.quantity"><span>
+
+														<i class="fas fa-plus"></i>
+													</span>
+												</button>
+											</div>
+										</td>
+
+										<td class="total">{{item.product.price*item.quantity}}</td>
+										<td class="product-remove"><a href="#">X</a></td>
+									</tr><!-- END TR-->
+								</tbody>
+							</table>
+						</div>
+						<div class="cart-total mb-3">
+							<h3>Tổng Cộng Giỏ Hàng</h3>
+							<p class="d-flex">
+								<span>Thành Tiền</span>
+								<span>$20.60</span>
+							</p>
+							<p class="d-flex">
+								<span>Phí Ship</span>
+								<span>{{shippingFee}}</span>
+							</p>
+							<p class="d-flex">
+								<span>Giảm Giá</span>
+								<span>$3.00</span>
+							</p>
+							<hr>
+							<p class="d-lg-flex total-price">
+								<span>Tổng Tiền</span>
+								<span>{{tongTien}}</span>
+							</p>
+							<p><a th:href="@{/checkout}" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+						</div>
+					</div>
+					<div class="col-lg-4 .ftco-cart cart-wrap ftco-animate">
+						<div class="cart-total mb-3">
+							<h3>Mã Giảm Giá</h3>
+							<p>Nhập mã giảm giá mà bạn đang có để áp dụng giảm giá</p>
+							<form action="#" class="info">
+								<div class="form-group">
+									<label for="">Mã giảm giá</label>
+									<input type="text" class="form-control text-left px-3" placeholder="">
+								</div>
+							</form>
+							<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp dụng</a></p>
+						</div>
+						<div class="cart-total mb-3">
+							<h3>Vận Chuyển</h3>
+							<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+									aria-expanded="false" aria-controls="collapseExample">Nhập vào địa chỉ của bạn để
+									ước
+									tính phí ship</a></p>
+
+							<div class="collapse" id="collapseExample">
+								<div class="card card-body">
+									<form action="#" class="info">
+										<!-- <div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<input type="text" class="form-control text-left px-3" placeholder="">
 										</div>
-									</td>
-
-									<td class="price">{{item.product.price}}</td>
-
-									<td class=" ftco-cart quantity">
-										<div class="input-group mb-7">
-											<button class="btn btn-primary quantity-left-minus"
-												ng-click="updateQuantity($index, 0)"
-												ng-disabled="item.quantity==1"><span>
-
-													<i class="fas fa-minus"></i>
-												</span>
-											</button>
-											<input type="number" name="quantity"
-												class="quantity form-control input-number" ng-model="item.quantity"
-												ng-value="item.quantity" min="1" max="100"
-												ng-change="updateQuantity($index, 2)">
-											<button class="btn btn-primary quantity-right-plus"
-												ng-click="updateQuantity($index, 1)"
-												ng-disabled="item.quantity==item.productDetail.quantity"><span>
-
-													<i class="fas fa-plus"></i>
-												</span>
-											</button>
+										<div class="form-group">
+											<label for="country">Quận/Huyện</label>
+											<input type="text" class="form-control text-left px-3" placeholder="">
 										</div>
-									</td>
+										<div class="form-group">
+											<label for="country">Phường/Xã</label>
+											<input type="text" class="form-control text-left px-3" placeholder="">
+										</div> -->
 
-									<td class="total">{{item.product.price*item.quantity}}</td>
-									<td class="product-remove"><a href="#">X</a></td>
-								</tr><!-- END TR-->
-							</tbody>
-						</table>
-					</div>
-					<div class="cart-total mb-3">
-						<h3>Tổng Cộng Giỏ Hàng</h3>
-						<p class="d-flex">
-							<span>Thành Tiền</span>
-							<span>$20.60</span>
-						</p>
-						<p class="d-flex">
-							<span>Phí Ship</span>
-							<span>$0.00</span>
-						</p>
-						<p class="d-flex">
-							<span>Giảm Giá</span>
-							<span>$3.00</span>
-						</p>
-						<hr>
-						<p class="d-lg-flex total-price">
-							<span>Tổng Tiền</span>
-							<span>{{tongTien}}</span>
-						</p>
-						<p><a th:href="@{/checkout}" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
-					</div>
-				</div>
-				<div class="col-lg-4  cart-wrap ftco-animate">
-					<div class="cart-total mb-3">
-						<h3>Mã Giảm Giá</h3>
-						<p>Nhập mã giảm giá mà bạn đang có để áp dụng giảm giá</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Mã giảm giá</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
-						<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp dụng</a></p>
-					</div>
-					<div class="cart-total mb-3">
-						<h3>Vận Chuyển</h3>
-						<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
-								aria-expanded="false" aria-controls="collapseExample">Nhập vào địa chỉ của bạn để ước
-								tính phí ship</a></p>
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg address" id="province"
+												ng-model="selectedProvince"
+												ng-options="province.ProvinceName for province in provinces"
+												ng-change="loadDistricts()"
+												>
+												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg" id="district"
+												ng-model="selectedDistrict"
+												ng-options="district.DistrictName for district in selectedProvince.Districts"
+												ng-change="loadWards()"
+												ng-disabled="selectedProvince.Districts==null">
+												<option value="" disabled selected>Chọn Quận/Huyện</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg" id="ward"
+												ng-model="selectedWard"
+												ng-options="ward.WardName for ward in selectedDistrict.Wards">
+												<option value="" disabled selected>Chọn Phường/Xã</option>
+											</select>
+										</div>
 
-						<div class="collapse" id="collapseExample">
-							<div class="card card-body">
-								<form action="#" class="info">
-									<div class="form-group">
-										<label for="">Tỉnh/Thành Phố</label>
-										<input type="text" class="form-control text-left px-3" placeholder="">
-									</div>
-									<div class="form-group">
-										<label for="country">Quận/Huyện</label>
-										<input type="text" class="form-control text-left px-3" placeholder="">
-									</div>
-									<div class="form-group">
-										<label for="country">Phường/Xã</label>
-										<input type="text" class="form-control text-left px-3" placeholder="">
-									</div>
-								</form>
-								<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp Dụng</a></p>
+
+									</form>
+									<p><a ng-click="calculateShipping()" class="btn btn-primary py-3 px-4">Áp Dụng</a></p>
+								</div>
 							</div>
+
 						</div>
 
 					</div>
 
+
+					<!-- <div class=" justify-content-end"> -->
+					<div class="col-lg-8 mt-5 cart-wrap ftco-animate">
+
+					</div>
+					<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+
+					</div>
 				</div>
-
-
-				<!-- <div class=" justify-content-end"> -->
-				<div class="col-lg-8 mt-5 cart-wrap ftco-animate">
-
-				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-
-				</div>
-			</div>
-			<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 
 					<div class="cart-total mb-3">
 						<h3>Estimate shipping and tax</h3>
@@ -324,9 +315,17 @@
 				</div> -->
 
 
-			<!-- </div> -->
+				<!-- </div> -->
+			</div>
+		</section>
+	</div>
+
+	<div ng-show="items==null" style="display: flex; justify-content: center;">
+		<div>
+			<img src="/asset/user/img/e.jpg" alt="">
+			<h1>Mua Hàng đê giỏ hàng trống lỏng z !!!</h1>
 		</div>
-	</section>
+	</div>
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
