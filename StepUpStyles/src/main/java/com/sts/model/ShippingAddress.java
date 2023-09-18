@@ -35,6 +35,12 @@ public class ShippingAddress implements Serializable {
 	@Column(name="default_address")
 	private boolean defaultAddress;
 
+	@Column(name="name_receiver")
+	private String nameReceiver;
+
+	@Column(name="phone_receiver")
+	private String phoneReceiver;
+
 	private String district;
 
 	private String province;
