@@ -7,7 +7,7 @@
 
 </head>
 
-<body>
+<body ng-controller="favorite-ctrl">
 	<section class="w3l-banner-slider-main inner-pagehny">
 		<div class="breadcrumb-infhny">
 	
@@ -344,7 +344,10 @@
 											<img th:if="${not #lists.isEmpty(p.productImages)}" class="pic-2 img-fluid" th:src="@{|${p.productImages[0].imagePath}|}">
 										</a>
 										<ul class="social">
-											<li><a href="#" data-tip="Quick View"><span class="fa fa-heart"></span></a>
+											<li>
+												<button th:attr="ng-click=@{|toggleFavorite(${p.productID})|}">
+												<span ng-class="{ 'liked': product.liked }">&#10084;</span> {{ p.liked ? 'Đã thích' : 'Thích' }}
+											</button>
 											</li>
 
 											<li><a href="single_product.html" data-tip="Add to Cart"><span
