@@ -7,7 +7,7 @@
 
 </head>
 
-<body>
+<body ng-app="app" ng-controller="index-ctrl">
    
     
     <section class="w3l-banner-slider-main">
@@ -119,7 +119,6 @@
 										<a href="list_products.html" class="shop-button btn">
 											Xem ngay
 										</a>
-
 									</div>
 								</div>
 							</div>
@@ -675,14 +674,17 @@
                                 </a>
                                 <ul class="social">
                                     <li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-
-                                    <li><a href="list_products.html" data-tip="Favorite"><span
-                                                class="fa fa-heart"></span></a>
-                                    </li>
                                     <li>
-                                        <button ng-click="toggleFavorite(product)" ng-class="{ 'active': product.isFavorite }">
-                                            <span class="fa fa-heart"></span>
+                                        <!-- <button style="border-radius: 50%; font-size: 14px; background-color: white;
+                                        line-height: 45px; outline: none;
+                                        height: 45px;
+                                        width: 45px;" ng-click="" ng-class="{ 'liked': product.liked }">
+                                            <span class="fa" ng-class="{ 'fa-heart': product.liked, 'fa-heart-o': !product.liked }"></span>
+                                        </button> -->
+                                        <button ng-click="toggleFavorite(product)">
+                                            <span ng-class="{ 'liked': product.liked }">&#10084;</span> Thích
                                         </button>
+                                        
                                     </li>
                                 </ul>
                                 <div class="transmitv single-item">
