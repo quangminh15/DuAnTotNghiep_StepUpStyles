@@ -1,6 +1,7 @@
 package com.sts.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,6 +38,10 @@ public class ProductDetail implements Serializable {
 	private Boolean deleted;
 
 	private Integer quantity;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "modify_date")
+	private Date modifyDate = new Date();
 
 	@JsonIgnore
 	@OneToMany(mappedBy="productDetail")
