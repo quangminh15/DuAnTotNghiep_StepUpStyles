@@ -13,6 +13,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.sortableColumns = [
 		{ name: 'colorID', label: 'Mã màu' },
 		{ name: 'colorName', label: 'Tên màu' },
+		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trạng thái' },
 	];
 
@@ -104,7 +105,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			}
 		},
 	};
-	
+
 	//	Phân trang đã xóa
 	$scope.RestorePager = {
 		page: 0,
@@ -170,6 +171,10 @@ app.controller("color-ctrl", function($scope, $http) {
 		//load coloritems hết luôn
 		$http.get("/rest/colors/loadall").then(resp => {
 			$scope.coloritemsLoadAll = resp.data;
+			$scope.coloritemsLoadAll.forEach(coloritem => {
+				coloritem.modifyDate = new Date(coloritem.modifyDate)
+			})
+			$scope.coloritemsLoadAll.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -177,6 +182,10 @@ app.controller("color-ctrl", function($scope, $http) {
 		//load coloritems 
 		$http.get("/rest/colors/loadallNoDeleted").then(resp => {
 			$scope.coloritems = resp.data;
+			$scope.coloritems.forEach(coloritem => {
+				coloritem.modifyDate = new Date(coloritem.modifyDate)
+			})
+			$scope.coloritems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -184,6 +193,10 @@ app.controller("color-ctrl", function($scope, $http) {
 		//load coloritems đã xóa
 		$http.get("/rest/colors/loadallDeleted").then(resp => {
 			$scope.coloritemss = resp.data;
+			$scope.coloritemss.forEach(coloritem => {
+				coloritem.modifyDate = new Date(coloritem.modifyDate)
+			})
+			$scope.coloritemss.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -294,7 +307,9 @@ app.controller("color-ctrl", function($scope, $http) {
 		// Thực hiện việc lưu vào db
 		var coloritem = angular.copy($scope.form);
 		coloritem.deleted = false;
+		coloritem.modifyDate = new Date();
 		$http.post('/rest/colors/create', coloritem).then(resp => {
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.coloritems.push(resp.data);
 			$scope.reset();
 			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
@@ -325,12 +340,14 @@ app.controller("color-ctrl", function($scope, $http) {
 		}
 
 		var coloritem = angular.copy($scope.form);
+		coloritem.modifyDate = new Date();
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-			$scope.coloritems[index] = coloritem;
+			resp.data.modifyDate = new Date(resp.data.modifyDate); $scope.coloritems[index] = coloritem;
 			$scope.messageSuccess = "Cập nhật thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Cập nhật thất bại";
 			$('#errorModal').modal('show');
@@ -361,16 +378,19 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.confirmHide = function() {
 		var coloritem = angular.copy($scope.form);
 		coloritem.deleted = true;
+		coloritem.modifyDate = new Date();
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-			$scope.coloritems[index] = coloritem;
+			resp.data.modifyDate = new Date(resp.data.modifyDate); $scope.coloritems[index] = coloritem;
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
@@ -392,8 +412,10 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.restore = function() {
 		var coloritem = angular.copy($scope.form);
 		coloritem.deleted = false;
+		coloritem.modifyDate = new Date();
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritemsLoadAll.findIndex(p => p.colorID == coloritem.colorID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.coloritemsLoadAll[index] = coloritem;
 
 			// Đóng modal thùng rác
@@ -402,7 +424,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.messageSuccess = "khôi phục thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
-
+			$scope.reset();
 		}).catch(error => {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
@@ -410,6 +432,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Khôi phục thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 

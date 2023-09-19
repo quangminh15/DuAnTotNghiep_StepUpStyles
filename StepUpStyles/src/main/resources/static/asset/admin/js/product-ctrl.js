@@ -13,7 +13,7 @@ app.controller("product-ctrl", function($scope, $http) {
 
 	$scope.sortableColumns = [
 		{ name: 'productID', label: 'Mã sản phẩm' },
-		{ name: 'createdDate', label: 'Thời gian' },
+		{ name: 'modifyDate', label: 'Thời gian' },
 		{ name: 'productName', label: 'Tên sản phẩm' },
 		{ name: 'price', label: 'Giá' },
 		{ name: 'category.categoryName', label: 'Danh mục' },
@@ -221,9 +221,9 @@ app.controller("product-ctrl", function($scope, $http) {
 		$http.get("/rest/products/loadall").then(resp => {
 			$scope.productitemsLoadAll = resp.data;
 			$scope.productitemsLoadAll.forEach(productitem => {
-				productitem.createdDate = new Date(productitem.createdDate)
+				productitem.modifyDate = new Date(productitem.modifyDate)
 			})
-			$scope.productitems.sort((a, b) => b.createdDate - a.createdDate);
+			$scope.productitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -232,9 +232,9 @@ app.controller("product-ctrl", function($scope, $http) {
 		$http.get("/rest/products/loadallNoDeleted").then(resp => {
 			$scope.productitems = resp.data;
 			$scope.productitems.forEach(productitem => {
-				productitem.createdDate = new Date(productitem.createdDate)
+				productitem.modifyDate = new Date(productitem.modifyDate)
 			})
-			$scope.productitems.sort((a, b) => b.createdDate - a.createdDate);
+			$scope.productitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -243,9 +243,9 @@ app.controller("product-ctrl", function($scope, $http) {
 		$http.get("/rest/products/loadallDeleted").then(resp => {
 			$scope.productitemss = resp.data;
 			$scope.productitemss.forEach(productitem => {
-				productitem.createdDate = new Date(productitem.createdDate)
+				productitem.modifyDate = new Date(productitem.modifyDate)
 			})
-			$scope.productitems.sort((a, b) => b.createdDate - a.createdDate);
+			$scope.productitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -361,13 +361,13 @@ app.controller("product-ctrl", function($scope, $http) {
 				$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
 
 				var currentDate = new Date(); // Lấy ngày hiện tại
-				$scope.form.createdDate = currentDate; // Gán ngày hiện tại cho createdDate
+				$scope.form.modifyDate = currentDate; // Gán ngày hiện tại cho modifyDate
 
 				var productitem = angular.copy($scope.form);
 				productitem.user.userID = userID;
-				productitem.createdDate = currentDate;
+				productitem.modifyDate = currentDate;
 				$http.post('/rest/products/create', productitem).then(resp => {
-					resp.data.createdDate = new Date(resp.data.createdDate);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
 					$scope.productitems.push(resp.data);
 					$scope.reset();
 					$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
@@ -465,14 +465,14 @@ app.controller("product-ctrl", function($scope, $http) {
 				$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
 
 				var currentDate = new Date(); // Lấy ngày hiện tại
-				$scope.form.createdDate = currentDate; // Gán ngày hiện tại cho createdDate
+				$scope.form.modifyDate = currentDate; // Gán ngày hiện tại cho modifyDate
 
 				var productitem = angular.copy($scope.form);
 				productitem.user.userID = userID;
-				productitem.createdDate = currentDate;
+				productitem.modifyDate = currentDate;
 				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
 					var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
-					resp.data.createdDate = new Date(resp.data.createdDate);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
 					$scope.productitems[index] = productitem;
 					$scope.messageSuccess = "Cập nhật thành công";
 					$scope.initialize();
