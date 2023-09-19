@@ -9,7 +9,7 @@
 
 </head>
 
-<body class="">
+<body class="" ng-controller="checkout-ctrl">
 
 	<!-- <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
 		rel="stylesheet">
@@ -60,11 +60,15 @@
 
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
-								<h3>NAME HERE | 09089765989 <span class="badge badge-danger">Mặc Định</span></h3> <span>Nhà trọ NH, đường số 9, Khu Đô Thị Mới An Bình,
-									Đường Nguyễn Văn Cừ, Phường An Bình, Quận Ninh Kiều, Cần Thơ</span>
+								<h3>{{addressDefault.user.fullName}} | 09089765989 <span class="badge badge-danger">Mặc
+										Định</span></h3> <span>{{addressDefault.addressDetails}},
+									{{addressDefault.ward}}, {{addressDefault.district}},
+									{{addressDefault.province}}</span>
 							</div>
 							<div class="col-lg-3">
-									<span><a style="color: white;" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary py-3 px-4"><i class="fas fa-edit"></i> Thay Đổi</a></span>	
+								<span><a style="color: white;" type="button" data-toggle="modal" data-target="#myModal"
+										class="btn btn-primary py-3 px-4"><i class="fas fa-edit"></i> Thay
+										Đổi</a></span>
 							</div>
 						</div>
 					</div>
@@ -74,27 +78,55 @@
 				<!-- The Modal -->
 				<div class="modal fade" id="myModal">
 					<div class="modal-dialog modal-lg">
-					  <div class="modal-content">
-					  
-						<!-- Modal Header -->
-						<div class="modal-header">
-						  <h4 class="modal-title">Modal Heading</h4>
-						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						<div class="modal-content">
+
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">Địa Chỉ Của Tôi</h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<!-- Modal body -->
+							<div class="modal-body">
+								<div class="row card-body" ng-repeat="addr in address ">
+									<div class="form-check col-lg-1">
+										<input class="form-check-input mg-2" ng-checked="addr.defaultAddress" type="radio" name="exampleRadios"
+											id="exampleRadios1" value="option1" checked>
+									</div>
+									<div class="col-lg-8">
+
+										<h4 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
+											Địa Chỉ Giao Hàng</h3>
+											<h4>{{addr.user.fullName}} | 09089765989 <span ng-show="addr.defaultAddress"
+													class="badge badge-danger">Mặc Định</span></h3>
+												<span>{{addr.addressDetails}}, {{addr.ward}}, {{addr.district}},
+													{{addr.province}}</span>
+									</div>
+
+									<div class="col-lg-3">
+										<span><a style="color: white;" type="button" data-toggle="modal"
+												data-target="#myModal" class="btn btn-primary py-3 px-4"><i
+													class="fas fa-edit"></i> Thay Đổi</a></span>
+									</div>
+									<hr>
+
+								</div>
+
+							</div>
+
+							<!-- Modal footer -->
+							<div class="modal-footer" style=" justify-content: start">
+								<div style=" justify-content: start">
+									<a type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
+								</div>
+								<div style=" justify-content: start">
+									<a type="button" class="btn btn-danger" data-dismiss="modal">Close</a>
+								</div>
+							</div>
+
 						</div>
-						
-						<!-- Modal body -->
-						<div class="modal-body">
-						  Modal body..
-						</div>
-						
-						<!-- Modal footer -->
-						<div class="modal-footer">
-						  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						</div>
-						
-					  </div>
 					</div>
-				  </div>
+				</div>
 			</div>
 			<div class="row">
 				<!-- <div class="col-lg-6  cart-wrap ftco-animate">
@@ -188,10 +220,11 @@
 												<span>Tổng Tiền</span>
 												<span>$17.60</span>
 											</p>
-											<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+											<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Tiến Hành Thanh
+													Toán</a></p>
 										</div>
 									</td>
-									
+
 									<!-- <td colspan="2">
 										<h3>Tổng Thành Tiền</h3>
 									</td>

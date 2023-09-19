@@ -139,7 +139,7 @@ CREATE TABLE cart_detail(
 	product_detail_id bigint ,
 	product_id bigint ,
 	quantity int ,
-	check_buy bit
+	
 
 	FOREIGN KEY (cart_id) REFERENCES cart(cart_id),
 
@@ -162,6 +162,8 @@ CREATE TABLE shipping_address (
     district NVARCHAR(255),
     ward NVARCHAR(255),
     address_details NVARCHAR(255),
+	name_receiver nvarchar(50),
+	phone_receiver char(10),
 	default_address bit ,
 	users_id bigint
 	FOREIGN KEY (users_id) REFERENCES users(users_id),
@@ -413,13 +415,13 @@ values (N'Thanh toán khi nhân hàng',N'Thanh toán tiền mặt',1),
 	   (N'PayPal',N'Thanh toán online',1);
 
 --shipping_address
-INSERT INTO shipping_address (province, district, ward, address_details, default_address, users_id)
+INSERT INTO shipping_address (province, district, ward, address_details, default_address, users_id,name_receiver,phone_receiver)
 VALUES
-    (N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng Hậu', N'123 Đường ABC', 1, 1),
-    (N'TPHCM', N'Quận 1', N'Bến Nghé', N'456 Đường XYZ', 0, 2),
-    (N'Hải Phòng', N'Hồng Bàng', N'Ngô Quyền', N'789 Đường DEF', 0, 3),
-    (N'Đà Nẵng', N'Hải Châu', N'Hòa Cường Nam', N'101 Đường GHI', 0, 4),
-    (N'Cần Thơ', N'Ninh Kiều', N'Tân An', N'202 Đường JKL', 0, 5);
+    (N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng Hậu', N'123 Đường ABC', 1, 1, N'Nguyễn Văn Mười','0919919919'),
+    (N'TPHCM', N'Quận 1', N'Bến Nghé', N'456 Đường XYZ', 0, 2, N'Nguyễn Văn A','0456456456'),
+    (N'Hải Phòng', N'Hồng Bàng', N'Ngô Quyền', N'789 Đường DEF', 0, 3, N'Nguyễn Văn Mơi','0986543166'),
+    (N'Đà Nẵng', N'Hải Châu', N'Hòa Cường Nam', N'101 Đường GHI', 0, 4, N'Nguyễn Văn Tèo','0987987989'),
+    (N'Cần Thơ', N'Ninh Kiều', N'Tân An', N'202 Đường JKL', 0, 5, N'Nguyễn Văn Người Nhận','0456456456');
 --Order
 
 INSERT INTO [order] (users_id, payment_method_id, shipping_address_id, delivery_date, payment_status, delivery_status, order_date, initial_price, shipping_fee, total_amount, order_status)
