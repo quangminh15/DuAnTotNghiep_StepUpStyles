@@ -345,9 +345,9 @@
 										</a>
 										<ul class="social">
 											<li>
-												<button th:attr="ng-click=@{|toggleFavorite(${p.productID})|}">
-												<span ng-class="{ 'liked': product.liked }">&#10084;</span> {{ p.liked ? 'Đã thích' : 'Thích' }}
-											</button>
+												<button th:attr="ng-click=@{|check(${p.productID})|}">
+													<span>&#10084;</span>Thích
+												</button>										
 											</li>
 
 											<li><a href="single_product.html" data-tip="Add to Cart"><span

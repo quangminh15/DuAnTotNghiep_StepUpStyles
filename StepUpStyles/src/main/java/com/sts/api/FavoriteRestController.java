@@ -35,9 +35,14 @@ public class FavoriteRestController {
 	// 	return favoriteService.findById(favoriteID);
 	// }
 
-    @GetMapping("/rest/favorites/{userId}")
-	public List<Favorite> getFavoriteProduct(@PathVariable("userId") Integer userId) {
-		return favoriteService.findByUserId(userId);
+    @GetMapping("/rest/favorites/getUserFavorite")
+	public List<Favorite> getFavoriteProduct() {
+		return favoriteService.findByUserId(3);
+	}
+
+	@GetMapping("/rest/favorites/check/{productID}")
+	public Favorite getFavoriteProductAndUser(@PathVariable("productID") Integer productID) {
+		return favoriteService.getUserAndProductFavorite(3,productID);
 	}
 
 	@GetMapping("/rest/favorites/loadall")
@@ -45,41 +50,14 @@ public class FavoriteRestController {
 		return favoriteService.findAll();
 	}
 
-	// @PostMapping("/rest/favorites/{userId}")
-	// public void addToFavorite(@PathVariable("userId") Integer userId,@RequestParam("productId") Integer productId) {
-	// 	Product product = productService.findById(productId);
-    //     User user = userService.findById(userId);
+	@GetMapping("/rest/products")
+	public List<Product> getAllPD() {
+		return productService.findAll();
+	}
 
-    //     if (product != null && user != null) {
-    //         Favorite favorite = new Favorite();
-    //         favorite.setUser(user);
-    //         favorite.setProduct(product);
-
-    //         favoriteService.create(favorite);
-    //     }
-	// }
-
-	// @DeleteMapping("/rest/favorites/delete/{userId}")
-	// public void deleteFavorite(@PathVariable("userId") Integer userId, @RequestParam("productId") Integer productId) {
-	// 	Product product = productService.findById(productId);
-    //     User user = userService.findById(userId);
-
-    //     if (product != null && user != null) {
-    //         favoriteService.delete(user, product);
-    //     }
-	// }
-	@PostMapping("/rest/favorites/{userId}/{productId}")
-	public void addToFavorite(@PathVariable("userId") Integer userId,@PathVariable("productId") Integer productId) {
-		Product product = productService.findById(productId);
-        User user = userService.findById(userId);
-
-        if (product != null && user != null) {
-            Favorite favorite = new Favorite();
-            favorite.setUser(user);
-            favorite.setProduct(product);
-
-            favoriteService.create(favorite);
-        }
+	@PostMapping("/rest/favorites/{productId}")
+	public void addToFavorite(@PathVariable("productId") Integer productId) {		
+            favoriteService.create(productId, 3);
 	}
 
 	@DeleteMapping("/rest/favorites/delete/{userId}/{productId}")
@@ -90,5 +68,10 @@ public class FavoriteRestController {
         if (product != null && user != null) {
             favoriteService.delete(user, product);
         }
+	}
+
+	@DeleteMapping("/rest/favorites/delete/{favoriteId}")
+	public void delete(@PathVariable("favoriteId") Integer favoriteId) {
+		favoriteService.deleteById(favoriteId);
 	}
 }
