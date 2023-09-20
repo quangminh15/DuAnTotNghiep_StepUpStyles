@@ -137,11 +137,19 @@
 	<div class="card-header card-header-divider">Sản phẩm chi tiết</div>
 	<div class="card-body">
 		<div class="row">
-			<!-- 			<div class="form-group col-md-4"> -->
-			<!-- 				<label for="inputUserName">Mã chi tiết:</label> <input -->
-			<!-- 					class="form-control" id="inputUserName" type="text" -->
-			<!-- 					ng-model="form.laptopID" readonly="true"> -->
-			<!-- 			</div> -->
+			<div class="form-group col-md-6">
+				<label for="inputUserName">Mã chi tiết:</label> <input
+					class="form-control" id="inputUserName" type="text"
+					ng-model="form.productDetailID" readonly="true">
+			</div>
+			<div class="form-group col-md-6">
+				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
+				<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
+					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate |
+					date:'dd-MM-yyyy' }}</div>
+			</div>
+		</div>
+		<div class="row">
 			<div class="form-group col-md-6">
 				<label>Sản phẩm</label>
 				<div>
@@ -268,8 +276,10 @@
 	<!-- 	thùng rác bắt đầu -->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
+		<div class="modal-dialog modal-dialog-centered modal-xl"
+			style="width: 1500px; height: 600px;">
+			<div class="modal-content"
+				style="background-color: #eee; max-width: 1500px">
 				<div class="modal-header">
 					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
 					<button class="close modal-close" type="button"
@@ -293,8 +303,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="productdetailitem in RestorePager.productdetailitemss">
+							<tr
+								ng-repeat="productdetailitem in RestorePager.productdetailitemss">
 								<td>{{productdetailitem.productDetailID}}</td>
+								<td>{{productdetailitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 								<td>{{productdetailitem.product.productName}}</td>
 								<td>{{productdetailitem.color.colorName}}</td>
 								<td>{{productdetailitem.size.sizeNumber}}</td>
@@ -367,6 +379,7 @@
 			<tbody>
 				<tr ng-repeat="productdetailitem in pager.productdetailitems">
 					<td>{{productdetailitem.productDetailID}}</td>
+					<td>{{productdetailitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 					<td>{{productdetailitem.product.productName}}</td>
 					<td>{{productdetailitem.color.colorName}}</td>
 					<td>{{productdetailitem.size.sizeNumber}}</td>

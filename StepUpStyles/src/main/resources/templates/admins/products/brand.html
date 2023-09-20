@@ -264,8 +264,8 @@
 	<!-- 	thùng rác bắt đầu -->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
+		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+			<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 				<div class="modal-header">
 					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
 					<button class="close modal-close" type="button"
@@ -298,6 +298,7 @@
 											src="{{branditem.brandImage}}">
 									</div>
 								</td>
+								<td>{{branditem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 								<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 								<td class="actions">
 									<button class="btn btn-space btn btn-primary "
@@ -368,12 +369,14 @@
 				<tr ng-repeat="branditem in pager.branditems">
 					<td>{{branditem.brandID}}</td>
 					<td>{{branditem.brandName}}</td>
+					
 					<td>
 						<div class="image-container">
 							<img class="image-content" alt="{{branditem.brandName}}"
 								src="{{branditem.brandImage}}">
 						</div>
 					</td>
+					<td>{{branditem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 					<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "

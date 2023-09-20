@@ -10,6 +10,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		{ name: 'brandID', label: 'Mã thương hiệu' },
 		{ name: 'brandName', label: 'Tên thương hiệu' },
 		{ name: 'brandImage', label: 'Hình ảnh' },
+		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trạng thái' },
 	];
 
@@ -44,7 +45,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 	//	Phân trang
 	$scope.pager = {
 		page: 0,
-		size: 2,
+		size: 5,
 		getPageNumbers: function() {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
@@ -212,6 +213,10 @@ app.controller("brand-ctrl", function($scope, $http) {
 		//load branditems hết luôn
 		$http.get("/rest/brands/loadall").then(resp => {
 			$scope.branditemsLoadAll = resp.data;
+			$scope.branditemsLoadAll.forEach(branditem => {
+				branditem.modifyDate = new Date(branditem.modifyDate)
+			})
+			$scope.branditemsLoadAll.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -219,6 +224,10 @@ app.controller("brand-ctrl", function($scope, $http) {
 		//load branditems 
 		$http.get("/rest/brands/loadallNoDeleted").then(resp => {
 			$scope.branditems = resp.data;
+			$scope.branditems.forEach(branditem => {
+				branditem.modifyDate = new Date(branditem.modifyDate)
+			})
+			$scope.branditems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -226,6 +235,10 @@ app.controller("brand-ctrl", function($scope, $http) {
 		//load branditems đã xóa
 		$http.get("/rest/brands/loadallDeleted").then(resp => {
 			$scope.branditemss = resp.data;
+			$scope.branditemss.forEach(branditem => {
+				branditem.modifyDate = new Date(branditem.modifyDate)
+			})
+			$scope.branditemss.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -315,7 +328,9 @@ app.controller("brand-ctrl", function($scope, $http) {
 			var branditem = angular.copy($scope.form);
 			branditem.brandImage = $scope.form.brandImage;
 			branditem.deleted = false;
+			branditem.modifyDate = new Date();
 			$http.post('/rest/brands/create', branditem).then(resp => {
+				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.branditems.push(resp.data);
 				$scope.reset();
 				$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
@@ -362,12 +377,15 @@ app.controller("brand-ctrl", function($scope, $http) {
 
 			var branditem = angular.copy($scope.form);
 			branditem.brandImage = $scope.form.brandImage;
+			branditem.modifyDate = new Date();
 			$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
 				var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
+				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.branditems[index] = branditem;
 				$scope.messageSuccess = "Cập nhật thành công";
 				$('#errorModal1').modal('show');
 				$scope.initialize();
+				$scope.reset();
 				console.log("branditem", branditem);
 			}).catch(error => {
 				$scope.errorMessage = "Cập nhật thất bại";
@@ -381,46 +399,50 @@ app.controller("brand-ctrl", function($scope, $http) {
 			$scope.initialize();
 		}
 	}
-	
+
 	//Mở modal thùng rác
 	$scope.openRecycleBinForm = function() {
 		// Reset searchKeyword
 		searchValue = '';
 		$('#recycleBinModal').modal('show');
 	};
-	
+
 	//Gọi đến modal xác nhận để xóa vào thùng rác
 	$scope.confirmHideModal = function() {
 		$('#confirmHideModal').modal('show');
 	}
-	
+
 	//Gọi đến modal xác nhận để xóa vào thùng rác
 	$scope.confirmHideModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
 		$('#confirmHideModal').modal('show');
 	}
-	
+
 	//sau khi xác nhận thành công thì xóa vào thùng rác
 	$scope.confirmHide = function() {
 		var branditem = angular.copy($scope.form);
 		branditem.deleted = true;
+		branditem.modifyDate = new Date();
 		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
 			var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.branditems[index] = branditem;
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
 		// Đóng modal thùng rác
 		$('#confirmHideModal').modal('hide');
 	}
-	
+
 	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
 	$scope.confirmRestoreModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
@@ -430,13 +452,15 @@ app.controller("brand-ctrl", function($scope, $http) {
 
 		$('#confirmRestoreModal').modal('show');
 	}
-	
+
 	//Khôi phục item từ thùng rác
 	$scope.restore = function() {
 		var branditem = angular.copy($scope.form);
 		branditem.deleted = false;
+		branditem.modifyDate = new Date();
 		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
 			var index = $scope.branditemsLoadAll.findIndex(p => p.brandID == branditem.brandID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.branditemsLoadAll[index] = branditem;
 
 			// Đóng modal thùng rác
@@ -445,7 +469,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 			$scope.messageSuccess = "khôi phục thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
-
+			$scope.reset();
 		}).catch(error => {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
@@ -453,13 +477,14 @@ app.controller("brand-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Khôi phục thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
 		// Đóng modal thùng rác
 		$('#confirmRestoreModal').modal('hide');
 	}
-	
+
 	//Gọi đến modal xác nhận để xóa luôn
 	$scope.confirmDeleteModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
@@ -479,17 +504,17 @@ app.controller("brand-ctrl", function($scope, $http) {
 			$scope.reset();
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show'); // Hiển thị modal thành công
+			$scope.initialize();
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show'); // Hiển thị modal lỗi
 			console.log("Error", error);
+			$scope.initialize();
+			$scope.reset();
 		});
 
 		// Đóng modal xác nhận xóa
 		$('#confirmDeleteModal').modal('hide');
 	}
-
-
-
 });
 

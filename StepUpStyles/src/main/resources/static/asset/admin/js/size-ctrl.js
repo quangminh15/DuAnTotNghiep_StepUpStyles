@@ -11,6 +11,7 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.sortableColumns = [
 		{ name: 'sizeID', label: 'Mã cấu hình' },
 		{ name: 'sizeNumber', label: 'Tên sản phẩm' },
+		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trạng thái' },
 	];
 
@@ -169,13 +170,21 @@ app.controller("size-ctrl", function($scope, $http) {
 		//load sizeitems hết luôn
 		$http.get("/rest/sizes/loadall").then(resp => {
 			$scope.sizeitemsLoadAll = resp.data;
+			$scope.sizeitemsLoadAll.forEach(sizeitem => {
+				sizeitem.modifyDate = new Date(sizeitem.modifyDate)
+			})
+			$scope.sizeitemsLoadAll.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
 
-		//load sizeitems 
+		//load sizeitems chưa xóa
 		$http.get("/rest/sizes/loadallNoDeleted").then(resp => {
 			$scope.sizeitems = resp.data;
+			$scope.sizeitems.forEach(sizeitem => {
+				sizeitem.modifyDate = new Date(sizeitem.modifyDate)
+			})
+			$scope.sizeitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -183,6 +192,10 @@ app.controller("size-ctrl", function($scope, $http) {
 		//load sizeitems đã xóa
 		$http.get("/rest/sizes/loadallDeleted").then(resp => {
 			$scope.sizeitemss = resp.data;
+			$scope.sizeitemss.forEach(sizeitem => {
+				sizeitem.modifyDate = new Date(sizeitem.modifyDate)
+			})
+			$scope.sizeitemss.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -302,7 +315,9 @@ app.controller("size-ctrl", function($scope, $http) {
 
 		var sizeitem = angular.copy($scope.form);
 		sizeitem.deleted = false;
+		sizeitem.modifyDate = new Date();
 		$http.post('/rest/sizes/create', sizeitem).then(resp => {
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitems.push(resp.data);
 			$scope.reset();
 			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
@@ -354,12 +369,15 @@ app.controller("size-ctrl", function($scope, $http) {
 		}
 
 		var sizeitem = angular.copy($scope.form);
+		sizeitem.modifyDate = new Date();
 		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
 			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitems[index] = sizeitem;
 			$scope.messageSuccess = "Cập nhật thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Cập nhật thất bại";
 			$('#errorModal').modal('show');
@@ -390,16 +408,20 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.confirmHide = function() {
 		var sizeitem = angular.copy($scope.form);
 		sizeitem.deleted = true;
+		sizeitem.modifyDate = new Date();
 		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
 			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitems[index] = sizeitem;
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
@@ -421,8 +443,10 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.restore = function() {
 		var sizeitem = angular.copy($scope.form);
 		sizeitem.deleted = false;
+		sizeitem.modifyDate = new Date();
 		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
 			var index = $scope.sizeitemsLoadAll.findIndex(p => p.sizeID == sizeitem.sizeID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitemsLoadAll[index] = sizeitem;
 
 			// Đóng modal thùng rác
@@ -431,7 +455,7 @@ app.controller("size-ctrl", function($scope, $http) {
 			$scope.messageSuccess = "khôi phục thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
-
+			$scope.reset();
 		}).catch(error => {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
@@ -439,6 +463,7 @@ app.controller("size-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Khôi phục thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 

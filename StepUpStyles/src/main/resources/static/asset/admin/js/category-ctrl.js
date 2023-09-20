@@ -12,6 +12,7 @@ app.controller("category-ctrl", function($scope, $http) {
 		{ name: 'categoryID', label: 'Mã danh mục' },
 		{ name: 'categoryName', label: 'Tên danh mục' },
 		{ name: 'categoryImage', label: 'Hình ảnh' },
+		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trang thái' },
 	];
 
@@ -192,13 +193,21 @@ app.controller("category-ctrl", function($scope, $http) {
 		//load categoryitems hết luôn
 		$http.get("/rest/categories/loadall").then(resp => {
 			$scope.categoryitemsLoadAll = resp.data;
+			$scope.categoryitemsLoadAll.forEach(categoryitem => {
+				categoryitem.modifyDate = new Date(categoryitem.modifyDate)
+			})
+			$scope.categoryitemsLoadAll.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
 
-		//load categoryitems 
+		//load categoryitems chưa xóa 
 		$http.get("/rest/categories/loadallNoDeleted").then(resp => {
 			$scope.categoryitems = resp.data;
+			$scope.categoryitems.forEach(categoryitem => {
+				categoryitem.modifyDate = new Date(categoryitem.modifyDate)
+			})
+			$scope.categoryitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -206,6 +215,10 @@ app.controller("category-ctrl", function($scope, $http) {
 		//load categoryitems đã xóa
 		$http.get("/rest/categories/loadallDeleted").then(resp => {
 			$scope.categoryitemss = resp.data;
+			$scope.categoryitemss.forEach(categoryitem => {
+				categoryitem.modifyDate = new Date(categoryitem.modifyDate)
+			})
+			$scope.categoryitemss.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -313,22 +326,26 @@ app.controller("category-ctrl", function($scope, $http) {
 			var categoryitem = angular.copy($scope.form);
 			categoryitem.categoryImage = $scope.form.categoryImage;
 			categoryitem.deleted = false;
+			categoryitem.modifyDate = new Date();
 			$http.post('/rest/categories/create', categoryitem).then(resp => {
+				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.categoryitems.push(resp.data);
-				$scope.reset();
 				$scope.errorMessage = '';
 				$scope.messageSuccess = "Thêm mới thành công";
 				$('#errorModal1').modal('show');
 				$scope.initialize();
+				$scope.reset();
 				console.log(resp)
 			}).catch(error => {
 				if (error.status === 400) {
 					$scope.errorMessage = error.data;
 					$scope.initialize();
+					$scope.reset();
 				} else {
 					$scope.errorMessage = "Thêm mới thất bại";
 					$('#errorModal').modal('show');
 					$scope.initialize();
+					$scope.reset();
 					console.log("Error", error);
 				}
 			});
@@ -336,6 +353,7 @@ app.controller("category-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}
 	}
 
@@ -360,12 +378,15 @@ app.controller("category-ctrl", function($scope, $http) {
 
 			var categoryitem = angular.copy($scope.form);
 			categoryitem.categoryImage = $scope.form.categoryImage;
+			categoryitem.modifyDate = new Date();
 			$http.put('/rest/categories/update/' + categoryitem.categoryID, categoryitem).then(resp => {
 				var index = $scope.categoryitems.findIndex(p => p.categoryID == categoryitem.categoryID);
+				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.categoryitems[index] = categoryitem;
 				$scope.messageSuccess = "Cập nhật thành công";
 				$('#errorModal1').modal('show');
 				$scope.initialize();
+				$scope.reset();
 				console.log("categoryitem", categoryitem);
 			}).catch(error => {
 				$scope.errorMessage = "Cập nhật thất bại";
@@ -402,16 +423,20 @@ app.controller("category-ctrl", function($scope, $http) {
 	$scope.confirmHide = function() {
 		var categoryitem = angular.copy($scope.form);
 		categoryitem.deleted = true;
+		categoryitem.modifyDate = new Date();
 		$http.put('/rest/categories/update/' + categoryitem.categoryID, categoryitem).then(resp => {
 			var index = $scope.categoryitems.findIndex(p => p.categoryID == categoryitem.categoryID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.categoryitems[index] = categoryitem;
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
@@ -433,8 +458,10 @@ app.controller("category-ctrl", function($scope, $http) {
 	$scope.restore = function() {
 		var categoryitem = angular.copy($scope.form);
 		categoryitem.deleted = false;
+		categoryitem.modifyDate = new Date();
 		$http.put('/rest/categories/update/' + categoryitem.categoryID, categoryitem).then(resp => {
 			var index = $scope.categoryitemsLoadAll.findIndex(p => p.categoryID == categoryitem.categoryID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.categoryitemsLoadAll[index] = categoryitem;
 
 			// Đóng modal thùng rác
@@ -443,7 +470,7 @@ app.controller("category-ctrl", function($scope, $http) {
 			$scope.messageSuccess = "khôi phục thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
-
+			$scope.reset();
 		}).catch(error => {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
@@ -451,6 +478,7 @@ app.controller("category-ctrl", function($scope, $http) {
 			$scope.errorMessage = "Khôi phục thất bại";
 			$('#errorModal').modal('show');
 			$scope.initialize();
+			$scope.reset();
 			console.log("Error", error);
 		})
 
@@ -476,11 +504,13 @@ app.controller("category-ctrl", function($scope, $http) {
 			$scope.categoryitems.splice(index, 1);
 			$scope.reset();
 			$scope.initialize();
+			$scope.reset();
 			$scope.messageSuccess = "Xóa thành công";
 			$('#errorModal1').modal('show');
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
 			$('#errorModal').modal('show');
+			$scope.reset();
 			console.log("Error", error);
 		});
 
