@@ -153,8 +153,8 @@
 			</div>
 			<div class="form-group col-md-4">
 				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
-				<div ng-model="form.createdDate" class="form-control" id="ngaytao"
-					readonly="true" placeholder="dd-MM-yyyy">{{ form.createdDate
+				<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
+					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
 					| date:'dd-MM-yyyy' }}</div>
 			</div>
 		</div>
@@ -319,8 +319,8 @@
 	<!-- 	thùng rác bắt đầu -->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
+		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+			<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 				<div class="modal-header">
 					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
 					<button class="close modal-close" type="button"
@@ -346,7 +346,7 @@
 						<tbody>
 							<tr ng-repeat="productitem in RestorePager.productitemss">
 								<td>{{productitem.productID}}</td>
-								<td>{{productitem.createdDate | date: 'dd-MM-yyyy'}}</td>
+								<td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 								<td>{{productitem.productName}}</td>
 								<td>{{productitem.price | number: 0 }}đ</td>
 								<td>{{productitem.category.categoryName}}</td>
@@ -421,7 +421,7 @@
 			<tbody>
 				<tr ng-repeat="productitem in pager.productitems">
 					<td>{{productitem.productID}}</td>
-					<td>{{productitem.createdDate | date: 'dd-MM-yyyy'}}</td>
+					<td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 					<td>{{productitem.productName}}</td>
 					<td>{{productitem.price | number: 0 }}đ</td>
 					<td>{{productitem.category.categoryName}}</td>

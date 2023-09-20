@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Review;
@@ -42,5 +43,13 @@ public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId)
     @GetMapping("/rest/reviews/loadbyproducts/{productId}")
 	public List<Review> getProductByProduct(@PathVariable Integer productId) {
 		return reviewService.getProductByProductId(productId);
+	}
+    @GetMapping("/rest/reviews/loadbyusers/{usersId}")
+	public List<Review> getUserByUser(@PathVariable Integer usersId) {
+		return reviewService.getUsersByUsersId(usersId);
+	}
+    @GetMapping("/rest/reviews/loadbystar")
+	public List<Review> getStar(@RequestParam Integer rating) {
+		return reviewService.getReviewByStar(rating);
 	}
 }

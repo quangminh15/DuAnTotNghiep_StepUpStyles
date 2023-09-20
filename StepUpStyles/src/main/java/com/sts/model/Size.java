@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,10 @@ public class Size implements Serializable {
 
 	@Column(name = "size_number")
 	private Float sizeNumber;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "modify_date")
+	private Date modifyDate = new Date();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "size")

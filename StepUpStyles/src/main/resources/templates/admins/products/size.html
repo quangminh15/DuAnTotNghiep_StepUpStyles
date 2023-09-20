@@ -138,18 +138,27 @@
 	<div class="card-header card-header-divider">Size sản phẩm</div>
 	<div class="card-body">
 		<div class="row">
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label for="inputUserName">SizeID:</label> <input
 					class="form-control" id="inputUserName" type="text"
 					ng-model="form.sizeID" readonly="true">
 			</div>
 			<div class="form-group col-md-4">
+				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
+				<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
+					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
+					| date:'dd-MM-yyyy' }}</div>
+			</div>
+		</div>
+		
+		<div class="row">
+		<div class="form-group col-md-6">
 				<label for="inputPassword3">Size giày</label> <input
 					class="form-control" id="inputPassword3" type="number"
 					placeholder="Size giày" required="" ng-model="form.sizeNumber">
 			</div>
 
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-6">
 				<label class="col-form-label text-sm-left">Trạng thái</label>
 				<div class="form-check mt-1">
 					<label class="custom-control custom-radio custom-control-inline">
@@ -248,8 +257,8 @@
 	<!-- 	thùng rác bắt đầu -->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
+		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+			<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 				<div class="modal-header">
 					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
 					<button class="close modal-close" type="button"
@@ -276,6 +285,7 @@
 							<tr ng-repeat="sizeitem in RestorePager.sizeitemss">
 								<td>{{sizeitem.sizeID}}</td>
 								<td>{{sizeitem.sizeNumber}}</td>
+								<td>{{sizeitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 								<td>{{sizeitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 								<td class="actions">
 									<button class="btn btn-space btn btn-primary "
@@ -349,6 +359,7 @@
 				<tr ng-repeat="sizeitem in pager.sizeitems">
 					<td>{{sizeitem.sizeID}}</td>
 					<td>{{sizeitem.sizeNumber}}</td>
+					<td>{{sizeitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 					<td>{{sizeitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 					<td class="actions">
 						<button class="btn btn-space btn btn-primary "
