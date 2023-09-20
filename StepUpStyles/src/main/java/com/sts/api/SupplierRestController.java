@@ -3,7 +3,6 @@ package com.sts.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,34 +49,12 @@ public class SupplierRestController {
         return supplierService.findById(supplierId);
     }
 
-    @PutMapping("/deletedSupplier/{supplierId}")
-    public ResponseEntity<String> deletedSupplier(@PathVariable Long supplierId) {
-        boolean markedAsDeleted = supplierService.markSupplierAsDeleted(supplierId);
-
-        if (markedAsDeleted) {
-            return ResponseEntity.ok("Nhà cung cấp với ID " + supplierId + " đã được đánh dấu là đã xóa.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/historySupplier/{supplierId}")
-    public ResponseEntity<String> historySupplier(@PathVariable Long supplierId) {
-        boolean markedAsHistory = supplierService.markSupplierAsHistory(supplierId);
-
-        if (markedAsHistory) {
-            return ResponseEntity.ok("Nhà cung cấp với ID " + supplierId + " đã được đánh dấu là đã khôi phục.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/deleted")
+    @GetMapping("/nodeleted")
     public List<Supplier> getActiveSuppliers() {
         return supplierService.getDeletedSuppliers();
     }
 
-    @GetMapping("/history")
+    @GetMapping("/deleted")
     public List<Supplier> getHistorySuppliers() {
         return supplierService.getHistorySuppliers();
     }

@@ -1,12 +1,15 @@
 package com.sts.serviceImpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.ImportReceiptDAO;
+import com.sts.dao.ImportReceiptDetailDAO;
 import com.sts.model.ImportReceipt;
+import com.sts.model.ImportReceiptDetail;
 import com.sts.service.ImportReceiptService;
 
 @Service
@@ -14,6 +17,9 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
 
     @Autowired
     ImportReceiptDAO importDao;
+
+    @Autowired
+    ImportReceiptDetailDAO importDetailDao;
 
     @Override
     public List<ImportReceipt> findAll() {
@@ -55,6 +61,16 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
     public ImportReceipt findImportReceiptById(Long importReceiptID) {
         return importDao.findById(importReceiptID)
         .orElse(null);
+    }
+
+    @Override
+    public List<ImportReceiptDetail> getByImport(Long importReceiptId) {
+        ImportReceipt importReceipt = importDao.findById(importReceiptId).orElse(null);
+	    if (importReceipt != null) {
+	        List<ImportReceiptDetail> list = importDetailDao.findByImportReceipt(importReceipt);
+	        return list;
+	    }
+	    return Collections.emptyList();
     }
     
 }

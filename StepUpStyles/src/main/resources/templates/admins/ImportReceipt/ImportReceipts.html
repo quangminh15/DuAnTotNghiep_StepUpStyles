@@ -70,9 +70,9 @@
             </div>
         </div>
     </div>
-
+    <!--Form phiếu nhập-->
     <div class="card-header card-header-divider">Quản lý phiếu nhập</div>
-    <div class="card-body">
+    <div class="card-body" ng-show="showPhieuNhapForm">
         <div class="row">
             <div class="form-group col-md-6">
                 <label for="inputUserName">Tên người nhập:</label>
@@ -106,19 +106,151 @@
         <div class="row pt-0 pt-sm-5">
             <div class="col-sm-12 pl-0">
                 <p class="text-right">
+                    <button class="btn btn-space btn btn-primary" type="submit"
+                        ng-click="showPhieuNhapForm = false; showChiTietForm = true">
+                        <i class="bi bi-arrow-left"></i>Thêm chi tiết
+                    </button>
                     <button class="btn btn-space btn btn-success" ng-click="create()" type="submit"><i
                             class="bi bi-file-plus-fill"></i>Thêm</button>
-                    <button class="btn btn-space btn btn-primary" ng-click="update()"><i
-                            class="bi bi-pencil-square"></i>Sửa</button>
-                    <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal()" type="submit"><i
-                            class="bi bi-trash3-fill"></i>Xóa</button>
                     <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
                             class="bi bi-arrow-clockwise"></i>Làm mới</button>
                 </p>
             </div>
         </div>
-
     </div>
+    <!--Form chi tiết phiếu nhập-->
+    <div class="card-body" ng-show="showChiTietForm">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>Phiếu nhập</label>
+                <div>
+                    <select class="select2 form-control" ng-model="form.importReceipt.importReceiptId">
+                        <option value="" disabled selected>Vui lòng chọn phiếu nhập</option>
+                        <option ng-repeat="p in items" ng-value="p.importReceiptId">{{p.importReceiptId}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Sản phẩm</label>
+                <div>
+                    <!-- <select class="select2 form-control" ng-model="form.productDetail.productDetailID">
+                        <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+                        <option ng-repeat="p in uniqueProducts(prods) track by p.productDetailID"
+                                ng-value="p.productDetailID">
+                            {{p.product.productName}}
+                        </option>
+                    </select> -->
+                    <select class="select2 form-control" ng-model="form.productDetail.productDetailID">
+                        <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+                        <option ng-repeat="p in prods" ng-value="p.productDetailID">
+                            {{p.product.productName}} ({{p.color.colorName}}) ({{p.size.sizeNumber}})
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="form-group col-md-6">
+                <label>Size</label>
+                <div>
+                    <select class="select2 form-control" ng-model="form.productDetail.size.sizeID">
+                        <option value="" disabled selected>Vui lòng chọn size</option>
+                        <option ng-repeat="p in prods" ng-value="p.size.sizeID">{{p.size.sizeNumber}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Màu sắc</label>
+                <div>
+                    <select class="select2 form-control" ng-model="form.productDetail.color.colorID">
+                        <option value="" disabled selected>Vui lòng chọn màu sắc</option>
+                        <option ng-repeat="p in prods" ng-value="p.color.colorID">{{p.color.colorName}}</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword3">Số lượng</label>
+                <input class="form-control" id="inputPassword3" type="text" placeholder="Số lượng" required=""
+                    ng-model="form.quantity">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Đơn giá</label>
+                <input class="form-control" id="inputPassword4" type="text" placeholder="Đơn giá" required=""
+                    ng-model="form.price">
+            </div>
+        </div>
+
+        <div class="row pt-0 pt-sm-5">
+            <div class="col-sm-12 pl-0">
+                <p class="text-right">
+                    <button class="btn btn-space btn btn-primary"
+                        ng-click="showPhieuNhapForm = true; showChiTietForm = false" type="submit"><i class="bi bi-arrow-left"></i>Thêm phiếu nhập</button>
+                    <button class="btn btn-space btn btn-success" ng-click="createDetail()" type="submit"><i
+                            class="bi bi-file-plus-fill"></i>Thêm</button>
+                    <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
+                            class="bi bi-arrow-clockwise"></i>Làm mới</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--Form chi tiết phiếu nhập kết thúc-->
+
+    <!-- Modal hiển thị chi tiết phiếu nhập -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Chi tiết phiếu nhập</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div ng-if="importDetail.length > 0">
+                        <b>
+                            <h3 style="text-align: center;">Phiếu nhập {{importDetail[0].importReceipt.importReceiptId}}
+                            </h3>
+                        </b>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Size</th>
+                            <th>Màu sắc</th>
+                            <th>Đơn giá</th>
+                        </tr>
+                        <tr ng-repeat="item in importDetail">
+                            <td>{{item.productDetail.product.productName}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.productDetail.size.sizeNumber}}</td>
+                            <td>{{item.productDetail.color.colorName}}</td>
+                            <td>{{formatToVND(item.price)}}</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <div class="text-right" ng-if="importDetail.length > 0">
+                        <b>
+                            <h3>Tổng tiền: {{formatToVND(importDetail[0].importReceipt.totalAmount)}}</h3>
+                        </b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button>Xuất PDF</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="card card-table m-3">
@@ -128,7 +260,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th>ID phiếu nhập</th>
                     <th>Tên người nhập</th>
                     <th>Tên nhà cung cấp</th>
                     <th>Tổng tiền</th>
@@ -138,7 +270,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in pager.items">
-                    <td>{{$index + 1}}</td>
+                    <td>{{item.importReceiptId}}</td>
                     <td>{{item.user.fullName}}</td>
                     <td>{{item.supplier.supplierName}}</td>
                     <td>{{ formatToVND(item.totalAmount) }}</td>
@@ -147,60 +279,11 @@
                         <button class="btn btn-space btn btn-primary" ng-click="edit(item)">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal1(item)">
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
-                        <button class="btn btn-space btn btn-success" ng-click="openCreateDetail(item)">
-                            <i class="bi bi-brush"></i>
-                        </button>
-                        
-                        <button class="btn btn-space btn btn-dark">
+                        <button class="btn btn-space btn btn-dark" ng-click="loadImportDetail(item.importReceiptId)">
                             <i class="bi bi-eye"></i>
                         </button>
                     </td>
                 </tr>
-                <!-- them chi tiet phieu nhap  -->
-                <div class="modal fade" id="createDetail" tabindex="-1" aria-labelledby="createDetail1"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header modal-header-colored" style="background-color: rgb(76, 186, 76);">
-                                <h3 class="modal-title" style="color: white;"><b>Nhập chi tiết phiếu nhập</b></h3>
-                                <button class="close md-close" type="button" data-dismiss="modal"
-                                    aria-hidden="true"><span class="mdi mdi-close"> </span></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <h4><b>Phieu nhap</b></h4>
-                                    <input class="form-control" type="text" ng-model="form.importReceipt.importReceiptId">
-                                </div>
-                                <div class="form-group">
-                                    <h4><b>Sản phẩm</b></h4>
-                                    <div>
-                                        <select class="select2 form-control" ng-model="form.product.productID">
-                                            <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-                                            <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <h4><b>Số lượng</b></h4>
-                                    <input class="form-control" type="text" ng-model="form.quantity">
-                                </div>
-                                <div class="form-group">
-                                    <h4><b>Đơn giá</b></h4>
-                                    <input class="form-control" type="text" ng-model="form.price">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary md-close" type="button"
-                                    data-dismiss="modal">Hủy</button>
-                                <button class="btn btn-primary md-close" style="background-color: rgb(76, 186, 76);" type="button"
-                                    data-dismiss="modal">Thêm</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </tbody>
         </table>
         <div class="card-header d-flex justify-content-end">

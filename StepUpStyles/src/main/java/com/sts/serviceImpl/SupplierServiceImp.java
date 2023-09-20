@@ -1,7 +1,6 @@
 package com.sts.serviceImpl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,19 +41,6 @@ public class SupplierServiceImp implements SupplierService {
     }
 
     @Override
-    public boolean markSupplierAsDeleted(Long supplierId) {
-        Optional<Supplier> optionalSupplier = supDao.findById(supplierId);
-
-        if (optionalSupplier.isPresent()) {
-            Supplier supplier = optionalSupplier.get();
-            supplier.setDeleted(true);
-            supDao.save(supplier);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public List<Supplier> getDeletedSuppliers() {
         return supDao.findByDeletedFalse();
     }
@@ -67,18 +53,5 @@ public class SupplierServiceImp implements SupplierService {
     @Override
     public List<Supplier> getHistorySuppliers() {
         return supDao.findByDeletedTrue();
-    }
-
-    @Override
-    public boolean markSupplierAsHistory(Long supplierId) {
-        Optional<Supplier> optionalSupplier = supDao.findById(supplierId);
-
-        if (optionalSupplier.isPresent()) {
-            Supplier supplier = optionalSupplier.get();
-            supplier.setDeleted(false);
-            supDao.save(supplier);
-            return true;
-        }
-        return false;
     }
 }

@@ -17,6 +17,7 @@ import com.sts.dao.ImportReceiptDAO;
 import com.sts.model.ImportReceipt;
 import com.sts.model.ImportReceiptDetail;
 import com.sts.service.ImportReceiptDetailService;
+import com.sts.service.ImportReceiptService;
 
 @CrossOrigin
 @RestController
@@ -27,6 +28,9 @@ public class ImportReceiptDetailRestController {
 
     @Autowired
     ImportReceiptDAO importDao;
+
+    @Autowired
+    ImportReceiptService importService;
 
     @GetMapping
     public List<ImportReceiptDetail> getAll(){
@@ -47,4 +51,9 @@ public class ImportReceiptDetailRestController {
     public ImportReceiptDetail createDetail(@RequestBody ImportReceiptDetail importReceiptDetail){
         return importReceiptDetailService.create(importReceiptDetail);
     }
+
+    @GetMapping("/getImportDetails/{importReceiptId}")
+	public List<ImportReceiptDetail> getOrderID(@PathVariable("importReceiptId") Long importReceiptId) {
+		return importService.getByImport(importReceiptId);
+	}
 }
