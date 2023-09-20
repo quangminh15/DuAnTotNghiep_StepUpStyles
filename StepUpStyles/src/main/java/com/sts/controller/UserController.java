@@ -47,4 +47,10 @@ public class UserController {
 
 		return "users/checkout";
 	}
+
+	@RequestMapping("/login")
+	public String login(Model model) {
+
+		return "users/LoginSTS";
+	}
 }
