@@ -1,1 +1,15 @@
 /* style.css */
+.dienra {
+    color: green;
+    /* Màu xanh cho trạng thái "Đang diễn ra" */
+}
+
+.chuadien {
+    color: #CD853F;
+    /* Màu vàng cho trạng thái "Chưa diễn ra" */
+}
+
+.ketthuc {
+    color: red;
+    /* Màu đỏ cho trạng thái "Đã kết thúc" */
+}
