@@ -14,10 +14,14 @@ public interface FavoriteService {
 	List<Favorite> findAll();
 
 	// Favorite create(Integer userId, Integer productId);
-    Favorite create(Favorite favorite);
+    Favorite create(Integer productId, Integer usersId);
 
 	Favorite update(Favorite favorite);
 
     void delete(User user, Product product);
+
+    Favorite getUserAndProductFavorite(Integer usersId, Integer productId);
+
+    void deleteById(Integer favorateId);
 
 }

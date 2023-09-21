@@ -48,8 +48,14 @@ public class ImportReceiptRestController {
         importService.deleteById(importReceiptId);
     }
     
-    @PutMapping("/ImportReceipt/{importReceiptID}")
+    @PutMapping("/updateTotal/{importReceiptId}")
     public ImportReceipt updateImportReceiptTotalAmount(@PathVariable Long importReceiptId, @RequestBody ImportReceipt importReceipt) {
         return importService.updateTotalAmount(importReceiptId, importReceipt);
+    }
+
+    @GetMapping("/findIdImportReceipt/{importReceiptID}")
+    public ImportReceipt findImportReceiptById(@PathVariable Long importReceiptID) {
+        ImportReceipt importReceipt = importService.findImportReceiptById(importReceiptID);
+        return importReceipt;
     }
 }

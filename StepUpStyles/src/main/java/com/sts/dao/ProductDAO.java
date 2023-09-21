@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.sts.model.Category;
 import com.sts.model.Product;
 
 public interface ProductDAO extends JpaRepository<Product, Integer>{
@@ -17,4 +18,6 @@ public interface ProductDAO extends JpaRepository<Product, Integer>{
 
 	@Query("SELECT c FROM Product c WHERE c.deleted = false")
 	List<Product> loadAllNoDeleted();
+
+	Long countByCategory(Category category);
 }

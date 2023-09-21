@@ -12,6 +12,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	
 	$scope.sortableColumns = [
 		{ name: 'productDetailID', label: 'Mã chi tiết' },
+		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'color.colorName', label: 'Tên màu' },
 		{ name: 'size.sizeNumber', label: 'Size' },
@@ -181,6 +182,10 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		//load productdetailitems hết luôn
 		$http.get("/rest/productdetails/loadall").then(resp => {
 			$scope.productdetailitemsLoadAll = resp.data;
+			$scope.productdetailitemsLoadAll.forEach(productdetailitem => {
+				productdetailitem.modifyDate = new Date(productdetailitem.modifyDate)
+			})
+			$scope.productdetailitemsLoadAll.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -188,6 +193,10 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		//load productdetailitems 
 		$http.get("/rest/productdetails/loadallNoDeleted").then(resp => {
 			$scope.productdetailitems = resp.data;
+			$scope.productdetailitems.forEach(productdetailitem => {
+				productdetailitem.modifyDate = new Date(productdetailitem.modifyDate)
+			})
+			$scope.productdetailitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -195,6 +204,10 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		//load productdetailitems đã xóa
 		$http.get("/rest/productdetails/loadallDeleted").then(resp => {
 			$scope.productdetailitemss = resp.data;
+			$scope.productdetailitemss.forEach(productdetailitem => {
+				productdetailitem.modifyDate = new Date(productdetailitem.modifyDate)
+			})
+			$scope.productdetailitemss.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});
@@ -204,7 +217,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 			$scope.prods = resp.data;
 			console.log($scope.prods)
 			$scope.prods.forEach(productitem => {
-				productitem.createDate = new Date(productitem.createDate)
+				productitem.modifyDate = new Date(productitem.modifyDate)
 			})
 			$scope.pager.first();
 		});
@@ -212,12 +225,18 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		//load color
 		$http.get("/rest/colors/loadallNoDeleted").then(resp => {
 			$scope.cols = resp.data;
+			$scope.cols.forEach(coloritem => {
+				coloritem.modifyDate = new Date(coloritem.modifyDate)
+			})
 			$scope.pager.first();
 		});
 		
 		//load size
 		$http.get("/rest/sizes/loadallNoDeleted").then(resp => {
 			$scope.sizs = resp.data;
+			$scope.sizs.forEach(sizeitem => {
+				sizeitem.modifyDate = new Date(sizeitem.modifyDate)
+			})
 			$scope.pager.first();
 		});
 	}
@@ -349,13 +368,16 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 
 		var productdetailitem = angular.copy($scope.form);
 		productdetailitem.deleted = false;
+		productdetailitem.modifyDate = new Date();
 		$http.post('/rest/productdetails/create', productdetailitem).then(resp => {
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.productdetailitems.push(resp.data);
 			$scope.reset();
 			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
 			$scope.messageSuccess = "Thêm mới thành công";
 			$('#errorModal1').modal('show'); // Show the modal
 			$scope.initialize();
+			$scope.reset();
 		}).catch(error => {
 			if (error.status === 400) {
 				$scope.errorMessage = error.data;

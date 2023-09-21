@@ -39,8 +39,8 @@ public class Product implements Serializable {
 	private Boolean activities;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "created_date")
-	private Date createdDate = new Date();
+	@Column(name = "modify_date")
+	private Date modifyDate = new Date();
 
 	private Boolean deleted;
 

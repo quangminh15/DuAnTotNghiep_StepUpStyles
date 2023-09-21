@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,10 @@ public class Color implements Serializable {
 	private String colorName;
 
 	private Boolean deleted;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "modify_date")
+	private Date modifyDate = new Date();
 
 	@JsonIgnore														
 	@OneToMany(mappedBy = "color", fetch = FetchType.EAGER)

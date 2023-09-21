@@ -1,6 +1,7 @@
 package com.sts.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +33,10 @@ public class ProductImage implements Serializable {
 
 	@Column(name = "image_path")
 	private String imagePath;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "modify_date")
+	private Date modifyDate = new Date();
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")

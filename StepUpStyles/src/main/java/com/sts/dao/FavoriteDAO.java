@@ -17,4 +17,7 @@ public interface FavoriteDAO extends JpaRepository<Favorite, Integer>{
 
     @Query("SELECT f FROM Favorite f WHERE f.user.usersId=?1")
     List<Favorite> findByUserId(Integer usersId);
+
+    @Query("SELECT f FROM Favorite f WHERE f.user.usersId=?1 and f.product.productID=?2")
+    Favorite findByUserAndProduct(Integer usersId, Integer productID);
 }

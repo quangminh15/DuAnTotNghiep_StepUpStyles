@@ -47,7 +47,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void delete(Integer categoryID) {
 		cateDAO.deleteById(categoryID);
-
 	}
 
 	@Override

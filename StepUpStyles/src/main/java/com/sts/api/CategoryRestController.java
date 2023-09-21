@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Category;
 import com.sts.service.CategoryService;
-
+import com.sts.service.ProductService;
 
 @CrossOrigin("*")
 @RestController
@@ -23,6 +23,9 @@ public class CategoryRestController {
 	@Autowired
 	CategoryService categoryService;
 	
+	@Autowired
+	ProductService productService;
+
 	@GetMapping("/rest/categories/{categoryID}")
 	public Category getOne(@PathVariable("categoryID") Integer categoryID) {
 		return categoryService.findById(categoryID);
@@ -32,12 +35,12 @@ public class CategoryRestController {
 	public List<Category> getAll() {
 		return categoryService.findAll();
 	}
-	
+
 	@GetMapping("/rest/categories/loadallDeleted")
 	public List<Category> getAllDeleted() {
 		return categoryService.loadAllDeleted();
 	}
-	
+
 	@GetMapping("/rest/categories/loadallNoDeleted")
 	public List<Category> getAllNoDeleted() {
 		return categoryService.loadAllNoDeleted();
@@ -57,9 +60,9 @@ public class CategoryRestController {
 	public void delete(@PathVariable("categoryID") Integer categoryID) {
 		categoryService.delete(categoryID);
 	}
-	
+
 	@GetMapping("/rest/categories/search")
-    public List<Category> searchColorByName(@RequestParam("keyword") String keyword) {
-        return categoryService.searchByName(keyword);
-    }
+	public List<Category> searchColorByName(@RequestParam("keyword") String keyword) {
+		return categoryService.searchByName(keyword);
+	}
 }
