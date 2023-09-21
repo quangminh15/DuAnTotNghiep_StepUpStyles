@@ -34,6 +34,7 @@
 	<link rel="stylesheet" href="/asset/user/css/cart/flaticon.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/icomoon.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/style.css">
+	
 	<!-- END nav -->
 
 	<div class="hero-wrap hero-bread"
@@ -44,7 +45,7 @@
 					<p class="breadcrumbs"><span class="mr-2"><a th:href="@{/index}">Trang Chủ</a></span> > <span>Giỏ
 							Hàng</span>
 					</p>
-					<h1 class="mb-0 bread">THANH TOÁN</h1>
+					<h1 class="mb-0 bread" >THANH TOÁN</h1>
 				</div>
 			</div>
 		</div>
@@ -57,7 +58,7 @@
 					<div style="border-top: 3px tomato solid;" class="cart-total mb-3">
 						<div class="row">
 							<div class="col-lg-9">
-
+								
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
 								<h3>{{addressDefault.user.fullName}} | 09089765989 <span class="badge badge-danger">Mặc
@@ -91,7 +92,7 @@
 								<div class="row card-body" ng-repeat="addr in address ">
 									<div class="form-check col-lg-1">
 										<input class="form-check-input mg-2" ng-checked="addr.defaultAddress" type="radio" name="exampleRadios"
-											id="exampleRadios1" value="option1" checked>
+											 ng-value="addressDefault.defaultAddress" ng-model="addr.defaultAddress" ng-change="updateDefault(addr.shippingAddressId)">
 									</div>
 									<div class="col-lg-8">
 
@@ -117,10 +118,10 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
+									<a type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalAddress" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
 								</div>
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-danger" data-dismiss="modal">Close</a>
+									<a type="button" class="btn btn-danger"  data-dismiss="modal">Close</a>
 								</div>
 							</div>
 
@@ -128,6 +129,95 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- *************************************Form address************************************* -->
+			<div class="container " >
+				<!-- The Modal -->
+				<div class="modal fade" id="ModalAddress" data-keyboard="false" data-backdrop="static">
+					<div class="modal-dialog modal-md">
+						<div class="modal-content">
+
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title">Địa chỉ mới <br><p>Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</p></h4>
+								
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								
+							</div>
+
+							<!-- Modal body -->
+							<div class="modal-body " >
+								<div class=" card-body cart-wrap  ftco-animate" >
+									<form action="#" class="info .ftco-cart">
+										<div class="row">
+
+											<div class="form-group col-lg-6 col-md-6 col-sm-12">
+												<label for="">Họ Tên</label>
+												<input ng-model="name" type="text" class="form-control text-left px-3" placeholder="">
+											</div>
+											<div class="form-group col-lg-6 col-md-6 col-sm-12">
+												<label for="">Số Điện Thoại</label>
+												<input ng-model="phone" type="text" class="form-control text-left px-3" placeholder="">
+											</div>
+
+										</div>
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg address" id="province"
+												ng-model="selectedProvince"
+												ng-options="province.ProvinceName for province in provinces"
+												ng-change="loadDistricts()"
+												>
+												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Quận/Huyện</label>
+											<select class="form-control form-control-lg" id="district"
+												ng-model="selectedDistrict"
+												ng-options="district.DistrictName for district in selectedProvince.Districts"
+												ng-change="loadWards()"
+												ng-disabled="selectedProvince.Districts==null">
+												<option value="" disabled selected>Chọn Quận/Huyện</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Phường/Xã</label>
+											<select class="form-control form-control-lg" id="ward"
+												ng-model="selectedWard"
+												ng-options="ward.WardName for ward in selectedDistrict.Wards">
+												<option value="" disabled selected>Chọn Phường/Xã</option>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label for="comment">Địa chỉ cụ thể:</label>
+											<textarea ng-model="addressDetail" class="form-control text-left px-3"  rows="5" id="comment"></textarea>
+										  </div>
+										
+										<input ng-model="checked" ng-disabled="check!=true" class="check" type="checkbox" ng-checked="check==false">
+										<label data-toggle="tooltip" data-placement="top" title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặt định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này" for="check"> Đặt Làm Mặc Định</label>
+									</form>
+
+								</div>
+
+							</div>
+
+							<!-- Modal footer -->
+							<div class="modal-footer" style=" justify-content: start">
+								<div style=" justify-content: start">
+									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(checked,name,phone,addressDetail)"><i class="fa fa-plus"></i> Luu</a>
+								</div>
+								<div style=" justify-content: start">
+									<a type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#myModal">Close</a>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="row">
 				<!-- <div class="col-lg-6  cart-wrap ftco-animate">
 

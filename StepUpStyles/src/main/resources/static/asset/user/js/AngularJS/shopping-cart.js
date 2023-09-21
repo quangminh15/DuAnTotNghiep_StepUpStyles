@@ -5,15 +5,16 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.prods = [];
 	$scope.cartitems = [];
 	$scope.selectedColors = {};
-
+	$scope.cout=0
 	//Load data
 	$scope.initialize = function () {
 
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;
-				// console.log(cartItems);
-
+				 console.log(cartItems);
+				 
+				$scope.updateCount(cartItems.length)
 				// Initialize the disabledColors object
 				$scope.disabledSizes = {};
 
@@ -34,7 +35,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/sizes?prodID=${productId}&colorID=${colorId}`)
 						.then(sizeResp => {
 							cartItem.sizes = sizeResp.data;
-							console.log(cartItem.sizes)
+							console.log("size",cartItem.sizes)
 
 							if (!$scope.disabledSizes[productId]) {
 								$scope.disabledSizes[productId] = {};
@@ -53,7 +54,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/colors?prodID=${productId}&sizeID=${sizeId}`)
 						.then(colorResp => {
 							cartItem.colors = colorResp.data;
-							console.log(cartItem.colors)
+							console.log("color",cartItem.colors)
 
 							// Set disabled colors for the product
 							if (!$scope.disabledColors[productId]) {
@@ -157,7 +158,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			value.isSelected = false;
 		});
 	}
-
+	
+$scope.updateCount = function (newCount) {
+    $scope.count = newCount;
+    console.log($scope.count);
+};
 	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
 
@@ -166,6 +171,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			// Thì gán thằng biến lên URL --> truyền data cho @RequestParam(...)
 			.then(function (response) {
 				console.log('Added to cart: ');
+				$scope.initialize()
 				// $scope.itemQuantity = qty;
 				// $scope.showAlert = true;
 				// alert("Đã thêm "+qty+" sản phẩm giỏ hàng")

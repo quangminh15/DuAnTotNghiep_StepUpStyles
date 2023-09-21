@@ -28,5 +28,17 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
         
         return shipAddressDao.findByUserAndDefault(userId);
     }
+
+    @Override
+    public void updateDefault(Integer shipid) {
+      shipAddressDao.updateDefault(1, shipid);
+    }
+
+    @Override
+    public void createAddress(int userId, boolean defaultCheck, String province, String district, String ward, String addressDetail,
+        String nameReceiver, String phoneReceiver) {
+      // TODO Auto-generated method stub
+      shipAddressDao.createAddress(userId, defaultCheck, province, district, ward,addressDetail, nameReceiver, phoneReceiver);
+    }
     
 }

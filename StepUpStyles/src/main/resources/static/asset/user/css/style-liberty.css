@@ -3611,6 +3611,7 @@ Author URL: http://w3layouts.com
  .w3l-banner-slider-main .search-right a {
    color: #fff;
    font-size: 20px;
+   font-weight: 600;
  }
  
  .w3l-banner-slider-main .search-right .popup form input[type="search"] {
@@ -3854,7 +3855,7 @@ Author URL: http://w3layouts.com
    color: #fff;
    text-transform: uppercase;
    font-weight: 600;
-   font-size: 14px;
+   font-size: 20px;
  }
  
  .w3l-banner-slider-main li.nav-item {
@@ -3989,7 +3990,8 @@ Author URL: http://w3layouts.com
    }
  
    .w3l-banner-slider-main .search-right a {
-     font-size: 16px;
+     font-size: 20px;
+     font-weight: 600;
    }
  
    .w3l-banner-slider-main .search-right {
@@ -4591,7 +4593,7 @@ Author URL: http://w3layouts.com
    color: #fff;
    font-weight: 600;
    font-family: 'Lato', sans-serif;
-   font-size: 16px;
+   font-size: 20px;
    text-transform: capitalize;
    background: rgba(255, 255, 255, 0.141);
    padding: 6px 20px;
