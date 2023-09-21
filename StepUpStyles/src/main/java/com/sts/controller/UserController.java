@@ -1,11 +1,16 @@
 package com.sts.controller;
 
+import com.sts.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserController {
+	@Autowired
+	UserService userService;
+
 	@RequestMapping("/index")
 	public String index(Model model) {
 
@@ -38,7 +43,6 @@ public class UserController {
 
 	@RequestMapping("/cart")
 	public String cart(Model model) {
-
 		return "users/cart";
 	}
 
@@ -48,9 +52,21 @@ public class UserController {
 		return "users/checkout";
 	}
 
-	@RequestMapping("/login")
+	@RequestMapping("/loginSTS")
 	public String login(Model model) {
 
+		return "users/LoginSTS";
+	}
+
+	@RequestMapping("/accessdenied")
+	public String ad(Model model) {
+		model.addAttribute("messageLoginFail", "Access denied");
+		return "users/LoginSTS";
+	}
+
+	@RequestMapping("/login/error")
+	public String ad2(Model model) {
+		model.addAttribute("messageLoginFail", "Thông tin chưa đúng");
 		return "users/LoginSTS";
 	}
 }
