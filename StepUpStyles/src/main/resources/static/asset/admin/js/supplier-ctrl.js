@@ -1,5 +1,7 @@
 app.controller("supplier-ctrl", function($scope, $http){
     $scope.items = [];
+	$scope.itemss = [];
+	$scope.itemsss = [];
 	$scope.form = {
         supplierName: '',
         phone: '',
@@ -10,14 +12,27 @@ app.controller("supplier-ctrl", function($scope, $http){
     };
 
     $scope.initialize = function () {
-		// Load suppliers
-		$http.get("/rest/supplier/deleted").then(resp => {
+		//load all supplier
+		$http.get("/rest/supplier").then(resp => {
 			$scope.items = resp.data;
 			$scope.pager.first();
+			$scope.RestorePager.first();
 			
-		}).catch(error => {
-			console.log("Error fetching suppliers:", error);
-			// Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi)
+		});
+
+		//load supplier deleted
+		$http.get("/rest/supplier/deleted").then(resp => {
+			$scope.itemsss = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
+			
+		});
+
+		//load supplier no deleted
+		$http.get("/rest/supplier/nodeleted").then(resp => {
+			$scope.itemss = resp.data;
+			$scope.pager.first();
+			$scope.RestorePager.first();
 		});
 	}
 
@@ -80,6 +95,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 			let data = response.data;
 			$scope.items.push(data);
 			$scope.reset();
+			$scope.initialize();
 			$scope.messageSuccess = "Thêm thành công nhà cung cấp";
 			$('#errorModal1').modal('show'); // Show the modal
 		}).catch(error => {
@@ -125,18 +141,78 @@ app.controller("supplier-ctrl", function($scope, $http){
 		})
 	}
 
-	//hàm xóa tạm thời
-	$scope.deleted = function(supplierId) {
-		$http.put('/rest/supplier/deletedSupplier/' + supplierId).then(resp => {
-			var index = $scope.items.findIndex(p => p.supplierId == supplierId);
-			$scope.items.splice(index, 1); // Xóa mục khỏi danh sách
-			$scope.messageSuccess = "Xóa thành công nhà cung cấp";
-			$('#errorModal1').modal('show'); // Hiển thị modal
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(item) {
+		$scope.form = angular.copy(item);
+		$('#confirmHideModal').modal('show');
+	}
+	//Xóa vào thùng rác
+	$scope.confirmHide = function() {
+		var item = angular.copy($scope.form);
+		item.deleted = true;
+		$http.put('/rest/supplier/updateSupp/' + item.supplierId, item).then(resp => {
+			var index = $scope.itemss.findIndex(p => p.supplierId == item.supplierId);
+			$scope.itemss[index] = item;
+			$scope.messageSuccess = "Xóa thành công";
+			$scope.reset();
+			$('#errorModal1').modal('show');
+			$scope.initialize();
 		}).catch(error => {
-			alert("Lỗi xóa");
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
 			console.log("Error", error);
-		});
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Mở modal thùng rác
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
 	};
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(item) {
+		$scope.form = angular.copy(item);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var item = angular.copy($scope.form);
+		item.deleted = false;
+		$http.put('/rest/supplier/updateSupp/' + item.supplierId, item).then(resp => {
+			var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
+			$scope.items[index] = item;
+			$scope.reset();
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
 
 	//search
 	$scope.searchByName = function(){
@@ -144,7 +220,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 			$http.get("/rest/supplier/searchSupplier", {
 				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
-				$scope.items = resp.data;
+				$scope.itemss = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
 				console.log("Error", error);
@@ -177,6 +253,36 @@ app.controller("supplier-ctrl", function($scope, $http){
 		$('#confirmDeleteModal').modal('hide');
 	}
 
+	//Gọi đến modal xác nhận để xóa luôn
+	$scope.confirmDeleteModal1 = function(item) {
+		$scope.form = angular.copy(item);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmDeleteModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa luôn
+	$scope.confirmDelete = function() {
+		// Thực hiện xóa
+		$http.delete('/rest/supplier/removeSupp/' + $scope.form.supplierId).then(resp => {
+			var index = $scope.itemss.findIndex(p => p.supplierId == $scope.form.supplierId);
+			$scope.itemss.splice(index, 1);
+			$scope.reset();
+			$scope.initialize();
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			console.log("Error", error);
+		});
+
+		// Đóng modal xác nhận xóa
+		$('#confirmDeleteModal').modal('hide');
+	}
+
     //xoa form
     $scope.reset = function () {
 		$scope.form = {
@@ -189,7 +295,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 		$scope.form = angular.copy(item);
 	}
 
-    //	Phân trang
+    //Phân trang
 	$scope.pager = {
 		page: 0,
 		size: 5,
@@ -211,20 +317,18 @@ app.controller("supplier-ctrl", function($scope, $http){
 					visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
 				}
 			}
-			console.log('visiblePages', visiblePages);
 			return visiblePages;
 		},
-		get items() {
+		get itemss() {
 			var start = this.page * this.size;
-			return $scope.items.slice(start, start + this.size);
+			return $scope.itemss.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.items.length / this.size);
+			return Math.ceil(1.0 * $scope.itemss.length / this.size);
 		},
 		first() {
 			this.page = 0;
 			$scope.visiblePages = this.getPageNumbers();
-			console.log('Đã click nút first');
 		},
 		prev() {
 			this.page--;
@@ -248,6 +352,67 @@ app.controller("supplier-ctrl", function($scope, $http){
 			if (pageNumber >= 1 && pageNumber <= this.count) {
 				this.page = pageNumber - 1;
 				$scope.visiblePages = this.getPageNumbers();
+			}
+		},
+	};
+
+	//	Phân trang đã xóa
+	$scope.RestorePager = {
+		page: 0,
+		size: 5,
+		getRestorePageNumbers: function() {
+			var RestorePageCount = this.count;
+			var RestoreCurrentPage = this.page + 1;
+			var RestoreVisiblePages = [];
+
+			if (RestorePageCount <= 3) {
+				for (var i = 1; i <= RestorePageCount; i++) {
+					RestoreVisiblePages.push({ value: i });
+				}
+			} else {
+				if (RestoreCurrentPage <= 2) {
+					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
+				} else {
+					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return RestoreVisiblePages;
+		},
+		get itemsss() {
+			var start = this.page * this.size;
+			return $scope.itemsss.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.itemsss.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
+		},
+		RestoreGoto(RestorePageNumber) {
+			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
+				this.page = RestorePageNumber - 1;
+				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 			}
 		},
 	};

@@ -50,20 +50,65 @@
         </div>
     </div>
 
-    <!-- modal xác nhận -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-        aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <!-- modal xác nhận xóa vào thùng rác-->
+    <div class="modal fade" id="confirmHideModal" tabindex="-1" role="dialog" aria-labelledby="confirmHideModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
+                    <h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
                         xóa</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">Bạn có chắc chắn muốn xóa nhà cung cấp
-                    "{{ form.supplierName }}" này không?</div>
+                <div class="modal-body">Bạn có chắc chắn muốn xóa nhà cung cấp "{{
+                    form.supplierName }}" này không?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" ng-click="confirmHide()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal xác nhận khôi phục item từ thùng rác-->
+    <div class="modal fade" id="confirmRestoreModal" tabindex="-1" role="dialog"
+        aria-labelledby="confirmRestoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmRestoreModalLabel">Xác nhận
+                        khôi phục</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Bạn có chắc chắn muốn khôi phục sản
+                    phẩm "{{ form.supplierName }}" này không?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" ng-click="restore()">Khôi
+                        phục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal xác nhận xóa luôn-->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmHideModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
+                        xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Bạn có chắc chắn muốn xóa sản phẩm "{{
+                    form.supplierName }}" này không?</div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
@@ -72,6 +117,83 @@
         </div>
     </div>
 
+    <!-- 	thùng rác bắt đầu -->
+    <div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #eee;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên nhà cung cấp</th>
+                                <th>Địa chỉ</th>
+                                <th>Số điện thoại</th>
+                                <th>Email</th>
+                                <th>Hiển thị</th>
+                                <th class="actions"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in RestorePager.itemsss">
+                                <td>{{$index + 1}}</td>
+                                <td>{{item.supplierName}}</td>
+                                <td>{{item.addresss}}</td>
+                                <td>{{item.phone}}</td>
+                                <td>{{item.email}}</td>
+                                <td>{{item.display? 'Bật':'Tắt'}}</td>
+                                <td class="actions">
+									<button class="btn btn-space btn btn-primary "
+										ng-click="confirmRestoreModal1(item)">
+										<i class="mdi mdi-refresh-alt"></i>
+									</button>
+									<button class="btn btn-space btn btn-danger "
+										ng-click="confirmDeleteModal1(item)">
+										<i class="bi bi-trash3-fill"></i>
+									</button>
+								</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="card-header d-flex justify-content-end">
+                        <div>
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <button style="font-size: 25px" ng-click="RestorePager.first()" class="page-link">
+                                        <span class="mdi mdi-skip-previous"></span>
+                                    </button>
+                                </li>
+
+                                <li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+                                    ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
+                                        class="page-link" href=""
+                                        ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+                                        RestorePage.value }}</a></li>
+
+
+                                <li class="page-item">
+                                    <button style="font-size: 25px" ng-click="RestorePager.last()" class="page-link">
+                                        <span class="mdi mdi-skip-next"></span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: #eee;">
+                    <button class="btn btn-secondary modal-close" type="button" data-dismiss="modal">Hủy</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- thùng rác kết thúc -->
 
     <div class="card-header card-header-divider">Quản lý nhà cung cấp</div>
     <div class="card-body">
@@ -123,6 +245,8 @@
                             class="bi bi-trash3-fill"></i>Xóa</button>
                     <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
                             class="bi bi-arrow-clockwise"></i>Làm mới</button>
+                    <button class="btn btn-space btn btn-warning" ng-click="openRecycleBinForm()"><i
+                            class="bi bi-clock-history"></i>Lịch sử xóa</button>
                 </p>
             </div>
         </div>
@@ -137,11 +261,12 @@
         <form method="post">
             <div class="form-group">
                 <label for="searchKeyword"></label>
-                <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword" placeholder="Tìm kiếm nhà cung cấp" ng-change="searchByName()">
+                <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword"
+                    placeholder="Tìm kiếm nhà cung cấp" ng-change="searchByName()">
             </div>
         </form>
     </div>
-    
+
     <div class="card-body">
         <table class="table">
             <thead>
@@ -156,7 +281,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in pager.items">
+                <tr ng-repeat="item in pager.itemss">
                     <td>{{$index + 1}}</td>
                     <td>{{item.supplierName}}</td>
                     <td>{{item.addresss}}</td>
@@ -167,7 +292,7 @@
                         <button class="btn btn-space btn btn-primary" ng-click="edit(item)">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal1(item)">
+                        <button class="btn btn-space btn btn-danger" ng-click="confirmHideModal1(item)">
                             <i class="bi bi-trash3-fill"></i>
                         </button>
                     </td>
