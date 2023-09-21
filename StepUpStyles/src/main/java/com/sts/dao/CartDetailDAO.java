@@ -37,4 +37,6 @@ public interface CartDetailDAO extends JpaRepository<CartDetail,Integer>{
 
     @Query("SELECT ci FROM CartDetail ci WHERE ci.cart.user.usersId=?1")
     List<CartDetail> findCartItemsByCustomerId(Integer usersId);
+
+    
 }

@@ -2,8 +2,9 @@
 <section class="w3l-banner-slider-main">
 				<nav class="navbar navbar-expand-lg navbar-light">
 					<div class="container-fluid serarc-fluid">
-						<a class="navbar-brand" href="index.html">
-							STS-<span class="lohny">S</span>tore</a>
+						<a  href="index.html">
+							<img src="/asset/user/img/banner/logo1.png"  style=" display: block;
+							margin: auto;" width="70%" alt=""></a>
 
 						<div class="search-right">
 
@@ -56,12 +57,13 @@
                                     </form>
                                 </li>
 								 <li class="transmitvcart galssescart2 cart cart box_1">
-                                    <form action="#" method="post" class="last">
+                                    <form action="#" method="post" class="last" ng-controller="cart-ctrl">
                                         <input type="hidden" name="cmd" value="_cart">
                                         <input type="hidden" name="display" value="1">
                                         <button class="top_transmitv_cart" type="submit" name="submit" value="">
                                             Giỏ hàng
                                             <span class="fa fa-shopping-cart"></span>
+											<span class="badge badge-pill badge-dark">{{count}}</span>
                                         </button>
                                     </form>
                                 </li>
