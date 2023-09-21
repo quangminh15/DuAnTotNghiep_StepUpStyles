@@ -63,4 +63,11 @@ public class ProductRestController {
 	public List<Product> searchProductByName(@RequestParam("keyword") String keyword) {
 		return productService.searchByName(keyword);
 	}
+	
+	@GetMapping("/api/category-product-count")
+	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
+	    List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
+	    return ResponseEntity.ok(categoryProductCounts);
+	}
+
 }

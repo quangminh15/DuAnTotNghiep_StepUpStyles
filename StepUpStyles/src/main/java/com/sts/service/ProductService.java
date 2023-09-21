@@ -21,4 +21,6 @@ public interface ProductService {
 	void delete(Integer productID);
 
 	List<Product> searchByName(String keyword);
+
+	List<CategoryProductCountDTO> getCategoryProductCount();
 }
