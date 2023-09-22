@@ -3,6 +3,7 @@ package com.sts.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Product;
+import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
-
 
 @CrossOrigin("*")
 @RestController
@@ -32,12 +33,12 @@ public class ProductRestController {
 	public List<Product> getAll() {
 		return productService.findAll();
 	}
-	
+
 	@GetMapping("/rest/products/loadallDeleted")
 	public List<Product> getAllDeleted() {
 		return productService.loadAllDeleted();
 	}
-	
+
 	@GetMapping("/rest/products/loadallNoDeleted")
 	public List<Product> getAllNoDeleted() {
 		return productService.loadAllNoDeleted();
@@ -62,4 +63,11 @@ public class ProductRestController {
 	public List<Product> searchProductByName(@RequestParam("keyword") String keyword) {
 		return productService.searchByName(keyword);
 	}
+	
+	@GetMapping("/api/category-product-count")
+	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
+	    List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
+	    return ResponseEntity.ok(categoryProductCounts);
+	}
+
 }

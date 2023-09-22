@@ -7,11 +7,16 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -30,6 +35,7 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="users_id")
+	@JsonProperty
 	private Integer usersId;
 
 	private Boolean activaties;
@@ -64,7 +70,6 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to Cart
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
-	
 	private List<Cart> carts;
 
 	//bi-directional many-to-one association to Favorite
@@ -83,10 +88,7 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Order> orders;
 
-	//bi-directional many-to-one association to Product
-	@JsonIgnore
-	@OneToMany(mappedBy="user")
-	private List<Product> products;
+
 
 	//bi-directional many-to-one association to Review
 	@JsonIgnore

@@ -239,6 +239,7 @@ CREATE TABLE direct_discount(
 	direct_discount DECIMAL(5,2),
 	[start_date] DATETIME,
 	end_date DATETIME,
+	deleted BIT NOT NULL DEFAULT 0,
     [status] NVARCHAR(50),
     price_discount FLOAT,
 	CONSTRAINT fk_direct_discount FOREIGN KEY (product_id) REFERENCES product(product_id)
@@ -486,8 +487,8 @@ VALUES
     (10, 10, 7, 12.15);
 --direct_discount
 go
-INSERT INTO direct_discount (product_id, direct_discount, [start_date], end_date, [status], price_discount)
+INSERT INTO direct_discount (product_id, direct_discount, [start_date], end_date, [status], price_discount,deleted)
 VALUES
-    (1, 10.50, '2023-09-08 10:00:00', '2023-09-08 10:00:00', 'Đã Kết Thúc', 10.5),
-    (2, 5.25, '2023-09-08 10:00:00', '2023-09-08 10:00:00', 'Đã Kết Thúc', 10.5),
-    (3, 8.75, '2023-09-08 10:00:00', '2023-09-08 10:00:00', 'Đã Kết Thúc', 10.5);
+    (1, 10.50, '2023-09-08 10:00:00', '2023-09-08 10:00:00', N'Đã kết thúc', 10.5, 0),
+    (2, 5.25, '2023-09-08 10:00:00', '2023-09-08 10:00:00', N'Chưa diễn ra', 10.5, 0),
+    (3, 8.75, '2023-09-08 10:00:00', '2023-09-08 10:00:00', N'Sắp diễn ra', 10.5, 0);

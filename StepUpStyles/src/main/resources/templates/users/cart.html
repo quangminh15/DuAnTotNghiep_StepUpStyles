@@ -100,7 +100,7 @@
 												</a>
 
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item"
+													<a class="dropdown-item" style="color: black;"
 														ng-repeat="c in item.colors| unique:'colorName' "
 														ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
 														ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
@@ -120,7 +120,7 @@
 												</a>
 
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item"
+													<a class="dropdown-item"  style="color: black;"
 														ng-repeat="s in item.sizes| unique:'sizeNumber'"
 														ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
 														ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
@@ -254,7 +254,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="">Tỉnh/Thành Phố</label>
+											<label for="">Quận/Huyện</label>
 											<select class="form-control form-control-lg" id="district"
 												ng-model="selectedDistrict"
 												ng-options="district.DistrictName for district in selectedProvince.Districts"
@@ -264,7 +264,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="">Tỉnh/Thành Phố</label>
+											<label for="">Phường/Xã</label>
 											<select class="form-control form-control-lg" id="ward"
 												ng-model="selectedWard"
 												ng-options="ward.WardName for ward in selectedDistrict.Wards">
@@ -371,7 +371,7 @@
 	<script src="/asset/user/js/cart/jquery.min.js"></script>
 	<script src="/asset/user/js/cart/jquery-migrate-3.0.1.min.js"></script>
 	<script src="/asset/user/js/cart/popper.min.js"></script>
-	<script src="/asset/user/js/cart/bootstrap.min.js"></script>
+	<!-- <script src="/asset/user/js/cart/bootstrap.min.js"></script> -->
 	<script src="/asset/user/js/cart/jquery.easing.1.3.js"></script>
 	<script src="/asset/user/js/cart/jquery.waypoints.min.js"></script>
 	<script src="/asset/user/js/cart/jquery.stellar.min.js"></script>
@@ -381,9 +381,9 @@
 	<script src="/asset/user/js/cart/jquery.animateNumber.min.js"></script>
 	<script src="/asset/user/js/cart/bootstrap-datepicker.js"></script>
 	<script src="/asset/user/js/cart/scrollax.min.js"></script>
-	<script
+	<!-- <script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="/asset/user/js/cart/google-map.js"></script>
+	<script src="/asset/user/js/cart/google-map.js"></script> -->
 	<script src="/asset/user/js/cart/main.js"></script>
 
 	<script>

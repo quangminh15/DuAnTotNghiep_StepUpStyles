@@ -38,6 +38,8 @@ public class DirectDiscount implements Serializable {
 	@Column(name = "price_discount")
 	private Double priceDiscount;
 
+	private Boolean deleted;
+
 	@ManyToOne
 	@JoinColumn(name="product_id")
 	private Product product;

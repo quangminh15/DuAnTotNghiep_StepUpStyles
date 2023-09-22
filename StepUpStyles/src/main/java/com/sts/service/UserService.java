@@ -17,4 +17,6 @@ public interface UserService {
 	void delete(Integer Id);
 
 	List<User> searchByName(String keyword);
+
+	Integer getUserIdCurrent();
 }
