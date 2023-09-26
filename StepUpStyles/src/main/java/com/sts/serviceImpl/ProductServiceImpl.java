@@ -15,87 +15,85 @@ import com.sts.dao.ProductDAO;
 import com.sts.model.Category;
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
+import com.sts.model.DTO.ProductWithCount;
 import com.sts.service.ProductService;
-
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    ProductDAO productDAO;
+	@Autowired
+	ProductDAO productDAO;
 
-    @Autowired
-    CategoryDAO categoryDAO;
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+	@Autowired
+	CategoryDAO categoryDAO;
 
-    @Override
-    public Product findById(Integer productID) {
-        return productDAO.findById(productID).get();
-    }
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Override
-    public List<Product> findAll() {
-        return productDAO.findAll();
-    }
+	@Override
+	public Product findById(Integer productID) {
+		return productDAO.findById(productID).get();
+	}
 
-    @Override
-    public List<Product> loadAllDeleted() {
-        return productDAO.loadAllDeleted();
-    }
+	@Override
+	public List<Product> findAll() {
+		return productDAO.findAll();
+	}
 
-    @Override
-    public List<Product> loadAllNoDeleted() {
-        return productDAO.loadAllNoDeleted();
-    }
+	@Override
+	public List<Product> loadAllDeleted() {
+		return productDAO.loadAllDeleted();
+	}
 
-    @Override
-    public Product create(Product product) {
-        return productDAO.save(product);
-    }
+	@Override
+	public List<Product> loadAllNoDeleted() {
+		return productDAO.loadAllNoDeleted();
+	}
 
-    @Override
-    public Product update(Product product) {
-        return productDAO.save(product);
-    }
+	@Override
+	public Product create(Product product) {
+		return productDAO.save(product);
+	}
 
-    @Override
-    public void delete(Integer productID) {
-        productDAO.deleteById(productID);
-    }
+	@Override
+	public Product update(Product product) {
+		return productDAO.save(product);
+	}
 
-    @Override
-    public List<Product> searchByName(String keyword) {
-        return productDAO.findByProductNameContaining(keyword);
-    }
+	@Override
+	public void delete(Integer productID) {
+		productDAO.deleteById(productID);
+	}
 
-    @Override
-    public List<CategoryProductCountDTO> getCategoryProductCount() {
-        List<CategoryProductCountDTO> categoryProductCounts = new ArrayList<>();
+	@Override
+	public List<Product> searchByName(String keyword) {
+		return productDAO.findByProductNameContaining(keyword);
+	}
 
-        // Lấy danh sách danh mục
-        List<Category> categories = categoryDAO.findAll();
+	@Override
+	public List<CategoryProductCountDTO> getCategoryProductCount() {
+		List<CategoryProductCountDTO> categoryProductCounts = new ArrayList<>();
 
-        for (Category category : categories) {
-            // Sử dụng JPQL để lấy tổng số lượng sản phẩm theo danh mục
-            TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT SUM(pd.quantity) FROM ProductDetail pd WHERE pd.product.category = :category", 
-                Long.class);
-            query.setParameter("category", category);
-            
-            // Thực hiện truy vấn và lấy kết quả
-            Long productCount = query.getSingleResult();
+		// Lấy danh sách danh mục
+		List<Category> categories = categoryDAO.findAll();
 
-            if (productCount == null) {
-                productCount = 0L;
-            }
+		for (Category category : categories) {
+			// Sử dụng JPQL để lấy tổng số lượng sản phẩm theo danh mục
+			TypedQuery<Long> query = entityManager.createQuery(
+					"SELECT SUM(pd.quantity) FROM ProductDetail pd WHERE pd.product.category = :category", Long.class);
+			query.setParameter("category", category);
 
-            // Tạo một đối tượng CategoryProductCountDTO và thêm vào danh sách
-            CategoryProductCountDTO countDTO = new CategoryProductCountDTO(category.getCategoryName(), productCount);
-            categoryProductCounts.add(countDTO);
-        }
+			// Thực hiện truy vấn và lấy kết quả
+			Long productCount = query.getSingleResult();
 
-        return categoryProductCounts;
-    }
+			if (productCount == null) {
+				productCount = 0L;
+			}
 
+			// Tạo một đối tượng CategoryProductCountDTO và thêm vào danh sách
+			CategoryProductCountDTO countDTO = new CategoryProductCountDTO(category.getCategoryName(), productCount);
+			categoryProductCounts.add(countDTO);
+		}
+
+		return categoryProductCounts;
+	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
+import com.sts.model.DTO.ProductWithCount;
 
 public interface ProductService {
 	Product findById(Integer productID);
