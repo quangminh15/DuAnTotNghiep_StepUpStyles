@@ -154,8 +154,8 @@
 			<div class="form-group col-md-4">
 				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
 				<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
-					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
-					| date:'dd-MM-yyyy' }}</div>
+					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate |
+					date:'dd-MM-yyyy' }}</div>
 			</div>
 		</div>
 
@@ -271,6 +271,13 @@
 		<h4 class="mb-0">Danh sách sản phẩm</h4>
 
 		<div class="d-flex">
+			<!-- Thẻ select box -->
+			<select class="form-control mr-2" ng-model="selectedActivity"
+				ng-change="filterByActivities()" style="width: 200px;">
+				<option value="all">Tất cả</option>
+				<option value="true">Đang bật</option>
+				<option value="false">Đang tắt</option>
+			</select>
 			<!-- Nút tìm kiếm -->
 			<button class="btn btn-space btn-success md-trigger"
 				ng-click="openSearchForm()" style="width: 50px; height: 43px">
@@ -319,8 +326,10 @@
 	<!-- 	thùng rác bắt đầu -->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1"
 		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
-			<div class="modal-content" style="background-color: #eee; max-width: 1500px">
+		<div class="modal-dialog modal-dialog-centered modal-xl"
+			style="width: 1500px; height: 600px;">
+			<div class="modal-content"
+				style="background-color: #eee; max-width: 1500px">
 				<div class="modal-header">
 					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
 					<button class="close modal-close" type="button"
