@@ -293,109 +293,103 @@ app.controller("product-ctrl", function($scope, $http) {
 	//		return isDuplicate;
 	//	}
 
-	//	Thêm sản phẩm mới 
-	$scope.create = function() {
-		//Không chọn danh mục
-		if (!$scope.form.category || !$scope.form.category.categoryID) {
-			$scope.errorMessage = "Vui lòng chọn danh mục!";
-			$('#errorModal').modal('show');
-			return;
-		}
+	// Thêm sản phẩm mới
+$scope.create = function() {
+    // Không chọn danh mục
+    if (!$scope.form.category || !$scope.form.category.categoryID) {
+        $scope.errorMessage = "Vui lòng chọn danh mục!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		//Không chọn thương hiệu
-		if (!$scope.form.brand || !$scope.form.brand.brandID) {
-			$scope.errorMessage = "Vui lòng chọn thương hiệu!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Không chọn thương hiệu
+    if (!$scope.form.brand || !$scope.form.brand.brandID) {
+        $scope.errorMessage = "Vui lòng chọn thương hiệu!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		//Lỗi bỏ trống tên sản phẩm 
-		if (!$scope.form.productName) {
-			$scope.errorMessage = "Vui lòng nhập tên sản phẩm!!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Lỗi bỏ trống tên sản phẩm
+    if (!$scope.form.productName) {
+        $scope.errorMessage = "Vui lòng nhập tên sản phẩm!!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		// Kiểm tra sự trùng lặp
-		//		var isDuplicate = checkDuplicateProduct($scope.form);
-		//		if (isDuplicate) {
-		//			$scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
-		//			$('#errorModal').modal('show');
-		//			return;
-		//		}
+    // Kiểm tra sự trùng lặp
+    // var isDuplicate = checkDuplicateProduct($scope.form);
+    // if (isDuplicate) {
+    //     $scope.errorMessage = "Đã tồn tại sản phẩm trong danh mục này rồi. Vui lòng đặt tên khác cho sản phẩm!";
+    //     $('#errorModal').modal('show');
+    //     return;
+    // }
 
-		//Lỗi bỏ trống giá sản phẩm 
-		if (!$scope.form.price) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm!!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Lỗi bỏ trống giá sản phẩm
+    if (!$scope.form.price) {
+        $scope.errorMessage = "Vui lòng nhập giá sản phẩm!!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		//Lỗi giá sản phẩm < 0
-		if ($scope.form.price < 0) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm lớn hơn 0!!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Lỗi giá sản phẩm < 0
+    if ($scope.form.price < 0) {
+        $scope.errorMessage = "Vui lòng nhập giá sản phẩm lớn hơn 0!!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		//Lỗi giá sản phẩm > 100.000.000
-		if ($scope.form.price > 100000000) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Lỗi giá sản phẩm > 100.000.000
+    if ($scope.form.price > 100000000) {
+        $scope.errorMessage = "Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		//Lỗi bỏ trống mô tả
-		if (!$scope.form.description) {
-			$scope.errorMessage = "Vui lòng nhập mô tả sản phẩm!!";
-			$('#errorModal').modal('show');
-			return;
-		}
+    // Lỗi bỏ trống mô tả
+    if (!$scope.form.description) {
+        $scope.errorMessage = "Vui lòng nhập mô tả sản phẩm!!";
+        $('#errorModal').modal('show');
+        return;
+    }
 
-		// Lấy thông tin người dùng từ API /api/user (email)
-		$http.get("/api/user").then(resp => {
-			const email = resp.data.username; // Lấy email từ userDetails
-			// Truy vấn cơ sở dữ liệu để lấy userID từ email
-			$http.get("/rest/users/by-email/" + email).then(userResp => {
-				var userID = userResp.data.userID;
-				$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
+    // Lấy thông tin người dùng từ API /rest/users/Idprofile
+    $http.get("/rest/users/Idprofile").then(resp => {
+        var userID = resp.data; // Lấy userID từ userDetails
+		console.log(userID,"Đây là userID lấy từ /rest/users/Idprofile")
+        // Gán userID cho sản phẩm và ngày hiện tại
+        $scope.form.user = { userID: userID };
+        $scope.form.modifyDate = new Date();
 
-				var currentDate = new Date(); // Lấy ngày hiện tại
-				$scope.form.modifyDate = currentDate; // Gán ngày hiện tại cho modifyDate
+        // Tạo sản phẩm mới trong cơ sở dữ liệu
+        var productitem = angular.copy($scope.form);
+        productitem.user.userID = userID;
+        console.log(userID,"Đây là userID lấy từ /rest/users/Idprofile")
+		productitem.deleted = false;
+        $http.post('/rest/products/create', productitem).then(resp => {
+            resp.data.modifyDate = new Date(resp.data.modifyDate);
+            $scope.productitems.push(resp.data);
+            $scope.reset();
+            $scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
+            $scope.messageSuccess = "Thêm mới thành công";
+            $scope.initialize();
+            $('#errorModal1').modal('show');
+        }).catch(error => {
+            if (error.status === 400) {
+                $scope.errorMessage = error.data;
+            } else {
+                $scope.errorMessage = "Thêm mới thất bại";
+                $scope.initialize();
+                $('#errorModal').modal('show');
+                console.log("Error", error);
+            }
+        });
+    }).catch(error => {
+        console.log("Lỗi không tìm thấy người dùng có ID", error);
+        $scope.initialize();
+        // Xử lý lỗi khi không lấy được thông tin người dùng từ ID
+    });
+}
 
-				var productitem = angular.copy($scope.form);
-				productitem.user.userID = userID;
-				productitem.modifyDate = currentDate;
-				$http.post('/rest/products/create', productitem).then(resp => {
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.productitems.push(resp.data);
-					$scope.reset();
-					$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-					$scope.messageSuccess = "Thêm mới thành công";
-					$scope.initialize();
-					$('#errorModal1').modal('show');
-				}).catch(error => {
-					if (error.status === 400) {
-						$scope.errorMessage = error.data;
-					} else {
-						$scope.messageSuccess = "Thêm mới thành công";
-						$('#errorModal1').modal('show');
-						//$scope.errorMessage = "Thêm mới thất bại";
-						$scope.initialize();
-						//$('#errorModal').modal('show');
-						console.log("Error", error);
-					}
-				});
-			}).catch(error => {
-				console.log("Lỗi không tìm thấy người dùng có email", error);
-				$scope.initialize();
-				// Xử lý lỗi khi không lấy được userID từ email
-			});
-		}).catch(error => {
-			console.log("Lỗi khi không lấy được dữ liệu người dùng", error);
-			$scope.initialize();
-		});
-	}
 
 	//	Cập nhật sản phẩm 
 	$scope.update = function() {
@@ -456,20 +450,15 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Lấy thông tin người dùng từ API /api/user (email)
-		$http.get("/api/user").then(resp => {
-			const email = resp.data.username; // Lấy email từ userDetails
-			// Truy vấn cơ sở dữ liệu để lấy userID từ email
-			$http.get("/rest/users/by-email/" + email).then(userResp => {
-				var userID = userResp.data.userID;
+		// Lấy thông tin người dùng từ API /rest/users/Idprofile
+			$http.get("/rest/users/Idprofile").then(resp => {
+				var userID = resp.data;
 				$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
 
-				var currentDate = new Date(); // Lấy ngày hiện tại
-				$scope.form.modifyDate = currentDate; // Gán ngày hiện tại cho modifyDate
+				$scope.form.modifyDate = new Date();
 
 				var productitem = angular.copy($scope.form);
 				productitem.user.userID = userID;
-				productitem.modifyDate = currentDate;
 				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
 					var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
 					resp.data.modifyDate = new Date(resp.data.modifyDate);
@@ -487,10 +476,7 @@ app.controller("product-ctrl", function($scope, $http) {
 				console.log("Error fetching userID from email", error);
 				// Xử lý lỗi khi không lấy được userID từ email
 			});
-		}).catch(error => {
-			console.log("Error fetching user data", error);
-			// Xử lý lỗi khi không lấy được dữ liệu người dùng
-		});
+		
 	}
 
 	//Mở modal thùng rác

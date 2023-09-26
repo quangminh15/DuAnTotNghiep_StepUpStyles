@@ -1,1 +1,113 @@
-<canvas id="polar-chart" width="900" height="900"></canvas>
+<style>
+/* CSS cho table */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* CSS cho các hàng chẵn */
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+/* CSS cho header của bảng */
+.table th {
+	background-color: #4CAF50;
+	color: white;
+	text-align: left;
+}
+
+/* CSS cho các ô trong bảng */
+.table td, .table th {
+	padding: 12px 15px;
+	border-bottom: 1px solid #ddd;
+}
+</style>
+<div class="main-content container-fluid">
+	<div class="row">
+
+		<div class="col-lg-6">
+			<div class="card">
+				<div class="card-header card-header-divider">
+
+					<span class="title">BIỂU ĐỒ</span><span class="card-subtitle">Thống
+						kê số lượng sản phẩm theo danh mục</span>
+				</div>
+				<div class="card-body">
+					<canvas id="polar-chart" height="200"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="card card-table"
+				style="box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
+				<div
+					class="card-header d-flex justify-content-between align-items-center">
+					<h4 class="mb-0"
+						style="font-size: 25px; font-weight: 500; font-style: italic;">Danh
+						sách sản phẩm theo danh mục</h4>
+					<div class="d-flex align-items-center">
+						<select id="categorySelect" class="form-control"
+							ng-model="selectedCategory" ng-change="loadProductsByCategory()"
+							style="width: 230px; height: 50px;">
+							<option value="" disabled selected>Vui lòng chọn danh
+								mục</option>
+							<option ng-repeat="category in categories"
+								value="{{category.categoryID}}">{{category.categoryName}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="card-body">
+					<table class="table">
+						<thead style="font-size: 18px; font-style: italic;">
+							<tr>
+								<th>STT</th>
+								<th>Tên sản phẩm</th>
+								<th>Tên màu</th>
+								<th>Size</th>
+								<th>Số lượng</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="products in pager.filteredProducts">
+								<td>{{ $index + 1 }}</td>
+								<td>{{ products.product.productName }}</td>
+								<td>{{ products.color.colorName }}</td>
+								<td>{{ products.size.sizeNumber }}</td>
+								<td>{{ products.quantity }}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="card-header d-flex justify-content-end">
+						<div>
+							<ul class="pagination">
+								<li class="page-item">
+									<button style="font-size: 25px" ng-click="pager.first()"
+										class="page-link">
+										<span class="mdi mdi-skip-previous"></span>
+									</button>
+								</li>
+
+								<li class="page-item" ng-repeat="page in visiblePages"
+									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+									class="page-link" href="" ng-click="pager.goto(page.value)">{{
+										page.value }}</a></li>
+
+								<li class="page-item">
+									<button style="font-size: 25px" ng-click="pager.last()"
+										class="page-link">
+										<span class="mdi mdi-skip-next"></span>
+									</button>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

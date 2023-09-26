@@ -331,72 +331,76 @@
 							</div>
 						</div>
 						<h2>SẢN PHẨM ĐƯỢC BẠN YÊU THÍCH</h2>
-						<!-- <div class="ecom-products-grids row">
-							<div th:each="p: ${favoriteitems}" class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv">
-									<div class="product-image2">
-										<a th:href="@{|/single_product/${p.product.productID}|}">
-											<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-1 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
-											<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-2 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
-										</a>
-										<ul class="social">
-											<li>
-												<button th:attr="ng-click=@{|check(${p.product.productID})|}">
-													<span>&#10084;</span>Thích
-												</button>										
-											</li>
-
-											<li><a href="single_product.html" data-tip="Add to Cart"><span
-														class="fa fa-shopping-bag"></span></a>
-											</li>
-										</ul>
-										<div class="transmitv single-item">
-												<a th:href="@{|/single_product/${p.product.productID}|}" type="submit"
-													class="transmitv-cart ptransmitv-cart add-to-cart">
+						<div ng-if="userItemsFavorite.length == 0" style="text-align: center; justify-content: center; margin: 10px;">
+							<p>Bạn chưa có sản phẩm yêu thích.</p>
+							<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;">Tiếp tục mua sắm</a>
+						</div>
+						<div ng-if="userItemsFavorite">
+							<!-- Hiển thị danh sách sản phẩm yêu thích -->
+							<!-- <div class="ecom-products-grids row">
+								<div th:each="p: ${favoriteitems}" class="col-lg-4 col-6 product-incfhny mb-4">
+									<div class="product-grid2 transmitv">
+										<div class="product-image2">
+											<a th:href="@{|/single_product/${p.product.productID}|}">
+												<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-1 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
+												<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-2 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
+											</a>
+											<ul class="social">
+												
+												<li>
+															<a th:attr="ng-click=@{|check(${p.product.productID})|}" data-tip="Favorite">
+																<span class="fa fa-heart"></span>
+															</a>
+												</li>
+											</ul>
+											<div class="transmitv single-item">
+													<a th:href="@{|/single_product/${p.product.productID}|}" type="submit"
+														class="transmitv-cart ptransmitv-cart add-to-cart">
+														Xem chi tiết
+													</a>
+											</div>
+										</div>
+										<div class="product-content">
+											<h3 class="title" th:text="${p.product.productName}"><a th:href="@{|/single_product/${p.product.productID}|}"></a>
+											</h3>
+											<span class="price" th:text="${p.product.price}"></span>
+										</div>
+									</div>
+								</div>
+							</div> -->
+							
+							<div class="ecom-products-grids row">
+								<div ng-repeat="item in userItemsFavorite" class="col-lg-4 col-6 product-incfhny mb-4">
+									<div class="product-grid2 transmitv">
+										<div class="product-image2">
+											<a ng-href="/single_product/{{item.product.productID}}">
+												<img ng-if="item.product.productImages.length > 0" class="pic-1 img-fluid" ng-src="{{item.product.productImages[0].imagePath}}">
+												<img ng-if="item.product.productImages.length > 0" class="pic-2 img-fluid" ng-src="{{item.product.productImages[0].imagePath}}">
+											</a>
+											<ul class="social">
+												<li>
+													<a ng-click="check(item.product.productID)">
+														<span>&#10084;</span>Thích
+													</a>
+												</li>
+											</ul>
+											<div class="transmitv single-item">
+												<a ng-href="/single_product/{{item.product.productID}}" type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 													Xem chi tiết
 												</a>
+											</div>
 										</div>
-									</div>
-									<div class="product-content">
-										<h3 class="title" th:text="${p.product.productName}"><a th:href="@{|/single_product/${p.product.productID}|}"></a>
-										</h3>
-										<span class="price" th:text="${p.product.price}"></span>
+										<div class="product-content">
+											<h3 class="title">{{ item.product.productName }}</h3>
+											<span class="price">{{ item.product.price }}</span>
+											<span class="price">{{ item.product.brand.brandImage }}</span>
+											<span class="price">{{ item.product.brand.brandName }}</span>
+											<span class="price">{{ item.product.productImages[0].imagePath }}</span>
+											<span class="price">{{ item.product.productImages[0].productImageID }}</span>
+										</div>
 									</div>
 								</div>
 							</div>
-							
-
-						</div> -->
-						<div class="ecom-products-grids row">
-							<div ng-repeat="item in userItemsFavorite" class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv">
-									<div class="product-image2">
-										<a ng-href="/single_product/{{item.product.productID}}">
-											<img ng-if="item.product.productImages.length > 0" class="pic-1 img-fluid" ng-src="{{item.product.productImages[0].imagePath}}">
-											<img ng-if="item.product.productImages.length > 0" class="pic-2 img-fluid" ng-src="{{item.product.productImages[0].imagePath}}">
-										</a>
-										<ul class="social">
-											<li>
-												<button ng-click="check(item.product.productID)">
-													<span>&#10084;</span> {{ item.isFavorite ? 'Đã thích' : 'Thích' }}
-												</button>
-											</li>
-											<li><a href="single_product.html" data-tip="Add to Cart"><span class="fa fa-shopping-bag"></span></a></li>
-										</ul>
-										<div class="transmitv single-item">
-											<a ng-href="/single_product/{{item.product.productID}}" type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-												Xem chi tiết
-											</a>
-										</div>
-									</div>
-									<div class="product-content">
-										<h3 class="title">{{ item.product.productName }}</h3>
-										<span class="price">{{ item.product.price }}</span>
-									</div>
-								</div>
-							</div>
-							
-
 						</div>
 						<!-- //row-->
 						<!--/row2-->

@@ -101,7 +101,9 @@ public class User implements Serializable {
 	private List<ShippingAddress> shippingAddresses;
 
 	
-
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	private List<Product> product;
 	
 
 }

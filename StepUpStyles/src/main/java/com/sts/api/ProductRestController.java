@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
+import com.sts.model.DTO.ProductWithCount;
 import com.sts.service.ProductService;
 
 @CrossOrigin("*")
@@ -62,5 +63,11 @@ public class ProductRestController {
 	@GetMapping("/rest/products/search")
 	public List<Product> searchProductByName(@RequestParam("keyword") String keyword) {
 		return productService.searchByName(keyword);
+	}
+
+	@GetMapping("/api/category-product-count")
+	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
+		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
+		return ResponseEntity.ok(categoryProductCounts);
 	}
 }

@@ -26,12 +26,11 @@ public interface ProductDetailDAO extends JpaRepository<ProductDetail, Integer> 
 
 	@Query("SELECT c FROM ProductDetail c WHERE c.deleted = false")
 	List<ProductDetail> loadAllNoDeleted();
-	
-	//Hai -----
+
+	// Hai -----
 	@Query("SELECT pd FROM ProductDetail pd WHERE pd.product= ?1 AND pd.size = ?2 AND pd.color = ?3")
-    ProductDetail findProductDetail(
-             Product product,
-            Size size,
-             Color color);
-	//-------
+	ProductDetail findProductDetail(Product product, Size size, Color color);
+
+	// -------
+
 }

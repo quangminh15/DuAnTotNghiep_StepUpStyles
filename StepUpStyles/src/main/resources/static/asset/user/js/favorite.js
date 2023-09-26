@@ -28,6 +28,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                 .then(function(response) {
                     console.log("tat thich");
                     $scope.begin();
+                    $window.location.reload();
                 })
                 .catch(function(error) {
                     console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
@@ -41,11 +42,16 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
     $scope.getAllUserFavorite = function(){
         $http.get("/rest/favorites/getUserFavorite").then(function(response){
-            $scope.userItemsFavorite = response.data;
-            console.log(hi);
-            console.log($scope.userItemsFavorite)
-            console.log(response.data)
+            $scope.userItemsFavorite = response.data
+            console.log(response.data);
+            console.log(userItemsFavorite)
         })
+    }
+
+    $scope.isFavorite = function(productID) {
+        return $scope.userItemsFavorite.some(function(item) {
+            return item.product.productID === productID;
+        });
     }
 
     $scope.getAllUserFavorite();

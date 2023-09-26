@@ -70,4 +70,12 @@ public class ProductDetailRestController {
 	public List<ProductDetail> getProductDetailByProduct(@PathVariable Integer productId) {
 		return productDetailService.getProductDetailByProduct(productId);
 	}
+	
+	//test
+	@GetMapping("/rest/productdetails/byCategory/{categoryId}")
+    public ResponseEntity<List<ProductDetail>> getProductDetailsByCategory(@PathVariable("categoryId") Integer categoryId) {
+        List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(categoryId);
+        return ResponseEntity.ok(productDetails);
+    }
+
 }
