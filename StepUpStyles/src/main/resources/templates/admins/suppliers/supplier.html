@@ -149,15 +149,14 @@
                                 <td>{{item.email}}</td>
                                 <td>{{item.display? 'Bật':'Tắt'}}</td>
                                 <td class="actions">
-									<button class="btn btn-space btn btn-primary "
-										ng-click="confirmRestoreModal1(item)">
-										<i class="mdi mdi-refresh-alt"></i>
-									</button>
-									<button class="btn btn-space btn btn-danger "
-										ng-click="confirmDeleteModal1(item)">
-										<i class="bi bi-trash3-fill"></i>
-									</button>
-								</td>
+                                    <button class="btn btn-space btn btn-primary "
+                                        ng-click="confirmRestoreModal1(item)">
+                                        <i class="mdi mdi-refresh-alt"></i>
+                                    </button>
+                                    <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal1(item)">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -268,18 +267,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>STT</th>
-                    <th>Tên nhà cung cấp</th>
-                    <th>Địa chỉ</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th>Hiển thị</th>
-                    <th class="actions"></th>
+                    <th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label }}
+                        <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+                                class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
+                                class="mdi mdi-long-arrow-up"></span>
+                        </span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="item in pager.itemss">
-                    <td>{{$index + 1}}</td>
+                    <td>{{item.supplierId}}</td>
                     <td>{{item.supplierName}}</td>
                     <td>{{item.addresss}}</td>
                     <td>{{item.phone}}</td>
