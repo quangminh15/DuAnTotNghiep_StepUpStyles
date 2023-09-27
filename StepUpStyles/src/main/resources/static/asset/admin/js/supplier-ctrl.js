@@ -11,6 +11,51 @@ app.controller("supplier-ctrl", function($scope, $http){
 		deleted: false
     };
 
+	$scope.sortableColumns = [
+		{ name: 'supplierId', label: 'Mã nhà cung cấp' },
+		// { name: 'modifyDate', label: 'Thời gian' },
+		{ name: 'supplierName', label: 'Tên nhà cung cấp' },
+		{ name: 'addresss', label: 'Địa chỉ' },
+		{ name: 'phone', label: 'Số điện thoại' },
+		{ name: 'email', label: 'Email' },
+		{ name: 'display', label: 'Hiển thị' },
+	];
+
+	$scope.sortByColumn = function(columnName) {
+		if ($scope.sortColumn === columnName) {
+			$scope.sortReverse = !$scope.sortReverse;
+		} else {
+			$scope.sortColumn = columnName;
+			$scope.sortReverse = false;
+		}
+
+		$scope.itemss.sort(function(a, b) {
+			var aValue = a[columnName];
+			var bValue = b[columnName];
+			// if (columnName === 'category.categoryName') {
+			// 	aValue = a.category.categoryName;
+			// 	bValue = b.category.categoryName;
+			// }
+			// if (columnName === 'brand.brandName') {
+			// 	aValue = a.brand.brandName;
+			// 	bValue = b.brand.brandName;
+			// }
+			if (typeof aValue === 'string') {
+				aValue = aValue.toLowerCase();
+			}
+			if (typeof bValue === 'string') {
+				bValue = bValue.toLowerCase();
+			}
+
+			if (aValue < bValue) {
+				return $scope.sortReverse ? 1 : -1;
+			} else if (aValue > bValue) {
+				return $scope.sortReverse ? -1 : 1;
+			}
+			return 0;
+		});
+	};
+
     $scope.initialize = function () {
 		//load all supplier
 		$http.get("/rest/supplier").then(resp => {
@@ -134,6 +179,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 			var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
 			$scope.items[index] = item;
 			$scope.messageSuccess = "Cập nhật thành công nhà cung cấp";
+			$scope.reset();
+			$scope.initialize();
 			$('#errorModal1').modal('show'); // Show the modal
 		}).catch(error => {
 			alert("Loi cap nhat");

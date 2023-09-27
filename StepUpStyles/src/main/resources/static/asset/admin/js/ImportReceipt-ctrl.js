@@ -14,6 +14,77 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.showChiTietForm = false; // Ẩn form chi tiết mặc định
   $scope.showThemChiTietButton = true; // Hiển thị nút "Thêm chi tiết" mặc định
 
+    $scope.exportPdf = function () {
+        $http({
+            method: 'POST',
+            url: '/export-pdf',
+            data: $scope.importDetail,
+            responseType: 'arraybuffer', // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            // Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+            var blob = new Blob([response.data], { type: 'application/pdf' });
+            var url = URL.createObjectURL(blob);
+
+            // Tạo một thẻ a để tải xuống tệp PDF
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'import_receipt.pdf';
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+        }).catch(function (error) {
+            console.error('Xuất PDF thất bại:', error);
+        });
+    };
+
+  $scope.sortableColumns = [
+    { name: "importReceiptId", label: "Mã phiếu nhập" },
+    // { name: 'modifyDate', label: 'Thời gian' },
+    { name: "user.fullName", label: "Tên người nhập" },
+    { name: "supplier.supplierName", label: "Tên nhà cung cấp" },
+    { name: "totalAmount", label: "Tổng tiền" },
+    { name: "importDate", label: "Ngày nhập" },
+  ];
+
+  $scope.sortByColumn = function (columnName) {
+    if ($scope.sortColumn === columnName) {
+      $scope.sortReverse = !$scope.sortReverse;
+    } else {
+      $scope.sortColumn = columnName;
+      $scope.sortReverse = false;
+    }
+
+    $scope.items.sort(function (a, b) {
+      var aValue = a[columnName];
+      var bValue = b[columnName];
+      if (columnName === "user.fullName") {
+        aValue = a.user.fullName;
+        bValue = b.user.fullName;
+      }
+
+      if (columnName === "supplier.supplierName") {
+        aValue = a.supplier.supplierName;
+        bValue = b.supplier.supplierName;
+      }
+      if (typeof aValue === "string") {
+        aValue = aValue.toLowerCase();
+      }
+      if (typeof bValue === "string") {
+        bValue = bValue.toLowerCase();
+      }
+
+      if (aValue < bValue) {
+        return $scope.sortReverse ? 1 : -1;
+      } else if (aValue > bValue) {
+        return $scope.sortReverse ? -1 : 1;
+      }
+      return 0;
+    });
+  };
+
   $scope.initialize = function () {
     // Load product
     $http.get("/rest/productdetails/loadall").then((resp) => {
@@ -35,7 +106,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     });
 
     //load supplier
-    $http.get("/rest/supplier").then((resp) => {
+    $http.get("/rest/supplier/displaysupplier").then((resp) => {
       $scope.importSup = resp.data;
       $scope.pager.first();
     });
@@ -80,34 +151,49 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   };
 
   // Hàm để xuất file PDF từ nội dung HTML
-  $scope.exportToPDF = function() {
-	// Tạo một đối tượng jsPDF
-	var doc = new jsPDF();
+  $scope.exportToPDF = function () {
+    // Tạo một đối tượng jsPDF
+    var doc = new jsPDF();
 
-	// Tạo biến để theo dõi vị trí dòng trong tài liệu PDF
-	var yPos = 20;
+    // Tạo biến để theo dõi vị trí dòng trong tài liệu PDF
+    var yPos = 20;
 
-	// Đặt tiêu đề cho tài liệu PDF
-	doc.setFontSize(18);
-	doc.text('Phiếu nhập ' + $scope.importDetail[0].importReceipt.importReceiptId, 10, yPos);
-	yPos += 10;
+    // Đặt tiêu đề cho tài liệu PDF
+    doc.setFontSize(18);
+    doc.text(
+      "Phiếu nhập " + $scope.importDetail[0].importReceipt.importReceiptId,
+      10,
+      yPos
+    );
+    yPos += 10;
 
-	// Tạo bảng trong tài liệu PDF
-	var columns = ["Tên sản phẩm", "Số lượng", "Size", "Màu sắc", "Đơn giá"];
-	var data = [];
-	data.push([$scope.importDetail[0].productDetail.product.productName, $scope.importDetail[0].quantity, $scope.importDetail[0].productDetail.size.sizeNumber, $scope.importDetail[0].productDetail.color.colorName, $scope.formatToVND($scope.importDetail[0].price)]);
+    // Tạo bảng trong tài liệu PDF
+    var columns = ["Tên sản phẩm", "Số lượng", "Size", "Màu sắc", "Đơn giá"];
+    var data = [];
+    data.push([
+      $scope.importDetail[0].productDetail.product.productName,
+      $scope.importDetail[0].quantity,
+      $scope.importDetail[0].productDetail.size.sizeNumber,
+      $scope.importDetail[0].productDetail.color.colorName,
+      $scope.formatToVND($scope.importDetail[0].price),
+    ]);
 
-	doc.autoTable(columns, data, { startY: yPos });
-	yPos += 40;
+    doc.autoTable(columns, data, { startY: yPos });
+    yPos += 40;
 
-	// Hiển thị tổng tiền
-	doc.setFontSize(14);
-	doc.text('Tổng tiền: ' + $scope.formatToVND($scope.importDetail[0].importReceipt.totalAmount), 10, yPos);
+    // Hiển thị tổng tiền
+    doc.setFontSize(14);
+    doc.text(
+      "Tổng tiền: " +
+        $scope.formatToVND($scope.importDetail[0].importReceipt.totalAmount),
+      10,
+      yPos
+    );
 
-	// Tạo tên file PDF và tải nó
-	var fileName = 'phieu_nhap.pdf';
-	doc.save(fileName);
-};
+    // Tạo tên file PDF và tải nó
+    var fileName = "phieu_nhap.pdf";
+    doc.save(fileName);
+  };
 
   $scope.initialize();
 
@@ -304,10 +390,10 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     let newItem = angular.copy($scope.form);
     newItem.deleted = false;
     $http
-      .post(`/rest/importReceiptDetails/createImpDetail`, newItem)
+      .post(`/rest/importReceiptDetails/createImpDetails`, newItem)
       .then((response) => {
         let data = response.data;
-        $scope.items.push(data);
+        $scope.importDetail.push(data);
         $scope.reset();
         $scope.initialize();
         $scope.messageSuccess = "Thêm thành công chi tiết phiếu nhập";

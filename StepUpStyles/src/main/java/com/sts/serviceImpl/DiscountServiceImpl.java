@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.DirectDiscountDAO;
@@ -13,7 +14,7 @@ import com.sts.model.DirectDiscount;
 import com.sts.service.DiscountService;
 
 @Service
-public class DiscountServiceImpl implements DiscountService{
+public class DiscountServiceImpl implements DiscountService {
     @Autowired
     DirectDiscountDAO discountDAO;
 
@@ -50,12 +51,13 @@ public class DiscountServiceImpl implements DiscountService{
     @Override
     public void saveStatus(DirectDiscount directDis) {
         Date currentDate = new Date();
-    
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Điều chỉnh định dạng ngày tháng tương ứng với định dạng của thuộc tính startDate
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Điều chỉnh định dạng ngày tháng tương ứng
+                                                                          // với định dạng của thuộc tính startDate
         try {
             Date startDate = dateFormat.parse(directDis.getStartDate());
             Date endDate = dateFormat.parse(directDis.getEndDate());
-            
+
             if (startDate.after(currentDate)) {
                 directDis.setStatus("Chưa diễn ra");
             } else if (endDate.before(currentDate)) {
@@ -67,5 +69,37 @@ public class DiscountServiceImpl implements DiscountService{
             // Xử lý ngoại lệ nếu không thể chuyển đổi startDate thành Date
             e.printStackTrace();
         }
+    }
+
+    @Scheduled(cron = "*/1 * * * * *") // Chạy mỗi giây
+    public void updateDiscountStatus() {
+        List<DirectDiscount> discounts = discountDAO.findAll();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        Date currentDate = new Date();
+
+        for (DirectDiscount discount : discounts) {
+            try {
+                Date startDate = dateFormat.parse(discount.getStartDate());
+                Date endDate = dateFormat.parse(discount.getEndDate());
+
+                if (startDate.after(currentDate)) {
+                    discount.setStatus("Chưa diễn ra");
+                } else if (endDate.before(currentDate)) {
+                    discount.setStatus("Đã kết thúc");
+                } else {
+                    discount.setStatus("Đang diễn ra");
+                }
+
+                // Cập nhật trạng thái vào cơ sở dữ liệu
+                discountDAO.save(discount);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public List<DirectDiscount> findByDiscountProduct(String keyword) {
+        return discountDAO.findByDiscountProduct(keyword);
     }
 }
