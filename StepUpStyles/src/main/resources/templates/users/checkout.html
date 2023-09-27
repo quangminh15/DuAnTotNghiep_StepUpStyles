@@ -98,7 +98,7 @@
 
 										<h4 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 											Địa Chỉ Giao Hàng</h3>
-											<h4>{{addr.user.fullName}} | 09089765989 <span ng-show="addr.defaultAddress"
+											<h4>{{addr.nameReceiver}} | 09089765989 <span ng-show="addr.defaultAddress"
 													class="badge badge-danger">Mặc Định</span></h3>
 												<span>{{addr.addressDetails}}, {{addr.ward}}, {{addr.district}},
 													{{addr.province}}</span>
@@ -106,7 +106,7 @@
 
 									<div class="col-lg-3">
 										<span><a style="color: white;" type="button" data-toggle="modal"
-												data-target="#myModal" class="btn btn-primary py-3 px-4"><i
+												data-target="#myModal" class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
 													class="fas fa-edit"></i> Thay Đổi</a></span>
 									</div>
 									<hr>
@@ -118,7 +118,7 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalAddress" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
+									<a type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalAddress" ng-click="reset()" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
 								</div>
 								<div style=" justify-content: start">
 									<a type="button" class="btn btn-danger"  data-dismiss="modal">Close</a>
@@ -141,7 +141,7 @@
 							<div class="modal-header">
 								<h4 class="modal-title">Địa chỉ mới <br><p>Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</p></h4>
 								
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<button type="button" ng-if="check!=false" class="close" data-dismiss="modal">&times;</button>
 								
 							</div>
 
@@ -153,49 +153,52 @@
 
 											<div class="form-group col-lg-6 col-md-6 col-sm-12">
 												<label for="">Họ Tên</label>
-												<input ng-model="name" type="text" class="form-control text-left px-3" placeholder="">
+												<input ng-model="form.nameReceiver" type="text" class="form-control text-left px-3" placeholder="">
 											</div>
 											<div class="form-group col-lg-6 col-md-6 col-sm-12">
 												<label for="">Số Điện Thoại</label>
-												<input ng-model="phone" type="text" class="form-control text-left px-3" placeholder="">
+												<input ng-model="form.phone" type="text" class="form-control text-left px-3" placeholder="">
 											</div>
 
 										</div>
 										<div class="form-group">
 											<label for="">Tỉnh/Thành Phố</label>
 											<select class="form-control form-control-lg address" id="province"
-												ng-model="selectedProvince"
+												ng-model="form.selectedProvince"
 												ng-options="province.ProvinceName for province in provinces"
 												ng-change="loadDistricts()"
+												ng-selected="current_province"
 												>
-												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+												<!-- <option value="" ng-show="" disabled ng-selected="selected">{{current_province.ProvinceName}}</option> -->
+												<option value=""  disabled selected>Chọn Tỉnh/Thành Phố</option>
 											</select>
 										</div>
 										<div class="form-group">
 											<label for="">Quận/Huyện</label>
 											<select class="form-control form-control-lg" id="district"
-												ng-model="selectedDistrict"
-												ng-options="district.DistrictName for district in selectedProvince.Districts"
+												ng-model="form.selectedDistrict"
+												ng-options="district.DistrictName for district in form.selectedProvince.Districts"
 												ng-change="loadWards()"
-												ng-disabled="selectedProvince.Districts==null">
+												ng-disabled="form.selectedProvince.Districts==null">
 												<option value="" disabled selected>Chọn Quận/Huyện</option>
 											</select>
 										</div>
 										<div class="form-group">
 											<label for="">Phường/Xã</label>
 											<select class="form-control form-control-lg" id="ward"
-												ng-model="selectedWard"
-												ng-options="ward.WardName for ward in selectedDistrict.Wards">
+												ng-model="form.selectedWard"
+												ng-options="ward.WardName for ward in form.selectedDistrict.Wards"
+												ng-disabled="form.selectedDistrict.Wards==null">
 												<option value="" disabled selected>Chọn Phường/Xã</option>
 											</select>
 										</div>
 
 										<div class="form-group">
 											<label for="comment">Địa chỉ cụ thể:</label>
-											<textarea ng-model="addressDetail" class="form-control text-left px-3"  rows="5" id="comment"></textarea>
+											<textarea ng-model="form.addressDetails" class="form-control text-left px-3"  rows="5" id="comment"></textarea>
 										  </div>
 										
-										<input ng-model="checked" ng-disabled="check!=true" class="check" type="checkbox" ng-checked="check==false">
+										<input ng-model="form.checked" ng-disabled="check!=true" class="check" type="checkbox" ng-checked="check==false">
 										<label data-toggle="tooltip" data-placement="top" title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặt định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này" for="check"> Đặt Làm Mặc Định</label>
 									</form>
 
@@ -206,10 +209,10 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(checked,name,phone,addressDetail)"><i class="fa fa-plus"></i> Luu</a>
+									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(form.checked,form.name,form.phone,form.addressDetail)"><i class="fa fa-plus"></i> Luu</a>
 								</div>
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#myModal">Close</a>
+									<a type="button" ng-if="check!=false" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#myModal">Close</a>
 								</div>
 							</div>
 
@@ -256,7 +259,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="text-center">
+								<tr class="text-center" ng-repeat="iCart in cartIs">
 									<td class="image-prod">
 										<div class="img" style="background-image:url(/asset/user/img/cartbg1.jpg);">
 										</div>

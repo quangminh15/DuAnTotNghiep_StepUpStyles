@@ -8,7 +8,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.cout=0
 	//Load data
 	$scope.initialize = function () {
-
+		$scope.tongTien=0
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;
@@ -107,10 +107,18 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	//------------------------------------
 
 	//Check cart 
+	$scope.checkButton = function () {
+	if ($scope.tongTien==0) {
+			return false
+		}else 
+			return true
+	}
 	$scope.checkOne = function (index) {
 		$scope.items[index].isSelected = !$scope.items[index].isSelected;
 		setTongTien()
 		checkCheck()
+
+		updateLocalStorage()
 	}
 	$scope.checkBox = function () {
 		var checkBox = document.getElementById("checkAll");
@@ -148,6 +156,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		angular.forEach($scope.items, function (value, key) {
 			// if (value.inventory >= value.quantity) {
 			value.isSelected = true;
+			updateLocalStorage()
 
 			// }
 		});
@@ -156,7 +165,16 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	function unCheckAll() {
 		angular.forEach($scope.items, function (value, key) {
 			value.isSelected = false;
+			updateLocalStorage()
 		});
+	}
+
+	function updateLocalStorage() {
+		var selectedItems = $scope.items.filter(function (item) {
+			return item.isSelected;
+		});
+		// Save selected items as JSON in local storage
+		localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
 	}
 	
 $scope.updateCount = function (newCount) {

@@ -186,30 +186,10 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="cart-total mb-3">
-							<h3>Tổng Cộng Giỏ Hàng</h3>
-							<p class="d-flex">
-								<span>Thành Tiền</span>
-								<span>$20.60</span>
-							</p>
-							<p class="d-flex">
-								<span>Phí Ship</span>
-								<span>{{shippingFee}}</span>
-							</p>
-							<p class="d-flex">
-								<span>Giảm Giá</span>
-								<span>$3.00</span>
-							</p>
-							<hr>
-							<p class="d-lg-flex total-price">
-								<span>Tổng Tiền</span>
-								<span>{{tongTien}}</span>
-							</p>
-							<p><a th:href="@{/checkout}" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
-						</div>
+						
 					</div>
 					<div class="col-lg-4 .ftco-cart cart-wrap ftco-animate">
-						<div class="cart-total mb-3">
+						<!-- <div class="cart-total mb-3">
 							<h3>Mã Giảm Giá</h3>
 							<p>Nhập mã giảm giá mà bạn đang có để áp dụng giảm giá</p>
 							<form action="#" class="info">
@@ -219,7 +199,7 @@
 								</div>
 							</form>
 							<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp dụng</a></p>
-						</div>
+						</div> -->
 						<div class="cart-total mb-3">
 							<h3>Vận Chuyển</h3>
 							<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
@@ -278,6 +258,27 @@
 								</div>
 							</div>
 
+						</div>
+						<div class="cart-total mb-3">
+							<h3>Tổng Cộng Giỏ Hàng</h3>
+							<p class="d-flex">
+								<span>Thành Tiền</span>
+								<span>$20.60</span>
+							</p>
+							<p class="d-flex">
+								<span>Phí Ship</span>
+								<span>{{shippingFee}}</span>
+							</p>
+							<p class="d-flex">
+								<span>Giảm Giá</span>
+								<span>$3.00</span>
+							</p>
+							<hr>
+							<p class="d-lg-flex total-price">
+								<span>Tổng Tiền</span>
+								<span>{{tongTien}}</span>
+							</p>
+							<p><a th:href="@{/checkout}" ng-if="checkButton()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
 						</div>
 
 					</div>

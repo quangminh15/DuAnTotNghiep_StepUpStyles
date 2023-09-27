@@ -62,8 +62,45 @@
         }
     </script>
     <!-- /move top -->
+
   
-    <script src="/asset/user/js/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="/asset/user/js/jquery-3.3.1.min.js"></script> -->
+    <script>
+        function updateCartCount() {
+            // Make an AJAX call to your API
+            var count = 0
+            $.ajax({
+                type: 'GET',
+                url: '/rest/cart', // Replace with the actual API endpoint
+               
+                data: JSON.stringify(count),
+	            contentType: "application/json",
+                success: function(data) {
+                    // Update the cart count with the received data
+                    count = data.length
+                    $('#cartCount').text(count);
+                    console.log(data.length); // Assuming the API returns an array of cart items
+                },
+                error: function() {
+                    // Handle errors here
+                    console.log('Error fetching cart items.');
+                }
+            });
+        }
+    
+        // Call the function initially to load the cart count
+       
+    
+        // You can also set a timer to periodically update the cart count
+        // setInterval(updateCartCount, 60000); // Update every minute (for example)
+
+        $('.add-to-cart').click(function () {
+            updateCartCount();
+        })
+        updateCartCount();
+    </script>
+    <!-- -------------- -->
     <script src="/asset/user/js/bootstrap.min.js"></script>
     <!-- <script src="/asset/user/js/jquery-2.1.4.min.js"></script> -->
    
@@ -98,7 +135,7 @@
         });
     </script>
     <!-- cart-js -->
-    <script src="/asset/user/js/minicart.js"></script>
+    <!-- <script src="/asset/user/js/minicart.js"></script> -->
     <script>
         transmitv.render();
 
@@ -159,6 +196,11 @@
         });
     </script>
      <!-- navbar scroll -->
+
+
+
+       <!-- count cartitem -->
+   
     
 </body>
 
