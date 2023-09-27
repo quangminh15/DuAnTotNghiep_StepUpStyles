@@ -54,4 +54,9 @@ public class SupplierServiceImp implements SupplierService {
     public List<Supplier> getHistorySuppliers() {
         return supDao.findByDeletedTrue();
     }
+
+    @Override
+    public List<Supplier> findByDisplay() {
+        return supDao.findByDisplayTrueAndDeletedFalse();
+    }
 }

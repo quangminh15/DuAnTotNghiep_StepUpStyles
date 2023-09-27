@@ -241,8 +241,6 @@
                             class="bi bi-trash3-fill"></i>Xóa</button>
                     <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
                             class="bi bi-arrow-clockwise"></i>Làm mới</button>
-                    <button class="btn btn-space btn btn-warning" ng-click="openRecycleBinForm()"><i
-                            class="bi bi-clock-history"></i>Lịch sử xóa</button>
                 </p>
             </div>
         </div>
@@ -251,7 +249,7 @@
 </div>
 
 <div class="card card-table m-3">
-    <div class="card-header">Danh sách nhà cung cấp
+    <div class="card-header d-flex justify-content-between align-items-center">Danh sách nhà cung cấp
     </div>
     <div class="modal-body">
         <form method="post">
@@ -261,6 +259,10 @@
                     placeholder="Tìm kiếm nhà cung cấp" ng-change="searchByName()">
             </div>
         </form>
+        <button class="btn btn-space btn-danger md-trigger" ng-click="openRecycleBinForm()"
+                style="width: 50px; height: 43px">
+                <span class="mdi mdi-delete"></span>
+            </button>
     </div>
 
     <div class="card-body">

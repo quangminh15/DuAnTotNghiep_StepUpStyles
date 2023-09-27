@@ -179,6 +179,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 			var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
 			$scope.items[index] = item;
 			$scope.messageSuccess = "Cập nhật thành công nhà cung cấp";
+			$scope.reset();
+			$scope.initialize();
 			$('#errorModal1').modal('show'); // Show the modal
 		}).catch(error => {
 			alert("Loi cap nhat");
