@@ -38,8 +38,8 @@ public class FavoriteController {
 
     @RequestMapping("/favorite")
     public String getFavoriteByUser(Model model){
-        // List<Favorite> item = favoriteService.findByUserId(3);
-        // model.addAttribute("favoriteitems", item);
+        List<Favorite> item = favoriteService.findByUserId(3);
+        model.addAttribute("favoriteitems", item);
         return "users/favorite";
     }
 }

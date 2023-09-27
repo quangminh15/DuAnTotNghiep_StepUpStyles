@@ -1,5 +1,6 @@
 package com.sts.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 	public List<ProductDetail> findAll() {
 		return productDetailDAO.findAll();
 	}
-	
+
 	@Override
 	public List<ProductDetail> loadAllDeleted() {
 		return productDetailDAO.loadAllDeleted();
@@ -58,4 +59,22 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 	public List<ProductDetail> getProductDetailByProduct(Integer productId) {
 		return productDetailDAO.findByProduct_ProductID(productId);
 	}
+
+	// test
+
+	@Override
+	public List<ProductDetail> getProductDetailsByCategory(Integer categoryId) {
+		// Thực hiện truy vấn danh sách ProductDetail theo categoryId
+		List<ProductDetail> allProductDetails = productDetailDAO.findAll(); // Lấy tất cả sản phẩm
+		List<ProductDetail> productDetailsByCategory = new ArrayList<>();
+
+		for (ProductDetail productDetail : allProductDetails) {
+			if (productDetail.getProduct().getCategory().getCategoryID().equals(categoryId)) {
+				productDetailsByCategory.add(productDetail);
+			}
+		}
+
+		return productDetailsByCategory;
+	}
+
 }

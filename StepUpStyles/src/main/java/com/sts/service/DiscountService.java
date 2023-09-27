@@ -19,5 +19,8 @@ public interface DiscountService {
     void delete(Long ddid);
 
     void saveStatus(DirectDiscount directDis);
-    
+
+    void updateDiscountStatus();
+
+    List<DirectDiscount> findByDiscountProduct(String keyword);
 }

@@ -98,6 +98,62 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		}	
 	}
 
+	//tìm kiếm tên sản phẩm
+	$scope.searchByProduct = function(){
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+			$http.get("/rest/discount/searchDiscountProduct", {
+				params: { keyword: $scope.searchKeyword }
+			}).then(resp => {
+				$scope.directDiscountNoDelItem = resp.data;
+				$scope.directDiscountNoDelItem.sort(function (a, b) {
+					var statusDiscount = {
+						'Đang diễn ra': 1,
+						'Chưa diễn ra': 2,
+						'Đã kết thúc': 3
+					};
+				
+					var statusA = a.status;
+					var statusB = b.status;
+				
+					return statusDiscount[statusA] - statusDiscount[statusB];
+				});
+				
+				$scope.directDiscountNoDelItem.forEach(function(ddI) {
+					ddI.formattedStartDate = formatDate(ddI.startDate);
+					ddI.formattedEndDate = formatDate(ddI.endDate);
+				});
+				$scope.pager.first();
+				function formatDate(startDate) {
+					// Parse the input date string
+					const inputDate = new Date(startDate);
+				
+					// format gio VN
+					const options = {
+						year: 'numeric',
+						month: '2-digit',
+						day: '2-digit',
+						hour: '2-digit',
+						minute: '2-digit',
+						second: '2-digit',
+						hour12: false, // 24-hour format
+						timeZone: 'Asia/Ho_Chi_Minh', //  time zone
+					};
+				
+					// Format the date using Intl.DateTimeFormat
+					const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+				
+					return formattedDate;
+				}	
+			}).catch(error => {
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}else {
+			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
+			$scope.initialize();
+		}
+	}
+
 	//	Xóa form
 	$scope.reset = function () {
 		$scope.form = {
@@ -248,7 +304,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		//lỗi ngày 
 		var today = new Date();
 		
-		if ($scope.form.startDate < today && $scope.form.endDate >today) {
+		if ($scope.form.status === 'Đang diễn ra') {
 			$scope.errorMessage = "Giảm giá đang trong thời gian áp dụng";
 			$('#errorModal').modal('show');
 			return;
@@ -268,10 +324,16 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 
 		var dynamicDateValueS = $scope.form.startDate;
 		var dynamicDateObjectS = new Date(dynamicDateValueS);
-		var isoDynamicDateStringS = dynamicDateObjectS.toISOString().slice(0, 19).replace('T', ' ');;
+		// Đặt múi giờ cho ngày giờ theo múi giờ Việt Nam (UTC+7)
+		dynamicDateObjectS.setHours(dynamicDateObjectS.getHours() + 7);
+		var isoDynamicDateStringS = dynamicDateObjectS.toISOString().slice(0, 19).replace('T', ' ');
+
 		var dynamicDateValueE = $scope.form.endDate;
 		var dynamicDateObjectE = new Date(dynamicDateValueE);
-		var isoDynamicDateStringE = dynamicDateObjectE.toISOString().slice(0, 19).replace('T', ' ');;
+		// Đặt múi giờ cho ngày giờ theo múi giờ Việt Nam (UTC+7)
+		dynamicDateObjectE.setHours(dynamicDateObjectE.getHours() + 7);
+		var isoDynamicDateStringE = dynamicDateObjectE.toISOString().slice(0, 19).replace('T', ' ');
+
 		//format deciaml
 		// var percentageValue = $scope.form.directDiscount;
 
@@ -409,7 +471,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 
 	//	Xóa 
 	$scope.delete = function (ddI) {
-		$http.delete('/rest/directdiscount/delete/' + ddI.directDiscountID).then(resp => {
+		$http.delete('/rest/discount/delete/' + ddI.directDiscountID).then(resp => {
 			var index = $scope.directDiscountItem.findIndex(d => d.directDiscountID == ddI.directDiscountID);
 			$scope.directDiscountItem.splice(index, 1);
 			$scope.reset();
@@ -459,6 +521,25 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	// 	// Đóng modal xác nhận xóa
 	// 	$('#confirmDeleteModal').modal('hide');
 	// }
+
+	//loc trang thai
+	$scope.filterStatus = ''; // Khởi tạo giá trị ban đầu
+
+	$scope.filterStatusDiscount = function (item) {
+		if ($scope.filterStatus === '') {
+			
+			return true; // Hiển thị tất cả khi bộ lọc chưa được chọn
+		} else if ($scope.filterStatus === 'dang' && item.status === 'Đang diễn ra') {
+			return true;
+		} else if ($scope.filterStatus === 'chuadr' && item.status === 'Chưa diễn ra') {
+			return true;
+		} else if ($scope.filterStatus === 'ket' && item.status === 'Đã kết thúc') {
+			return true;
+		}
+
+		return $scope.filterStatus === '';
+	};
+
 	//	Phân trang
 	$scope.pager = {
 		page: 0,

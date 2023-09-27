@@ -21,4 +21,6 @@ public interface SupplierService {
     List<Supplier> findBySupplierNameContaining(String keyword);
 
     List<Supplier> getHistorySuppliers();
+
+    List<Supplier> findByDisplay();
 }

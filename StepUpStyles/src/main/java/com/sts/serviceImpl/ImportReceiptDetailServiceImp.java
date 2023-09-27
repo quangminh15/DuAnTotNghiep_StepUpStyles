@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.ImportReceiptDetailDAO;
+import com.sts.dao.ProductDetailDAO;
 import com.sts.model.ImportReceiptDetail;
 import com.sts.service.ImportReceiptDetailService;
 
@@ -14,6 +15,9 @@ public class ImportReceiptDetailServiceImp implements ImportReceiptDetailService
     @Autowired
     ImportReceiptDetailDAO importReceiptDetailDAO;
 
+    @Autowired
+    ProductDetailDAO productDetailDao;
+
     @Override
     public ImportReceiptDetail findById(Long id) {
         return importReceiptDetailDAO.findById(id).get();
@@ -21,12 +25,11 @@ public class ImportReceiptDetailServiceImp implements ImportReceiptDetailService
 
     @Override
     public List<ImportReceiptDetail> findAll() {
-       return importReceiptDetailDAO.findAll();
+        return importReceiptDetailDAO.findAll();
     }
 
     @Override
     public ImportReceiptDetail create(ImportReceiptDetail importReceiptDetail) {
         return importReceiptDetailDAO.save(importReceiptDetail);
     }
-    
 }

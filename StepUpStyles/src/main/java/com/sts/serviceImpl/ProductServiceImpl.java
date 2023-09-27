@@ -1,21 +1,21 @@
 package com.sts.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
-import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CategoryDAO;
 import com.sts.dao.ProductDAO;
+import com.sts.model.Category;
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
+import com.sts.model.DTO.ProductWithCount;
 import com.sts.service.ProductService;
 
 @Service
@@ -67,5 +67,33 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> searchByName(String keyword) {
 		return productDAO.findByProductNameContaining(keyword);
+	}
+
+	@Override
+	public List<CategoryProductCountDTO> getCategoryProductCount() {
+		List<CategoryProductCountDTO> categoryProductCounts = new ArrayList<>();
+
+		// Lấy danh sách danh mục
+		List<Category> categories = categoryDAO.findAll();
+
+		for (Category category : categories) {
+			// Sử dụng JPQL để lấy tổng số lượng sản phẩm theo danh mục
+			TypedQuery<Long> query = entityManager.createQuery(
+					"SELECT SUM(pd.quantity) FROM ProductDetail pd WHERE pd.product.category = :category", Long.class);
+			query.setParameter("category", category);
+
+			// Thực hiện truy vấn và lấy kết quả
+			Long productCount = query.getSingleResult();
+
+			if (productCount == null) {
+				productCount = 0L;
+			}
+
+			// Tạo một đối tượng CategoryProductCountDTO và thêm vào danh sách
+			CategoryProductCountDTO countDTO = new CategoryProductCountDTO(category.getCategoryName(), productCount);
+			categoryProductCounts.add(countDTO);
+		}
+
+		return categoryProductCounts;
 	}
 }

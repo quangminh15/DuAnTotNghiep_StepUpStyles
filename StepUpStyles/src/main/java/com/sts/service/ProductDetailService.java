@@ -22,4 +22,6 @@ public interface ProductDetailService {
 	List<ProductDetail> searchByName(String keyword);
 	
 	List<ProductDetail> getProductDetailByProduct(Integer productId);
+
+	 List<ProductDetail> getProductDetailsByCategory(Integer categoryId);
 }

@@ -108,7 +108,7 @@
                 <p class="text-right">
                     <button class="btn btn-space btn btn-primary" type="submit"
                         ng-click="showPhieuNhapForm = false; showChiTietForm = true">
-                        <i class="bi bi-arrow-left"></i>Thêm chi tiết
+                        <i class="bi bi-arrow-bar-right"></i>Thêm chi tiết
                     </button>
                     <button class="btn btn-space btn btn-success" ng-click="create()" type="submit"><i
                             class="bi bi-file-plus-fill"></i>Thêm</button>
@@ -191,7 +191,7 @@
             <div class="col-sm-12 pl-0">
                 <p class="text-right">
                     <button class="btn btn-space btn btn-primary"
-                        ng-click="showPhieuNhapForm = true; showChiTietForm = false" type="submit"><i class="bi bi-arrow-left"></i>Thêm phiếu nhập</button>
+                        ng-click="showPhieuNhapForm = true; showChiTietForm = false" type="submit"><i class="bi bi-arrow-bar-left"></i>Thêm phiếu nhập</button>
                     <button class="btn btn-space btn btn-success" ng-click="createDetail()" type="submit"><i
                             class="bi bi-file-plus-fill"></i>Thêm</button>
                     <button class="btn btn-space btn btn-dark" ng-click="reset()"><i
@@ -244,7 +244,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button>Xuất PDF</button>
+                    <button ng-click="exportPdf()">Xuất PDF</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -260,12 +260,12 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID phiếu nhập</th>
-                    <th>Tên người nhập</th>
-                    <th>Tên nhà cung cấp</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày nhập</th>
-                    <th class="actions"></th>
+                    <th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label }}
+                        <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+                                class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
+                                class="mdi mdi-long-arrow-up"></span>
+                        </span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
