@@ -63,4 +63,9 @@ public class SupplierRestController {
     public List<Supplier> searchSuppliers(@RequestParam("keyword") String keyword) {
         return supplierService.findBySupplierNameContaining(keyword);
     }
+
+    @GetMapping("/displaysupplier")
+    public List<Supplier> displaySuppliers(){
+        return supplierService.findByDisplay();
+    }
 }

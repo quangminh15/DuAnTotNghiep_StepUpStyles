@@ -7,7 +7,26 @@
 
 </head>
 
-<body ng-controller="favorite-ctrl">
+<body ng-controller="favorite-list-ctrl">
+	<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa sản phẩm</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			<div class="modal-body">
+			  Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+			  <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xác nhận</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
 	<section class="w3l-banner-slider-main inner-pagehny">
 		<div class="breadcrumb-infhny">
 	
@@ -71,12 +90,12 @@
 				<div class="breadcrumb-contentnhy">
 					<div class="container">
 						<nav aria-label="breadcrumb">
-							<h2 class="hny-title text-center">Products</h2>
+							<h2 class="hny-title text-center">Favorite</h2>
 							<ol class="breadcrumb mb-0">
 								<li><a href="/index">Home</a>
 									<span class="fa fa-angle-double-right"></span>
 								</li>
-								<li class="active">Products</li>
+								<li class="active">Favorite</li>
 							</ol>
 						</nav>
 					</div>
@@ -331,13 +350,13 @@
 							</div>
 						</div>
 						<h2>SẢN PHẨM ĐƯỢC BẠN YÊU THÍCH</h2>
-						<div ng-if="userItemsFavorite.length == 0" style="text-align: center; justify-content: center; margin: 10px;">
+						<div th:if="${#lists.isEmpty(favoriteitems)}" style="text-align: center; justify-content: center; margin: 10px;">
 							<p>Bạn chưa có sản phẩm yêu thích.</p>
 							<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;">Tiếp tục mua sắm</a>
 						</div>
-						<div ng-if="userItemsFavorite">
+						<div th:if="${not #lists.isEmpty(favoriteitems)}">
 							<!-- Hiển thị danh sách sản phẩm yêu thích -->
-							<!-- <div class="ecom-products-grids row">
+							<div class="ecom-products-grids row">
 								<div th:each="p: ${favoriteitems}" class="col-lg-4 col-6 product-incfhny mb-4">
 									<div class="product-grid2 transmitv">
 										<div class="product-image2">
@@ -348,9 +367,10 @@
 											<ul class="social">
 												
 												<li>
-															<a th:attr="ng-click=@{|check(${p.product.productID})|}" data-tip="Favorite">
-																<span class="fa fa-heart"></span>
-															</a>
+															<!-- <button data-tip="Favorite" style="border: 50%; outline: none; border-radius: 50%;" th:attr="ng-click=@{|check(${p.product.productID})|}">
+																<span class="fa fa-heart" style="color: red;"></span>
+															</button> -->
+															<a th:attr="ng-click=@{|check(${p.product.productID})|}"><span class="fa fa-heart"></span></a>
 												</li>
 											</ul>
 											<div class="transmitv single-item">
@@ -367,9 +387,9 @@
 										</div>
 									</div>
 								</div>
-							</div> -->
+							</div>
 							
-							<div class="ecom-products-grids row">
+							<!-- <div class="ecom-products-grids row">
 								<div ng-repeat="item in userItemsFavorite" class="col-lg-4 col-6 product-incfhny mb-4">
 									<div class="product-grid2 transmitv">
 										<div class="product-image2">
@@ -397,10 +417,16 @@
 											<span class="price">{{ item.product.brand.brandName }}</span>
 											<span class="price">{{ item.product.productImages[0].imagePath }}</span>
 											<span class="price">{{ item.product.productImages[0].productImageID }}</span>
+											<li>
+												<button ng-show="isFavorite(item.product.productID)" ng-click="check(item.product.productID)">
+													<span>&#10084;</span> Đã thích
+												</button>
+												
+											</li>
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<!-- //row-->
 						<!--/row2-->
@@ -483,7 +509,7 @@
 				<!--//row1-->
 
 				<!--/pagination-->
-				<div class="pagination">
+				<!-- <div class="pagination">
 					<ul>
 						<li class="prev"><a href="#page-number"><span class="fa fa-angle-double-left"></span></a>
 						</li>
@@ -494,7 +520,7 @@
 						<li class="next"><a href="#page-number"><span class="fa fa-angle-double-right"></span></a>
 						</li>
 					</ul>
-				</div>
+				</div> -->
 				<!--//pagination-->
 
 			</div>
