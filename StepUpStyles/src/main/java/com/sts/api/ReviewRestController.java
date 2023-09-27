@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Review;
+import com.sts.model.DTO.TotalProductRatingDTO;
 import com.sts.service.ReviewService;
 
 @CrossOrigin("*")
@@ -51,5 +52,12 @@ public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId)
     @GetMapping("/rest/reviews/loadbystar")
 	public List<Review> getStar(@RequestParam Integer rating) {
 		return reviewService.getReviewByStar(rating);
+	}
+
+    // thong ke
+    @GetMapping("/api/total-product-rating")
+	public ResponseEntity<List<TotalProductRatingDTO>> getTotalProductRating(@RequestParam("month") Integer month, @RequestParam("year") Integer year) {
+		List<TotalProductRatingDTO> totalProducts = reviewService.getTotalProductRating(month, year);
+		return ResponseEntity.ok(totalProducts);
 	}
 }

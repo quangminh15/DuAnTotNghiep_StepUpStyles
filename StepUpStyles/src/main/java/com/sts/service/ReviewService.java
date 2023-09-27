@@ -3,6 +3,7 @@ package com.sts.service;
 import java.util.List;
 
 import com.sts.model.Review;
+import com.sts.model.DTO.TotalProductRatingDTO;
 
 public interface ReviewService {
     List<Review> findAll();
@@ -11,4 +12,5 @@ public interface ReviewService {
     List<Review> getProductByProductId(Integer productId);
     List<Review> getUsersByUsersId(Integer usersId);
     List<Review> getReviewByStar(Integer rating);
+    List<TotalProductRatingDTO> getTotalProductRating(int month, int year);
 }
