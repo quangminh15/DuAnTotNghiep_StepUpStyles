@@ -66,6 +66,43 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		}
 	};
 	
+
+	$scope.createOrder = function () {
+
+		const storedOrderDetails = localStorage.getItem('selectedItems');
+		if (storedOrderDetails) {
+			const orderDetails = JSON.parse(storedOrderDetails);
+	
+			// Create an order object with the orderDetails
+			const order = {
+				// Add other order-related information as needed
+				deliveryDate: null,
+				deliveryStatus: null,
+				initialPrice: null,
+				orderDate:null,
+				paymentStatus:null,
+				shippingFee:$scope.shippingFee,
+				totalAmount: 666,
+				discountPrice:0,
+				shippingAddress: $scope.addressDefault,
+				orderDetails: orderDetails,
+				
+
+			};
+	
+			$http.post('/api/createOrder', order)
+				.then(function (response) {
+					// Handle the response from the Spring Boot service if needed
+					console.log('Order created:', response.data);
+					// Optionally, clear the Local Storage after successful creation
+					localStorage.removeItem('orderDetails');
+				})
+				.catch(function (error) {
+					console.error('Error:', error);
+				});
+		}	
+	}
+	
 	// Call this function on page load or wherever it's needed in your controller.
 	$scope.loadFromLocalStorage();
 	
