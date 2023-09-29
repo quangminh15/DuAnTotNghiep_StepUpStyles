@@ -56,8 +56,20 @@ public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId)
 
     // thong ke
     @GetMapping("/api/total-product-rating")
-	public ResponseEntity<List<TotalProductRatingDTO>> getTotalProductRating(@RequestParam("month") Integer month, @RequestParam("year") Integer year) {
-		List<TotalProductRatingDTO> totalProducts = reviewService.getTotalProductRating(month, year);
-		return ResponseEntity.ok(totalProducts);
-	}
+	// public ResponseEntity<List<TotalProductRatingDTO>> getTotalProductRating(@RequestParam("year") Integer year) {
+	// 	if (year == null) {
+    //         // Nếu không có năm được chọn, mặc định lấy dữ liệu cho năm hiện tại
+    //         year = java.time.LocalDate.now().getYear();
+    //     }
+        
+    //     return reviewService.getTotalProductRating(year);
+	// }
+    public List<TotalProductRatingDTO> getReviewChartData(@RequestParam(name = "year", required = false) Integer year) {
+        if (year == null) {
+            // Nếu không có năm được chọn, mặc định lấy dữ liệu cho năm hiện tại
+            year = java.time.LocalDate.now().getYear();
+        }
+        
+        return reviewService.getTotalProductRating(year);
+    }
 }
