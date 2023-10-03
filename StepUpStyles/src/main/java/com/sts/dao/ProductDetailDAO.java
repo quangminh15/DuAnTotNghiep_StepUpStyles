@@ -37,4 +37,6 @@ public interface ProductDetailDAO extends JpaRepository<ProductDetail, Integer> 
 	void updatePDQuantiy(Integer newQuantity, Integer productDetailID);
 	// -------
 
+	ProductDetail findByProductDetailID(Integer productDetailID);
+
 }

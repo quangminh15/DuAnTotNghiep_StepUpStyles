@@ -24,7 +24,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                 });
                     console.log(1);
                 }else{
-                    $http.delete('/rest/favorites/delete/' + $scope.productbyids.favoriteId)
+                    $http.delete('/rest/favorites/delete/' + productID)
                 .then(function(response) {
                     console.log("tat thich");
                     $scope.begin();
@@ -40,21 +40,21 @@ app.controller("favorite-ctrl", function ($scope, $http) {
             });
     }
 
-    $scope.getAllUserFavorite = function(){
-        $http.get("/rest/favorites/getUserFavorite").then(function(response){
-            $scope.userItemsFavorite = response.data
-            console.log(response.data);
-            console.log(userItemsFavorite)
-        })
-    }
+    // $scope.getAllUserFavorite = function(){
+    //     $http.get("/rest/favorites/getUserFavorite").then(function(response){
+    //         $scope.userItemsFavorite = response.data
+    //         console.log(response.data);
+    //         console.log(userItemsFavorite)
+    //     })
+    // }
 
-    $scope.isFavorite = function(productID) {
-        return $scope.userItemsFavorite.some(function(item) {
-            return item.product.productID === productID;
-        });
-    }
+    // $scope.isFavorite = function(productID) {
+    //     return $scope.userItemsFavorite.some(function(item) {
+    //         return item.product.productID === productID;
+    //     });
+    // }
 
-    $scope.getAllUserFavorite();
+    // $scope.getAllUserFavorite();
 
-    $scope.begin();
+    // $scope.begin();
 });

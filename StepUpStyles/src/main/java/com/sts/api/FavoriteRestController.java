@@ -62,18 +62,18 @@ public class FavoriteRestController {
             favoriteService.create(productId, 3);
 	}
 
-	@DeleteMapping("/rest/favorites/delete/{userId}/{productId}")
-	public void deleteFavorite(@PathVariable("userId") Integer userId, @PathVariable("productId") Integer productId) {
+	@DeleteMapping("/rest/favorites/delete/{productId}")
+	public void deleteFavorite(@PathVariable("productId") Integer productId) {
 		Product product = productService.findById(productId);
-        User user = userService.findById(userId);
+        User user = userService.findById(3);
 
         if (product != null && user != null) {
             favoriteService.delete(user, product);
         }
 	}
 
-	@DeleteMapping("/rest/favorites/delete/{favoriteId}")
-	public void delete(@PathVariable("favoriteId") Integer favoriteId) {
-		favoriteService.deleteById(favoriteId);
-	}
+	// @DeleteMapping("/rest/favorites/delete/{favoriteId}")
+	// public void delete(@PathVariable("favoriteId") Integer favoriteId) {
+	// 	favoriteService.deleteById(favoriteId);
+	// }
 }
