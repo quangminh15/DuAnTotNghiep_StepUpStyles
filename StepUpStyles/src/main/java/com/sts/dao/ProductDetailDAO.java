@@ -33,4 +33,6 @@ public interface ProductDetailDAO extends JpaRepository<ProductDetail, Integer> 
 
 	// -------
 
+	ProductDetail findByProductDetailID(Integer productDetailID);
+
 }

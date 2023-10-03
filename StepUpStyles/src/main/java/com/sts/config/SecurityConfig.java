@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Phân quyền
         http.authorizeRequests()
                 .antMatchers("/cart/**").hasRole("USER")
-                .antMatchers("/admin/**").hasAnyRole("ADMIN","EMPLOYEE")
+                // .antMatchers("/admin/**").hasAnyRole("ADMIN","EMPLOYEE")
                 .antMatchers("/admin/thongke").hasRole("ADMIN")
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().permitAll()

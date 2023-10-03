@@ -14,31 +14,33 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.showChiTietForm = false; // Ẩn form chi tiết mặc định
   $scope.showThemChiTietButton = true; // Hiển thị nút "Thêm chi tiết" mặc định
 
-    $scope.exportPdf = function () {
-        $http({
-            method: 'POST',
-            url: '/export-pdf',
-            data: $scope.importDetail,
-            responseType: 'arraybuffer', // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(function (response) {
-            // Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
-            var blob = new Blob([response.data], { type: 'application/pdf' });
-            var url = URL.createObjectURL(blob);
+  $scope.exportPdf = function () {
+    $http({
+      method: "POST",
+      url: "/export-pdf",
+      data: $scope.importDetail,
+      responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(function (response) {
+        // Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+        var blob = new Blob([response.data], { type: "application/pdf" });
+        var url = URL.createObjectURL(blob);
 
-            // Tạo một thẻ a để tải xuống tệp PDF
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'import_receipt.pdf';
-            document.body.appendChild(a);
-            a.click();
-            URL.revokeObjectURL(url);
-        }).catch(function (error) {
-            console.error('Xuất PDF thất bại:', error);
-        });
-    };
+        // Tạo một thẻ a để tải xuống tệp PDF
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "import_receipt.pdf";
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(function (error) {
+        console.error("Xuất PDF thất bại:", error);
+      });
+  };
 
   $scope.sortableColumns = [
     { name: "importReceiptId", label: "Mã phiếu nhập" },
