@@ -31,6 +31,10 @@ public interface ProductDetailDAO extends JpaRepository<ProductDetail, Integer> 
 	@Query("SELECT pd FROM ProductDetail pd WHERE pd.product= ?1 AND pd.size = ?2 AND pd.color = ?3")
 	ProductDetail findProductDetail(Product product, Size size, Color color);
 
+	@Transactional
+	@Modifying
+	@Query("Update ProductDetail pd SET pd.quantity = ?1 WHERE pd.productDetailID= ?2")
+	void updatePDQuantiy(Integer newQuantity, Integer productDetailID);
 	// -------
 
 }

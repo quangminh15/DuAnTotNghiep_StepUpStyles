@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.model.Order;
 import com.sts.model.ShippingAddress;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
@@ -29,17 +30,20 @@ public class OrderRestController {
     @PostMapping("/receiveCartData")
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") double initialPrice,
-            @RequestParam("fee") double fee
+            @RequestParam("fee") double fee,
+            @RequestParam("addressId") int addressId
              ) {
         try {
             // Handle the list of CartData objects
             System.out.println(fee);
             System.out.println(initialPrice);
-            //System.out.println(address);
-            for (OrderDetailDTO cartData : cartDataList) {
-                System.out.println("CartDetailId: " + cartData.getCartDetailId());
-                // Handle other properties as needed
-            }
+            System.out.println(addressId);
+
+            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId);
+            // for (OrderDetailDTO cartData : cartDataList) {
+            //     System.out.println("CartDetailId: " + cartData.getCartDetailId());
+            //     // Handle other properties as needed
+            // }
 
             // Create a success response
             Map<String, String> responseMap = new HashMap<>();
