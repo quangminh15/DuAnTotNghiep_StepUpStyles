@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.sts.model.Review;
+import com.sts.model.DTO.TotalProductRatingDTO;
 
 public interface ReviewDAO extends JpaRepository<Review, Integer>{
     // @Query("SELECT u FROM Review u WHERE u.user.userId = :userId")
@@ -20,4 +21,15 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
 
     @Query("SELECT r FROM Review r WHERE r.rating = ?1")
     List<Review> findByStar(@Param("rating") Integer rating);
+
+    @Query(value = "SELECT MONTH(r.reviewDate) AS month, " +
+    "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
+    "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
+    "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
+    "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
+    "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
+    "FROM Review r " +
+    "WHERE YEAR(r.reviewDate) = :year " +
+    "GROUP BY MONTH(r.reviewDate)")
+List<TotalProductRatingDTO> getReviewStatsByYear(@Param("year") Integer year);
 }

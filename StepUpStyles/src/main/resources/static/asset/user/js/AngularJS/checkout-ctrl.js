@@ -1,6 +1,6 @@
 app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	$scope.address = []
-
+	$scope.cartDetails = []
 
 
 	$scope.index_of_province = function (address) {
@@ -50,25 +50,88 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);
 			});
+			
+			
 	}
-	$scope.loadFromLocalStorage = function() {
+	$scope.loadFromLocalStorage = function () {
 		var storedItems = localStorage.getItem('selectedItems');
 		if (storedItems) {
 			var selectedItems = JSON.parse(storedItems);
-			$scope.cartIs = selectedItems
+			$scope.cartIs = selectedItems;
+
 			// Update the isSelected property of items based on the loaded data
 			$scope.cartIs.forEach(function (item) {
 				item.isSelected = selectedItems.some(function (selectedItem) {
 					return selectedItem.id === item.id; // Adjust the condition as per your data structure
 				});
 			});
-			
+			setTongTien()
 		}
 	};
-	
+	function setTongTien() {
+        var tongTien = 0;
+        angular.forEach($scope.cartIs, function (value, key) {
+			
+            tongTien += value.product.price * value.quantity;
+            
+        });
+		console.log(tongTien);
+        $scope.tongTien = tongTien;
+    }
+	$scope.sendDataToJava = function () {
+		$http({
+			method: 'POST',
+			url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}`,
+			data: $scope.cartIs, // Assuming $scope.cartIs is an array
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			console.log('Order created:', response.data);
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
+	};
+
+	// Function to create an order
+	$scope.createOrder = function () {
+		// Create an order object with the order details
+		if (!$scope.cartIs || !$scope.cartIs.length) {
+			console.error('Error: cartIs is null or empty.');
+			return;
+		} else
+			console.log($scope.cartIs);
+		const cartDetails = Array.from($scope.cartIs);
+		const order = {
+
+			deliveryStatus: null,
+			initialPrice: null,
+			orderDate: null,
+			paymentStatus: null,
+			shippingFee: $scope.shippingFee,
+			totalAmount: 666,
+			discountPrice: 0,
+			shippingAddress: $scope.addressDefault,
+			cartDetails: cartDetails
+		};
+		console.log($scope.cartDetails);
+		//Send the order object to your Spring Boot service
+		$http.post('/rest/order/createOrder', order)
+			.then(function (response) {
+
+				console.log('Order created:', response.data);
+
+				localStorage.removeItem('selectedItems');
+			})
+			.catch(function (error) {
+				console.error('Error:', error);
+
+			});
+	};
+
 	// Call this function on page load or wherever it's needed in your controller.
 	$scope.loadFromLocalStorage();
-	
+
 	$scope.getAddressToShippingFee = function (p, d, w) {
 		$scope.dataAddress = {
 			"service_type_id": 2,
@@ -147,62 +210,62 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 			checked: false
 		}
-		$scope.current_province={}
+		$scope.current_province = {}
 	}
 
 	$scope.edit = function (addr) {
 		//console.log(addr.province);
 		if (addr) {
-			
-		
-		$('#ModalAddress').modal('show');
-		$scope.form = angular.copy(addr);
-	
 
-		$http({
-			method: 'GET',
-			url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
-			headers: {
-				'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
-			}
-		}).then(function successCallback(response) {
-			$scope.province = response.data.data;
-			// console.log($scope.province);
-			$scope.current_province = $scope.province[$scope.index_of_province(addr.province)]
-			
-			// $scope.form.selectedProvince = $scope.current_province
-			
-			console.log("Selected Province:", $scope.form.selectedProvince);
-			
+
+			$('#ModalAddress').modal('show');
+			$scope.form = angular.copy(addr);
+
+
 			$http({
 				method: 'GET',
-				url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
+				url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
 				headers: {
-					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
-					'ShopId': '4551956'
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
 				}
 			}).then(function successCallback(response) {
-				$scope.district = response.data.data;
-				console.log($scope.district);
-				$scope.current_district = $scope.district[$scope.index_of_district(addr.district)]
-				$scope.form.selectedDistrict = $scope.current_district
+				$scope.province = response.data.data;
+				// console.log($scope.province);
+				$scope.current_province = $scope.province[$scope.index_of_province(addr.province)]
+
+				// $scope.form.selectedProvince = $scope.current_province
+
+				console.log("Selected Province:", $scope.form.selectedProvince);
+
 				$http({
 					method: 'GET',
-					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.current_district.DistrictID,
+					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
 					headers: {
-						'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+						'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
+						'ShopId': '4551956'
 					}
 				}).then(function successCallback(response) {
-					$scope.ward = response.data.data
-					$scope.current_ward = $scope.ward[$scope.index_of_ward(addr.ward)]
-					$scope.form.selectedWard = $scope.current_ward
+					$scope.district = response.data.data;
+					console.log($scope.district);
+					$scope.current_district = $scope.district[$scope.index_of_district(addr.district)]
+					$scope.form.selectedDistrict = $scope.current_district
+					$http({
+						method: 'GET',
+						url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.current_district.DistrictID,
+						headers: {
+							'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+						}
+					}).then(function successCallback(response) {
+						$scope.ward = response.data.data
+						$scope.current_ward = $scope.ward[$scope.index_of_ward(addr.ward)]
+						$scope.form.selectedWard = $scope.current_ward
+					})
 				})
 			})
-		})
-	}
-	else{
-		return
-	}
+		}
+		else {
+			return
+		}
 	}
 
 	$scope.updateDefault = function (id) {

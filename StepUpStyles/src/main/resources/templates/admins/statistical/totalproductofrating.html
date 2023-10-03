@@ -25,33 +25,27 @@
     }
     </style>
     <div class="main-content container-fluid">
-        <!-- <div class="row">
+        <!-- <div class="row"> -->
     
-            <div class="col-lg-6"> -->
+            <!-- <div class="col-lg-6"> -->
                 <div class="card">
                     <div class="card-header card-header-divider">
     
                         <span class="title">BIỂU ĐỒ</span><span class="card-subtitle">Thống
                             kê tổng sản phẩm theo sao đánh giá</span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body container">
                         <div class="row">
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <label for="">Năm</label>
-                                <select class="form-control" ng-model="year" ng-options="year for year in years">
+                                <select class="form-control" ng-model="selectedYear" ng-options="year for year in years" ng-change="updateChartData()">
                                     <option value="">Chọn năm</option>
                                 </select>
                             </div>
-                            <div class="col-sm-2">
-                                <label for="">Tháng</label>
-                                <select class="form-control" ng-model="month" ng-options="month as month for month in months">
-                                    <option value="">Chọn tháng</option>
-                                </select>
                             </div>
-                            </div>
-                        <canvas id="polar-chart" height="200"></canvas>
+                        <canvas id="area-chart" height="80"></canvas>
                     </div>
-                </div>
+                <!-- </div> -->
             <!-- </div> -->
     
             <!-- <div class="col-md-6">
@@ -124,5 +118,8 @@
             </div> -->
     
         <!-- </div> -->
-    </div>
+    <!-- </div> -->
+
+   
+
     
