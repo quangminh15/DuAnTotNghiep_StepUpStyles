@@ -59,8 +59,8 @@
 								<thead class="thead-primary">
 									<tr class="text-center">
 										<th>
-											<input type="checkbox" ng-click="checkBox()" id="checkAll"
-												ng-model="item.isSelected">
+											<input  type="checkbox" ng-click="checkBox()" id="checkAll"
+												ng-model="item.isSelected"/>
 										</th>
 										<th></th>
 										<th>Tên Sản Phẩm</th>
@@ -69,7 +69,7 @@
 										<th>Đơn Giá</th>
 										<th>Số Lượng</th>
 										<th>Thành Tiền</th>
-										<th>&nbsp;</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -78,8 +78,8 @@
 
 									<tr class="text-center" ng-repeat="item in items">
 										<td>
-											<input type="checkbox" ng-checked="item.isSelected"
-												ng-click="checkOne($index)">
+											<input ng-if="item.quantity <= item.productDetail.quantity" type="checkbox" ng-checked="item.isSelected"
+												ng-click="checkOne($index)"/>
 										</td>
 
 										<td class="image-prod">
@@ -90,6 +90,9 @@
 										<td class="product-name">
 											<h3>{{item.product.productName}}</h3>
 											<!-- <p>Far far away, behind the word mountains, far from the countries</p> -->
+											<div ng-if="item.quantity > item.productDetail.quantity" class="alert alert-warning" role="alert">
+												Hết hàng rồi
+											  </div>
 										</td>
 										<td>
 											<div class="dropdown">
