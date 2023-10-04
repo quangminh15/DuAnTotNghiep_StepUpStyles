@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sts.model.Brand;
 import com.sts.model.Category;
 import com.sts.model.Color;
+import com.sts.model.Favorite;
 import com.sts.model.Product;
 import com.sts.model.Size;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.BrandService;
 import com.sts.service.CategoryService;
 import com.sts.service.ColorService;
+import com.sts.service.FavoriteService;
 import com.sts.service.ProductDetailService;
 import com.sts.service.ProductService;
 import com.sts.service.SizeService;
@@ -41,6 +43,9 @@ public class ProductController {
 
 	@Autowired
 	CategoryService categoryService;
+
+	@Autowired
+    FavoriteService favoriteService;
 
 	// Trang sản phẩm
 	@RequestMapping("/list_products")
@@ -67,6 +72,8 @@ public class ProductController {
 		model.addAttribute("colors", colors);
 		model.addAttribute("sizes", sizes);
 
+		List<Favorite> item = favoriteService.findByUserId(3);
+        model.addAttribute("favoriteitems", item);
 		return "users/list_products";
 	}
 

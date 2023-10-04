@@ -270,9 +270,18 @@
 											th:src="@{|${p.productImages[0].imagePath}|}">
 										</a>
 										<ul class="social">
-											<li><a th:attr="ng-click=@{|check(${p.productID})|}">
+											<li>
+												<!-- <a th:if="${#lists.contains(favoriteitems, p)}" th:attr="ng-click=@{|check(${p.productID})|}">
 													<span class="fa fa-heart"></span>
-											</a></li>
+												</a>
+												<a th:unless="${#lists.contains(favoriteitems)}" th:attr="ng-click=@{|check(${p.productID})|}">
+													<span class="fa fa-heart-o"></span>
+												</a> -->
+												
+												<a th:attr="ng-click=@{|check(${p.productID})|}">
+													<span class="fa fa-heart" aria-hidden="true"></span>
+												</a>
+											</li>
 										</ul>
 										<div class="transmitv single-item">
 											<a th:href="@{|/single_product/${p.productID}|}"

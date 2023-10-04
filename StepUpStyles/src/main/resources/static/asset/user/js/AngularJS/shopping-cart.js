@@ -78,6 +78,10 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// Now, cartItems will have color and size information for each product
 				$scope.items = cartItems;
 				$scope.cartitems = cartItems
+				if ($scope.items.length>0) {
+					$scope.page = true
+				}else
+				$scope.page = false
 			})
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);

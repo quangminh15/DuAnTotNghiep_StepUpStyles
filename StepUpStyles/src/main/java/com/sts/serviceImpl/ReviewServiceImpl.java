@@ -1,7 +1,9 @@
 package com.sts.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -9,6 +11,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.ReviewDAO;
@@ -21,6 +26,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Autowired
     ReviewDAO reviewDAO;
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public ReviewServiceImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     @Override
     public List<Review> findAll() {
@@ -63,29 +75,39 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<TotalProductRatingDTO> getTotalProductRating(int month, int year) {
-        List<TotalProductRatingDTO> totalProductRatings = new ArrayList<>();
+    public List<TotalProductRatingDTO> getTotalProductRating(int year) {
+        String sql = "SELECT MONTH(r.review_date) AS month, " +
+        "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
+        "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
+        "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
+        "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
+        "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
+        "FROM Review r " +
+        "WHERE YEAR(r.review_date) = :year " +
+        "GROUP BY MONTH(r.review_date)";
 
-		// Lấy danh sách danh mục
-		List<Review> reviews = reviewDAO.findAll();
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("year", year);
 
-		// for (Review review : reviews) {
-			// Sử dụng JPQL để lấy tổng số lượng sản phẩm theo danh mục
-			TypedQuery<Object[]> query = entityManager.createQuery(
-              "SELECT rv.rating, COUNT(rv) FROM Review rv WHERE FUNCTION('MONTH', rv.reviewDate) = :month and FUNCTION('YEAR', rv.reviewDate) = :year GROUP BY rv.rating", Object[].class);
-              query.setParameter("month", month);
-              query.setParameter("year", year);
+        List<TotalProductRatingDTO> reviewDTOList = new ArrayList<>();
 
-			// Thực hiện truy vấn và lấy kết quả
-            List<Object[]> results = query.getResultList();
-			for (Object[] result : results) {
-                Integer rating = (Integer) result[0];
-                Long productCount = (Long) result[1];
-                TotalProductRatingDTO ratingDTO = new TotalProductRatingDTO(rating, productCount);
-                totalProductRatings.add(ratingDTO);
-            }
-		// }
+        List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql, parameters);
 
-		return totalProductRatings;
+        for (Map<String, Object> row : rows) {
+            int month = (int) row.get("Month");
+
+            Map<String, Integer> ratings = new HashMap<>();
+            ratings.put("1 sao", (int) row.get("oneStar"));
+            ratings.put("2 sao", (int) row.get("twoStar"));
+            ratings.put("3 sao", (int) row.get("threeStar"));
+            ratings.put("4 sao", (int) row.get("fourStar"));
+            ratings.put("5 sao", (int) row.get("fiveStar"));
+
+            TotalProductRatingDTO reviewDTO = new TotalProductRatingDTO(month, ratings);
+            reviewDTOList.add(reviewDTO);
+        }
+
+        return reviewDTOList;
+    }
     }    
-}
+    

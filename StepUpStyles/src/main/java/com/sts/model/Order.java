@@ -6,10 +6,11 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Builder
 @Table(name = "\"order\"")
 @Data
 @AllArgsConstructor
@@ -41,9 +43,9 @@ public class Order implements Serializable {
 	@Column(name="initial_price")
 	private double initialPrice;
 
-	@Temporal(TemporalType.DATE)
+	
 	@Column(name="order_date")
-	private Date orderDate;
+	private String orderDate;
 
 	@Column(name="order_status")
 	@Enumerated(EnumType.STRING)
