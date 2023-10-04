@@ -12,7 +12,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;
-				 console.log(cartItems);
+				 //console.log(cartItems);
 				 
 				$scope.updateCount(cartItems.length)
 				// Initialize the disabledColors object
@@ -82,12 +82,14 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$scope.page = true
 				}else
 				$scope.page = false
+
+				
 			})
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);
 			});
 
-
+			
 	}
 
 	$scope.initialize();
@@ -139,7 +141,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		var checkAll = true;
 		angular.forEach($scope.items, function (value, key) {
 			
-			if (!value.isSelected) {
+			if (!value.isSelected ) {
 				console.log(value.isSelected);
 				checkAll = false;
 				console.log(1,checkAll);
@@ -150,7 +152,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 		var check = document.getElementById("checkAll");
 
-		if (checkAll == true) {
+		if (checkAll == true ) {
 			check.checked = true;
 		} else {
 			check.checked = false;
@@ -159,8 +161,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	function checkAll() {
 		angular.forEach($scope.items, function (value, key) {
 			// if (value.inventory >= value.quantity) {
-			value.isSelected = true;
-			updateLocalStorage()
+				if (value.quantity <= value.productDetail.quantity) {
+					
+					value.isSelected = true;
+					updateLocalStorage()
+				}
 
 			// }
 		});
