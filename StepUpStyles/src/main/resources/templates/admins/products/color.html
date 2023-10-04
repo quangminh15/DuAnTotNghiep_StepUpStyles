@@ -224,6 +224,22 @@
 				ng-click="openRecycleBinForm()" style="width: 50px; height: 43px">
 				<span class="mdi mdi-delete"></span>
 			</button>
+
+			<div class="">
+				<a class="btn btn-excel btn-sm export" title="=Xuất file excel"><i
+					class="fa fa-file-excel-o"></i> Xuất Excel</a>
+			</div>
+
+			<div class="">
+				<a class="btn btn-delete btn-sm pdf-file" type="button"
+					title="Xuất file pdf"><i class="fa fa-file-pdf-o"></i> Xuất PDF</a>
+			</div>
+
+			<div class="">
+				<a class="btn btn-delete btn-sm print-file" type="button" title="In"
+					onclick="myApp1.printTable()"><i class="fa fa-print"></i> In dữ
+					liệu</a>
+			</div>
 		</div>
 	</div>
 	<!-- tìm kiếm theo tên bắt đầu  -->
@@ -347,7 +363,7 @@
 	<!-- thùng rác kết thúc -->
 
 	<div class="card-body">
-		<table class="table">
+		<table class="table" id="sampleTable">
 			<thead>
 				<tr>
 					<th ng-repeat="column in sortableColumns"

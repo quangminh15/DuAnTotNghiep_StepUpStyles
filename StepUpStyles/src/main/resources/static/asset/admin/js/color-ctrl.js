@@ -16,7 +16,35 @@ app.controller("color-ctrl", function($scope, $http) {
 		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trạng thái' },
 	];
+	
+	$('.export').click(function() {
+		var table2excel = new Table2Excel();
+		table2excel.export(document.querySelectorAll("table.table"));
+	});
 
+	$('.pdf-file').click(function() {
+
+		var elment = document.getElementById('sampleTable');
+		var opt = {
+			margin: 0.5,
+			filename: 'myfilepdf.pdf',
+			image: { type: 'jpeg', quality: 0.98 },
+			html2canvas: { scale: 2 },
+			jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+		};
+		html2pdf(elment, opt);
+	});
+	
+	var myApp1 = new function () {
+	this.printTable = function () {
+		var tab = document.getElementById('sampleTable');
+		var win = window.open('', '', 'height=700,width=700');
+		win.document.write(tab.outerHTML);
+		win.document.close();
+		win.print();
+	}
+
+}
 
 	$scope.sortByColumn = function(columnName) {
 		if ($scope.sortColumn === columnName) {
