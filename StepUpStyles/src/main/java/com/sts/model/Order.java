@@ -43,9 +43,9 @@ public class Order implements Serializable {
 	@Column(name="initial_price")
 	private double initialPrice;
 
-	@Temporal(TemporalType.DATE)
+	
 	@Column(name="order_date")
-	private Date orderDate;
+	private String orderDate;
 
 	@Column(name="order_status")
 	@Enumerated(EnumType.STRING)
