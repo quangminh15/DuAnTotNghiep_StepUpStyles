@@ -4,6 +4,16 @@
 <head>
 
 	<title>STS || SẢN PHẨM</title>
+	<style>
+		.liked {
+    color: red;
+}
+
+/* Biểu tượng chưa thích (màu mặc định) */
+.not-liked {
+    color: black; /* Hoặc màu khác tùy bạn chọn */
+}
+	</style>
 
 </head>
 
@@ -345,9 +355,16 @@
 										</a>
 										<ul class="social">
 											<li>
-												<a th:attr="ng-click=@{|check(${p.productID})|}">
+												<!-- <a th:if="${#lists.contains(favoriteitems, p)}" th:attr="ng-click=@{|check(${p.productID})|}">
 													<span class="fa fa-heart"></span>
-												</a>										
+												</a>
+												<a th:unless="${#lists.contains(favoriteitems)}" th:attr="ng-click=@{|check(${p.productID})|}">
+													<span class="fa fa-heart-o"></span>
+												</a> -->
+												
+												<a th:attr="ng-click=@{|check(${p.productID})|}">
+													<span class="fa fa-heart" aria-hidden="true"></span>
+												</a>
 											</li>
 										</ul>
 										<div class="transmitv single-item">
@@ -365,7 +382,11 @@
 								</div>
 							</div>
 							
-
+								
+						</div>
+						<h2>Favorite</h2>
+						<div th:each="f: ${favoriteitems}">
+							<div th:text="${f.product.productName}"></div>
 						</div>
 						<!-- //row-->
 						<!--/row2-->
