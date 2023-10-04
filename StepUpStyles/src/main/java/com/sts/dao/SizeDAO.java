@@ -18,6 +18,9 @@ public interface SizeDAO extends JpaRepository<Size, Integer>{
 	
 	@Query("SELECT c FROM Size c WHERE c.deleted = false")
 	List<Size> loadAllNoDeleted();
+	
+	@Query("SELECT c FROM Size c WHERE c.deleted = false and c.activities = true")
+	List<Size> loadAllNoDeletedAndActivitiesTrue();
 
 	// Hai
 	

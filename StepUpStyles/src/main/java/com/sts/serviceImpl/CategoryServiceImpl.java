@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service;
 import com.sts.dao.CategoryDAO;
 import com.sts.model.Category;
 import com.sts.service.CategoryService;
+import com.sts.service.ProductService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	CategoryDAO cateDAO;
+
+	@Autowired
+	private ProductService productService;
 
 	@Override
 	public Category findById(Integer categoryID) {
@@ -23,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> findAll() {
 		return cateDAO.findAll();
 	}
-	
+
 	@Override
 	public List<Category> loadAllDeleted() {
 		return cateDAO.loadAllDeleted();
@@ -32,6 +36,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> loadAllNoDeleted() {
 		return cateDAO.loadAllNoDeleted();
+	}
+
+	@Override
+	public List<Category> loadAllNoDeletedAndActivitiesTrue() {
+		return cateDAO.loadAllNoDeletedAndActivitiesTrue();
 	}
 
 	@Override
@@ -53,4 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> searchByName(String keyword) {
 		return cateDAO.findByCateNameContaining(keyword);
 	}
+	
+	// Đếm số lượng sản phẩm trong mỗi danh mục dựa trên ProductService
+    @Override
+    public Long countProductsByCategory(Category category) {
+        return productService.countProductsByCategory(category);
+    }
 }

@@ -33,6 +33,11 @@ public class BrandServiceImpl implements BrandService {
 	public List<Brand> loadAllNoDeleted() {
 		return brandDAO.loadAllNoDeleted();
 	}
+	
+	@Override
+	public List<Brand> loadAllNoDeletedAndActivitiesTrue() {
+		return brandDAO.loadAllNoDeletedAndActivitiesTrue();
+	}
 
 	@Override
 	public Brand create(Brand brand) {

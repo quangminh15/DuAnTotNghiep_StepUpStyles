@@ -21,4 +21,6 @@ public interface ColorService {
 	List<Color> loadAllDeleted();
 
 	List<Color> loadAllNoDeleted();
+
+	List<Color> loadAllNoDeletedAndActivitiesTrue();
 }

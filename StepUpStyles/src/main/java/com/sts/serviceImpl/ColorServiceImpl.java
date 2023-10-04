@@ -33,6 +33,11 @@ public class ColorServiceImpl implements ColorService  {
 	public List<Color> loadAllNoDeleted() {
 		return ColorDAO.loadAllNoDeleted();
 	}
+	
+	@Override
+	public List<Color> loadAllNoDeletedAndActivitiesTrue() {
+		return ColorDAO.loadAllNoDeletedAndActivitiesTrue();
+	}
 
 	@Override
 	public Color create(Color color) {

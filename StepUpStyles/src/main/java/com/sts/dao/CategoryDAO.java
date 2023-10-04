@@ -17,4 +17,7 @@ public interface CategoryDAO extends JpaRepository<Category, Integer> {
 
 	@Query("SELECT c FROM Category c WHERE c.deleted = false")
 	List<Category> loadAllNoDeleted();
+	
+	@Query("SELECT c FROM Category c WHERE c.deleted = false and c.activities = true")
+	List<Category> loadAllNoDeletedAndActivitiesTrue();
 }

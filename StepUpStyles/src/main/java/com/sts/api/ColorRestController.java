@@ -41,6 +41,11 @@ public class ColorRestController {
 	public List<Color> getAllNoDeleted() {
 		return colorService.loadAllNoDeleted();
 	}
+	
+	@GetMapping("/rest/colors/loadallNoDeletedAndActivitiesTrue")
+	public List<Color> getAllNoDeletedAndActivitiesTrue() {
+		return colorService.loadAllNoDeletedAndActivitiesTrue();
+	}
 
 	@PostMapping("/rest/colors/create")
 	public Color create(@RequestBody Color color) {

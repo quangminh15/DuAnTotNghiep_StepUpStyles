@@ -45,6 +45,11 @@ public class CategoryRestController {
 	public List<Category> getAllNoDeleted() {
 		return categoryService.loadAllNoDeleted();
 	}
+	
+	@GetMapping("/rest/categories/loadallNoDeletedAndActivitiesTrue")
+	public List<Category> getAllNoDeletedAndActivitiesTrue() {
+		return categoryService.loadAllNoDeletedAndActivitiesTrue();
+	}
 
 	@PostMapping("/rest/categories/create")
 	public Category create(@RequestBody Category category) {

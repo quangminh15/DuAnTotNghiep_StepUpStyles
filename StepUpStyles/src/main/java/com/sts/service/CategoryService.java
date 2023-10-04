@@ -8,7 +8,7 @@ public interface CategoryService {
 	Category findById(Integer categoryID);
 
 	List<Category> findAll();
-	
+
 	List<Category> loadAllDeleted();
 
 	List<Category> loadAllNoDeleted();
@@ -20,4 +20,8 @@ public interface CategoryService {
 	void delete(Integer categoryID);
 
 	List<Category> searchByName(String keyword);
+
+	List<Category> loadAllNoDeletedAndActivitiesTrue();
+	
+	Long countProductsByCategory(Category category);
 }

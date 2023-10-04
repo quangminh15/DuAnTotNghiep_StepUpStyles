@@ -17,4 +17,7 @@ public interface BrandDAO extends JpaRepository<Brand, Integer> {
 
 	@Query("SELECT c FROM Brand c WHERE c.deleted = false")
 	List<Brand> loadAllNoDeleted();
+	
+	@Query("SELECT c FROM Brand c WHERE c.deleted = false and c.activities = true")
+	List<Brand> loadAllNoDeletedAndActivitiesTrue();
 }

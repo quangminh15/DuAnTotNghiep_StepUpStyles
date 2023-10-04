@@ -20,4 +20,6 @@ public interface BrandService {
 	void delete(Integer brandID);
 
 	List<Brand> searchByName(String keyword);
+
+	List<Brand> loadAllNoDeletedAndActivitiesTrue();
 }

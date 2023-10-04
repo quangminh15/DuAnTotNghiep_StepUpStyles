@@ -35,6 +35,11 @@ public class SizeServiceImpl implements SizeService {
 	}
 	
 	@Override
+	public List<Size> loadAllNoDeletedAndActivitiesTrue() {
+		return sizeDAO.loadAllNoDeletedAndActivitiesTrue();
+	}
+	
+	@Override
     public List<Size> searchByName(Float keyword) {
         return sizeDAO.findBySizeNumber(keyword);
     }

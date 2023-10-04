@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CategoryDAO;
@@ -15,7 +17,6 @@ import com.sts.dao.ProductDAO;
 import com.sts.model.Category;
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
-import com.sts.model.DTO.ProductWithCount;
 import com.sts.service.ProductService;
 
 @Service
@@ -47,6 +48,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> loadAllNoDeleted() {
 		return productDAO.loadAllNoDeleted();
+	}
+
+	@Override
+	public List<Product> loadAllNoDeletedAndActivitiesTrue() {
+		return productDAO.loadAllNoDeletedAndActivitiesTrue();
 	}
 
 	@Override
@@ -95,5 +101,24 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return categoryProductCounts;
+	}
+
+	// Đếm số lượng sản phẩm trong mỗi danh mục dựa trên ProductDetail
+	@Override
+	public Long countProductsByCategory(Category category) {
+		return productDAO.countProductsByCategory(category);
+	}
+
+	// Đếm số lượng sản phẩm để hiển thị lên danh mục người dùng
+	@Override
+	public Long countProductsByCategoryWithConditions(Category category, Boolean activities, Boolean deleted) {
+		return productDAO.countProductsByCategoryWithConditions(category, activities, deleted);
+	}
+
+	@Override
+	public List<Product> findByCategory(Category category) {
+		// Triển khai logic để tìm kiếm sản phẩm theo danh mục tại đây
+		// Sử dụng productDAO hoặc các phương thức khác để thực hiện truy vấn
+		return productDAO.findByCategory(category);
 	}
 }

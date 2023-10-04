@@ -21,6 +21,9 @@ public interface ColorDAO extends JpaRepository<Color, Integer>{
 
 	@Query("SELECT c FROM Color c WHERE c.deleted = false")
 	List<Color> loadAllNoDeleted();
+	
+	@Query("SELECT c FROM Color c WHERE c.deleted = false and c.activities = true")
+	List<Color> loadAllNoDeletedAndActivitiesTrue();
 
 	// Hai
 	List<Color> findByProductDetails_ProductAndProductDetails_Size(Product product,Size size);

@@ -21,6 +21,8 @@ public interface SizeService {
 	
 	List<Size> searchByName(Float keyword);
 
+	List<Size> loadAllNoDeletedAndActivitiesTrue();
+
 	
 
 	

@@ -15,7 +15,7 @@ app.controller("product-ctrl", function($scope, $http) {
 	var checkImage = false;
 
 	$scope.sortableColumns = [
-		{ name: 'productID', label: 'Mã sản phẩm' },
+		{ name: 'productID', label: 'Mã sản phẩm' }, 	
 		{ name: 'modifyDate', label: 'Thời gian' },
 		{ name: 'productName', label: 'Tên sản phẩm' },
 		{ name: 'price', label: 'Giá' },

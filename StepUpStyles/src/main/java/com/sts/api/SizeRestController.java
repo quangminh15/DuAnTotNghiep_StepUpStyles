@@ -42,6 +42,11 @@ public class SizeRestController {
 	public List<Size> getAllNoDeleted() {
 		return sizeService.loadAllNoDeleted();
 	}
+	
+	@GetMapping("/rest/sizes/loadallNoDeletedAndActivitiesTrue")
+	public List<Size> getAllNoDeletedAndActivitiesTrue() {
+		return sizeService.loadAllNoDeletedAndActivitiesTrue();
+	}
 
 	@PostMapping("/rest/sizes/create")
 	public Size create(@RequestBody Size size) {
