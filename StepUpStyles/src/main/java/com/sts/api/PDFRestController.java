@@ -31,13 +31,18 @@ public class PDFRestController {
             throws IOException, DocumentException {
         // Thiết lập response để trình duyệt hiểu rằng sẽ nhận tệp PDF
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=import_receipt.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=PhieuNhapStepUpStyle.pdf");
 
         // Tạo một đối tượng Document của iText
         Document document = new Document();
 
-        String relativePath = "StepUpStyles\\src\\main\\resources\\font-times-new-roman\\font-times-new-roman.ttf";
+        String relativePath = "/font-times-new-roman/font-times-new-roman.ttf";
         BaseFont baseFont = BaseFont.createFont(relativePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        // String relativePath = "/font-times-new-roman/font-times-new-roman.ttf";
+        // InputStream inputStream = getClass().getResourceAsStream(relativePath);
+        // BaseFont baseFont = BaseFont.createFont(relativePath, BaseFont.IDENTITY_H,
+        // BaseFont.EMBEDDED);
+
         Font font = new Font(baseFont);
         // Tạo đối tượng PdfWriter để ghi dữ liệu vào response OutputStream
         PdfWriter.getInstance(document, response.getOutputStream());
@@ -74,18 +79,19 @@ public class PDFRestController {
 
             table.addCell(new PdfPCell(new Paragraph(item.getProductDetail().getProduct().getProductName(), font)));
             table.addCell(new PdfPCell(new Paragraph(String.valueOf(item.getQuantity()))));
-            table.addCell(new PdfPCell(new Paragraph(String.valueOf(item.getProductDetail().getSize().getSizeNumber()))));
+            table.addCell(
+                    new PdfPCell(new Paragraph(String.valueOf(item.getProductDetail().getSize().getSizeNumber()))));
             table.addCell(new PdfPCell(new Paragraph(item.getProductDetail().getColor().getColorName(), font)));
 
             // Tạo một ô cho cột "price" và thiết lập chiều cao tối thiểu cho nó
             PdfPCell priceCell = new PdfPCell(new Paragraph(formatToVND(item.getPrice())));
-            table.addCell(priceCell);   
+            table.addCell(priceCell);
 
             // Tính tổng thành tiền
             totalAmount = item.getImportReceipt().getTotalAmount();
         }
 
-        Font nghiengFont = new Font(baseFont, 10 ,Font.ITALIC);
+        Font nghiengFont = new Font(baseFont, 10, Font.ITALIC);
         // tên cửa hàng
         Paragraph titleImport = new Paragraph();
         // Font vietnameseFont = new Font(baseFont, 22, Font.BOLD);
@@ -153,7 +159,8 @@ public class PDFRestController {
         document.close();
     }
 
-    // Định nghĩa hàm formatToVND() ở đây để định dạng giá thành tiền theo định dạng VND
+    // Định nghĩa hàm formatToVND() ở đây để định dạng giá thành tiền theo định dạng
+    // VND
     public static String formatToVND(double amount) {
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###");
         return decimalFormat.format(amount) + " VND";

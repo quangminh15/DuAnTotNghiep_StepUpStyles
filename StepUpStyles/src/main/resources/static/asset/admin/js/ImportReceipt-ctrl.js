@@ -32,7 +32,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
         // Tạo một thẻ a để tải xuống tệp PDF
         var a = document.createElement("a");
         a.href = url;
-        a.download = "import_receipt.pdf";
+        a.download = "PhieuNhapStepUpStyle.pdf";
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(url);
@@ -41,6 +41,35 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
         console.error("Xuất PDF thất bại:", error);
       });
   };
+
+  $scope.exportExcel = function () {
+    $http({
+      method: "POST",
+      url: "/export-excel", // Thay thế với URL phía máy chủ đúng
+      data: $scope.importDetail,
+      responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(function (response) {
+        // Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+        var blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        var url = URL.createObjectURL(blob);
+
+        // Tạo một thẻ <a> để tải xuống tệp Excel
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "import_receipt.xlsx"; // Đặt tên tệp Excel mong muốn
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch(function (error) {
+        console.error("Xuất ra Excel thất bại:", error);
+      });
+  };
+
 
   $scope.sortableColumns = [
     { name: "importReceiptId", label: "Mã phiếu nhập" },
