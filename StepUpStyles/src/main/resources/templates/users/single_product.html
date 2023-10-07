@@ -7,7 +7,7 @@
 
 </head>
 
-<body>
+<body ng-controller="favorite-ctrl">
 
 	<div class="right-sidebar-panel-content animated fadeInRight" tabindex="5003"
 		style="overflow: hidden; outline: none;"></div>
@@ -351,45 +351,26 @@
 				</div>
 				</div>				
 			</div>
-			<div class="content-singlev-ecomm py-3">
+			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
 				<div class="row">
 					<div class="col-sm-2 text-center">
 							<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
 					</div>
 					<div class="col-sm-10">
-						<p class="mb-0"><strong>TÔ VŨ LINH</strong></p>
-						<p class="mb-0">20-2-2023</p>
-						<div class="rating mb-2">
+						<p class="mb-0"><strong>{{rv.user.fullName}}</strong></p>
+						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
+						<!-- <div class="rating mb-2">
 							<span class="fa fa-star"></span>
 							<span class="fa fa-star"></span>
 							<span class="fa fa-star"></span>
 							<span class="fa fa-star"></span>
 							<span class="fa fa-star"></span>
-						</div>
-						<p class="mb-0" style="word-wrap: break-word;">hihihhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</p>
+						</div> -->
+						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
 						<span class="fa fa-thumbs-up"></span>
 					</div>
 				</div>
-				<hr>
-				<div class="row">
-					<div class="col-sm-2 text-center">
-							<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
-					</div>
-					<div class="col-sm-10">
-						<p class="mb-0"><strong>TÔ VŨ LINH</strong></p>
-						<p class="mb-0">20-2-2023</p>
-						<div class="rating mb-2">
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-						</div>
-						<p class="mb-0" style="word-wrap: break-word;">hihihhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</p>
-						<span class="fa fa-thumbs-up"></span>
-					</div>
-				</div>
-				<hr>				
+				<hr>			
 			</div>		
 			<div class="pagination text-center">
 				<ul>

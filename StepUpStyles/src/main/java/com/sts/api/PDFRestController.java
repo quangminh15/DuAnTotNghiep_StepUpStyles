@@ -36,7 +36,7 @@ public class PDFRestController {
         // Tạo một đối tượng Document của iText
         Document document = new Document();
 
-        String relativePath = "StepUpStyles\\src\\main\\resources\\font-times-new-roman\\font-times-new-roman.ttf";
+        String relativePath = "src\\main\\resources\\font-times-new-roman\\font-times-new-roman.ttf";
         BaseFont baseFont = BaseFont.createFont(relativePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font font = new Font(baseFont);
         // Tạo đối tượng PdfWriter để ghi dữ liệu vào response OutputStream
