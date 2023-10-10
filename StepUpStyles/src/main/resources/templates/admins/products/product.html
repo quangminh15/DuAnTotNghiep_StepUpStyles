@@ -1,490 +1,445 @@
- <section class="section">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Quản lý sản phẩm</h5>
-                            </div>
-                            <div class="card-body">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" id="danhsach-tab" data-bs-toggle="tab" href="#danhsach"
-                                            role="tab" aria-controls="danhsach" aria-selected="true">Danh sách</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="chinhsua-tab" data-bs-toggle="tab" href="#chinhsua"
-                                            role="tab" aria-controls="chinhsua" aria-selected="false">Chỉnh sửa</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="danhsach" role="tabpanel"
-                                        aria-labelledby="danhsach-tab">
-                                        <section class="section">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="card-title">
-                                                        <div class="d-flex justify-content-end align-items-center">
-                                                            <div class="btn-group me-2">
-                                                                <div data-bs-toggle="tooltip"
-                                                                    data-bs-original-title="Xuất file Excel"><button
-                                                                        type="button"
-                                                                        class="btn btn-outline-success ms-2">
-                                                                        <span class="fa-fw select-all fas"></span>
-                                                                    </button></div>
+<div class="content-wrapper">
+	<!-- modal xác nhận xóa vào thùng rác-->
+	<div class="modal fade" id="confirmHideModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmHideModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
+						xóa</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa sản phẩm "{{
+					form.productName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<span class="ti-close"></span>
+					</button>
+					<button type="button" class="btn btn-danger"
+						ng-click="confirmHide()">Xóa</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                                                                    <div data-bs-toggle="tooltip"
-                                                                    data-bs-original-title="Xuất file PDF"><button
-                                                                        type="button"
-                                                                        class="btn btn-outline-danger ms-2">
-                                                                        <span class="fa-fw select-all fas"></span>
-                                                                    </button></div>
-
-                                                                <div data-bs-toggle="tooltip"
-                                                                    data-bs-original-title="Tìm kiếm">
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-info ms-2"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#inlineForm">
-                                                                        <span class="fa-fw select-all fas"></span>
-                                                                    </button>
-                                                                </div>
-
-                                                                <div data-bs-toggle="tooltip"
-                                                                    data-bs-original-title="Mở thùng rác"><button
-                                                                        type="button"
-                                                                        class="btn btn-outline-warning ms-2"
-                                                                        data-bs-toggle="modal" data-bs-target="#xlarge">
-                                                                        <span class="fa-fw select-all fas"></span>
-                                                                    </button></div>
-                                                            </div>
-                                                            <div class="input-group" style="width: 230px;">
-                                                                <label class="input-group-text"
-                                                                    for="inputGroupSelect01">Trạng thái</label>
-                                                                <select class="form-select" id="inputGroupSelect01">
-                                                                    <option selected="">Tất cả</option>
-                                                                    <option value="1">Đang bật</option>
-                                                                    <option value="2">Đang tắt</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <!-- model thông báo -->
-                                                            <button hidden id="basic">
-                                                            </button>
-                                                            <button hidden id="title">
-                                                            </button>
-                                                            <button hidden id="footer">
-                                                            </button>
-
-                                                            <div class="row">
-                                                                <div class="col-md-4 col-12">
-                                                                    <button id="success"
-                                                                        class="btn btn-outline-success btn-lg btn-block">Success</button>
-                                                                </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <button id="error"
-                                                                        class="btn btn-outline-danger btn-lg btn-block">Error</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- model thông báo -->
-                                                        </div>
-                                                    </h5>
-                                                </div>
-
-                                                <!-- Model tìm kiếm bắt đầu  -->
-                                                <div class="modal fade text-left" id="inlineForm" tabindex="-1"
-                                                    role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-                                                        role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="myModalLabel33">Tìm
-                                                                    kiếm </h4>
-                                                                <button type="button" class="close"
-                                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i data-feather="x"></i>
-                                                                </button>
-                                                            </div>
-                                                            <form action="#">
-                                                                <div class="modal-body">
-                                                                    <label for="timkiem" class="mb-3">Tên sản
-                                                                        phẩm: </label>
-                                                                    <div class="form-group">
-                                                                        <input id="timkiem" type="text"
-                                                                            placeholder="Nhập tên sản phẩm mà bạn muốn tìm kiếm"
-                                                                            class="form-control">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button"
-                                                                        class="btn btn-light-secondary"
-                                                                        data-bs-dismiss="modal">
-                                                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                                                        <span class="d-none d-sm-block">Hủy</span>
-                                                                    </button>
-                                                                    <button type="button" class="btn btn-primary ms-1"
-                                                                        data-bs-dismiss="modal">
-                                                                        <i class="bx bx-check d-block d-sm-none"></i>
-                                                                        <span class="d-none d-sm-block">OK</span>
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- model tìm kiếm kết thúc -->
-
-                                                <!-- Model thùng rác bắt đầu -->
-                                                <div class="modal fade text-left w-100" id="xlarge" tabindex="-1"
-                                                    role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
-                                                        role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="myModalLabel16">
-                                                                    Thùng rác</h4>
-                                                                <button type="button" class="close"
-                                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i data-feather="x"></i>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="table-responsive" style="overflow: hidden;">
-                                                                    <table class="table" id="table1">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th ng-repeat="column in sortableColumns"
-                                                                                    ng-click="sortByColumn(column.name)">{{ column.label }} <span
-                                                                                    ng-if="sortColumn === column.name"> <span
-                                                                                        ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-                                                                                        ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
-                                                                                </span>
-                                                                                </th>
-                                                                                <th></th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr ng-repeat="productitem in RestorePager.productitemss">
-                                                                                <td>{{productitem.productID}}</td>
-                                                                                <td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
-                                                                                <td>{{productitem.productName}}</td>
-                                                                                <td>{{productitem.price | number: 0 }}đ</td>
-                                                                                <td>{{productitem.category.categoryName}}</td>
-                                                                                <td>{{productitem.brand.brandName}}</td>
-                                                                                <td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
-                                                                                <td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
-                                                                                <td>
-                                                                                    <div class="buttons">
-                                                                                        <button ng-click="confirmRestoreModal1(productitem)"
-                                                                                            class="btn icon btn-primary"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-original-title="Khôi phục"><span
-                                                                                                class="fa-fw select-all fas"></span>
-                                                                                        </button>
-                                                                                        <button ng-click="confirmDeleteModal1(productitem)"
-                                                                                            class="btn icon btn-danger"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-original-title="Xóa luôn"><span
-                                                                                                class="fa-fw select-all fas"></span></button>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    <nav aria-label="Page navigation example"
-                                                                        style="float: right;">
-                                                                        <ul class="pagination pagination-primary">
-                                                                            <li class="page-item"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Trang đầu tiên">
-                                                                                <a class="page-link" ng-click="pager.first()"><span
-                                                                                        aria-hidden="true"><i
-                                                                                            class="bi bi-chevron-left"></i></span></a>
-                                                                            </li>
-                                                                            <li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
-                                                                            ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-                                                                                class="page-link" href="" ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
-                                                                                    RestorePage.value }}</a></li>
-                                                                            <li class="page-item"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Trang cuối"><a
-                                                                                    class="page-link" ng-click="pager.last()"><span
-                                                                                        aria-hidden="true"><i
-                                                                                            class="bi bi-chevron-right"></i></span></a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </nav>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light-secondary"
-                                                                    data-bs-dismiss="modal">
-                                                                    <i class="bx bx-x d-block d-sm-none"></i>
-                                                                    <span class="d-none d-sm-block">Đóng</span>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Model thùng rác kết thúc -->
-
-                                                <div class="card-body">
-                                                    <div class="table-responsive" style="overflow: hidden;">
-                                                        <table class="table" id="table1">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th ng-repeat="column in sortableColumns"
-                                                                        ng-click="sortByColumn(column.name)">{{ column.label }} <span
-                                                                        ng-if="sortColumn === column.name"> <span
-                                                                            ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-                                                                            ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
-                                                                    </span>
-                                                                    </th>
-                                                                    <th class="actions"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="productitem in pager.productitems">
-                                                                    <td>{{productitem.productID}}</td>
-                                                                    <td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
-                                                                    <td>{{productitem.productName}}</td>
-                                                                    <td>{{productitem.price | number: 0 }}đ</td>
-                                                                    <td>{{productitem.category.categoryName}}</td>
-                                                                    <td>{{productitem.brand.brandName}}</td>
-                                                                    <td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
-                                                                    <td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
-                                                                    <td>
-                                                                        <div class="buttons">
-                                                                            <button ng-click="edit(productitem)" class="btn icon btn-primary"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Chỉnh sửa"><i
-                                                                                    class="bi bi-pencil"></i></button>
-                                                                            <button ng-click="confirmHideModal1(productitem)" class="btn icon btn-danger"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Xóa"><span
-                                                                                    class="fa-fw select-all fas"></span></button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <nav aria-label="Page navigation example"
-                                                                        style="float: right;">
-                                                                        <ul class="pagination pagination-primary">
-                                                                            <li class="page-item"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Trang đầu tiên">
-                                                                                <a class="page-link" ng-click="pager.first()"><span
-                                                                                        aria-hidden="true"><i
-                                                                                            class="bi bi-chevron-left"></i></span></a>
-                                                                            </li>
-                                                                            <li class="page-item" ng-repeat="page in visiblePages"
-                                                                            ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-                                                                                class="page-link" href="" ng-click="pager.goto(page.value)">{{
-                                                                                    page.value }}</a></li>
-                                                                            <li class="page-item"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-original-title="Trang cuối"><a
-                                                                                    class="page-link" ng-click="pager.last()"><span
-                                                                                        aria-hidden="true"><i
-                                                                                            class="bi bi-chevron-right"></i></span></a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </nav>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </section>
-                                    </div>
-                                    <div class="tab-pane fade" id="chinhsua" role="tabpanel"
-                                        aria-labelledby="chinhsua-tab">
-                                        <section id="multiple-column-form">
-                                            <div class="row match-height">
-                                                <div class="col-12">
-                                                    <div class="card">
-                                                        <!-- <div class="card-header">
-                                                            <h4 class="card-title"></h4>
-                                                        </div> -->
-                                                        <div class="card-content">
-                                                            <div class="card-body">
-                                                                <form class="form">
-                                                                    <div class="row">
-                                                                        <div class="col-md-4 col-6">
-                                                                            <div class="form-group">
-                                                                                <label for="first-name-column">First
-                                                                                    Name</label>
-                                                                                <input type="text"
-                                                                                    id="first-name-column"
-                                                                                    class="form-control"
-                                                                                    placeholder="First Name"
-                                                                                    name="fname-column" readonly>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 col-6">
-                                                                            <div class="form-group">
-                                                                                <label for="last-name-column">Last
-                                                                                    Name</label>
-                                                                                <input type="text" id="last-name-column"
-                                                                                    class="form-control"
-                                                                                    placeholder="Last Name"
-                                                                                    name="lname-column" readonly>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 col-6">
-                                                                            <div class="form-group">
-                                                                                <label for="city-column">City</label>
-                                                                                <input type="text" id="city-column"
-                                                                                    class="form-control"
-                                                                                    placeholder="City"
-                                                                                    name="city-column" readonly>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    for="country-floating">Country</label>
-                                                                                <select class="form-select"
-                                                                                    id="basicSelect">
-                                                                                    <option>IT</option>
-                                                                                    <option>Blade Runner</option>
-                                                                                    <option>Thor Ragnarok</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    for="company-column">Company</label>
-                                                                                <select class="form-select"
-                                                                                    id="basicSelect">
-                                                                                    <option>IT</option>
-                                                                                    <option>Blade Runner</option>
-                                                                                    <option>Thor Ragnarok</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    for="email-id-column">Email</label>
-                                                                                <input type="email" id="email-id-column"
-                                                                                    class="form-control"
-                                                                                    name="email-id-column"
-                                                                                    placeholder="Email">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    for="email-id-column1">Email</label>
-                                                                                <input type="email"
-                                                                                    id="email-id-column1"
-                                                                                    class="form-control"
-                                                                                    name="email-id-column"
-                                                                                    placeholder="Email">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label for="email-id-column1">Trạng
-                                                                                    thái</label> <br>
-                                                                                <div
-                                                                                    class="form-check form-check-inline">
-                                                                                    <input class="form-check-input"
-                                                                                        type="radio"
-                                                                                        name="flexRadioDefault"
-                                                                                        id="flexRadioDefault1">
-                                                                                    <label class="form-check-label"
-                                                                                        for="flexRadioDefault1">Bật</label>
-                                                                                </div>
-                                                                                <div
-                                                                                    class="form-check form-check-inline">
-                                                                                    <input class="form-check-input"
-                                                                                        type="radio"
-                                                                                        name="flexRadioDefault"
-                                                                                        id="flexRadioDefault2"
-                                                                                        checked="">
-                                                                                    <label class="form-check-label"
-                                                                                        for="flexRadioDefault2">Tắt</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-md-6 col-12">
-                                                                            <div class="form-group">
-                                                                                <label for="email-id-column1">Nổi
-                                                                                    bật</label> <br>
-                                                                                <div
-                                                                                    class="form-check form-check-inline">
-                                                                                    <input class="form-check-input"
-                                                                                        type="radio"
-                                                                                        name="flexRadioDefault"
-                                                                                        id="flexRadioDefault3">
-                                                                                    <label class="form-check-label"
-                                                                                        for="flexRadioDefault3">Bật</label>
-                                                                                </div>
-                                                                                <div
-                                                                                    class="form-check form-check-inline">
-                                                                                    <input class="form-check-input"
-                                                                                        type="radio"
-                                                                                        name="flexRadioDefault"
-                                                                                        id="flexRadioDefault4"
-                                                                                        checked="">
-                                                                                    <label class="form-check-label"
-                                                                                        for="flexRadioDefault4">Tắt</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
+	<!-- modal xác nhận khôi phục item từ thùng rác-->
+	<div class="modal fade" id="confirmRestoreModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmRestoreModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmRestoreModalLabel">Xác nhận
+						khôi phục</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn khôi phục sản
+					phẩm "{{ form.productName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<span class="ti-close"></span>
+					</button>
+					<button type="button" class="btn btn-danger" ng-click="restore()">Khôi
+						phục</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-                                                                        <div class="col-md-12">
-                                                                            <div class="form-group">
-                                                                                <label
-                                                                                    for="email-id-column1">Email</label>
-                                                                                <textarea class="form-control"
-                                                                                    id="exampleFormControlTextarea1"
-                                                                                    rows="3"></textarea>
-                                                                            </div>
-                                                                        </div>
+	<!-- modal xác nhận xóa luôn-->
+	<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+		role="dialog" aria-labelledby="confirmDeleteModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
+						xóa</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa sản phẩm "{{
+					form.productName }}" này không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">
+						<span class="ti-close"></span>
+					</button>
+					<button type="button" class="btn btn-danger"
+						ng-click="confirmDelete()">Xóa</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                                                                        <div class="col-12 d-flex justify-content-end">
-                                                                            <div class="buttons">
-                                                                                <a href="#"
-                                                                                    class="btn btn-outline-primary"
-                                                                                    data-bs-toggle="tooltip"
-                                                                                    data-bs-original-title="Thêm mới">
-                                                                                    <span
-                                                                                        class="fa-fw select-all fas"></span></a>
-                                                                                <a href="#" class="btn btn-outline-info"
-                                                                                    data-bs-toggle="tooltip"
-                                                                                    data-bs-original-title="Cập nhật"><span
-                                                                                        class="fa-fw select-all fas"></span></a>
-                                                                                <a href="#"
-                                                                                    class="btn btn-outline-danger"
-                                                                                    data-bs-toggle="tooltip"
-                                                                                    data-bs-original-title="Xóa">
-                                                                                    <span
-                                                                                        class="fa-fw select-all fas"></span></a>
-                                                                                <a href="#" class="btn btn-outline-dark"
-                                                                                    data-bs-toggle="tooltip"
-                                                                                    data-bs-original-title="Làm mới Form"><span
-                                                                                        class="fa-fw select-all fas"></span></a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
+	<div class="card mb-5"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<div class="card-body">
+			<h4 class="card-title">Form sản phẩm</h4>
+			<div class="row">
+				<div class="form-group col-md-4">
+					<label for="inputUserName">Mã sản phẩm:</label> <input
+						class="form-control" id="inputUserName" type="number"
+						placeholder="Mã sản phẩm" ng-model="form.productID"
+						readonly="true">
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputPassword3">Người tạo</label> <input
+						class="form-control" id="inputPassword3" type="text" required=""
+						ng-model="form.user.fullName" placeholder="Người tạo"
+						readonly="true">
+				</div>
+				<div class="form-group col-md-4">
+					<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
+					<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
+						readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
+						| date:'dd-MM-yyyy' }}</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label>Danh mục</label>
+					<div>
+						<select class="select2 form-control"
+							ng-model="form.category.categoryID">
+							<option value="" disabled selected>Vui lòng chọn danh
+								mục</option>
+							<option ng-repeat="p in cates" ng-value="p.categoryID">{{p.categoryName}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label>Thương hiệu</label>
+					<div>
+						<select class="select2 form-control" ng-model="form.brand.brandID">
+							<option value="" disabled selected>Vui lòng chọn thương
+								hiệu</option>
+							<option ng-repeat="p in brans" ng-value="p.brandID">{{p.brandName}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label for="inputPassword4">Tên sản phẩm</label> <input
+						class="form-control" id="inputPassword4" type="text" required=""
+						placeholder="Tên sản phẩm" ng-model="form.productName">
+				</div>
+
+				<div class="form-group col-md-6">
+					<label for="inputPassword1">Giá</label> <input class="form-control"
+						id="inputPassword1" type="number" required=""
+						ng-model="form.price" placeholder="Giá sản phẩm">
+				</div>
+
+
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label class="col-form-label text-sm-left" style="padding: 0">Trạng
+						thái</label>
+					<div class="form-check mt-1">
+						<label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.activities" class="custom-control-input"
+							ng-value="true" type="radio" name="available" checked=""><span
+							class="custom-control-label custom-control-color">Bật</span>
+						</label> <label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.activities" class="custom-control-input"
+							ng-value="false" type="radio" name="available"><span
+							class="custom-control-label custom-control-color">Tắt</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group col-md-6">
+					<label class="col-form-label text-sm-left" style="padding: 0">Sản
+						phẩm nổi bật</label>
+					<div class="form-check mt-1">
+						<label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.featured" class="custom-control-input"
+							ng-value="true" type="radio" name="featured" checked=""><span
+							class="custom-control-label custom-control-color">Bật</span>
+						</label> <label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.featured" class="custom-control-input"
+							ng-value="false" type="radio" name="featured"><span
+							class="custom-control-label custom-control-color">Tắt</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="control-label">Mô tả</label>
+					<textarea class="form-control" name="description"
+						ng-model="newProduct.description" id="description"></textarea>
+					<script>
+						CKEDITOR.replace('description');
+					</script>
+				</div>
+			</div>
+			<div class="template-demo text-right mb-3">
+				<button type="button" ng-click="create()"
+					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+					title="Thêm sản phẩm mới">
+					<span class="ti-agenda"></span>
+				</button>
+				<button type="button" ng-click="update()"
+					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					title="Cập nhật sản phẩm">
+					<span class="ti-support"></span>
+				</button>
+				<button type="button" ng-click="confirmHideModal()" type="submit"
+					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
+					title="Xóa sản phẩm">
+					<span class="ti-trash"></span>
+				</button>
+				<button type="button" ng-click="reset()"
+					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+					title="Làm mới form">
+					<span class="ti-control-shuffle"></span>
+				</button>
+			</div>
+
+		</div>
+	</div>
+
+
+	<div class="card"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+
+		<!-- tìm kiếm theo tên bắt đầu  -->
+		<div class="modal fade" id="searchModal" tabindex="-1"
+			aria-labelledby="searchModalLabel" aria-hidden="true"
+			style="overflow: hidden;">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content" style="background-color: #eee;">
+					<div class="modal-header">
+						<h5 class="modal-title" id="searchModalLabel">Tìm kiếm</h5>
+						<button class="close modal-close" type="button"
+							data-dismiss="modal" aria-hidden="true">
+							<span class="ti-close"></span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form method="post">
+							<div class="form-group">
+								<label for="searchKeyword">Tên sản phẩm</label> <input
+									class="form-control" type="text" id="searchKeyword"
+									ng-model="searchKeyword"
+									placeholder="Nhập tên sản phẩm mà bạn muốn tìm kiếm">
+							</div>
+						</form>
+						<button
+							class="btn btn-outline-success btn-fw modal-close text-right"
+							type="button" ng-click="searchProductByName()">Tìm kiếm</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- tìm kiếm theo tên kết thúc -->
+
+		<!-- 	thùng rác bắt đầu -->
+		<div class="modal fade" id="recycleBinModal" tabindex="-1"
+			aria-labelledby="searchModalLabel" aria-hidden="true"
+			style="overflow: hidden;">
+			<div class="modal-dialog modal-dialog-centered modal-xl"
+				style="width: 1800px; height: 600px; margin: 0 auto;">
+				<div class="modal-content"
+					style="background-color: #eee; max-width: 1800px">
+					<div class="modal-header">
+						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+						<button class="close modal-close" type="button"
+							data-dismiss="modal" aria-hidden="true">
+							<span class="ti-close"></span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th ng-repeat="column in sortableColumns"
+										ng-click="sortByColumn(column.name)">{{ column.label }} <span
+										ng-if="sortColumn === column.name"> <span
+											ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+											ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+									</span>
+									</th>
+
+									<th class="actions"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="productitem in RestorePager.productitemss">
+									<td>{{productitem.productID}}</td>
+									<td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
+									<td>{{productitem.productName}}</td>
+									<td>{{productitem.price | number: 0 }}đ</td>
+									<td>{{productitem.category.categoryName}}</td>
+									<td>{{productitem.brand.brandName}}</td>
+									<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+									<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
+									<td class="actions">
+										<button class="btn btn-space btn btn-primary "
+											ng-click="confirmRestoreModal1(productitem)">
+											<i class="ti-back-right"></i>
+										</button>
+										<button class="btn btn-space btn btn-danger "
+											ng-click="confirmDeleteModal1(productitem)">
+											<i class="ti-trash"></i>
+										</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+						<div class="d-flex justify-content-end">
+							<div>
+								<ul class="pagination">
+									<li class="page-item">
+										<button ng-click="RestorePager.first()" class="page-link">
+											<span class="ti-angle-double-left"></span>
+										</button>
+									</li>
+
+									<li class="page-item"
+										ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
+										class="page-link" href=""
+										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+											RestorePage.value }}</a></li>
+
+									<li class="page-item">
+										<button ng-click="RestorePager.last()" class="page-link">
+											<span class="ti-angle-double-right"></span>
+										</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- thùng rác kết thúc -->
+		<div class="card-body">
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">Danh sách sản phẩm</h4>
+
+				<div class="d-flex">
+					<!-- Thẻ select box -->
+					<select class="form-control mr-2" ng-model="selectedActivity"
+						data-toggle="tooltip" title="Lọc theo trạng thái sản phẩm"
+						ng-change="filterByActivities()" style="width: 200px;">
+						<option value="all">Tất cả</option>
+						<option value="true">Đang bật</option>
+						<option value="false">Đang tắt</option>
+					</select>
+					<button type="button"
+						class="btn btn-outline-success btn-fw mr-2 export"
+						data-toggle="tooltip" title="Xuất file Excel">
+						<span class="fa ti-file"></span>
+					</button>
+					<button type="button"
+						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
+						data-toggle="tooltip" title="Xuất file PDF">
+						<span class="ti-files"></span>
+					</button>
+					<!-- Nút tìm kiếm -->
+					<button ng-click="openSearchForm()"
+						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
+						title="Tìm kiếm">
+						<span class="ti-search"></span>
+					</button>
+					<!-- Nút thùng rác -->
+					<button ng-click="openRecycleBinForm()"
+						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+						title="Thùng rác">
+						<span class="ti-trash"></span>
+					</button>
+				</div>
+			</div>
+
+			<table class="table table-hover" id="sampleTable">
+				<thead>
+					<tr>
+						<th ng-repeat="column in sortableColumns"
+							ng-click="sortByColumn(column.name)">{{ column.label }} <span
+							ng-if="sortColumn === column.name"> <span
+								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+						</span>
+						</th>
+						<th class="actions"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="productitem in pager.productitems">
+						<td>{{productitem.productID}}</td>
+						<td>{{productitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
+						<td>{{productitem.productName}}</td>
+						<td>{{productitem.price | number: 0 }}đ</td>
+						<td>{{productitem.category.categoryName}}</td>
+						<td>{{productitem.brand.brandName}}</td>
+						<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+						<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
+						<td class="actions">
+							<button ng-click="edit(productitem)"
+								class="btn btn-inverse-primary btn-rounded btn-icon"
+								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+								<i class="ti-pencil"></i>
+							</button>
+							<button ng-click="confirmHideModal1(productitem)"
+								class="btn btn-inverse-danger btn-rounded btn-icon"
+								data-toggle="tooltip" data-placement="top" title="Xóa">
+								<i class="ti-trash"></i>
+							</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-end">
+				<div>
+					<ul class="pagination">
+						<li class="page-item">
+							<button ng-click="pager.first()" class="page-link">
+								<span class="ti-angle-double-left"></span>
+							</button>
+						</li>
+
+						<li class="page-item" ng-repeat="page in visiblePages"
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+								page.value }}</a></li>
+
+						<li class="page-item">
+							<button ng-click="pager.last()" class="page-link">
+								<span class="ti-angle-double-right"></span>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
