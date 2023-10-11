@@ -200,20 +200,30 @@ app.controller("product-ctrl", function($scope, $http) {
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					$scope.errorMessage = `Không tìm thấy sản phẩm có tên "${$scope.searchKeyword}"`;
-					$('#errorModal').modal('show');
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy sản phẩm có tên ' + $scope.searchKeyword,
+					});
+
 				}
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tìm kiếm sản phẩm!";
-				$('#errorModal').modal('show'); // Hiển thị modal lỗi
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tìm kiếm sản phẩm!',
+				})
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
-			$scope.errorMessage = "Không tìm thấy sản phẩm mà bạn mong muốn!";
-			$('#errorModal').modal('show'); // Hiển thị modal lỗi
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Không tìm thấy sản phẩm mà bạn mong muốn!',
+			})
 		}
 		$('#searchModal').modal('hide');
 	};
@@ -271,8 +281,12 @@ app.controller("product-ctrl", function($scope, $http) {
 				$scope.productitems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách sản phẩm!";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách sản phẩm!',
+				});
+
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -283,8 +297,12 @@ app.controller("product-ctrl", function($scope, $http) {
 				$scope.productitems = filteredSizes;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách sản phẩm theo trạng thái!";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách sản phẩm theo trạng thái!',
+				});
+
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -358,73 +376,84 @@ app.controller("product-ctrl", function($scope, $http) {
 	$scope.create = function() {
 		// Không chọn danh mục
 		if (!$scope.form.category || !$scope.form.category.categoryID) {
-			//			swal("Thất bại", "Vui lòng chọn danh mục!", "error")
 			Swal.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, delete it!'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Swal.fire(
-						'Deleted!',
-						'Your file has been deleted.',
-						'success'
-					)
-				}
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn danh mục!',
 			})
-
 			return;
 		}
 
 		// Không chọn thương hiệu
 		if (!$scope.form.brand || !$scope.form.brand.brandID) {
-			swal("Thất bại", "Vui lòng chọn thương hiệu!", "error")
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn thương hiệu!',
+			})
 			return;
 		}
 
 		// Lỗi bỏ trống tên sản phẩm
 		if (!$scope.form.productName) {
-			$scope.errorMessage = "Vui lòng nhập tên sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập tên sản phẩm!!',
+			})
 			return;
 		}
 
 		// Lỗi bỏ trống giá sản phẩm
 		if (!$scope.form.price) {
 			$scope.errorMessage = "Vui lòng nhập giá sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm!!',
+			})
 			return;
 		}
 
 		// Lỗi giá sản phẩm < 0
 		if ($scope.form.price < 0) {
 			$scope.errorMessage = "Vui lòng nhập giá sản phẩm lớn hơn 0!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm lớn hơn 0!!',
+			})
 			return;
 		}
 
 		// Lỗi giá sản phẩm > 100.000.000
 		if ($scope.form.price > 100000000) {
 			$scope.errorMessage = "Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!',
+			})
 			return;
 		}
 
 		// Lỗi bỏ trống mô tả
 		if (!$scope.form.description) {
-			$scope.errorMessage = "Vui lòng nhập mô tả sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập mô tả sản phẩm!',
+			})
 			return;
 		}
 
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
 		if (checkImage == true) {
-			$scope.errorMessage = "Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!!',
+			})
 			return;
 		}
 
@@ -445,17 +474,22 @@ app.controller("product-ctrl", function($scope, $http) {
 				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.productitems.push(resp.data);
 				$scope.reset();
-				$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-				$scope.messageSuccess = "Thêm mới thành công";
 				$scope.initialize();
-				$('#errorModal1').modal('show');
+				Swal.fire({
+					icon: 'success',
+					title: 'Thành công',
+					text: 'Thêm mới thành công!',
+				})
 			}).catch(error => {
 				if (error.status === 400) {
 					$scope.errorMessage = error.data;
 				} else {
-					$scope.errorMessage = "Thêm mới thất bại";
 					$scope.initialize();
-					$('#errorModal').modal('show');
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Thêm mới thất bại!',
+					})
 					console.log("Error", error);
 				}
 			});
@@ -470,22 +504,31 @@ app.controller("product-ctrl", function($scope, $http) {
 	$scope.update = function() {
 		//Không chọn danh mục
 		if (!$scope.form.category || !$scope.form.category.categoryID) {
-			$scope.errorMessage = "Vui lòng chọn danh mục!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn danh mục!',
+			})
 			return;
 		}
 
 		//Không chọn thương hiệu
 		if (!$scope.form.brand || !$scope.form.brand.brandID) {
-			$scope.errorMessage = "Vui lòng chọn thương hiệu!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn thương hiệu!',
+			})
 			return;
 		}
 
 		//Lỗi bỏ trống tên sản phẩm 
 		if (!$scope.form.productName) {
-			$scope.errorMessage = "Vui lòng nhập tên sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập tên sản phẩm!',
+			})
 			return;
 		}
 
@@ -499,36 +542,51 @@ app.controller("product-ctrl", function($scope, $http) {
 
 		//Lỗi bỏ trống giá sản phẩm 
 		if (!$scope.form.price) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm!',
+			})
 			return;
 		}
 
 		//Lỗi giá sản phẩm < 0
 		if ($scope.form.price < 0) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm lớn hơn 0!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm lớn hơn 0!',
+			})
 			return;
 		}
 
 		//Lỗi giá sản phẩm > 100.000.000
 		if ($scope.form.price > 100000000) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!',
+			})
 			return;
 		}
 
 		//Lỗi bỏ trống mô tả
 		if (!$scope.form.description) {
-			$scope.errorMessage = "Vui lòng nhập mô tả sản phẩm!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập mô tả sản phẩm!',
+			})
 			return;
 		}
 
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
 		if (checkImage == true) {
-			$scope.errorMessage = "Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+			})
 			return;
 		}
 
@@ -550,12 +608,18 @@ app.controller("product-ctrl", function($scope, $http) {
 				var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
 				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.productitems[index] = productitem;
-				$scope.messageSuccess = "Cập nhật thành công";
 				$scope.initialize();
-				$('#errorModal1').modal('show');
+				Swal.fire({
+					icon: 'success',
+					title: 'Thành công',
+					text: 'Cập nhật thành công!',
+				})
 			}).catch(error => {
-				$scope.errorMessage = "Cập nhật thất bại";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Cập nhật thất bại!',
+				})
 				$scope.initialize();
 				console.log("Error", error);
 			})
@@ -596,12 +660,18 @@ app.controller("product-ctrl", function($scope, $http) {
 		$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
 			var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
 			$scope.productitems[index] = productitem;
-			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show');
+			Swal.fire({
+				icon: 'success',
+				title: 'Thất bại',
+				text: 'Xóa thành công!',
+			})
 			$scope.initialize();
 		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Xóa thất bại!',
+			})
 			$scope.initialize();
 			console.log("Error", error);
 		})
@@ -636,16 +706,22 @@ app.controller("product-ctrl", function($scope, $http) {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
 
-			$scope.messageSuccess = "khôi phục thành công";
-			$('#errorModal1').modal('show');
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'khôi phục thành công!',
+			})
 			$scope.initialize();
 
 		}).catch(error => {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
 
-			$scope.errorMessage = "Khôi phục thất bại";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Khôi phục thất bại!',
+			})
 			$scope.initialize();
 			console.log("Error", error);
 		})
@@ -672,11 +748,19 @@ app.controller("product-ctrl", function($scope, $http) {
 			$scope.productitems.splice(index, 1);
 			$scope.reset();
 			$scope.initialize();
-			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Xóa thành công!',
+			})
 		}).catch(error => {
 			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Xóa thất bại!',
+			});
+
 			console.log("Error", error);
 		});
 
