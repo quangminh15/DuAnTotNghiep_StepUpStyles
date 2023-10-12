@@ -581,6 +581,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 
 	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
 	$scope.restore = function(branditem) {
+		console.log(branditem)
 		$scope.form = angular.copy(branditem);
 		Swal.fire({
 			title: 'Thông báo',
@@ -592,7 +593,9 @@ app.controller("brand-ctrl", function($scope, $http) {
 			cancelButtonText: 'Không',
 			confirmButtonText: 'Đồng ý'
 		}).then((result) => {
+			console.log(result)
 			if (result.isConfirmed) {
+				
 				branditem.deleted = false;
 				branditem.modifyDate = new Date();
 				$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
@@ -624,6 +627,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 
 	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
 	$scope.confirmDelete = function(branditem) {
+		console.log(branditem)
 		$scope.form = angular.copy(branditem);
 		Swal.fire({
 			title: 'Thông báo',
