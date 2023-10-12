@@ -1,0 +1,63 @@
+<div class="be-left-sidebar">
+	<div class="left-sidebar-wrapper">
+		<a class="left-sidebar-toggle" href="#">TRANG CHỦ</a>
+		<div class="left-sidebar-spacer">
+			<div class="left-sidebar-scroll">
+				<div class="left-sidebar-content">
+					<ul class="sidebar-elements">
+						<li class="divider">Menu</li>
+					<li class="active"><a href="#!indexAdmin"><i
+								class="icon mdi mdi-home"></i><span>Trang chủ</span></a></li> 
+						<li class="parent" onclick="toggleMenu(this)"><a href=""><span class="icon mdi mdi-book"></span> <span>Quản lý sản phẩm</span></a>
+							<ul class="sub-menu">
+								<li><a href="#!brand">Thương hiệu</a></li>
+								<li><a href="#!category">Danh mục</a></li>
+								<li><a href="#!productsize">Size</a></li>
+								<li><a href="#!product">Sản phẩm</a></li>
+								<li><a href="#!productImage">Hình ảnh</a></li>
+								<li><a href="#!color">Màu sắc</a></li>
+								<li><a href="#!productDetail">Sản phẩm chi tiết</a></li>
+							
+							</ul></li>
+							<li class="parent" onclick="toggleMenu(this)"><a href=""><span class="icon mdi mdi-ticket-star"></span> <span>Quản lý giảm giá</span></a>
+								<ul class="sub-menu">
+						
+									<li><a href="#!directDiscount">Giảm giá trực tiếp</a></li>
+									<!-- <li><a href="#!discount">Giảm giá</a></li>
+									<li><a href="#!discountProd">Giảm giá sản phẩm</a></li>
+									<li><a href="#!discountCate">Giảm giá danh mục</a></li> -->
+								</ul></li>
+						<li class="parent" onclick="toggleMenu(this)"><a
+							href="#!user"><i class="icon mdi mdi-chart-donut"></i><span>Quản
+									lý người dùng</span></a>
+<!-- 							<ul class="sub-menu">
+								<li><a href="charts-flot.html">Flot</a></li>
+								<li><a href="charts-sparkline.html">Sparklines</a></li>
+								<li><a href="charts-chartjs.html">Chart.js</a></li>
+								<li><a href="charts-morris.html">Morris.js</a></li>
+							</ul> -->
+							</li>
+						<li class="parent" onclick="toggleMenu(this)"><a href=""><span class="icon mdi mdi-book-image"></span> <span>Quản lý nhà
+									cung cấp</span></a>
+							<ul class="sub-menu">
+								<li><a href="#!supplier">Nhà cung cấp</a></li>
+								<li><a href="#!ImportReceipt">Nhập kho</a></li>
+							</ul></li>
+						<li class="parent"><a href="#!review"><span class="icon mdi mdi-dns"></span> <span>Quản lý đánh
+									giá</span></a></li>
+						<li class="parent"><a href="#!order"><span class="icon mdi mdi-shopping-basket"></span> <span>Quản lý đơn
+									hàng</span></a></li>
+						<li class="parent" onclick="toggleMenu(this)"><a href=""><i
+								class="icon mdi mdi-dot-circle"></i><span>Thống kê</span></a>
+							<ul class="sub-menu">
+								<li><a href="#!productOFcategory">Sản phẩm theo danh mục</a></li>
+								<li><a href="#!totalproductrating">Tổng sản phẩm theo sao đánh giá</a></li>
+								<li><a href="#!productTK">Lọc sản phẩm</a></li>
+							</ul></li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
