@@ -124,7 +124,7 @@
             <div class="form-group col-md-6">
                 <label>Phiếu nhập</label>
                 <div>
-                    <select class="select2 form-control" ng-model="form.importReceipt.importReceiptId">
+                    <select class="select2 form-control" ng-model="formDetal.importReceipt.importReceiptId">
                         <option value="" disabled selected>Vui lòng chọn phiếu nhập</option>
                         <option ng-repeat="p in items" ng-value="p.importReceiptId">{{p.importReceiptId}}
                         </option>
@@ -141,7 +141,7 @@
                             {{p.product.productName}}
                         </option>
                     </select> -->
-                    <select class="select2 form-control" ng-model="form.productDetail.productDetailID">
+                    <select class="select2 form-control" ng-model="formDetal.productDetail.productDetailID">
                         <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
                         <option ng-repeat="p in prods" ng-value="p.productDetailID">
                             {{p.product.productName}} ({{p.color.colorName}}) ({{p.size.sizeNumber}})
@@ -177,13 +177,13 @@
             <div class="form-group col-md-6">
                 <label for="inputPassword3">Số lượng</label>
                 <input class="form-control" id="inputPassword3" type="text" placeholder="Số lượng" required=""
-                    ng-model="form.quantity">
+                    ng-model="formDetal.quantity">
             </div>
 
             <div class="form-group col-md-6">
                 <label for="inputPassword4">Đơn giá</label>
                 <input class="form-control" id="inputPassword4" type="text" placeholder="Đơn giá" required=""
-                    ng-model="form.price">
+                    ng-model="formDetal.price">
             </div>
         </div>
 
