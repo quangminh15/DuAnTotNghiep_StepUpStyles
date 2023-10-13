@@ -595,7 +595,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		}).then((result) => {
 			console.log(result)
 			if (result.isConfirmed) {
-
+				
 				branditem.deleted = false;
 				branditem.modifyDate = new Date();
 				$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
@@ -631,7 +631,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(branditem);
 		Swal.fire({
 			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục thương hiệu này không?",
+			text: "Bạn có chắc chắn muốn xóa thương hiệu này không?",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
@@ -692,12 +692,10 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
-
-				//code xuất file
-				var table2excel = new Table2Excel();
-				table2excel.export(document.querySelectorAll("table.table"));
 			}
-
+			//code xuất file
+			var table2excel = new Table2Excel();
+			table2excel.export(document.querySelectorAll("table.table"));
 		})
 
 	});
@@ -724,18 +722,18 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
-
-				//code xuất file
-				var elment = document.getElementById('sampleTable');
-				var opt = {
-					margin: 0.5,
-					filename: 'myfilepdf.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				};
-				html2pdf(elment, opt);
 			}
+
+			//code xuất file
+			var elment = document.getElementById('sampleTable');
+			var opt = {
+				margin: 0.5,
+				filename: 'myfilepdf.pdf',
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2 },
+				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+			};
+			html2pdf(elment, opt);
 		})
 	});
 
@@ -751,3 +749,4 @@ app.controller("brand-ctrl", function($scope, $http) {
 	}
 
 });
+
