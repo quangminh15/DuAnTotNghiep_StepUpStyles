@@ -1,427 +1,245 @@
-<div class="card card-border-color card-border-color-primary m-3">
-	<div class="modal fade modal-full-color modal-full-color-danger"
-		id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button class="close modal-close" type="button"
-						data-dismiss="modal" aria-hidden="true">
-						<span class="mdi mdi-close"></span>
-					</button>
+<div class="content-wrapper">
+	<div class="card mb-5"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<div class="card-body">
+			<h4 class="card-title">Màu sắc</h4>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label for="inputUserName">Mã màu:</label> <input
+						class="form-control" id="inputUserName" type="text"
+						ng-model="form.colorID" readonly="true">
 				</div>
-				<div class="modal-body" style="color: white;">
-					<div class="text-center">
-						<span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span>
-						<b>
-							<h4 style="color: white;">{{ errorMessage }}</h4>
-						</b>
-						<div class="mt-8">
-							<button class="btn btn-secondary btn-space modal-close"
-								type="button" data-dismiss="modal"
-								style="background-color: white; color: red;">Đóng</button>
+				<div class="form-group col-md-6">
+					<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
+					<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
+						readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
+						| date:'dd-MM-yyyy' }}</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label for="inputPassword6">Tên màu</label> <input
+						class="form-control" id="inputPassword6" type="text"
+						placeholder="Tên màu" required="" ng-model="form.colorName">
+				</div>
+				<div class="form-group col-md-6">
+					<label class="col-form-label text-sm-left" style="padding: 0">Trạng
+						thái</label>
+					<div class="form-check mt-1">
+						<label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.activities" class="custom-control-input"
+							ng-value="true" type="radio" name="available" checked=""><span
+							class="custom-control-label custom-control-color">Bật</span>
+						</label> <label class="custom-control custom-radio custom-control-inline">
+							<input ng-model="form.activities" class="custom-control-input"
+							ng-value="false" type="radio" name="available"><span
+							class="custom-control-label custom-control-color">Tắt</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="template-demo text-right mb-3">
+				<button type="button" ng-click="create()"
+					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+					title="Thêm sản phẩm mới">
+					<span class="ti-agenda"></span>
+				</button>
+				<button type="button" ng-click="update()"
+					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					title="Cập nhật sản phẩm">
+					<span class="ti-support"></span>
+				</button>
+				<button type="button" ng-click="confirmHide()" type="submit"
+					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
+					title="Xóa sản phẩm">
+					<span class="ti-trash"></span>
+				</button>
+				<button type="button" ng-click="reset()"
+					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+					title="Làm mới form">
+					<span class="ti-control-shuffle"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="card"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<!-- 	thùng rác bắt đầu -->
+		<div class="modal fade" id="recycleBinModal" tabindex="-1"
+			aria-labelledby="searchModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-xl"
+				style="width: 1500px; height: 600px;">
+				<div class="modal-content"
+					style="background-color: #eee; max-width: 1500px">
+					<div class="modal-header">
+						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+						<button class="close modal-close" type="button"
+							data-dismiss="modal" aria-hidden="true">
+							<span class="mdi mdi-close"></span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th ng-repeat="column in sortableColumns"
+										ng-click="sortByColumn(column.name)">{{ column.label }} <span
+										ng-if="sortColumn === column.name"> <span
+											ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+											ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+									</span>
+									</th>
+
+									<th class="actions"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="coloritem in RestorePager.coloritemss">
+									<td>{{coloritem.colorID}}</td>
+									<td>{{coloritem.colorName}}</td>
+									<td>{{coloritem.modifyDate | date: 'dd-MM-yyyy'}}</td>
+									<td>{{coloritem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+									<td class="actions">
+										<button class="btn btn-space btn btn-primary "
+											ng-click="restore(coloritem)">
+											<i class="ti-back-right"></i>
+										</button>
+										<button class="btn btn-space btn btn-danger "
+											ng-click="confirmDelete(coloritem)">
+											<i class="ti-trash"></i>
+										</button>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+						<div class="d-flex justify-content-end">
+							<div>
+								<ul class="pagination">
+									<li class="page-item">
+										<button ng-click="RestorePager.first()" class="page-link">
+											<span class="ti-angle-double-left"></span>
+										</button>
+									</li>
+
+									<li class="page-item"
+										ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
+										class="page-link" href=""
+										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+											RestorePage.value }}</a></li>
+
+									<li class="page-item">
+										<button ng-click="RestorePager.last()" class="page-link">
+											<span class="ti-angle-double-right"></span>
+										</button>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer"></div>
 			</div>
 		</div>
-	</div>
+		<!-- thùng rác kết thúc -->
 
-	<!-- Modal for displaying error messages -->
-	<div class="modal fade modal-full-color modal-full-color-success"
-		id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button class="close modal-close" type="button"
-						data-dismiss="modal" aria-hidden="true">
-						<span class="mdi mdi-close"></span>
+		<div class="card-body">
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">Danh sách màu sắc</h4>
+
+				<div class="d-flex">
+					<!-- Thẻ select box -->
+					<select class="form-control mr-2" ng-model="selectedActivity"
+						data-toggle="tooltip" title="Lọc theo trạng thái thương hiệu"
+						ng-change="filterByActivities()" style="width: 200px;">
+						<option value="all">Tất cả</option>
+						<option value="true">Đang bật</option>
+						<option value="false">Đang tắt</option>
+					</select>
+					<button type="button"
+						class="btn btn-outline-success btn-fw mr-2 export"
+						data-toggle="tooltip" title="Xuất file Excel">
+						<span class="fa ti-file"></span>
+					</button>
+					<button type="button"
+						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
+						data-toggle="tooltip" title="Xuất file PDF">
+						<span class="ti-files"></span>
+					</button>
+					<!-- Nút tìm kiếm -->
+					<button ng-click="searchColorByName()"
+						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
+						title="Tìm kiếm">
+						<span class="ti-search"></span>
+					</button>
+					<!-- Nút thùng rác -->
+					<button ng-click="openRecycleBinForm()"
+						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+						title="Thùng rác">
+						<span class="ti-trash"></span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div class="text-center">
-						<span class="modal-main-icon mdi mdi-check mb-3"></span><b>
-							<h4 style="color: white;">{{ messageSuccess }}</h4>
-						</b>
-						<div class="mt-8">
-							<button class="btn btn-secondary btn-space modal-close"
-								type="button" data-dismiss="modal"
-								style="background-color: white; color: green;">Đóng</button>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer"></div>
 			</div>
-		</div>
-	</div>
+			<table class="table table-hover" id="sampleTable">
+				<thead>
+					<tr>
+						<th ng-repeat="column in sortableColumns"
+							ng-click="sortByColumn(column.name)">{{ column.label }} <span
+							ng-if="sortColumn === column.name"> <span
+								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+						</span>
+						</th>
+						<th class="actions"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="coloritem in pager.coloritems">
+						<td>{{coloritem.colorID}}</td>
+						<td>{{coloritem.colorName}}</td>
+						<td>{{coloritem.modifyDate | date: 'dd-MM-yyyy'}}</td>
+						<td>{{coloritem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+						<td class="actions">
+							<button ng-click="edit(coloritem)"
+								class="btn btn-inverse-primary btn-rounded btn-icon"
+								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+								<i class="ti-pencil"></i>
+							</button>
+							<button ng-click="confirmHideTable(coloritem)"
+								class="btn btn-inverse-danger btn-rounded btn-icon"
+								data-toggle="tooltip" data-placement="top" title="Xóa">
+								<i class="ti-trash"></i>
+							</button>
+						</td>
+					</tr>
 
-	<!-- modal xác nhận xóa vào thùng rác-->
-	<div class="modal fade" id="confirmHideModal" tabindex="-1"
-		role="dialog" aria-labelledby="confirmHideModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
-						xóa</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-end">
+				<div>
+					<ul class="pagination">
+						<li class="page-item">
+							<button ng-click="pager.first()" class="page-link">
+								<span class="ti-angle-double-left"></span>
+							</button>
+						</li>
+
+						<li class="page-item" ng-repeat="page in visiblePages"
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+								page.value }}</a></li>
+
+						<li class="page-item">
+							<button ng-click="pager.last()" class="page-link">
+								<span class="ti-angle-double-right"></span>
+							</button>
+						</li>
+					</ul>
 				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa màu sắc "{{
-					form.colorName }}" này không?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Hủy</button>
-					<button type="button" class="btn btn-danger"
-						ng-click="confirmHide()">Xóa</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- modal xác nhận khôi phục item từ thùng rác-->
-	<div class="modal fade" id="confirmRestoreModal" tabindex="-1"
-		role="dialog" aria-labelledby="confirmRestoreModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="confirmRestoreModalLabel">Xác nhận
-						khôi phục</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn khôi phục màu
-					sắc "{{ form.colorName }}" này không?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Hủy</button>
-					<button type="button" class="btn btn-danger" ng-click="restore()">Khôi
-						phục</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- modal xác nhận xóa luôn-->
-	<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
-		role="dialog" aria-labelledby="confirmDeleteModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
-						xóa</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa màu của sản
-					phẩm "{{ form.colorName }}" này không?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Hủy</button>
-					<button type="button" class="btn btn-danger"
-						ng-click="confirmDelete()">Xóa</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<div class="card-header card-header-divider">Màu sắc</div>
-	<div class="card-body">
-
-		<div class="row">
-			<div class="form-group col-md-6">
-				<label for="inputUserName">Mã màu:</label> <input
-					class="form-control" id="inputUserName" type="text"
-					ng-model="form.colorID" readonly="true">
-			</div>
-			<div class="form-group col-md-6">
-				<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
-				<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
-					readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate |
-					date:'dd-MM-yyyy' }}</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group col-md-6">
-				<label for="inputPassword6">Tên màu</label> <input
-					class="form-control" id="inputPassword6" type="text"
-					placeholder="Tên màu" required="" ng-model="form.colorName">
-			</div>
-			<div class="form-group col-md-6">
-				<label class="col-form-label text-sm-left">Trạng thái</label>
-				<div class="form-check mt-1">
-					<label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.activities" class="custom-control-input"
-						ng-value="true" type="radio" name="available" checked=""><span
-						class="custom-control-label custom-control-color">Bật</span>
-					</label> <label class="custom-control custom-radio custom-control-inline">
-						<input ng-model="form.activities" class="custom-control-input"
-						ng-value="false" type="radio" name="available"><span
-						class="custom-control-label custom-control-color">Tắt</span>
-					</label>
-				</div>
-			</div>
-		</div>
-
-
-
-
-		<div class="row pt-0 pt-sm-5">
-			<div class="col-sm-12 pl-0">
-				<p class="text-right">
-					<button class="btn btn-space btn btn-success" ng-click="create()"
-						type="submit">
-						<i class="bi bi-file-plus-fill"></i> Thêm
-					</button>
-					<button class="btn btn-space btn btn-primary" ng-click="update()">
-						<i class="bi bi-pencil-square"></i> Sửa
-					</button>
-					<button class="btn btn-space btn btn-danger"
-						ng-click="confirmHideModal()" type="submit">
-						<i class="bi bi-trash3-fill"></i> Xóa
-					</button>
-					<button class="btn btn-space btn btn-dark" ng-click="reset()">
-						<i class="bi bi-arrow-clockwise"></i> Làm mới
-					</button>
-				</p>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div class="card card-table m-3">
-	<div
-		class="card-header d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Danh sách màu sắc</h4>
-
-		<div class="d-flex">
-			<!-- Thẻ select box -->
-			<select class="form-control mr-2" ng-model="selectedActivity"
-				ng-change="filterByActivities()" style="width: 200px;">
-				<option value="all">Tất cả</option>
-				<option value="true">Đang bật</option>
-				<option value="false">Đang tắt</option>
-			</select>
-			<!-- Nút tìm kiếm -->
-			<button class="btn btn-space btn-success md-trigger"
-				ng-click="openSearchForm()" style="width: 50px;">
-				<span class="mdi mdi-search"></span>
-			</button>
-			<!-- Nút thùng rác -->
-			<button class="btn btn-space btn-danger md-trigger"
-				ng-click="openRecycleBinForm()" style="width: 50px; height: 43px">
-				<span class="mdi mdi-delete"></span>
-			</button>
-
-			<div class="">
-				<a class="btn btn-excel btn-sm export" title="=Xuất file excel"><i
-					class="fa fa-file-excel-o"></i> Xuất Excel</a>
-			</div>
-
-			<div class="">
-				<a class="btn btn-delete btn-sm pdf-file" type="button"
-					title="Xuất file pdf"><i class="fa fa-file-pdf-o"></i> Xuất PDF</a>
-			</div>
-
-			<div class="">
-				<a class="btn btn-delete btn-sm print-file" type="button" title="In"
-					onclick="myApp1.printTable()"><i class="fa fa-print"></i> In dữ
-					liệu</a>
-			</div>
-		</div>
-	</div>
-	<!-- tìm kiếm theo tên bắt đầu  -->
-	<div class="modal fade" id="searchModal" tabindex="-1"
-		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
-				<div class="modal-header">
-					<h5 class="modal-title" id="searchModalLabel">Tìm kiếm</h5>
-					<button class="close modal-close" type="button"
-						data-dismiss="modal" aria-hidden="true">
-						<span class="mdi mdi-close"></span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form method="post">
-						<div class="form-group">
-							<label for="searchKeyword">Tên màu</label> <input
-								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword"
-								placeholder="Nhập tên màu mà bạn muốn tìm kiếm">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer" style="background-color: #eee;">
-					<button class="btn btn-secondary modal-close" type="button"
-						data-dismiss="modal">Hủy</button>
-					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchColorByName()">Tìm kiếm</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- tìm kiếm theo tên kết thúc -->
-
-	<!-- 	thùng rác bắt đầu -->
-	<div class="modal fade" id="recycleBinModal" tabindex="-1"
-		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-xl"
-			style="width: 1500px; height: 600px;">
-			<div class="modal-content"
-				style="background-color: #eee; max-width: 1500px">
-				<div class="modal-header">
-					<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-					<button class="close modal-close" type="button"
-						data-dismiss="modal" aria-hidden="true">
-						<span class="mdi mdi-close"></span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th ng-repeat="column in sortableColumns"
-									ng-click="sortByColumn(column.name)">{{ column.label }} <span
-									ng-if="sortColumn === column.name"> <span
-										ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-										ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
-								</span>
-								</th>
-
-								<th class="actions"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="coloritem in RestorePager.coloritemss">
-								<td>{{coloritem.colorID}}</td>
-								<td>{{coloritem.colorName}}</td>
-								<td>{{coloritem.modifyDate | date: 'dd-MM-yyyy'}}</td>
-								<td>{{coloritem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
-								<td class="actions">
-									<button class="btn btn-space btn btn-primary "
-										ng-click="confirmRestoreModal1(coloritem)">
-										<i class="mdi mdi-refresh-alt"></i>
-									</button>
-									<button class="btn btn-space btn btn-danger "
-										ng-click="confirmDeleteModal1(coloritem)">
-										<i class="bi bi-trash3-fill"></i>
-									</button>
-								</td>
-							</tr>
-
-						</tbody>
-					</table>
-					<div class="card-header d-flex justify-content-end">
-						<div>
-							<ul class="pagination">
-								<li class="page-item">
-									<button style="font-size: 25px" ng-click="RestorePager.first()"
-										class="page-link">
-										<span class="mdi mdi-skip-previous"></span>
-									</button>
-								</li>
-
-								<li class="page-item"
-									ng-repeat="RestorePage in RestoreVisiblePages"
-									ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-									class="page-link" href=""
-									ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
-										RestorePage.value }}</a></li>
-
-
-								<li class="page-item">
-									<button style="font-size: 25px" ng-click="RestorePager.last()"
-										class="page-link">
-										<span class="mdi mdi-skip-next"></span>
-									</button>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer" style="background-color: #eee;">
-					<button class="btn btn-secondary modal-close" type="button"
-						data-dismiss="modal">Hủy</button>
-
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- thùng rác kết thúc -->
-
-	<div class="card-body">
-		<table class="table" id="sampleTable">
-			<thead>
-				<tr>
-					<th ng-repeat="column in sortableColumns"
-						ng-click="sortByColumn(column.name)">{{ column.label }} <span
-						ng-if="sortColumn === column.name"> <span
-							ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-							ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
-					</span>
-					</th>
-					<th class="actions"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="coloritem in pager.coloritems">
-					<td>{{coloritem.colorID}}</td>
-					<td>{{coloritem.colorName}}</td>
-					<td>{{coloritem.modifyDate | date: 'dd-MM-yyyy'}}</td>
-					<td>{{coloritem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
-					<td class="actions">
-						<button class="btn btn-space btn btn-primary "
-							ng-click="edit(coloritem)">
-							<i class="bi bi-pencil-square"></i>
-						</button>
-						<button class="btn btn-space btn btn-danger "
-							ng-click="confirmHideModal1(coloritem)">
-							<i class="bi bi-trash3-fill"></i>
-						</button>
-					</td>
-				</tr>
-
-			</tbody>
-		</table>
-		<div class="card-header d-flex justify-content-end">
-			<div>
-				<ul class="pagination">
-					<li class="page-item">
-						<button style="font-size: 25px" ng-click="pager.first()"
-							class="page-link">
-							<span class="mdi mdi-skip-previous"></span>
-						</button>
-					</li>
-
-					<li class="page-item" ng-repeat="page in visiblePages"
-						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-						class="page-link" href="" ng-click="pager.goto(page.value)">{{
-							page.value }}</a></li>
-
-					<li class="page-item">
-						<button style="font-size: 25px" ng-click="pager.last()"
-							class="page-link">
-							<span class="mdi mdi-skip-next"></span>
-						</button>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-	</div>
-
-</div>
-<div style="color: #eee;">123</div>

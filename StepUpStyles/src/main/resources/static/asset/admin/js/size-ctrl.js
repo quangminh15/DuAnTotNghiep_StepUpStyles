@@ -5,7 +5,6 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.prods = [];
 	$scope.form = {};
 	$scope.form.products = {};
-	$scope.errorMessage = '';
 	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
@@ -207,8 +206,11 @@ app.controller("size-ctrl", function($scope, $http) {
 				$scope.sizeitems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách size!";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách size!!',
+				});
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -219,24 +221,27 @@ app.controller("size-ctrl", function($scope, $http) {
 				$scope.sizeitems = filteredSizes;
 				$scope.pager.first();
 			}).catch(error => {
-				$scope.errorMessage = "Lỗi khi tải danh sách size theo trạng thái!";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách size theo trạng thái!!',
+				});
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		}
 	};
 
-	//Mở modal tìm kiếm
-	$scope.openSearchForm = function() {
-		// Reset searchKeyword
-		searchValue = '';
-		$('#searchModal').modal('show');
-	};
+	$scope.searchSizeNumber = async function() {
+		const { value: searchKeyword } = await Swal.fire({
+			title: 'Tìm kiếm size',
+			input: 'text',
+			inputLabel: 'Nhập số size',
+			inputPlaceholder: 'Nhập số size cần tìm kiếm'
+		});
+		
+		var searchValue = parseFloat(searchKeyword);
 
-	// Tìm kiếm  
-	$scope.searchSizeNumber = function() {
-		var searchValue = parseFloat($scope.searchKeyword); // Chuyển đổi searchKeyword sang kiểu số thực
 		if (!isNaN(searchValue) && searchValue !== null && searchValue !== undefined) {
 			$http.get("/rest/sizes/search", {
 				params: { keyword: searchValue }
@@ -246,24 +251,32 @@ app.controller("size-ctrl", function($scope, $http) {
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					$scope.errorMessage = `Không tìm thấy size "${searchValue}"`;
-					$('#errorModal').modal('show');
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy size có số ' + searchValue,
+					});
 				}
 			}).catch(error => {
 				$scope.errorMessage = "Lỗi khi tìm kiếm size!";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tìm kiếm size!!',
+				});
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả size
 			$scope.initialize();
-			$scope.errorMessage = "Không tìm thấy size mà bạn mong muốn!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập một số size hợp lệ để tìm kiếm!',
+			});
 		}
-		$('#searchModal').modal('hide');
 	};
-
 
 
 	//	Xóa form
@@ -286,30 +299,42 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.create = function() {
 		//Lỗi bỏ trống 
 		if (!$scope.form.sizeNumber) {
-			$scope.errorMessage = "Vui lòng số size!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng số size!!',
+			});
 			return;
 		}
 
 		//Lỗi trùng tên nhóm sản phẩm
 		let existingsizeitemNumber = $scope.sizeitemsLoadAll.find(sizeitem => sizeitem.sizeNumber === $scope.form.sizeNumber);
 		if (existingsizeitemNumber) {
-			$scope.errorMessage = "size đã tồn tại!!";
-			$('#errorModal').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'size đã tồn tại!!',
+			});
 			return;
 		}
 
 		//Lỗi sizeitem < 0
 		if ($scope.form.sizeitemNumber < 0) {
-			$scope.errorMessage = "Vui lòng nhập size lớn hơn 0!!";
-			$('#errorModal').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập size lớn hơn 0!!',
+			});
 			return;
 		}
 
 		//Lỗi sizeitem > 100
 		if ($scope.form.sizeitemNumber > 100) {
-			$scope.errorMessage = "Vui lòng nhập size nhỏ hơn 100!!";
-			$('#errorModal').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập size nhỏ hơn 100!!',
+			});
 			return;
 		}
 
@@ -320,17 +345,22 @@ app.controller("size-ctrl", function($scope, $http) {
 			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitems.push(resp.data);
 			$scope.reset();
-			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-			$scope.messageSuccess = "Thêm mới thành công";
-			$('#errorModal1').modal('show');
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'Thêm mới thành công',
+			});
 			$scope.initialize();
 		}).catch(error => {
 			if (error.status === 400) {
 				$scope.errorMessage = error.data;
 				$scope.initialize();
 			} else {
-				$scope.errorMessage = "Thêm mới thất bại";
-				$('#errorModal').modal('show');
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Thêm mới thất bại',
+				});
 				console.log("Error", error);
 				$scope.initialize();
 			}
@@ -341,8 +371,11 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.update = function() {
 		//Lỗi bỏ trống 
 		if (!$scope.form.sizeNumber) {
-			$scope.errorMessage = "Vui lòng số size!!";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng số size!!',
+			});
 			return;
 		}
 
@@ -356,15 +389,21 @@ app.controller("size-ctrl", function($scope, $http) {
 
 		//Lỗi sizeitem < 0
 		if ($scope.form.sizeNumber < 0) {
-			$scope.errorMessage = "Vui lòng nhập size lớn hơn 0!!";
-			$('#errorModal').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập size lớn hơn 0!!',
+			});
 			return;
 		}
 
 		//Lỗi sizeitem > 100
 		if ($scope.form.sizeNumber > 100) {
-			$scope.errorMessage = "Vui lòng nhập size nhỏ hơn 100!!";
-			$('#errorModal').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập size nhỏ hơn 100!!',
+			});
 			return;
 		}
 
@@ -374,13 +413,19 @@ app.controller("size-ctrl", function($scope, $http) {
 			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
 			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.sizeitems[index] = sizeitem;
-			$scope.messageSuccess = "Cập nhật thành công";
-			$('#errorModal1').modal('show');
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'Cập nhật thành công',
+			});
 			$scope.initialize();
 			$scope.reset();
 		}).catch(error => {
-			$scope.errorMessage = "Cập nhật thất bại";
-			$('#errorModal').modal('show');
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Cập nhật thất bại',
+			});
 			$scope.initialize();
 			console.log("Error", error);
 		})
@@ -393,111 +438,256 @@ app.controller("size-ctrl", function($scope, $http) {
 		$('#recycleBinModal').modal('show');
 	};
 
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal = function() {
-		$('#confirmHideModal').modal('show');
-	}
-
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal1 = function(sizeitem) {
-		$scope.form = angular.copy(sizeitem);
-		$('#confirmHideModal').modal('show');
-	}
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
 	$scope.confirmHide = function() {
-		var sizeitem = angular.copy($scope.form);
-		sizeitem.deleted = true;
-		sizeitem.modifyDate = new Date();
-		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
-			var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
-			resp.data.modifyDate = new Date(resp.data.modifyDate);
-			$scope.sizeitems[index] = sizeitem;
-			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show');
-			$scope.initialize();
-			$scope.reset();
-		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show');
-			$scope.initialize();
-			$scope.reset();
-			console.log("Error", error);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn xóa size này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				var sizeitem = angular.copy($scope.form);
+				sizeitem.deleted = true;
+				sizeitem.modifyDate = new Date();
+				$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+					var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.sizeitems[index] = sizeitem;
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
+		})
+	}
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) Kết thúc
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) bắt đầu
+	$scope.confirmHideTable = function(sizeitem) {
+		$scope.form = angular.copy(sizeitem);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn xóa size này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				sizeitem.deleted = true;
+				sizeitem.modifyDate = new Date();
+				$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+					var index = $scope.sizeitems.findIndex(p => p.sizeID == sizeitem.sizeID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.sizeitems[index] = sizeitem;
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
+		})
+	}
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) kết thúc
+
+	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
+	$scope.restore = function(sizeitem) {
+		console.log(sizeitem)
+		$scope.form = angular.copy(sizeitem);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn khôi phục size này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			console.log(result)
+			if (result.isConfirmed) {
+				sizeitem.deleted = false;
+				sizeitem.modifyDate = new Date();
+				$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
+					var index = $scope.sizeitemsLoadAll.findIndex(p => p.sizeID == sizeitem.sizeID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.sizeitemsLoadAll[index] = sizeitem;
+
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'khôi phục thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Khôi phục thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
+		})
+	}
+	//sau khi xác nhận thành công thì khôi phục item từ thùng rác (Nút khôi phục ở TABLE) Kết thúc
+
+	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
+	$scope.confirmDelete = function(sizeitem) {
+		console.log(sizeitem)
+		$scope.form = angular.copy(sizeitem);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn xóa size này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$http.delete('/rest/sizes/delete/' + $scope.form.sizeID).then(resp => {
+					var index = $scope.sizeitems.findIndex(p => p.sizeID == $scope.form.sizeID);
+					$scope.sizeitems.splice(index, 1);
+					$scope.reset();
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công!',
+					});
+					$scope.initialize();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					console.log("Error", error);
+					$scope.initialize();
+					$scope.reset();
+				});
+			}
+		})
+	}
+	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) Kết thúc
+
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+	$('.export').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+			}
+			//code xuất file
+			var table2excel = new Table2Excel();
+			table2excel.export(document.querySelectorAll("table.table"));
 		})
 
-		// Đóng modal thùng rác
-		$('#confirmHideModal').modal('hide');
-	}
+	});
 
-	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
-	$scope.confirmRestoreModal1 = function(sizeitem) {
-		$scope.form = angular.copy(sizeitem);
+	$('.pdf-file').click(function() {
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+			}
 
-		// Đóng modal thùng rác
-		$('#recycleBinModal').modal('hide');
-
-		$('#confirmRestoreModal').modal('show');
-	}
-
-	//Khôi phục item từ thùng rác
-	$scope.restore = function() {
-		var sizeitem = angular.copy($scope.form);
-		sizeitem.deleted = false;
-		sizeitem.modifyDate = new Date();
-		$http.put('/rest/sizes/update/' + sizeitem.sizeID, sizeitem).then(resp => {
-			var index = $scope.sizeitemsLoadAll.findIndex(p => p.sizeID == sizeitem.sizeID);
-			resp.data.modifyDate = new Date(resp.data.modifyDate);
-			$scope.sizeitemsLoadAll[index] = sizeitem;
-
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			$scope.messageSuccess = "khôi phục thành công";
-			$('#errorModal1').modal('show');
-			$scope.initialize();
-			$scope.reset();
-		}).catch(error => {
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			$scope.errorMessage = "Khôi phục thất bại";
-			$('#errorModal').modal('show');
-			$scope.initialize();
-			$scope.reset();
-			console.log("Error", error);
+			//code xuất file
+			var elment = document.getElementById('sampleTable');
+			var opt = {
+				margin: 0.5,
+				filename: 'myfilepdf.pdf',
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2 },
+				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+			};
+			html2pdf(elment, opt);
 		})
+	});
 
-		// Đóng modal thùng rác
-		$('#confirmRestoreModal').modal('hide');
+	var myApp1 = new function() {
+		this.printTable = function() {
+			var tab = document.getElementById('sampleTable');
+			var win = window.open('', '', 'height=700,width=700');
+			win.document.write(tab.outerHTML);
+			win.document.close();
+			win.print();
+		}
+
 	}
 
-	//Gọi đến modal xác nhận để xóa luôn
-	$scope.confirmDeleteModal1 = function(sizeitem) {
-		$scope.form = angular.copy(sizeitem);
-
-		// Đóng modal thùng rác
-		$('#recycleBinModal').modal('hide');
-
-		$('#confirmDeleteModal').modal('show');
-	}
-
-	//sau khi xác nhận thành công thì xóa luôn
-	$scope.confirmDelete = function() {
-		// Thực hiện xóa
-		$http.delete('/rest/sizes/delete/' + $scope.form.sizeID).then(resp => {
-			var index = $scope.sizeitems.findIndex(p => p.sizeID == $scope.form.sizeID);
-			$scope.sizeitems.splice(index, 1);
-			$scope.reset();
-			$scope.initialize();
-			$scope.messageSuccess = "Xóa thành công";
-			$('#errorModal1').modal('show');
-		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show');
-			console.log("Error", error);
-		});
-
-		// Đóng modal xác nhận xóa
-		$('#confirmDeleteModal').modal('hide');
-	}
 });
