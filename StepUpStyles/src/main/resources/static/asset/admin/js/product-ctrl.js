@@ -581,7 +581,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
-		
+
 		// Lấy thông tin người dùng từ API /rest/users/Idprofile
 		$http.get("/rest/users/Idprofile").then(resp => {
 			var userID = resp.data;
@@ -666,7 +666,7 @@ app.controller("product-ctrl", function($scope, $http) {
 		})
 	}
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) Kết thúc
-	
+
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) bắt đầu
 	$scope.confirmHideTable = function(productitem) {
 		$scope.form = angular.copy(productitem);
@@ -820,10 +820,12 @@ app.controller("product-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+
+				//code xuất file
+				var table2excel = new Table2Excel();
+				table2excel.export(document.querySelectorAll("table.table"));
 			}
-			//code xuất file
-			var table2excel = new Table2Excel();
-			table2excel.export(document.querySelectorAll("table.table"));
+
 		})
 
 	});
@@ -850,18 +852,18 @@ app.controller("product-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
-			}
 
-			//code xuất file
-			var elment = document.getElementById('sampleTable');
-			var opt = {
-				margin: 0.5,
-				filename: 'myfilepdf.pdf',
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2 },
-				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-			};
-			html2pdf(elment, opt);
+				//code xuất file
+				var elment = document.getElementById('sampleTable');
+				var opt = {
+					margin: 0.5,
+					filename: 'myfilepdf.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { scale: 2 },
+					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+				};
+				html2pdf(elment, opt);
+			}
 		})
 	});
 
@@ -873,7 +875,5 @@ app.controller("product-ctrl", function($scope, $http) {
 			win.document.close();
 			win.print();
 		}
-
 	}
-
 });
