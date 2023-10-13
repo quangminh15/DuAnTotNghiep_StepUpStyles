@@ -182,18 +182,18 @@ app.controller("product-ctrl", function($scope, $http) {
 		},
 	};
 
-	//Mở modal tìm kiếm
-	$scope.openSearchForm = function() {
-		// Reset searchKeyword
-		$scope.searchKeyword = '';
-		$('#searchModal').modal('show');
-	};
+	// Tìm kiếm  
+	$scope.searchProductByName = async function() {
+		const { value: searchKeyword } = await Swal.fire({
+			title: 'Tìm kiếm tên sản phẩm',
+			input: 'text',
+			inputLabel: 'Nhập tên sản phẩm',
+			inputPlaceholder: 'Nhập tên sản phẩm cần tìm kiếm'
+		});
 
-	// Tìm kiếm màu 
-	$scope.searchProductByName = function() {
-		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+		if (searchKeyword && searchKeyword.trim() !== "") {
 			$http.get("/rest/products/search", {
-				params: { keyword: $scope.searchKeyword }
+				params: { keyword: searchKeyword }
 			}).then(resp => {
 				$scope.productitems = resp.data;
 				$scope.pager.first();
@@ -203,29 +203,26 @@ app.controller("product-ctrl", function($scope, $http) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
-						text: 'Không tìm thấy sản phẩm có tên ' + $scope.searchKeyword,
+						text: 'Không tìm thấy sản phẩm có tên ' + searchKeyword,
 					});
-
 				}
 			}).catch(error => {
 				Swal.fire({
 					icon: 'error',
 					title: 'Thất bại',
 					text: 'Lỗi khi tìm kiếm sản phẩm!',
-				})
+				});
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
-			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Không tìm thấy sản phẩm mà bạn mong muốn!',
-			})
+				text: 'Không tìm thấy tên sản phẩm mà bạn mong muốn!',
+			});
 		}
-		$('#searchModal').modal('hide');
 	};
 
 	$scope.initialize = function() {
@@ -342,15 +339,14 @@ app.controller("product-ctrl", function($scope, $http) {
 					// Sản phẩm có hình ảnh, cho phép cập nhật sản phẩm
 					$scope.form = angular.copy(productitem);
 					checkImage = false;
-					$scope.form.description = productitem.description;
-					CKEDITOR.instances.description.setData($scope.form.description);
+
 				} else {
 					// Sản phẩm chưa có ảnh, không cho phép cập nhật sản phẩm
 					// Hiển thị thông báo hoặc xử lý khác tùy ý
 					$scope.form = angular.copy(productitem);
 					checkImage = true;
-					$scope.form.description = productitem.description;
-					CKEDITOR.instances.description.setData($scope.form.description);
+
+
 				}
 			}).catch(function(imageError) {
 				console.error("Lỗi khi lấy danh sách hình ảnh:", imageError);
@@ -456,10 +452,6 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
-
-		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData();
 
 		// Lấy thông tin người dùng từ API /rest/users/Idprofile
 		$http.get("/rest/users/Idprofile").then(resp => {
@@ -589,11 +581,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
-
-		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData();
-
+		
 		// Lấy thông tin người dùng từ API /rest/users/Idprofile
 		$http.get("/rest/users/Idprofile").then(resp => {
 			var userID = resp.data;
@@ -637,161 +625,185 @@ app.controller("product-ctrl", function($scope, $http) {
 		$('#recycleBinModal').modal('show');
 	};
 
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal = function() {
-		$('#confirmHideModal').modal('show');
-	}
-
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal1 = function(productitem) {
-		$scope.form = angular.copy(productitem);
-		$('#confirmHideModal').modal('show');
-	}
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
 	$scope.confirmHide = function() {
-		var productitem = angular.copy($scope.form);
-
-		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData();
-
-		productitem.deleted = true;
-		$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
-			var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
-			$scope.productitems[index] = productitem;
-			Swal.fire({
-				icon: 'success',
-				title: 'Thất bại',
-				text: 'Xóa thành công!',
-			})
-			$scope.initialize();
-		}).catch(error => {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Xóa thất bại!',
-			})
-			$scope.initialize();
-			console.log("Error", error);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				var productitem = angular.copy($scope.form);
+				productitem.deleted = true;
+				productitem.modifyDate = new Date();
+				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
+					var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.productitems[index] = productitem;
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
 		})
-
-		// Đóng modal thùng rác
-		$('#confirmHideModal').modal('hide');
 	}
-
-	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
-	$scope.confirmRestoreModal1 = function(productitem) {
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) Kết thúc
+	
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) bắt đầu
+	$scope.confirmHideTable = function(productitem) {
 		$scope.form = angular.copy(productitem);
-
-		// Đóng modal thùng rác
-		$('#recycleBinModal').modal('hide');
-
-		$('#confirmRestoreModal').modal('show');
-	}
-
-	//Khôi phục item từ thùng rác
-	$scope.restore = function() {
-		var productitem = angular.copy($scope.form);
-
-		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData();
-
-		productitem.deleted = false;
-		$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
-			var index = $scope.productitemsLoadAll.findIndex(p => p.productID == productitem.productID);
-			$scope.productitemsLoadAll[index] = productitem;
-
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'khôi phục thành công!',
-			})
-			$scope.initialize();
-
-		}).catch(error => {
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Khôi phục thất bại!',
-			})
-			$scope.initialize();
-			console.log("Error", error);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				productitem.deleted = true;
+				productitem.modifyDate = new Date();
+				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
+					var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.productitems[index] = productitem;
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
 		})
-
-		// Đóng modal thùng rác
-		$('#confirmRestoreModal').modal('hide');
 	}
+	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) kết thúc	
 
-	//Gọi đến modal xác nhận để xóa luôn
-	$scope.confirmDeleteModal1 = function(productitem) {
+
+	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
+	$scope.restore = function(productitem) {
 		$scope.form = angular.copy(productitem);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn khôi phục sản phẩm này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			console.log(result)
+			if (result.isConfirmed) {
+				productitem.deleted = false;
+				productitem.modifyDate = new Date();
+				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
+					var index = $scope.productitemsLoadAll.findIndex(p => p.productID == productitem.productID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.productitemsLoadAll[index] = productitem;
 
-		// Đóng modal thùng rác
-		$('#recycleBinModal').modal('hide');
-
-		$('#confirmDeleteModal').modal('show');
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'khôi phục thành công',
+					});
+					$scope.initialize();
+					$scope.reset();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Khôi phục thất bại!',
+					});
+					$scope.initialize();
+					$scope.reset();
+					console.log("Error", error);
+				})
+			}
+		})
 	}
+	//sau khi xác nhận thành công thì khôi phục item từ thùng rác (Nút khôi phục ở TABLE) Kết thúc
 
-	//sau khi xác nhận thành công thì xóa luôn
-	$scope.confirmDelete = function() {
-		// Thực hiện xóa
-		$http.delete('/rest/products/delete/' + $scope.form.productID).then(resp => {
-			var index = $scope.productitems.findIndex(p => p.productID == $scope.form.productID);
-			$scope.productitems.splice(index, 1);
-			$scope.reset();
-			$scope.initialize();
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Xóa thành công!',
-			})
-		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Xóa thất bại!',
-			});
-
-			console.log("Error", error);
-		});
-
-		// Đóng modal xác nhận xóa
-		$('#confirmDeleteModal').modal('hide');
+	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
+	$scope.confirmDelete = function(productitem) {
+		$scope.form = angular.copy(productitem);
+		Swal.fire({
+			title: 'Thông báo',
+			text: "Bạn có chắc chắn muốn khôi phục sản phẩm này không?",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Không',
+			confirmButtonText: 'Đồng ý'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$http.delete('/rest/products/delete/' + $scope.form.productID).then(resp => {
+					var index = $scope.productitems.findIndex(p => p.productID == $scope.form.productID);
+					$scope.productitems.splice(index, 1);
+					$scope.reset();
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Xóa thành công!',
+					});
+					$scope.initialize();
+				}).catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Xóa thất bại!',
+					});
+					console.log("Error", error);
+					$scope.initialize();
+					$scope.reset();
+				});
+			}
+		})
 	}
+	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) Kết thúc
 
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 
 	$('.export').click(function() {
-		var table2excel = new Table2Excel();
-		table2excel.export(document.querySelectorAll("table.table"));
-	});
 
-	$('.pdf-file').click(function() {
-
-		var elment = document.getElementById('sampleTable');
-		var opt = {
-			margin: 0.5,
-			filename: 'myfilepdf.pdf',
-			image: { type: 'jpeg', quality: 0.98 },
-			html2canvas: { scale: 2 },
-			jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-		};
-		html2pdf(elment, opt);
 		let timerInterval
 		Swal.fire({
-			title: 'Auto close alert!',
-			html: 'I will close in <b></b> milliseconds.',
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
 			timer: 2000,
 			timerProgressBar: true,
 			didOpen: () => {
@@ -809,6 +821,47 @@ app.controller("product-ctrl", function($scope, $http) {
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
 			}
+			//code xuất file
+			var table2excel = new Table2Excel();
+			table2excel.export(document.querySelectorAll("table.table"));
+		})
+
+	});
+
+	$('.pdf-file').click(function() {
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+			}
+
+			//code xuất file
+			var elment = document.getElementById('sampleTable');
+			var opt = {
+				margin: 0.5,
+				filename: 'myfilepdf.pdf',
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2 },
+				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+			};
+			html2pdf(elment, opt);
 		})
 	});
 

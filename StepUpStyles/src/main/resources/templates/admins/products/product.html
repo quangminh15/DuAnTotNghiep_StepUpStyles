@@ -53,6 +53,7 @@
 					<label for="inputPassword4">Tên sản phẩm</label> <input
 						class="form-control" id="inputPassword4" type="text" required=""
 						placeholder="Tên sản phẩm" ng-model="form.productName">
+
 				</div>
 
 				<div class="form-group col-md-6">
@@ -101,11 +102,8 @@
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="control-label">Mô tả</label>
-					<textarea class="form-control" name="description"
-						ng-model="newProduct.description" id="description"></textarea>
-					<script>
-						CKEDITOR.replace('description');
-					</script>
+					<textarea class="form-control" id="inputTextarea3"
+						ng-model="form.description" rows="5"></textarea>
 				</div>
 			</div>
 			<div class="template-demo text-right mb-3">
@@ -119,7 +117,7 @@
 					title="Cập nhật sản phẩm">
 					<span class="ti-support"></span>
 				</button>
-				<button type="button" ng-click="confirmHideModal()" type="submit"
+				<button type="button" ng-click="confirmHide()" type="submit"
 					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
 					title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
@@ -138,37 +136,7 @@
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 
-		<!-- tìm kiếm theo tên bắt đầu  -->
-		<div class="modal fade" id="searchModal" tabindex="-1"
-			aria-labelledby="searchModalLabel" aria-hidden="true"
-			style="overflow: hidden;">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content" style="background-color: #eee;">
-					<div class="modal-header">
-						<h5 class="modal-title" id="searchModalLabel">Tìm kiếm</h5>
-						<button class="close modal-close" type="button"
-							data-dismiss="modal" aria-hidden="true">
-							<span class="ti-close"></span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form method="post">
-							<div class="form-group">
-								<label for="searchKeyword">Tên sản phẩm</label> <input
-									class="form-control" type="text" id="searchKeyword"
-									ng-model="searchKeyword"
-									placeholder="Nhập tên sản phẩm mà bạn muốn tìm kiếm">
-							</div>
-						</form>
-						<button
-							class="btn btn-outline-success btn-fw modal-close text-right"
-							type="button" ng-click="searchProductByName()">Tìm kiếm</button>
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!-- tìm kiếm theo tên kết thúc -->
+		
 
 		<!-- 	thùng rác bắt đầu -->
 		<div class="modal fade" id="recycleBinModal" tabindex="-1"
@@ -212,11 +180,11 @@
 									<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
 									<td class="actions">
 										<button class="btn btn-space btn btn-primary "
-											ng-click="confirmRestoreModal1(productitem)">
+											ng-click="restore(productitem)">
 											<i class="ti-back-right"></i>
 										</button>
 										<button class="btn btn-space btn btn-danger "
-											ng-click="confirmDeleteModal1(productitem)">
+											ng-click="confirmDelete(productitem)">
 											<i class="ti-trash"></i>
 										</button>
 									</td>
@@ -279,7 +247,7 @@
 						<span class="ti-files"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click="openSearchForm()"
+					<button ng-click="searchProductByName()"
 						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
 						title="Tìm kiếm">
 						<span class="ti-search"></span>
@@ -322,7 +290,7 @@
 								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
-							<button ng-click="confirmHideModal1(productitem)"
+							<button ng-click="confirmHideTable(productitem)"
 								class="btn btn-inverse-danger btn-rounded btn-icon"
 								data-toggle="tooltip" data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
