@@ -631,7 +631,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(branditem);
 		Swal.fire({
 			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục thương hiệu này không?",
+			text: "Bạn có chắc chắn muốn xóa thương hiệu này không?",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',

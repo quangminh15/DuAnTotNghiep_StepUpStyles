@@ -759,7 +759,7 @@ app.controller("product-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(productitem);
 		Swal.fire({
 			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục sản phẩm này không?",
+			text: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
