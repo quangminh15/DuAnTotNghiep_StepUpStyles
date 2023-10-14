@@ -105,17 +105,16 @@
 										Danh mục <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
-										<li
-											th:each="category : ${categories}"
+										<li th:each="category : ${categories}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											
-												<a th:value="${category.categoryID}" href="#"><span th:text="${category.categoryName}"></span>
-										 </a><span class="badge badge-primary badge-pill"
-											>1</span>
+
+											<a th:value="${category.categoryID}" th:href="@{|/list_products?cid=${category.categoryID}|}"><span
+												th:text="${category.categoryName}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
-								
+
 								<!-- màu sắc  -->
 								<div class="single-gd mb-5">
 									<h4>
@@ -124,8 +123,9 @@
 									<ul class="list-group single">
 										<li th:each="color : ${colors}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											 <a th:value="${color.colorID}" href="#"><span th:text="${color.colorName}"></span>
-										 </a><span class="badge badge-primary badge-pill">1</span>
+											<a th:value="${color.colorID}" href="#"><span
+												th:text="${color.colorName}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
@@ -138,8 +138,9 @@
 									<ul class="list-group single">
 										<li th:each="size : ${sizes}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											 <a th:value="${size.sizeID}" href="#"><span th:text="${size.sizeNumber}"></span>
-										 </a><span class="badge badge-primary badge-pill">1</span>
+											<a th:value="${size.sizeID}" href="#"><span
+												th:text="${size.sizeNumber}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
@@ -276,11 +277,9 @@
 												</a>
 												<a th:unless="${#lists.contains(favoriteitems)}" th:attr="ng-click=@{|check(${p.productID})|}">
 													<span class="fa fa-heart-o"></span>
-												</a> -->
-												
-												<a th:attr="ng-click=@{|check(${p.productID})|}">
+												</a> --> <a th:attr="ng-click=@{|check(${p.productID})|}">
 													<span class="fa fa-heart" aria-hidden="true"></span>
-												</a>
+											</a>
 											</li>
 										</ul>
 										<div class="transmitv single-item">
@@ -302,6 +301,24 @@
 
 
 						</div>
+						<!--/pagination-->
+						<div class="pagination" style="margin: 0px 10px 20px;">
+							<ul>
+								<li class="prev"><a th:href="@{/list_products?page=0}"><span
+										class="fa fa-angle-double-left"></span></a></li>
+								<li th:each="i: ${#numbers.sequence(0, numberOfPages - 1)}">
+									<a
+									th:style="${'background-color:' + (i==currIndex?'orage':'orage')}"
+									th:href="@{/list_products?page=__${i}__}" th:text="${i+1}"
+									th:classappend="${i==currIndex} ? 'active'"></a>
+								</li>
+								<li class="next"><a
+									th:href="@{/list_products?page=__${numberOfPages-1}__}"><span
+										class="fa fa-angle-double-right"></span></a></li>
+							</ul>
+						</div>
+
+						<!--//pagination-->
 						<!-- //row-->
 						<!--/row2-->
 						<div class="ecom-slider-hny">
@@ -380,22 +397,6 @@
 					</div>
 				</div>
 				<!--//row1-->
-
-				<!--/pagination-->
-				<div class="pagination">
-					<ul>
-						<li class="prev"><a href="#page-number"><span
-								class="fa fa-angle-double-left"></span></a></li>
-						<li><a href="#page-number" class="active">1</a></li>
-						<li><a href="#page-number">2</a></li>
-						<li><a href="#page-number">3</a></li>
-
-						<li class="next"><a href="#page-number"><span
-								class="fa fa-angle-double-right"></span></a></li>
-					</ul>
-				</div>
-				<!--//pagination-->
-
 			</div>
 		</div>
 		<!--//mag-content-->

@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CategoryDAO;
@@ -51,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable) {
-		return productDAO.loadAllNoDeletedAndActivitiesTrue(pageable);
+	public List<Product> loadAllNoDeletedAndActivitiesTrue() {
+		return productDAO.loadAllNoDeletedAndActivitiesTrue();
 	}
 
 	@Override
@@ -120,20 +120,5 @@ public class ProductServiceImpl implements ProductService {
 		// Triển khai logic để tìm kiếm sản phẩm theo danh mục tại đây
 		// Sử dụng productDAO hoặc các phương thức khác để thực hiện truy vấn
 		return productDAO.findByCategory(category);
-	}
-	
-	@Override
-	public Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable) {
-		return productDAO.findByCategoryIDPaged(cid, pageable);
-	}
-
-	@Override
-	public Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable) {
-		return productDAO.findByBrandID(bid, pageable);
-	}
-
-	@Override
-	public Page<Product> searchByNamePaged(String keyword, Pageable pageable) {
-		return productDAO.findByProductNameContaining(keyword, pageable);
 	}
 }
