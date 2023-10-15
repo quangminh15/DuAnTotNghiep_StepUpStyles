@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Order;
-import com.sts.model.ShippingAddress;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
 
@@ -39,12 +38,8 @@ public class OrderRestController {
             System.out.println(initialPrice);
             System.out.println(addressId);
 
-            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId);
-            // for (OrderDetailDTO cartData : cartDataList) {
-            //     System.out.println("CartDetailId: " + cartData.getCartDetailId());
-            //     // Handle other properties as needed
-            // }
-
+            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId,false);
+           
             // Create a success response
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");

@@ -1,8 +1,6 @@
 package com.sts.serviceImpl;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,12 +43,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
 
-    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId) {
+    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
         User user = userDao.findById(1).get();
 
         ShippingAddress address = addressDao.findById(addressId).get();
 
-        PaymentMenthod pay = payDao.findById(1).get();
+
+        PaymentMenthod pay = payDao.findById(!paymentStatus?1:2).get();
 
         Order order = Order.builder()
                 .deliveryDate(formatDeliveryDate(calculateDeliveryDate()))
@@ -58,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
                 .initialPrice(initialPrice)
                 .orderDate(getCurrentDateTime()) // Set the order date to the current date
                 .orderStatus(OrderStatus.Pending) // Set the initial order status
-                .paymentStatus(false)
+                .paymentStatus(paymentStatus)
                 .shippingFee(fee)
                 .totalAmount(initialPrice + fee)
                 .discountPrice(0)

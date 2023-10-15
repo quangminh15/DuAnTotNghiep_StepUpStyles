@@ -1,4 +1,4 @@
-package com.sts.api;
+package com.sts.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -16,21 +16,13 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.sts.config.VNPayConfig;
-import com.sts.model.DTO.PaymentDTO;
 
-@RestController
-@RequestMapping("/api/payment")
-public class PaymentRestcontroller {
-    
-    @GetMapping("/create_vnpaypayment")
-     public String createOrder() {
+@Service
+public class VNPayService {
+     public String createOrder(double total, String orderInfor, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
@@ -42,17 +34,17 @@ public class PaymentRestcontroller {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(1000000* 100));
+        vnp_Params.put("vnp_Amount", String.valueOf(total* 100));
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "orderInfor");
+        vnp_Params.put("vnp_OrderInfo", orderInfor);
         vnp_Params.put("vnp_OrderType", orderType);
 
         String locate = "vn";
         vnp_Params.put("vnp_Locale", locate);
 
-        String urlReturn = VNPayConfig.vnp_Returnurl;
+        urlReturn = VNPayConfig.vnp_Returnurl;
         vnp_Params.put("vnp_ReturnUrl", urlReturn);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 

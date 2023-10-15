@@ -15,8 +15,6 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		return $scope.ward.findIndex(a => a.WardName === address);
 	}
 
-
-
 	$scope.initialize = function () {
 
 		$http.get(`/rest/address/default`)
@@ -93,6 +91,22 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			console.error('Error:', error);
 		});
 	};
+
+	$scope.getDataPayment = function () {
+		$http({
+			method: 'POST',
+			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}`,
+			data: $scope.cartIs, // Assuming $scope.cartIs is an array
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			console.log('done:', response.data);
+			
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
+	}
 
 	// Function to create an order
 	$scope.createOrder = function () {
@@ -190,7 +204,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 						$scope.data2 = response.data.data
 						//$scope.total = $scope.tongTien + $scope.data2.total;
 						var shippingCost = $scope.data2.total;
-						alert('Tiền ship là: ' + Math.floor(shippingCost));
+						// alert('Tiền ship là: ' + Math.floor(shippingCost));
 						$scope.shippingFee = Math.floor(shippingCost);
 					})
 						.catch(function (error) {
