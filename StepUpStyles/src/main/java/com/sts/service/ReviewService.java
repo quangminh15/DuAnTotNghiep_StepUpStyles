@@ -13,4 +13,5 @@ public interface ReviewService {
     List<Review> getUsersByUsersId(Integer usersId);
     List<Review> getReviewByStar(Integer rating);
     List<TotalProductRatingDTO> getTotalProductRating(int year);
+    List<Review> searchs(Integer productId, Integer usersId, Integer rating);
 }
