@@ -108,7 +108,8 @@
 										<li th:each="category : ${categories}"
 											class="list-group-item d-flex justify-content-between align-items-center">
 
-											<a th:value="${category.categoryID}" th:href="@{|/list_products?cid=${category.categoryID}|}"><span
+											<a th:value="${category.categoryID}"
+											th:href="@{|/list_products?cid=${category.categoryID}|}"><span
 												th:text="${category.categoryName}"></span> </a><span
 											class="badge badge-primary badge-pill">1</span>
 										</li>
@@ -204,35 +205,29 @@
 										Sản phẩm <span>nổi bật</span>
 									</h4>
 									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img
-												src="/asset/user/images/shop-88.jpg" class="img-fluid"
-												alt=""></a>
+										<!-- Lặp qua danh sách sản phẩm nổi bật và hiển thị tối đa 3 sản phẩm -->
+										<div class="row mb-3" th:each="product : ${featuredProducts}">
+											<div class="col-4 img-deals">
+												<a
+													th:href="@{/single_product/{productId}(productId=${product.productID})}">
+													<img th:src="@{${product.productImages[0].imagePath}}"
+													class="img-fluid" alt="">
+												</a>
+											</div>
+											<div class="col-8 img-deal1">
+												<h5 class="post-title">
+													<a
+														th:href="@{/single_product/{productId}(productId=${product.productID})}"
+														th:text="${product.productName}"></a>
+												</h5>
+												<a
+													th:href="@{/single_product/{productId}(productId=${product.productID})}"
+													class="price-right" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></a>
+											</div>
 										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">Blue Sweater</a>
-											</h5>
-
-											<a href="single_product.html" class="price-right">$499.00</a>
-										</div>
-
 									</div>
-									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img
-												src="assets/images/shop-77.jpg" class="img-fluid" alt=""></a>
-										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">White T-Shirt</a>
-											</h5>
-											<a href="single_product.html" class="price-right">$575.00</a>
-										</div>
-
-									</div>
-
 								</div>
+
 							</div>
 						</aside>
 						<!--//ecommerce-left-hny-->
@@ -271,16 +266,9 @@
 											th:src="@{|${p.productImages[0].imagePath}|}">
 										</a>
 										<ul class="social">
-											<li>
-												<!-- <a th:if="${#lists.contains(favoriteitems, p)}" th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fa fa-heart"></span>
-												</a>
-												<a th:unless="${#lists.contains(favoriteitems)}" th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fa fa-heart-o"></span>
-												</a> --> <a th:attr="ng-click=@{|check(${p.productID})|}">
+											<li><a th:attr="ng-click=@{|check(${p.productID})|}">
 													<span class="fa fa-heart" aria-hidden="true"></span>
-											</a>
-											</li>
+											</a></li>
 										</ul>
 										<div class="transmitv single-item">
 											<a th:href="@{|/single_product/${p.productID}|}"
@@ -334,12 +322,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">30% Off</h6>
-														<h3 class="title-cover-9">Men's Suit</h3>
+														<h6 class="tag-cover-9">NAM GIỚI</h6>
+														<h3 class="title-cover-9">LỊCH LÃM</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>
@@ -349,12 +337,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Men's Footerwear</h3>
+														<h6 class="tag-cover-9">TRÃI NGHIỆM</h6>
+														<h3 class="title-cover-9">THOẢI MÁI & NĂNG ĐỘNG</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>
@@ -364,12 +352,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Women's Footwear</h3>
+														<h6 class="tag-cover-9">XINH ĐẸP</h6>
+														<h3 class="title-cover-9">DÀNH CHO PHÁI NỮ</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>

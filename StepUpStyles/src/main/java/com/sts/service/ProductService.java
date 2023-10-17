@@ -17,6 +17,8 @@ public interface ProductService {
 	List<Product> loadAllDeleted();
 
 	List<Product> loadAllNoDeleted();
+	
+	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
 	Product create(Product product);
 
@@ -45,4 +47,9 @@ public interface ProductService {
     Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable);
 
     Page<Product> searchByNamePaged(String keyword, Pageable pageable);
+    
+    // sản phẩm nỏi bật
+    List<Product> findFeaturedProducts();
+
+    List<Product> findSimilarProductsByCategory(Integer categoryID);
 }

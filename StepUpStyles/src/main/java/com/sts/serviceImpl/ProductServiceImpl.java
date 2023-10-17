@@ -51,6 +51,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<Product> loadAllNoDeletedAndActivitiesTrue() {
+		return productDAO.loadAllNoDeletedAndActivitiesTrue();
+	}
+
+	@Override
 	public Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable) {
 		return productDAO.loadAllNoDeletedAndActivitiesTrue(pageable);
 	}
@@ -121,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 		// Sử dụng productDAO hoặc các phương thức khác để thực hiện truy vấn
 		return productDAO.findByCategory(category);
 	}
-	
+
 	@Override
 	public Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable) {
 		return productDAO.findByCategoryIDPaged(cid, pageable);
@@ -136,4 +141,24 @@ public class ProductServiceImpl implements ProductService {
 	public Page<Product> searchByNamePaged(String keyword, Pageable pageable) {
 		return productDAO.findByProductNameContaining(keyword, pageable);
 	}
+
+	@Override
+	public List<Product> findFeaturedProducts() {
+		List<Product> allProducts = loadAllNoDeletedAndActivitiesTrue();
+		List<Product> featuredProducts = new ArrayList<>();
+		for (Product product : allProducts) {
+			if (Boolean.TRUE.equals(product.getFeatured())) {
+				featuredProducts.add(product);
+			}
+		}
+		return featuredProducts;
+	}
+	
+	@Override
+	public List<Product> findSimilarProductsByCategory(Integer categoryID) {
+	    // Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
+	    return productDAO.findSimilarProductsByCategory(categoryID);
+	}
+
+
 }

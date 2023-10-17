@@ -19,12 +19,14 @@ import com.sts.model.Category;
 import com.sts.model.Color;
 import com.sts.model.Favorite;
 import com.sts.model.Product;
+import com.sts.model.ProductImage;
 import com.sts.model.Size;
 import com.sts.service.BrandService;
 import com.sts.service.CategoryService;
 import com.sts.service.ColorService;
 import com.sts.service.FavoriteService;
 import com.sts.service.ProductDetailService;
+import com.sts.service.ProductImageService;
 import com.sts.service.ProductService;
 import com.sts.service.SizeService;
 
@@ -53,15 +55,27 @@ public class ProductController {
 
 	@Autowired
 	FavoriteService favoriteService;
+	
+	@Autowired
+	ProductImageService productImageService;
+
+	@RequestMapping("/index")
+	public String index(Model model) {
+	    List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();
+	    List<Product> featuredProducts = productservice.findFeaturedProducts(); 
+
+	    model.addAttribute("brands", brands);
+	    model.addAttribute("featuredProducts", featuredProducts);
+	    return "users/index";
+	}
+
 
 	// Trang sản phẩm
 	@RequestMapping("/list_products")
 	public String listproducts(Model model, @RequestParam("page") Optional<Integer> page,
-			@RequestParam("cid") Optional<Integer> cid,@RequestParam("bid") Optional<Integer> bid) {
-//		List<Product> productss = productservice.loadAllNoDeletedAndActivitiesTrue();
-//		model.addAttribute("productitems", productss);
+			@RequestParam("cid") Optional<Integer> cid, @RequestParam("bid") Optional<Integer> bid) {
 
-		Pageable pageable = PageRequest.of(page.orElse(0), 6);
+		Pageable pageable = PageRequest.of(page.orElse(0), 9);
 		Page<Product> products = handleOtherParams(pageable, cid, bid);
 
 		var numberOfPages = products.getTotalPages();
@@ -75,14 +89,15 @@ public class ProductController {
 		List<Color> colors = colorService.loadAllNoDeletedAndActivitiesTrue();
 		List<Size> sizes = sizeService.loadAllNoDeletedAndActivitiesTrue();
 
-		// Tạo danh sách danh mục kèm số lượng sản phẩm
-//		List<CategoryProductCountDTO> categoryProductCounts = new ArrayList<>();
-//		for (Category category : categories) {
-//            Long productCount = productservice.countProductsByCategoryWithConditions(category, true, false);
-//            CategoryProductCountDTO categoryProductCount = new CategoryProductCountDTO(category.getCategoryName(), productCount);
-//            categoryProductCounts.add(categoryProductCount);
-//        }
-//		model.addAttribute("categoriesWithProductCounts", categoryProductCounts);
+		 // Lấy danh sách sản phẩm nổi bật
+	    List<Product> featuredProducts = productservice.findFeaturedProducts();
+
+	    // Giới hạn danh sách sản phẩm nổi bật chỉ hiển thị tối đa 3 sản phẩm
+	    if (featuredProducts.size() > 3) {
+	        featuredProducts = featuredProducts.subList(0, 3);
+	    }
+
+	    model.addAttribute("featuredProducts", featuredProducts);
 
 		model.addAttribute("categories", categories);
 		model.addAttribute("brands", brands);
@@ -99,7 +114,7 @@ public class ProductController {
 			return productservice.findByCategoryIDPaged(cid.get(), pageable);
 		} else if (bid.isPresent()) {
 			return productservice.findByBrandIDPaged(bid.get(), pageable);
-		}  
+		}
 
 		return productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
 	}
@@ -110,11 +125,17 @@ public class ProductController {
 		Product item = productservice.findById(productID);
 		model.addAttribute("productitem", item);
 
-		List<Size> sizs = sizeService.findAll();
+		List<Size> sizs = sizeService.loadAllNoDeletedAndActivitiesTrue();
 		model.addAttribute("sizs", sizs);
 
-		List<Color> cols = colorService.findAll();
+		List<Color> cols = colorService.loadAllNoDeletedAndActivitiesTrue();
 		model.addAttribute("cols", cols);
+		
+		List<ProductImage> productImages = productImageService.getImagesByProduct(productID);
+	    model.addAttribute("productImages", productImages);
+	    
+	    List<Product> similarProducts = productservice.findSimilarProductsByCategory(item.getCategory().getCategoryID());
+	    model.addAttribute("similarProducts", similarProducts);
 		return "users/single_product";
 	}
 }
