@@ -149,7 +149,13 @@ public class ProductController {
 		model.addAttribute("currIndex", page.orElse(0));
 		model.addAttribute("numberOfPages", numberOfPages);
 
-		model.addAttribute("productitems", searchResults);
+		if (searchResults.isEmpty()) {
+			model.addAttribute("notFoundMessage", "Không tìm thấy sản phẩm");
+			searchResults = productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
+			model.addAttribute("productitems", searchResults);
+		} else {
+			model.addAttribute("productitems", searchResults);
+		}
 
 		List<Category> categories = categoryService.loadAllNoDeletedAndActivitiesTrue();
 		List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();

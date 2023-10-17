@@ -222,7 +222,8 @@
 												</h5>
 												<a
 													th:href="@{/single_product/{productId}(productId=${product.productID})}"
-													class="price-right" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></a>
+													class="price-right"
+													th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></a>
 											</div>
 										</div>
 									</div>
@@ -236,6 +237,12 @@
 						<div class="row ecomhny-topbar">
 							<div class="col-6 ecomhny-result">
 								<h4 class="ecomhny-result-count"></h4>
+								<div th:if="${notFoundMessage}">
+									<div class="alert alert-danger"
+										style="height: 50px; margin: 0;" role="alert">
+										<p th:text="${notFoundMessage}"></p>
+									</div>
+								</div>
 							</div>
 							<div class="col-6 ecomhny-topbar-ordering">
 
@@ -248,11 +255,11 @@
 										<option value="price">Sắp xếp theo giá: thấp -> cao</option>
 									</select>
 								</div>
-
 							</div>
 						</div>
 						<!-- /row-->
 						<div class="ecom-products-grids row">
+
 							<div th:each="p: ${productitems}"
 								class="col-lg-4 col-6 product-incfhny mb-4">
 								<div class="product-grid2 transmitv">
