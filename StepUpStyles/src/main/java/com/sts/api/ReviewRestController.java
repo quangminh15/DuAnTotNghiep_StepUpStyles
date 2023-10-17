@@ -72,4 +72,12 @@ public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId)
         
         return reviewService.getTotalProductRating(year);
     }
+
+    @GetMapping("/rest/reviews/search")
+    public List<Review> searchReviews(
+            @RequestParam(name = "productId", required = false) Integer productId,
+            @RequestParam(name = "usersId", required = false) Integer usersId,
+            @RequestParam(name = "rating", required = false) Integer rating) {
+        return reviewService.searchs(productId, usersId, rating);
+    }
 }
