@@ -159,6 +159,10 @@ public class ProductServiceImpl implements ProductService {
 	    // Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
 	    return productDAO.findSimilarProductsByCategory(categoryID);
 	}
-
+	
+	@Override
+	public Page<Product> findByProductNameContaining(String keyword, Pageable pageable) {
+	    return productDAO.findByProductNameContaining(keyword, pageable);
+	}
 
 }

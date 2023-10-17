@@ -50,6 +50,7 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	@Query("select p from Product p where p.brand.brandID=?1 and p.deleted = false and p.activities = true")
 	Page<Product> findByBrandID(Integer bid, Pageable pageable);
 	
+	//tìm kiếm sản phẩm
 	@Query("select p from Product p where p.deleted = false and p.activities = true and lower(p.productName) like lower(concat('%', ?1, '%'))")
     Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 

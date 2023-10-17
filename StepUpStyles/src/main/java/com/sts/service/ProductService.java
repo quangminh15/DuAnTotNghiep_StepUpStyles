@@ -52,4 +52,7 @@ public interface ProductService {
     List<Product> findFeaturedProducts();
 
     List<Product> findSimilarProductsByCategory(Integer categoryID);
+    
+    Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
+
 }

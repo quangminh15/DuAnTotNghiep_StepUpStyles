@@ -55,20 +55,19 @@ public class ProductController {
 
 	@Autowired
 	FavoriteService favoriteService;
-	
+
 	@Autowired
 	ProductImageService productImageService;
 
 	@RequestMapping("/index")
 	public String index(Model model) {
-	    List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();
-	    List<Product> featuredProducts = productservice.findFeaturedProducts(); 
+		List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();
+		List<Product> featuredProducts = productservice.findFeaturedProducts();
 
-	    model.addAttribute("brands", brands);
-	    model.addAttribute("featuredProducts", featuredProducts);
-	    return "users/index";
+		model.addAttribute("brands", brands);
+		model.addAttribute("featuredProducts", featuredProducts);
+		return "users/index";
 	}
-
 
 	// Trang sản phẩm
 	@RequestMapping("/list_products")
@@ -89,15 +88,15 @@ public class ProductController {
 		List<Color> colors = colorService.loadAllNoDeletedAndActivitiesTrue();
 		List<Size> sizes = sizeService.loadAllNoDeletedAndActivitiesTrue();
 
-		 // Lấy danh sách sản phẩm nổi bật
-	    List<Product> featuredProducts = productservice.findFeaturedProducts();
+		// Lấy danh sách sản phẩm nổi bật
+		List<Product> featuredProducts = productservice.findFeaturedProducts();
 
-	    // Giới hạn danh sách sản phẩm nổi bật chỉ hiển thị tối đa 3 sản phẩm
-	    if (featuredProducts.size() > 3) {
-	        featuredProducts = featuredProducts.subList(0, 3);
-	    }
+		// Giới hạn danh sách sản phẩm nổi bật chỉ hiển thị tối đa 3 sản phẩm
+		if (featuredProducts.size() > 3) {
+			featuredProducts = featuredProducts.subList(0, 3);
+		}
 
-	    model.addAttribute("featuredProducts", featuredProducts);
+		model.addAttribute("featuredProducts", featuredProducts);
 
 		model.addAttribute("categories", categories);
 		model.addAttribute("brands", brands);
@@ -130,12 +129,52 @@ public class ProductController {
 
 		List<Color> cols = colorService.loadAllNoDeletedAndActivitiesTrue();
 		model.addAttribute("cols", cols);
-		
+
 		List<ProductImage> productImages = productImageService.getImagesByProduct(productID);
-	    model.addAttribute("productImages", productImages);
-	    
-	    List<Product> similarProducts = productservice.findSimilarProductsByCategory(item.getCategory().getCategoryID());
-	    model.addAttribute("similarProducts", similarProducts);
+		model.addAttribute("productImages", productImages);
+
+		List<Product> similarProducts = productservice
+				.findSimilarProductsByCategory(item.getCategory().getCategoryID());
+		model.addAttribute("similarProducts", similarProducts);
 		return "users/single_product";
 	}
+
+	@RequestMapping("/search_products")
+	public String searchProducts(Model model, @RequestParam("search") String searchQuery,
+			@RequestParam("page") Optional<Integer> page) {
+		Pageable pageable = PageRequest.of(page.orElse(0), 9);
+		Page<Product> searchResults = productservice.findByProductNameContaining(searchQuery, pageable);
+
+		var numberOfPages = searchResults.getTotalPages();
+		model.addAttribute("currIndex", page.orElse(0));
+		model.addAttribute("numberOfPages", numberOfPages);
+
+		model.addAttribute("productitems", searchResults);
+
+		List<Category> categories = categoryService.loadAllNoDeletedAndActivitiesTrue();
+		List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();
+		List<Color> colors = colorService.loadAllNoDeletedAndActivitiesTrue();
+		List<Size> sizes = sizeService.loadAllNoDeletedAndActivitiesTrue();
+
+		// Lấy danh sách sản phẩm nổi bật
+		List<Product> featuredProducts = productservice.findFeaturedProducts();
+
+		// Giới hạn danh sách sản phẩm nổi bật chỉ hiển thị tối đa 3 sản phẩm
+		if (featuredProducts.size() > 3) {
+			featuredProducts = featuredProducts.subList(0, 3);
+		}
+
+		model.addAttribute("featuredProducts", featuredProducts);
+
+		model.addAttribute("categories", categories);
+		model.addAttribute("brands", brands);
+		model.addAttribute("colors", colors);
+		model.addAttribute("sizes", sizes);
+
+		List<Favorite> item = favoriteService.findByUserId(3);
+		model.addAttribute("favoriteitems", item);
+
+		return "users/list_products";
+	}
+
 }
