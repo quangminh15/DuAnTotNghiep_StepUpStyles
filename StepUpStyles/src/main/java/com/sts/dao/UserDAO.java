@@ -1,8 +1,9 @@
 package com.sts.dao;
 
-import com.sts.dto.respone.OneUserForSecurity;
-import com.sts.dto.respone.UserForSecurity;
 import com.sts.model.User;
+import com.sts.model.DTO.OneUserForSecurity;
+import com.sts.model.DTO.UserForSecurity;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
