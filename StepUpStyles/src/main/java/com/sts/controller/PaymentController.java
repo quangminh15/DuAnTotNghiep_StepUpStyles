@@ -56,7 +56,13 @@ public class PaymentController {
     @GetMapping("/purchase")
     public String createOrderVNPay(){
         Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(), ordertemp.getShippingFee(), ordertemp.getAddressID(), true);
-        return "redirect:/cart";
+        return "redirect:/payment/removedata";
+    }
+    @ResponseBody
+    @GetMapping("/payment/removedata")
+    public String reovedata(){
+       
+        return "/index";
     }
 
     @Autowired
@@ -88,7 +94,7 @@ public class PaymentController {
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
 
-        return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/cart";
+        return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/index";
     }
 
 }

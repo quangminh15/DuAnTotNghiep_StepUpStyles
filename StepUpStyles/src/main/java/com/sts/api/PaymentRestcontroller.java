@@ -30,7 +30,7 @@ import com.sts.model.DTO.PaymentDTO;
 public class PaymentRestcontroller {
     
     @GetMapping("/create_vnpaypayment")
-     public String createOrder() {
+     public String createOrder(int total, String orderInfor, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
@@ -52,7 +52,7 @@ public class PaymentRestcontroller {
         String locate = "vn";
         vnp_Params.put("vnp_Locale", locate);
 
-        String urlReturn = VNPayConfig.vnp_Returnurl;
+        urlReturn = VNPayConfig.vnp_Returnurl;
         vnp_Params.put("vnp_ReturnUrl", urlReturn);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 

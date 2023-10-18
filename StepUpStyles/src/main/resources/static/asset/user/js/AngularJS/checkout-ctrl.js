@@ -108,6 +108,21 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		});
 	}
 
+	$scope.removeDataPayment = function () {
+		$http({
+			method: 'GET',
+			url: `/payment/removedata`,
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			localStorage.removeItem('selectedItems');
+			console.log("remove");
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
+	}
+
 	// Function to create an order
 	$scope.createOrder = function () {
 		// Create an order object with the order details
