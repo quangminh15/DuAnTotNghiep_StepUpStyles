@@ -105,13 +105,10 @@
 										Danh mục <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
-										<li th:each="category : ${categories}"
+										<li ng-repeat="category in cates"
 											class="list-group-item d-flex justify-content-between align-items-center">
-
-											<a th:value="${category.categoryID}"
-											th:href="@{|/list_products?cid=${category.categoryID}|}"><span
-												th:text="${category.categoryName}"></span> </a><span
-											class="badge badge-primary badge-pill">1</span>
+											<a><span>{{category.categoryName}}</span> <!--th:href="@{|/list_products?cid=${category.categoryID}|}" -->
+										</a><span class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
@@ -122,11 +119,10 @@
 										Thương hiệu <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
-										<li th:each="brand : ${brands}"
+										<li ng-repeat="brand in brans"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<a th:value="${brand.brandID}"
-											th:href="@{|/list_products?bid=${brand.brandID}|}"><span
-												th:text="${brand.brandName}"></span> </a><span
+											<!-- 					th:href="@{|/list_products?bid=${brand.brandID}|}"	-->
+											<a><span> {{brand.brandName}} </span> </a><span
 											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
@@ -160,12 +156,10 @@
 												<label for="inputZip" class="col-12 form-label">
 													<h5>Thương hiệu</h5>
 												</label>
-												<div th:each="brand : ${brands}" class="col-4">
+												<div ng-repeat="brand in brans" class="col-4">
 													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"
-															th:value="${brand.brandID}"> <label
-															th:text="${brand.brandName}" class="form-check-label">
-														</label>
+														<input class="form-check-input" type="checkbox"> <label
+															class="form-check-label"> {{brand.brandName}} </label>
 													</div>
 												</div>
 											</div>
@@ -173,11 +167,10 @@
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Danh
 														mục</h5></label>
-												<div th:each="c : ${categories}" class="col-4">
+												<div ng-repeat="c in cates" class="col-4">
 													<div class="form-check mb-2">
-														<input th:value="${c.categoryID}" class="form-check-input"
-															type="checkbox"> <label class="form-check-label"
-															th:text="${c.categoryName}"> </label>
+														<input class="form-check-input" type="checkbox"> <label
+															class="form-check-label"> {{c.categoryName}} </label>
 													</div>
 												</div>
 											</div>
@@ -185,22 +178,20 @@
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Màu
 														sắc</h5></label>
-												<div th:each="c : ${colors}" class="col-4">
+												<div ng-repeat="c in colors" class="col-4">
 													<div class="form-check mb-2">
-														<input th:value="${c.colorID}" class="form-check-input"
-															type="checkbox"> <label th:text="${c.colorName}"
-															class="form-check-label"> </label>
+														<input class="form-check-input" type="checkbox"> <label
+															class="form-check-label"> {{c.colorName}} </label>
 													</div>
 												</div>
 											</div>
 
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Size</h5></label>
-												<div th:each="c : ${sizes}" class="col-4">
+												<div ng-repeat="c in sizes" class="col-4">
 													<div class="form-check mb-2">
-														<input th:value="${c.sizeID}" class="form-check-input"
-															type="checkbox"> <label th:text="${c.sizeNumber}"
-															class="form-check-label"> 39 </label>
+														<input class="form-check-input" type="checkbox"> <label
+															class="form-check-label"> {{c.sizeNumber}} </label>
 													</div>
 												</div>
 											</div>
@@ -382,55 +373,53 @@
 						<!-- /row-->
 						<div class="ecom-products-grids row">
 
-							<div th:each="p: ${productitems}"
+							<div ng-repeat="p in pager.productitems"
 								class="col-lg-4 col-6 product-incfhny mb-4">
 								<div class="product-grid2 transmitv">
 									<div class="product-image2">
-										<a th:href="@{|/single_product/${p.productID}|}"> <img
-											th:if="${not #lists.isEmpty(p.productImages)}"
-											class="pic-1 img-fluid"
-											th:src="@{|${p.productImages[0].imagePath}|}"> <img
-											th:if="${not #lists.isEmpty(p.productImages)}"
-											class="pic-2 img-fluid"
-											th:src="@{|${p.productImages[0].imagePath}|}">
+										<a ng-click="goToSinglePage(p.productID)"> <img
+											ng-if="p.productImages.length > 0" class="pic-1 img-fluid"
+											ng-src="{{p.productImages[0].imagePath}}"> <img
+											ng-if="p.productImages.length > 0" class="pic-2 img-fluid"
+											ng-src="{{p.productImages[0].imagePath}}">
 										</a>
 										<ul class="social">
-											<li><a th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fa fa-heart" aria-hidden="true"></span>
-											</a></li>
+											<li><a ng-click="check(p.productID)"><span
+													class="fa fa-heart" aria-hidden="true"></span></a></li>
 										</ul>
 										<div class="transmitv single-item">
-											<a th:href="@{|/single_product/${p.productID}|}"
-												type="submit"
+											<a ng-click="goToSinglePage(p.productID)" type="submit"
 												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
 												chi tiết </a>
 										</div>
 									</div>
 									<div class="product-content">
-										<h3 class="title" th:text="${p.productName}">
-											<a th:href="@{|/single_product/${p.productID}|}"></a>
+										<h3 class="title">
+											<a ng-click="goToSinglePage(p.productID)">{{
+												p.productName }}</a>
 										</h3>
-										<span class="price"
-											th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
+										<span class="price">{{ p.price | number:0 }} ₫</span>
 									</div>
 								</div>
 							</div>
+
 
 
 						</div>
 						<!--/pagination-->
 						<div class="pagination" style="margin: 0px 10px 20px;">
 							<ul>
-								<li class="prev"><a th:href="@{/list_products?page=0}"><span
+								<li class="prev"><a ng-click="pager.first()"><span
 										class="fa fa-angle-double-left"></span></a></li>
-								<li th:each="i: ${#numbers.sequence(0, numberOfPages - 1)}">
-									<a
-									th:style="${'background-color:' + (i==currIndex?'orage':'orage')}"
-									th:href="@{/list_products?page=__${i}__}" th:text="${i+1}"
-									th:classappend="${i==currIndex} ? 'active'"></a>
+								<li class="page-item" ng-repeat="page in visiblePages"
+									ng-class="{ 'active': (page.value === pager.page + 1) }">
+									<a class="page-link" href="" ng-click="pager.goto(page.value)"
+									ng-style="page.value === (pager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+										{{ page.value }} </a>
 								</li>
-								<li class="next"><a
-									th:href="@{/list_products?page=__${numberOfPages-1}__}"><span
+
+
+								<li class="next"><a ng-click="pager.last()"><span
 										class="fa fa-angle-double-right"></span></a></li>
 							</ul>
 						</div>

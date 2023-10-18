@@ -1,65 +1,113 @@
 app.controller("favorite-ctrl", function($scope, $http) {
-	$scope.userItemsFavorite = [];
-//Linh
-    $scope.check = function(productID){
-        $http.get('/rest/favorites/check/' + productID)
-            .then(function(response) {
-                $scope.productbyids = response.data;
-                console.log($scope.productbyids.favoriteId);
-                if(!$scope.productbyids){
-                    $http.post('/rest/favorites/' + productID)
-                .then(function(response) {
-                    console.log("bat thich");
-                    alert("Đã thích sản phẩm ")
-                })
-                .catch(function(error) {
-                    console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
-                });
-                    console.log(1);
-                }else{
-                    $http.delete('/rest/favorites/delete/' + productID)
-                .then(function(response) {
-                    console.log("tat thich");
-                    alert("Đã hủy thích sản phẩm")
-                })
-                .catch(function(error) {
-                    console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
-                });
-                }
-            })
-            .catch(function(error) {
-                console.error('Error ' + error);
-            });
-    }
+	// quangminh bắt đầu
+	$scope.productitems = [];
 
-    $scope.getAllUserFavorite = function(){
-        $http.get("/rest/favorites/getUserFavorite").then(function(response){
-            $scope.userItemsFavorite = response.data
-            console.log(response.data);
-        })
-    }
+	$scope.initialize = function() {
+		//load product
+		$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
+			$scope.productitems = resp.data;
+			$scope.pager.first();
+		});
 
-	$scope.isFavorite = function(productID) {
-		return $scope.userItemsFavorite.some(function(item) {
-			return item.product.productID === productID;
+		//load category
+		$http.get("/rest/categories/loadallNoDeletedAndActivitiesTrue").then(resp => {
+			$scope.cates = resp.data;
+			$scope.pager.first();
+		});
+
+		//load brand
+		$http.get("/rest/brands/loadallNoDeletedAndActivitiesTrue").then(resp => {
+			$scope.brans = resp.data;
+			$scope.pager.first();
+		});
+
+		//load color
+		$http.get("/rest/colors/loadallNoDeletedAndActivitiesTrue").then(resp => {
+			$scope.colors = resp.data;
+			$scope.pager.first();
+		});
+
+		//load size
+		$http.get("/rest/sizes/loadallNoDeletedAndActivitiesTrue").then(resp => {
+			$scope.sizes = resp.data;
+			$scope.pager.first();
+		});
+
+		//load image
+		$http.get("/rest/productimages/loadall").then(resp => {
+			$scope.images = resp.data;
+			console.log($scope.images)
+			$scope.pager.first();
 		});
 	}
 
-    $scope.getAllUserFavorite();
+	//	Khởi đầu
+	$scope.initialize();
 
-    $scope.getReviewByProduct = function(productID) {
-			$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
-				$scope.allreviews = resp.data;
-                console.log(resp.data);
-			}).catch(error => {
-                console.log("Error", error);
-			});
+	//phân trang
+	$scope.pager = {
+		page: 0,
+		size: 9,
+		getPageNumbers: function() {
+			var pageCount = this.count;
+			var currentPage = this.page + 1;
+			var visiblePages = [];
+
+			if (pageCount <= 3) {
+				for (var i = 1; i <= pageCount; i++) {
+					visiblePages.push({ value: i });
+				}
+			} else {
+				if (currentPage <= 2) {
+					visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (currentPage >= pageCount - 1) {
+					visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+				} else {
+					visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+				}
+			}
+			return visiblePages;
+		},
+		get productitems() {
+			var start = this.page * this.size;
+			return $scope.productitems.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.productitems.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		goto(pageNumber) {
+			if (pageNumber >= 1 && pageNumber <= this.count) {
+				this.page = pageNumber - 1;
+				$scope.visiblePages = this.getPageNumbers();
+			}
+		},
 	};
-    $scope.getReviewByProduct(3);
-    //Linh end
 
-	// quangminh bắt đầu
-
+	$scope.goToSinglePage = function(productID) {
+		window.location.href = `/single_product/${productID}`; 
+	};
 
 	// quangminh kết thúc
 });
