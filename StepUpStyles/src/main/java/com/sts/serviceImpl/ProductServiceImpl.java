@@ -164,5 +164,26 @@ public class ProductServiceImpl implements ProductService {
 	public Page<Product> findByProductNameContaining(String keyword, Pageable pageable) {
 	    return productDAO.findByProductNameContaining(keyword, pageable);
 	}
+	
+	//sắp xếp
+	@Override
+    public List<Product> findAllByOrderByProductNameAsc() {
+        return productDAO.findAllByOrderByProductNameAsc();
+    }
+
+    @Override
+    public List<Product> findAllByOrderByProductNameDesc() {
+        return productDAO.findAllByOrderByProductNameDesc();
+    }
+
+    @Override
+    public List<Product> findAllByOrderByPriceAsc() {
+        return productDAO.findAllByOrderByPriceAsc();
+    }
+
+    @Override
+    public List<Product> findAllByOrderByPriceDesc() {
+        return productDAO.findAllByOrderByPriceDesc();
+    }
 
 }

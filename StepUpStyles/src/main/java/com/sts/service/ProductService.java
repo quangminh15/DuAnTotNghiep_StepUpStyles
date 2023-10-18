@@ -54,5 +54,13 @@ public interface ProductService {
     List<Product> findSimilarProductsByCategory(Integer categoryID);
     
     Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
+    
+    //Sắp xếp
+    List<Product> findAllByOrderByProductNameAsc();
 
+    List<Product> findAllByOrderByProductNameDesc();
+
+    List<Product> findAllByOrderByPriceAsc();
+
+    List<Product> findAllByOrderByPriceDesc();
 }
