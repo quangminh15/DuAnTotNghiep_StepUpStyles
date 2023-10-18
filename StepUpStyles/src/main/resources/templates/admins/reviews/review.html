@@ -1,58 +1,3 @@
-<style>
-    .star-rating {
-        font-size: 24px;
-        /* Kích thước của biểu tượng sao */
-    }
-
-    .fa-star {
-        color: #ccc;
-        /* Màu mặc định của sao chưa được chọn */
-    }
-
-    .checked {
-        color: #f7d825;
-        /* Màu của sao đã được chọn */
-    }
-
-    /* Định dạng body của modal */
-    .modal-body {
-        padding: 20px;
-        /* Khoảng cách bên trong modal body */
-    }
-
-    /* Định dạng label */
-    label {
-        font-weight: bold;
-        /* Đậm để nổi bật label */
-    }
-
-    /* Định dạng phần hiển thị sao đánh giá */
-    .star-rating {
-        font-size: 24px;
-        /* Kích thước của biểu tượng sao */
-        margin-top: 10px;
-        /* Khoảng cách giữa label và sao đánh giá */
-    }
-
-    .fa-star {
-        color: #ccc;
-        /* Màu mặc định của sao chưa được chọn */
-        margin-right: 5px;
-        /* Khoảng cách giữa các sao */
-    }
-
-    .checked {
-        color: #f7d825;
-        /* Màu của sao đã được chọn */
-    }
-
-    /* Định dạng nội dung text của sản phẩm và người dùng */
-    p {
-        margin-top: 5px;
-        /* Khoảng cách giữa các phần tử p */
-    }
-</style>
-
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -91,64 +36,73 @@
         </div>
     </div>
 </div>
-<div class="card card-border-color card-border-color-primary m-3">
-    <div class="card-header card-header-divider">Đánh giá</div>
-    <div class="row container">
-        <div class="col-sm-4">
-            <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
-            <select class="form-control mr-2" ng-model="productId" id="productName"
-                style="width: 200px; margin-bottom: 10px">
-                <option value="">Tất cả</option>
-                <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label for="userId">Người dùng:</label>
-            <select class="form-control mr-2" ng-model="usersId" id="userId"
-            style="width: 200px; margin-bottom: 10px">
-                <option value="">Tất cả</option>
-                <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
-            </select>
-        </div>
-        <div class="col-sm-2">
-            <label for="rating">Sao đánh giá:</label>
-            <select class="form-control mr-2" ng-model="rating" id="rating">
-                <option value="">Tất cả</option>
-                <option value="1">1 sao</option>
-                <option value="2">2 sao</option>
-                <option value="3">3 sao</option>
-                <option value="4">4 sao</option>
-                <option value="5">5 sao</option>
-            </select>
-        </div>
-        <div class="col-sm-2" style="display: flex; align-items: center; justify-content: center;" >
-            <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button>
-            <button ng-click="reset()" class="btn btn-primary">Đặt lại</button>
-        </div>
-    </div>
-    <div class="card card-table m-3">
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Mã đánh giá</th>
-                        <th>Sản phẩm</th>
-                        <th>Người dùng</th>
-                        <th>Nội dung</th>
-                        <th>Sao đánh giá</th>
-                        <th>Ngày đánh giá</th>
-                        <!-- <th class="actions"></th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="reviewitem in pager.reviewitems">
+
+<div class="content-wrapper">
+	<div class="card"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<div class="card-body">
+            <h4 class="mb-5">Danh sách đánh giá</h4>
+			<div class="d-flex justify-content-between align-items-center">
+				
+
+				<div class="d-flex">
+					<!-- Thẻ select box -->
+					<div class="col-sm-4">
+                        <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
+                        <select class="form-control mr-2" ng-model="productId" id="productName"
+                            style="width: 200px; margin-bottom: 10px">
+                            <option value="">Tất cả</option>
+                            <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="userId">Người dùng:</label>
+                        <select class="form-control mr-2" ng-model="usersId" id="userId"
+                        style="width: 200px; margin-bottom: 10px">
+                            <option value="">Tất cả</option>
+                            <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="rating">Sao đánh giá:</label>
+                        <select class="form-control mr-2" ng-model="rating" id="rating">
+                            <option value="">Tất cả</option>
+                            <option value="1">1 sao</option>
+                            <option value="2">2 sao</option>
+                            <option value="3">3 sao</option>
+                            <option value="4">4 sao</option>
+                            <option value="5">5 sao</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 template-demo text-right mt-3"  >
+                        <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button>
+                        <button ng-click="reset()" class="btn btn-primary">Đặt lại</button>
+                    </div>					
+				</div>
+			</div>
+
+			<table class="table table-hover" id="sampleTable">
+				<thead>
+					<tr>
+						<th ng-repeat="column in sortableColumns"
+							ng-click="sortByColumn(column.name)">{{ column.label }} <span
+							ng-if="sortColumn === column.name"> <span
+								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+						</span>
+						</th>
+						<th class="actions"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="reviewitem in pager.reviewitems">
                         <td>{{reviewitem.reviewId}}</td>
                         <td>{{reviewitem.product.productName}}</td>
                         <td>{{reviewitem.user.fullName}}</td>
                         <td>{{reviewitem.title}}</td>
                         <td>
                             <div class="star-rating">
-                                <span class="fa fa-star" ng-class="{ 'checked': i <= reviewitem.rating }"
+                                <span class="icon-star" ng-class="{'checked': i <= reviewitem.rating }"
                                     ng-repeat="i in [1, 2, 3, 4, 5]"></span>
                             </div>
                         </td>
@@ -160,33 +114,31 @@
                         </td> -->
                     </tr>
 
-                </tbody>
-            </table>
-            <div class="card-header d-flex justify-content-end">
-                <div>
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <button style="font-size: 25px" ng-click="pager.first()" class="page-link">
-                                <span class="mdi mdi-skip-previous"></span>
-                            </button>
-                        </li>
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-end">
+				<div>
+					<ul class="pagination">
+						<li class="page-item">
+							<button ng-click="pager.first()" class="page-link">
+								<span class="ti-angle-double-left"></span>
+							</button>
+						</li>
 
-                        <li class="page-item" ng-repeat="page in visiblePages"
-                            ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
-                                ng-click="pager.goto(page.value)">{{
-                                page.value }}</a></li>
+						<li class="page-item" ng-repeat="page in visiblePages"
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+								page.value }}</a></li>
 
-                        <li class="page-item">
-                            <button style="font-size: 25px" ng-click="pager.last()" class="page-link">
-                                <span class="mdi mdi-skip-next"></span>
-                            </button>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
+						<li class="page-item">
+							<button ng-click="pager.last()" class="page-link">
+								<span class="ti-angle-double-right"></span>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div style="color: #eee;">123</div>
+

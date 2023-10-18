@@ -9,8 +9,14 @@ app.controller("favorite-ctrl", function($scope, $http) {
                 if(!$scope.productbyids){
                     $http.post('/rest/favorites/' + productID)
                 .then(function(response) {
+                    $scope.isFavorite = true;
                     console.log("bat thich");
-                    alert("Đã thích sản phẩm ")
+                    // alert("Đã thích sản phẩm ")
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Thích sp thành công!'
+                    })
                 })
                 .catch(function(error) {
                     console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
@@ -19,6 +25,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
                 }else{
                     $http.delete('/rest/favorites/delete/' + productID)
                 .then(function(response) {
+                    $scope.isFavorite = false;
                     console.log("tat thich");
                     alert("Đã hủy thích sản phẩm")
                 })
@@ -31,6 +38,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
                 console.error('Error ' + error);
             });
     }
+    
 
     $scope.getAllUserFavorite = function(){
         $http.get("/rest/favorites/getUserFavorite").then(function(response){
@@ -56,6 +64,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			});
 	};
     $scope.getReviewByProduct(3);
+    
     //Linh end
 
 	// quangminh bắt đầu
