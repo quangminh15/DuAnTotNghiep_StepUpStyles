@@ -57,4 +57,13 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	//sản phẩm tương tự
 	@Query("select p from Product p where p.category.categoryID=?1 and p.deleted = false and p.activities = true")
 	List<Product> findSimilarProductsByCategory(Integer categoryID);
+	
+	//Sắp xếp
+	List<Product> findAllByOrderByProductNameAsc();
+
+    List<Product> findAllByOrderByProductNameDesc();
+
+    List<Product> findAllByOrderByPriceAsc();
+
+    List<Product> findAllByOrderByPriceDesc();
 }
