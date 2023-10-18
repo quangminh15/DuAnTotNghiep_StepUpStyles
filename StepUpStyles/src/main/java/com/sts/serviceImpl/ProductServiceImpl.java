@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CategoryDAO;
@@ -53,6 +53,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> loadAllNoDeletedAndActivitiesTrue() {
 		return productDAO.loadAllNoDeletedAndActivitiesTrue();
+	}
+
+	@Override
+	public Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable) {
+		return productDAO.loadAllNoDeletedAndActivitiesTrue(pageable);
 	}
 
 	@Override
@@ -121,4 +126,43 @@ public class ProductServiceImpl implements ProductService {
 		// Sử dụng productDAO hoặc các phương thức khác để thực hiện truy vấn
 		return productDAO.findByCategory(category);
 	}
+
+	@Override
+	public Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable) {
+		return productDAO.findByCategoryIDPaged(cid, pageable);
+	}
+
+	@Override
+	public Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable) {
+		return productDAO.findByBrandID(bid, pageable);
+	}
+
+	@Override
+	public Page<Product> searchByNamePaged(String keyword, Pageable pageable) {
+		return productDAO.findByProductNameContaining(keyword, pageable);
+	}
+
+	@Override
+	public List<Product> findFeaturedProducts() {
+		List<Product> allProducts = loadAllNoDeletedAndActivitiesTrue();
+		List<Product> featuredProducts = new ArrayList<>();
+		for (Product product : allProducts) {
+			if (Boolean.TRUE.equals(product.getFeatured())) {
+				featuredProducts.add(product);
+			}
+		}
+		return featuredProducts;
+	}
+	
+	@Override
+	public List<Product> findSimilarProductsByCategory(Integer categoryID) {
+	    // Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
+	    return productDAO.findSimilarProductsByCategory(categoryID);
+	}
+	
+	@Override
+	public Page<Product> findByProductNameContaining(String keyword, Pageable pageable) {
+	    return productDAO.findByProductNameContaining(keyword, pageable);
+	}
+
 }

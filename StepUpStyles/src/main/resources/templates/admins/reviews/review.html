@@ -73,6 +73,13 @@
                         <label for="">Người dùng</label>
                         <h5>{{reviewdetails.user.fullName}}</h5>
                     </div>
+                    <div class="col-sm-4">
+                        <label for="">Sao đánh giá</label>
+                        <div class="star-rating">
+                            <span class="fa fa-star" ng-class="{ 'checked': i <= reviewdetails.rating }"
+                                ng-repeat="i in [1, 2, 3, 4, 5]"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <label>Nội dung</label>
@@ -88,27 +95,35 @@
     <div class="card-header card-header-divider">Đánh giá</div>
     <div class="row container">
         <div class="col-sm-4">
-            <label style="font-size: 15px">Tên sản phẩm</label>
-            <select class="form-control mr-2" ng-model="selectedProduct" ng-change="filterByProduct()"
-                ng-options="product.productID as product.productName for product in prods"
+            <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
+            <select class="form-control mr-2" ng-model="productId" id="productName"
                 style="width: 200px; margin-bottom: 10px">
                 <option value="">Tất cả</option>
+                <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
             </select>
         </div>
         <div class="col-sm-4">
-            <label style="font-size: 15px">Tên người dùng</label>
-            <select class="form-control mr-2" ng-model="selectedUser" ng-change="filterByUser()"
-                ng-options="user.usersId as user.fullName for user in users" style="width: 200px; margin-bottom: 10px">
+            <label for="userId">Người dùng:</label>
+            <select class="form-control mr-2" ng-model="usersId" id="userId"
+            style="width: 200px; margin-bottom: 10px">
                 <option value="">Tất cả</option>
+                <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
             </select>
         </div>
-        <div class="col-sm-4">
-            <label style="font-size: 15px">Sao đánh giá</label>
-            <select class="form-control mr-2" ng-model="selectedStar" ng-change="filterByStar()"
-                ng-options="" style="width: 200px; margin-bottom: 10px">
+        <div class="col-sm-2">
+            <label for="rating">Sao đánh giá:</label>
+            <select class="form-control mr-2" ng-model="rating" id="rating">
                 <option value="">Tất cả</option>
-                <option ng-repeat="star in [1, 2, 3, 4, 5]" value="{{star}}">{{star}} sao</option>
+                <option value="1">1 sao</option>
+                <option value="2">2 sao</option>
+                <option value="3">3 sao</option>
+                <option value="4">4 sao</option>
+                <option value="5">5 sao</option>
             </select>
+        </div>
+        <div class="col-sm-2" style="display: flex; align-items: center; justify-content: center;" >
+            <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button>
+            <button ng-click="reset()" class="btn btn-primary">Đặt lại</button>
         </div>
     </div>
     <div class="card card-table m-3">
@@ -120,8 +135,9 @@
                         <th>Sản phẩm</th>
                         <th>Người dùng</th>
                         <th>Nội dung</th>
+                        <th>Sao đánh giá</th>
                         <th>Ngày đánh giá</th>
-                        <th class="actions"></th>
+                        <!-- <th class="actions"></th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -130,12 +146,18 @@
                         <td>{{reviewitem.product.productName}}</td>
                         <td>{{reviewitem.user.fullName}}</td>
                         <td>{{reviewitem.title}}</td>
+                        <td>
+                            <div class="star-rating">
+                                <span class="fa fa-star" ng-class="{ 'checked': i <= reviewitem.rating }"
+                                    ng-repeat="i in [1, 2, 3, 4, 5]"></span>
+                            </div>
+                        </td>
                         <td>{{reviewitem.reviewDate | date:'dd-MM-yyyy'}}</td>
-                        <td class="actions">
+                        <!-- <td class="actions">
                             <button class="button btn-success" ng-click="showReview(reviewitem.reviewId)"><i
                                     class="mdi mdi-eye mx-2"></i></button>
-                            <!-- <button class="button btn-primary" ng-click="hideReview(reviewitem.reviewId)">{{ reviewitem.display ? 'Ẩn' : 'Hiện' }}</button> -->
-                        </td>
+                            <button class="button btn-primary" ng-click="hideReview(reviewitem.reviewId)">{{ reviewitem.display ? 'Ẩn' : 'Hiện' }}</button>
+                        </td> -->
                     </tr>
 
                 </tbody>
