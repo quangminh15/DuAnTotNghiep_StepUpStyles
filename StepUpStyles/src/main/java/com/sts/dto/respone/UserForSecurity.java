@@ -1,4 +1,6 @@
-package com.sts.model.DTO;
+package com.sts.dto.respone;
+
+import javax.persistence.ConstructorResult;
 
 public class UserForSecurity {
     public Integer usersId;
