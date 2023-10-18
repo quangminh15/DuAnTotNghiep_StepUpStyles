@@ -6,6 +6,8 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.productNames = [];
 	$scope.form = {};
 	$scope.form.product = {};
+	$scope.errorMessage = '';
+	$scope.messageSuccess = '';
 	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
@@ -14,6 +16,35 @@ app.controller("color-ctrl", function($scope, $http) {
 		{ name: 'modifyDate', label: 'Ngày điều chỉnh' },
 		{ name: 'activities', label: 'Trạng thái' },
 	];
+	
+	$('.export').click(function() {
+		var table2excel = new Table2Excel();
+		table2excel.export(document.querySelectorAll("table.table"));
+	});
+
+	$('.pdf-file').click(function() {
+
+		var elment = document.getElementById('sampleTable');
+		var opt = {
+			margin: 0.5,
+			filename: 'myfilepdf.pdf',
+			image: { type: 'jpeg', quality: 0.98 },
+			html2canvas: { scale: 2 },
+			jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+		};
+		html2pdf(elment, opt);
+	});
+	
+	var myApp1 = new function () {
+	this.printTable = function () {
+		var tab = document.getElementById('sampleTable');
+		var win = window.open('', '', 'height=700,width=700');
+		win.document.write(tab.outerHTML);
+		win.document.close();
+		win.print();
+	}
+
+}
 
 	$scope.sortByColumn = function(columnName) {
 		if ($scope.sortColumn === columnName) {
@@ -199,48 +230,44 @@ app.controller("color-ctrl", function($scope, $http) {
 		});
 	}
 
-	// Tìm kiếm  
-	$scope.searchColorByName = async function() {
-		const { value: searchKeyword } = await Swal.fire({
-			title: 'Tìm kiếm màu sắc',
-			input: 'text',
-			inputLabel: 'Nhập tên màu sắc',
-			inputPlaceholder: 'Nhập tên màu sắc cần tìm kiếm'
-		});
+	//Mở modal tìm kiếm
+	$scope.openSearchForm = function() {
+		// Reset searchKeyword
+		$scope.searchKeyword = '';
+		$('#searchModal').modal('show');
+	};
 
-		if (searchKeyword && searchKeyword.trim() !== "") {
+	// Tìm kiếm màu 
+	$scope.searchColorByName = function() {
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
 			$http.get("/rest/colors/search", {
-				params: { keyword: searchKeyword }
+				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
+				console.log("Kết quả tìm kiếm ", resp.data);
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Không tìm thấy màu sắc có tên ' + searchKeyword,
-					});
+					$scope.errorMessage = `Không tìm thấy màu có tên "${$scope.searchKeyword}"`;
+					$('#errorModal').modal('show');
 				}
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tìm kiếm màu sắc!',
-				});
+				$scope.errorMessage = "Lỗi khi tìm kiếm màu!";
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
+			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Không tìm thấy tên màu sắc mà bạn mong muốn!',
-			});
+			$scope.errorMessage = "Không tìm thấy màu mà bạn mong muốn!";
+			$('#errorModal').modal('show');
 		}
+		$('#searchModal').modal('hide');
 	};
+
+
 
 	$scope.filterByActivities = function() {
 		if ($scope.selectedActivity === "all") {
@@ -248,11 +275,8 @@ app.controller("color-ctrl", function($scope, $http) {
 				$scope.coloritems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách màu sắc!',
-				});
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc!";
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -263,11 +287,8 @@ app.controller("color-ctrl", function($scope, $http) {
 				$scope.coloritems = filteredColors;
 				$scope.pager.first();
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách màu sắc theo trạng thái!',
-				});
+				$scope.errorMessage = "Lỗi khi tải danh sách màu sắc theo trạng thái!";
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -306,11 +327,8 @@ app.controller("color-ctrl", function($scope, $http) {
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên màu!!',
-			});
+			$scope.errorMessage = "Vui lòng nhập tên màu!!";
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -322,22 +340,17 @@ app.controller("color-ctrl", function($scope, $http) {
 			resp.data.modifyDate = new Date(resp.data.modifyDate);
 			$scope.coloritems.push(resp.data);
 			$scope.reset();
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'Thêm mới thành công',
-			});
+			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
+			$scope.messageSuccess = "Thêm mới thành công";
+			$('#errorModal1').modal('show');
 			$scope.initialize();
 		}).catch(error => {
 			if (error.status === 400) {
 				$scope.errorMessage = error.data;
 				$scope.initialize();
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Thêm mới thất bại!!',
-				});
+				$scope.errorMessage = "Thêm mới thất bại";
+				$('#errorModal').modal('show');
 				$scope.initialize();
 				console.log("Error", error);
 			}
@@ -349,11 +362,8 @@ app.controller("color-ctrl", function($scope, $http) {
 
 		//Lỗi bỏ trống tên màu
 		if (!$scope.form.colorName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên màu!!',
-			});
+			$scope.errorMessage = "Vui lòng nhập tên màu!!";
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -362,19 +372,13 @@ app.controller("color-ctrl", function($scope, $http) {
 		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
 			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
 			resp.data.modifyDate = new Date(resp.data.modifyDate); $scope.coloritems[index] = coloritem;
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'Cập nhật thành công',
-			});
+			$scope.messageSuccess = "Cập nhật thành công";
+			$('#errorModal1').modal('show');
 			$scope.initialize();
 			$scope.reset();
 		}).catch(error => {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Cập nhật thất bại!!',
-			});
+			$scope.errorMessage = "Cập nhật thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
 			console.log("Error", error);
 		})
@@ -387,259 +391,110 @@ app.controller("color-ctrl", function($scope, $http) {
 		$('#recycleBinModal').modal('show');
 	};
 
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal = function() {
+		$('#confirmHideModal').modal('show');
+	}
+
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(coloritem) {
+		$scope.form = angular.copy(coloritem);
+		$('#confirmHideModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác
 	$scope.confirmHide = function() {
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa màu sắc này không này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				var coloritem = angular.copy($scope.form);
-				coloritem.deleted = true;
-				coloritem.modifyDate = new Date();
-				$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
-					var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.coloritems[index] = coloritem;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
+		var coloritem = angular.copy($scope.form);
+		coloritem.deleted = true;
+		coloritem.modifyDate = new Date();
+		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
+			var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate); $scope.coloritems[index] = coloritem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+			$scope.reset();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			$scope.reset();
+			console.log("Error", error);
 		})
-	}
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) Kết thúc
 
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) bắt đầu
-	$scope.confirmHideTable = function(coloritem) {
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(coloritem) {
 		$scope.form = angular.copy(coloritem);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa màu sắc này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				coloritem.deleted = true;
-				coloritem.modifyDate = new Date();
-				$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
-					var index = $scope.coloritems.findIndex(p => p.colorID == coloritem.colorID);
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.coloritems[index] = coloritem;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) kết thúc
 
-	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
-	$scope.restore = function(coloritem) {
-		console.log(coloritem)
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var coloritem = angular.copy($scope.form);
+		coloritem.deleted = false;
+		coloritem.modifyDate = new Date();
+		$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
+			var index = $scope.coloritemsLoadAll.findIndex(p => p.colorID == coloritem.colorID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
+			$scope.coloritemsLoadAll[index] = coloritem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+			$scope.reset();
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			$scope.reset();
+			console.log("Error", error);
+		})
+
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để xóa luôn
+	$scope.confirmDeleteModal1 = function(coloritem) {
 		$scope.form = angular.copy(coloritem);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục mùa sắc này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			console.log(result)
-			if (result.isConfirmed) {
 
-				coloritem.deleted = false;
-				coloritem.modifyDate = new Date();
-				$http.put('/rest/colors/update/' + coloritem.colorID, coloritem).then(resp => {
-					var index = $scope.coloritemsLoadAll.findIndex(p => p.colorID == coloritem.colorID);
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.coloritemsLoadAll[index] = coloritem;
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
 
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'khôi phục thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Khôi phục thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-	//sau khi xác nhận thành công thì khôi phục item từ thùng rác (Nút khôi phục ở TABLE) Kết thúc
-
-	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
-	$scope.confirmDelete = function(coloritem) {
-		console.log(coloritem)
-		$scope.form = angular.copy(coloritem);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa màu sắc này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$http.delete('/rest/colors/delete/' + $scope.form.colorID).then(resp => {
-					var index = $scope.coloritems.findIndex(p => p.colorID == $scope.form.colorID);
-					$scope.coloritems.splice(index, 1);
-					$scope.reset();
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công!',
-					});
-					$scope.initialize();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					console.log("Error", error);
-					$scope.initialize();
-					$scope.reset();
-				});
-			}
-		})
-	}
-	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) Kết thúc
-
-	$(function() {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
-
-	$('.export').click(function() {
-
-		let timerInterval
-		Swal.fire({
-			icon: 'info',
-			title: 'Đang xuất file',
-			html: 'Cần phải chờ trong <b></b>s.',
-			timer: 2000,
-			timerProgressBar: true,
-			didOpen: () => {
-				Swal.showLoading()
-				const b = Swal.getHtmlContainer().querySelector('b')
-				timerInterval = setInterval(() => {
-					b.textContent = Swal.getTimerLeft()
-				}, 100)
-			},
-			willClose: () => {
-				clearInterval(timerInterval)
-			}
-		}).then((result) => {
-			/* Read more about handling dismissals below */
-			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log('I was closed by the timer')
-
-				//code xuất file
-				var table2excel = new Table2Excel();
-				table2excel.export(document.querySelectorAll("table.table"));
-			}
-
-		})
-
-	});
-
-	$('.pdf-file').click(function() {
-		let timerInterval
-		Swal.fire({
-			icon: 'info',
-			title: 'Đang xuất file',
-			html: 'Cần phải chờ trong <b></b>s.',
-			timer: 2000,
-			timerProgressBar: true,
-			didOpen: () => {
-				Swal.showLoading()
-				const b = Swal.getHtmlContainer().querySelector('b')
-				timerInterval = setInterval(() => {
-					b.textContent = Swal.getTimerLeft()
-				}, 100)
-			},
-			willClose: () => {
-				clearInterval(timerInterval)
-			}
-		}).then((result) => {
-			/* Read more about handling dismissals below */
-			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log('I was closed by the timer')
-
-				//code xuất file
-				var elment = document.getElementById('sampleTable');
-				var opt = {
-					margin: 0.5,
-					filename: 'myfilepdf.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				};
-				html2pdf(elment, opt);
-			}
-		})
-	});
-
-	var myApp1 = new function() {
-		this.printTable = function() {
-			var tab = document.getElementById('sampleTable');
-			var win = window.open('', '', 'height=700,width=700');
-			win.document.write(tab.outerHTML);
-			win.document.close();
-			win.print();
-		}
-
+		$('#confirmDeleteModal').modal('show');
 	}
 
-});
+	//sau khi xác nhận thành công thì xóa luôn
+	$scope.confirmDelete = function() {
+		// Thực hiện xóa
+		$http.delete('/rest/colors/delete/' + $scope.form.colorID).then(resp => {
+			var index = $scope.coloritems.findIndex(p => p.colorID == $scope.form.colorID);
+			$scope.coloritems.splice(index, 1);
+			$scope.reset();
+			$scope.initialize();
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			console.log("Error", error);
+		});
+
+		// Đóng modal xác nhận xóa
+		$('#confirmDeleteModal').modal('hide');
+	}
+})

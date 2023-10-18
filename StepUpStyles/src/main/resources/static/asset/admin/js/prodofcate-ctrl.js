@@ -134,8 +134,4 @@ app.controller("prodofcate-ctrl", function($scope, $http) {
 				$scope.filteredProducts = response.data;
 			});
 	};
-	
-	$(function() {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
 });

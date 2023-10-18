@@ -3,6 +3,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 	$scope.branditemss = [];
 	$scope.branditemsLoadAll = [];
 	$scope.form = {};
+	$scope.errorMessage = '';
 	$scope.selectedActivity = "all";
 
 	$scope.sortableColumns = [
@@ -163,70 +164,24 @@ app.controller("brand-ctrl", function($scope, $http) {
 		},
 	};
 
-	// Tải ảnh lên Firebase	bắt đầu
-	$scope.createImages = async function() {
-		try {
-			// Lấy tệp ảnh đã chọn từ trường input với id là "photo"
-			const imageFile = document.querySelector('#photo').files[0];
+	// Tải ảnh lên Firebase	
+	$scope.uploadImages = function() {
+		var ref = firebase.storage().ref();
+		var folder = 'Brand';
+		var file = document.querySelector('#photo').files[0];
+		var metadata = {
+			contentType: file.type
+		};
+		var name = folder + '/' + file.name; // Tạo tên file với thư mục
 
-			if (!imageFile) {
-				throw new Error("Chưa chọn ảnh để tải lên Firebase.");
-			}
+		var uploadIMG = ref.child(name).put(file, metadata);
 
-			// Tạo một thư mục trên Firebase Storage để lưu trữ ảnh
-			const storageRef = firebase.storage().ref();
-			const imageRef = storageRef.child('brands/' + imageFile.name);
-
-			// Tải tệp ảnh lên Firebase Storage
-			const snapshot = await imageRef.put(imageFile);
-
-			// Lấy URL của ảnh sau khi tải lên Firebase
-			const downloadURL = await snapshot.ref.getDownloadURL();
-
-			// Lưu URL vào biến $scope.form.brandImage hoặc nơi bạn muốn lưu
-			$scope.form.brandImage = downloadURL;
-		} catch (error) {
-			// Xử lý lỗi khi tải ảnh lên Firebase
-			throw error;
-		}
+		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
+			.then(url => {
+				$scope.form.brandImage = url;
+				console.log($scope.form.brandImage)
+			});
 	};
-	// Tải ảnh lên Firebase	Kết thúc
-
-	//Cập nhật ảnh lên Firebase	bắt đầu
-	$scope.updateImages = async function() {
-		try {
-			const imageFile = document.querySelector('#photo').files[0];
-
-			if (!imageFile) {
-				throw new Error("Chưa chọn ảnh để tải lên Firebase.");
-			}
-
-			// Tạo một thư mục trên Firebase Storage để lưu trữ ảnh (ví dụ: theo tên brand)
-			const brandID = $scope.form.brandID; // Lấy tên brand (sử dụng tên brand hoặc một giá trị duy nhất khác)
-			const storageRef = firebase.storage().ref();
-
-			// Lấy định dạng của tệp ảnh được tải lên
-			const fileExtension = imageFile.name.split('.').pop();
-
-			// Đặt tên ảnh theo tên brand và định dạng của tệp
-			const imageRef = storageRef.child('brands/' + brandID + '.' + fileExtension);
-
-			// Tải tệp ảnh lên Firebase Storage, và sử dụng 'put' để thay thế ảnh cũ nếu đã tồn tại
-			const snapshot = await imageRef.put(imageFile);
-
-			// Lấy URL của ảnh sau khi tải lên Firebase
-			const downloadURL = await snapshot.ref.getDownloadURL();
-
-			// Lưu URL vào biến $scope.form.brandImage hoặc nơi bạn muốn lưu
-			$scope.form.brandImage = downloadURL;
-		} catch (error) {
-			throw error;
-		}
-	}
-
-
-
-	//Cập nhật ảnh lên Firebase	Kết thúc
 
 	$scope.filterByActivities = function() {
 		if ($scope.selectedActivity === "all") {
@@ -234,11 +189,8 @@ app.controller("brand-ctrl", function($scope, $http) {
 				$scope.branditems = resp.data;
 				$scope.pager.first();
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách thương hiệu!',
-				});
+				$scope.errorMessage = "Lỗi khi tải danh sách thương hiệu!";
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -249,11 +201,8 @@ app.controller("brand-ctrl", function($scope, $http) {
 				$scope.branditems = filteredBrands;
 				$scope.pager.first();
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách thương hiệu theo trạng thái!',
-				});
+				$scope.errorMessage = "Lỗi khi tải danh sách thương hiệu theo trạng thái!";
+				$('#errorModal').modal('show');
 				console.log("Error", error);
 				$scope.pager.first();
 			});
@@ -311,50 +260,41 @@ app.controller("brand-ctrl", function($scope, $http) {
 		$scope.form = angular.copy(branditem);
 	}
 
-	// Tìm kiếm  
-	$scope.searchProductGroupByName = async function() {
-		const { value: searchKeyword } = await Swal.fire({
-			title: 'Tìm kiếm thương hiệu',
-			input: 'text',
-			inputLabel: 'Nhập tên thương hiệu',
-			inputPlaceholder: 'Nhập tên thương hiệu cần tìm kiếm'
-		});
+	//Mở modal tìm kiếm
+	$scope.openSearchForm = function() {
+		// Reset searchKeyword
+		$scope.searchKeyword = '';
+		$('#searchModal').modal('show');
+	};
 
-		if (searchKeyword && searchKeyword.trim() !== "") {
+	// Tìm kiếm  
+	$scope.searchProductGroupByName = function() {
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
 			$http.get("/rest/brands/search", {
-				params: { keyword: searchKeyword }
+				params: { keyword: $scope.searchKeyword }
 			}).then(resp => {
 				$scope.branditems = resp.data;
 				$scope.pager.first();
 
 				if (resp.data.length === 0) {
 					$scope.initialize();
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Không tìm thấy thương hiệu có tên ' + searchKeyword,
-					});
+					$scope.errorMessage = `Không tìm thấy thương hiệu có tên "${$scope.searchKeyword}"`;
+					$('#errorModal').modal('show');
 				}
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tìm kiếm thương hiệu!',
-				});
+				$scope.errorMessage = "Lỗi khi tìm kiếm thương hiệu!";
+				$('#errorModal').modal('show'); // Hiển thị modal lỗi
 				console.log("Error", error);
 				$scope.pager.first();
 			});
 		} else {
 			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
 			$scope.initialize();
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Không tìm thấy tên thương hiệu mà bạn mong muốn!',
-			});
+			$scope.errorMessage = "Không tìm thấy tên thương hiệu mà bạn mong muốn!";
+			$('#errorModal').modal('show'); // Hiển thị modal lỗi
 		}
+		$('#searchModal').modal('hide');
 	};
-
 
 
 	//	Thêm mới 
@@ -362,36 +302,27 @@ app.controller("brand-ctrl", function($scope, $http) {
 		//Lỗi trùng tên nhóm sản phẩm
 		let existingBrandName = $scope.branditems.find(branditem => branditem.brandName === $scope.form.brandName);
 		if (existingBrandName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Tên thương hiệu đã tồn tại!',
-			});
+			$scope.errorMessage = "Tên thương hiệu đã tồn tại!!";
+			$('#errorModal').modal('show');
 			return;
 		}
 
 		//Lỗi bỏ trống 
 		if (!$scope.form.brandName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên thương hiệu!',
-			});
+			$scope.errorMessage = "Vui lòng nhập tên thương hiệu!!";
+			$('#errorModal').modal('show');
 			return;
 		}
 
 		//Lỗi không chọn ảnh
 		if (!document.querySelector('#photo').files[0]) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Bạn chưa chọn ảnh',
-			});
+			$scope.errorMessage = "Bạn chưa chọn ảnh";
+			$('#errorModal').modal('show');
 			return; // Dừng tiến trình nếu không chọn ảnh
 		};
 
 		try {
-			await $scope.createImages(); // cập nhật ảnh của Firebase
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
 
 			// Thực hiện việc lưu vào db
 			var branditem = angular.copy($scope.form);
@@ -402,11 +333,9 @@ app.controller("brand-ctrl", function($scope, $http) {
 				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.branditems.push(resp.data);
 				$scope.reset();
-				Swal.fire({
-					icon: 'success',
-					title: 'Thành công',
-					text: 'Thêm mới thành công!',
-				});
+				$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
+				$scope.messageSuccess = "Thêm mới thành công";
+				$('#errorModal1').modal('show');
 				$scope.initialize();
 				console.log(resp)
 			}).catch(error => {
@@ -414,79 +343,62 @@ app.controller("brand-ctrl", function($scope, $http) {
 					$scope.errorMessage = error.data;
 					$scope.initialize();
 				} else {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Thêm mới thất bại!',
-					});
+					$scope.errorMessage = "Thêm mới thất bại";
+					$('#errorModal').modal('show');
 					$scope.initialize();
 					console.log("Error", error);
 				}
 			});
 		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Tải ảnh lên firebase thất bại',
-			});
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
 		}
 	}
 
 	//	Cập nhật  
 	$scope.update = async function() {
-		// Lỗi bỏ trống
+		//Lỗi bỏ trống 
 		if (!$scope.form.brandName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên thương hiệu!',
-			});
+			$scope.errorMessage = "Vui lòng nhập tên thương hiệu!!";
+			$('#errorModal').modal('show');
 			return;
 		}
 
+		//Lỗi không chọn ảnh 
+		if (!document.querySelector('#photo').files[0]) {
+			$scope.errorMessage = "Bạn chưa chọn ảnh";
+			$('#errorModal').modal('show');
+			return; // Dừng tiến trình nếu không chọn ảnh
+		}
+
 		try {
-			var newImageFile = document.querySelector('#photo').files[0];
-			if (newImageFile) {
-				// Tải ảnh lên Firebase nếu có ảnh mới
-				await $scope.updateImages();
-				// Sau khi tải lên Firebase, bạn có thể cập nhật thông tin thương hiệu ở đây
-			}
+			await $scope.uploadImages(); // Tải ảnh lên Firebase
 
 			var branditem = angular.copy($scope.form);
+			branditem.brandImage = $scope.form.brandImage;
 			branditem.modifyDate = new Date();
 			$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
 				var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
 				resp.data.modifyDate = new Date(resp.data.modifyDate);
 				$scope.branditems[index] = branditem;
-				Swal.fire({
-					icon: 'success',
-					title: 'Thành công',
-					text: 'Cập nhật thành công',
-				});
+				$scope.messageSuccess = "Cập nhật thành công";
+				$('#errorModal1').modal('show');
 				$scope.initialize();
 				$scope.reset();
 				console.log("branditem", branditem);
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Cập nhật thất bại!',
-				});
+				$scope.errorMessage = "Cập nhật thất bại";
+				$('#errorModal').modal('show');
 				$scope.initialize();
 				console.log("Error", error);
-			});
+			})
 		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Tải ảnh lên Firebase thất bại!' + error,
-			});
+			$scope.errorMessage = "Tải ảnh lên firebase thất bại";
+			$('#errorModal').modal('show');
 			$scope.initialize();
 		}
 	}
-
-
 
 	//Mở modal thùng rác
 	$scope.openRecycleBinForm = function() {
@@ -495,94 +407,92 @@ app.controller("brand-ctrl", function($scope, $http) {
 		$('#recycleBinModal').modal('show');
 	};
 
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal = function() {
+		$('#confirmHideModal').modal('show');
+	}
+
+	//Gọi đến modal xác nhận để xóa vào thùng rác
+	$scope.confirmHideModal1 = function(branditem) {
+		$scope.form = angular.copy(branditem);
+		$('#confirmHideModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa vào thùng rác
 	$scope.confirmHide = function() {
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa thương hiệu này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				var branditem = angular.copy($scope.form);
-				branditem.deleted = true;
-				branditem.modifyDate = new Date();
-				$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
-					var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.branditems[index] = branditem;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
+		var branditem = angular.copy($scope.form);
+		branditem.deleted = true;
+		branditem.modifyDate = new Date();
+		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
+			var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
+			$scope.branditems[index] = branditem;
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+			$scope.reset();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			$scope.reset();
+			console.log("Error", error);
 		})
-	}
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) Kết thúc
 
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) bắt đầu
-	$scope.confirmHideTable = function(branditem) {
+		// Đóng modal thùng rác
+		$('#confirmHideModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để khôi phục item từ thùng rác
+	$scope.confirmRestoreModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa thương hiệu này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				branditem.deleted = true;
-				branditem.modifyDate = new Date();
-				$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
-					var index = $scope.branditems.findIndex(p => p.brandID == branditem.brandID);
-					resp.data.modifyDate = new Date(resp.data.modifyDate);
-					$scope.branditems[index] = branditem;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmRestoreModal').modal('show');
+	}
+
+	//Khôi phục item từ thùng rác
+	$scope.restore = function() {
+		var branditem = angular.copy($scope.form);
+		branditem.deleted = false;
+		branditem.modifyDate = new Date();
+		$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
+			var index = $scope.branditemsLoadAll.findIndex(p => p.brandID == branditem.brandID);
+			resp.data.modifyDate = new Date(resp.data.modifyDate);
+			$scope.branditemsLoadAll[index] = branditem;
+
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.messageSuccess = "khôi phục thành công";
+			$('#errorModal1').modal('show');
+			$scope.initialize();
+			$scope.reset();
+		}).catch(error => {
+			// Đóng modal thùng rác
+			$('#recycleBinModal').modal('hide');
+
+			$scope.errorMessage = "Khôi phục thất bại";
+			$('#errorModal').modal('show');
+			$scope.initialize();
+			$scope.reset();
+			console.log("Error", error);
 		})
-	}
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở TABLE) kết thúc	
 
-	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
-	$scope.restore = function(branditem) {
-		console.log(branditem)
+		// Đóng modal thùng rác
+		$('#confirmRestoreModal').modal('hide');
+	}
+
+	//Gọi đến modal xác nhận để xóa luôn
+	$scope.confirmDeleteModal1 = function(branditem) {
 		$scope.form = angular.copy(branditem);
+<<<<<<< HEAD
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+=======
 		Swal.fire({
 			title: 'Thông báo',
 			text: "Bạn có chắc chắn muốn khôi phục thương hiệu này không?",
@@ -595,7 +505,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		}).then((result) => {
 			console.log(result)
 			if (result.isConfirmed) {
-				
+
 				branditem.deleted = false;
 				branditem.modifyDate = new Date();
 				$http.put('/rest/brands/update/' + branditem.brandID, branditem).then(resp => {
@@ -692,12 +602,11 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+				//code xuất file
+				var table2excel = new Table2Excel();
+				table2excel.export(document.querySelectorAll("table.table"));
 			}
-			//code xuất file
-			var table2excel = new Table2Excel();
-			table2excel.export(document.querySelectorAll("table.table"));
 		})
-
 	});
 
 	$('.pdf-file').click(function() {
@@ -722,18 +631,17 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+				//code xuất file
+				var elment = document.getElementById('sampleTable');
+				var opt = {
+					margin: 0.5,
+					filename: 'myfilepdf.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { scale: 2 },
+					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+				};
+				html2pdf(elment, opt);
 			}
-
-			//code xuất file
-			var elment = document.getElementById('sampleTable');
-			var opt = {
-				margin: 0.5,
-				filename: 'myfilepdf.pdf',
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2 },
-				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-			};
-			html2pdf(elment, opt);
 		})
 	});
 
@@ -745,8 +653,31 @@ app.controller("brand-ctrl", function($scope, $http) {
 			win.document.close();
 			win.print();
 		}
+>>>>>>> parent of 631b953 (Revert "Merge branch 'Dev' into Dev_LongHai")
 
+		$('#confirmDeleteModal').modal('show');
 	}
 
+	//sau khi xác nhận thành công thì xóa luôn
+	$scope.confirmDelete = function() {
+		// Thực hiện xóa 
+		$http.delete('/rest/brands/delete/' + $scope.form.brandID).then(resp => {
+			var index = $scope.branditems.findIndex(p => p.brandID == $scope.form.brandID);
+			$scope.branditems.splice(index, 1);
+			$scope.reset();
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show'); // Hiển thị modal thành công
+			$scope.initialize();
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show'); // Hiển thị modal lỗi
+			console.log("Error", error);
+			$scope.initialize();
+			$scope.reset();
+		});
+
+		// Đóng modal xác nhận xóa
+		$('#confirmDeleteModal').modal('hide');
+	}
 });
 

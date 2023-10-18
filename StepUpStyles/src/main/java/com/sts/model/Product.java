@@ -39,7 +39,7 @@ public class Product implements Serializable {
 
 	private Boolean activities;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "modify_date")
 	private Date modifyDate = new Date();
 

@@ -4,7 +4,6 @@ app.controller("review-ctrl", function($scope, $http){
 	$scope.users = [];
 	$scope.form = {};
 	$scope.reviewdetails = {}
-	$scope.showSelectBoxEmptyWarning = false;
 	$scope.initialize = function() {
 		//load review
 		$http.get("/rest/reviews/loadall").then(resp => {
@@ -138,28 +137,4 @@ app.controller("review-ctrl", function($scope, $http){
 			$scope.initialize();
 		}
 	};
-
-	$scope.searchReviews = function() {
-		if ($scope.productId || $scope.usersId || $scope.rating) {
-			// Sử dụng template string để chèn biến vào URL
-			$http.get(`/rest/reviews/search?productId=${$scope.productId}&usersId=${$scope.usersId}&rating=${$scope.rating}`)
-			.then(function(response) {
-				$scope.reviewitems = response.data;
-				console.log("Dữ liệu");
-				console.log(response.data);
-				$scope.pager.first();
-			});
-		} else {
-			// Gọi hàm khởi tạo khi không có tham số tìm kiếm
-			$scope.initialize();
-		}
-	}
-
-	$scope.reset = function(){
-		$scope.initialize();
-		$scope.productId = "";
-        $scope.usersId = "";
-  		$scope.rating = "";
-	}
-	
 })

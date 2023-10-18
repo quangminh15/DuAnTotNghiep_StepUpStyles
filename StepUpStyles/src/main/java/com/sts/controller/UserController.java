@@ -11,7 +11,11 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	
+	@RequestMapping("/index")
+	public String index(Model model) {
+
+		return "users/index";
+	}
 
 	@RequestMapping("/about")
 	public String about(Model model) {

@@ -1,6 +1,6 @@
 app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.userItemsFavorite = [];
-//Linh
+
     $scope.check = function(productID){
         $http.get('/rest/favorites/check/' + productID)
             .then(function(response) {
@@ -46,17 +46,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	}
 
     $scope.getAllUserFavorite();
-
-    $scope.getReviewByProduct = function(productID) {
-			$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
-				$scope.allreviews = resp.data;
-                console.log(resp.data);
-			}).catch(error => {
-                console.log("Error", error);
-			});
-	};
-    $scope.getReviewByProduct(3);
-    //Linh end
 
 	// quangminh bắt đầu
 

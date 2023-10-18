@@ -86,84 +86,51 @@ app.controller("supplier-ctrl", function($scope, $http){
     //ham create
     $scope.create = function (){
 		//bo trong ten
-		if (!$scope.form.supplierName) {	
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên nhà cung cấp!!!',
-			})
+		if (!$scope.form.supplierName) {
+			$scope.errorMessage = "Vui lòng nhập tên nhà cung cấp!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		//loi trung
 		let existingSupplier = $scope.items.find(item => item.supplierName === $scope.form.supplierName);
 		if (existingSupplier) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Tên nhà cung cấp đã tồn tại!!',
-			})
-			return;
-		}
-		// bo trong address
-		if (!$scope.form.addresss) {	
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập địa chỉ!!!',
-			})
+			$scope.errorMessage = "Tên nhà cung cấp đã tồn tại!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		//bo trong so dien thoai
 		if (!$scope.form.phone) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập số điện thoại!!!',
-			})
+			$scope.errorMessage = "Vui lòng nhập số điện thoại!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		} else if (!/^0\d{9}$/.test($scope.form.phone)) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Số điện thoại không hợp lệ!!!',
-			})
+			$scope.errorMessage = "Số điện thoại không hợp lệ!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		// Kiểm tra trùng số điện thoại
 		let existingPhone = $scope.items.find(item => item.phone === $scope.form.phone);
 		if (existingPhone) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Số điện thoại đã tồn tại!!!',
-			})
+			$scope.errorMessage = "Số điện thoại đã tồn tại!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		//bo trong email va kiem tra email
 		if (!$scope.form.email) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập email!!!',
-			})
+			$scope.errorMessage = "Vui lòng nhập email!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		} else if (!/\S+@\S+\.\S+/.test($scope.form.email)) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Email không hợp lệ. Vui lòng nhập email chính xác!!',
-			})
+			$scope.errorMessage = "Email không hợp lệ. Vui lòng nhập email chính xác!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		// Kiểm tra trùng email
 		let existingEmail = $scope.items.find(item => item.email === $scope.form.email);
 		if (existingEmail) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Email đã tồn tại!!',
-			})
+			$scope.errorMessage = "Email đã tồn tại!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
@@ -174,11 +141,8 @@ app.controller("supplier-ctrl", function($scope, $http){
 			$scope.items.push(data);
 			$scope.reset();
 			$scope.initialize();
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'Thêm nhà cung cấp thành công!',
-			})
+			$scope.messageSuccess = "Thêm thành công nhà cung cấp";
+			$('#errorModal1').modal('show'); // Show the modal
 		}).catch(error => {
 			alert("Lỗi");
 			console.log("Error", error);
@@ -189,43 +153,24 @@ app.controller("supplier-ctrl", function($scope, $http){
     $scope.update = function () {
 		//bo trong ten
 		if (!$scope.form.supplierName) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập tên nhà cung cấp!!!',
-			})
+			$scope.errorMessage = "Vui lòng nhập tên nhà cung cấp!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		//bo trong so dien thoai
 		if (!$scope.form.phone) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập số điện thoại!!!',
-			})
-			return;
-		} else if (!/^0\d{9}$/.test($scope.form.phone)) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Số điện thoại không hợp lệ!!!',
-			})
+			$scope.errorMessage = "Vui lòng nhập số điện thoại!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 		//bo trong email va kiem tra email
 		if (!$scope.form.email) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập email!!!',
-			})
+			$scope.errorMessage = "Vui lòng nhập email!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		} else if (!/\S+@\S+\.\S+/.test($scope.form.email)) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Email không hợp lệ. Vui lòng nhập email chính xác!!',
-			})
+			$scope.errorMessage = "Email không hợp lệ. Vui lòng nhập email chính xác!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
@@ -233,13 +178,10 @@ app.controller("supplier-ctrl", function($scope, $http){
 		$http.put(`/rest/supplier/updateSupp/${item.supplierId}`, item).then(resp => {
 			var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
 			$scope.items[index] = item;
+			$scope.messageSuccess = "Cập nhật thành công nhà cung cấp";
 			$scope.reset();
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'Cập nhật nhà cung cấp thành công!',
-			})
 			$scope.initialize();
+			$('#errorModal1').modal('show'); // Show the modal
 		}).catch(error => {
 			alert("Loi cap nhat");
 			console.log("Error", error);
@@ -399,198 +341,6 @@ app.controller("supplier-ctrl", function($scope, $http){
 	$scope.edit = function (item) {
 		$scope.form = angular.copy(item);
 	}
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở Table)
-	$scope.confirmHideTable = function(item) {
-		$scope.form = angular.copy(item);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				item.deleted = true;
-				$http.put('/rest/supplier/updateSupp/' + item.supplierId, item).then(resp => {
-					var index = $scope.itemss.findIndex(p => p.supplierId == item.supplierId);
-					$scope.itemss[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
-	$scope.confirmHide = function() {
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				var item = angular.copy($scope.form);
-				item.deleted = true;
-				$http.put('/rest/supplier/updateSupp/' + item.supplierId, item).then(resp => {
-					var index = $scope.itemss.findIndex(p => p.supplierId == item.supplierId);
-					$scope.itemss[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
-	$scope.restore = function(item) {
-		$scope.form = angular.copy(item);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục nhà cung cấp này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			console.log(result)
-			if (result.isConfirmed) {
-				item.deleted = false;
-				$http.put('/rest/supplier/updateSupp/' + item.supplierId, item).then(resp => {
-					var index = $scope.items.findIndex(p => p.supplierId == item.supplierId);
-					$scope.items[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'khôi phục thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Khôi phục thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
-	$scope.confirmDelete = function(item) {
-		$scope.form = angular.copy(item);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$http.delete('/rest/supplier/removeSupp/' + $scope.form.supplierId).then(resp => {
-					var index = $scope.itemsss.findIndex(p => p.supplierId == $scope.form.supplierId);
-					$scope.itemsss.splice(index, 1);
-					$scope.reset();
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công!',
-					});
-					$scope.initialize();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					console.log("Error", error);
-					$scope.initialize();
-					$scope.reset();
-				});
-			}
-		})
-	};
-
-	//loc display
-	$scope.filterByDisplay = function() {
-		if ($scope.selectedDisplay === "") {
-			$http.get("/rest/supplier/nodeleted").then(resp => {
-				$scope.itemss = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách sản phẩm!',
-				});
-
-				console.log("Error", error);
-				$scope.pager.first();
-			});
-		} else {
-			$http.get("/rest/supplier/nodeleted").then(resp => {
-				const selectedStatus = $scope.selectedDisplay === "true";
-				const filteredSizes = resp.data.filter(itemss => itemss.display === selectedStatus);
-				$scope.itemss = filteredSizes;
-				$scope.pager.first();
-			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách sản phẩm theo trạng thái!',
-				});
-
-				console.log("Error", error);
-				$scope.pager.first();
-			});
-		}
-	};
-	
 
     //Phân trang
 	$scope.pager = {

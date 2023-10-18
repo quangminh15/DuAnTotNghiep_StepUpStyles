@@ -48,4 +48,6 @@ public class ProductImageServiceImpl implements ProductImageService {
 	public List<ProductImage> searchByName(String keyword) {
 		return ProductImageDAO.findByProductImageName(keyword);
 	}
+
+
 }

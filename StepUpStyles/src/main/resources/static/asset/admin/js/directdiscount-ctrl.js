@@ -73,7 +73,6 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 				ddI.formattedEndDate = formatDate(ddI.endDate);
 			});
 			$scope.pager.first();
-			$scope.RestorePager.first();
 		})
 
 		function formatDate(startDate) {
@@ -178,11 +177,8 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	$scope.create = function () {
 		//Không chọn sản phẩm
 		if (!$scope.form.product || !$scope.form.product.productID) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn sản phẩm!',
-			})
+			$scope.errorMessage = "Vui lòng chọn sản phẩm!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
@@ -196,50 +192,38 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 
 		//Lỗi bỏ trống 
 		if (!$scope.form.directDiscount) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập mức giảm giá!',
-			})
+			$scope.errorMessage = "Vui lòng nhập mức giảm giá!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		if (!$scope.form.startDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn thời gian bắt đầu!',
-			})
+			$scope.errorMessage = "Vui lòng nhập thời gian bắt đầu!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		if (!$scope.form.endDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn thời gian kết thúc!',
-			})
+			$scope.errorMessage = "Vui lòng nhập thời gian kết thúc!!";
+
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		//lỗi ngày 
 		var today = new Date();
 
+
 		if ($scope.form.startDate < today) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Thời gian bắt đầu không thể ở quá khứ!',
-			})
+			$scope.errorMessage = "Thời gian bắt đầu không thể ở quá khứ";
+			console.log($scope.form.startDate);
+			$('#errorModal').modal('show');
 			return;
 		}
 
 		if ($scope.form.endDate < $scope.form.startDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Thời gian kết thúc phải sau ngày bắt đầu!',
-			})
+			$scope.errorMessage = "Thời gian kết thúc phải sau ngày bắt đầu";
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -264,11 +248,8 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		});
 
 		if (isProductOnPromotion) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Thời gian khuyến mãi của sản phẩm bạn muốn thêm mới đang trùng với thời gian khuyến mãi hiện tại của sản phấm đó!',
-			})
+			$scope.errorMessage = "Thời gian khuyến mãi của sản phẩm bạn muốn thêm mới đang trùng với thời gian khuyến mãi hiện tại của sản phấm đó";
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -302,29 +283,21 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	$scope.update = function () {
 		//Không chọn sản phẩm
 		if (!$scope.form.directDiscount) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập mức giảm giá!',
-			})
+			$scope.errorMessage = "Vui lòng nhập mức giảm giá!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		if (!$scope.form.startDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn thời gian bắt đầu!',
-			})
+			$scope.errorMessage = "Vui lòng nhập thời gian bắt đầu!!";
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
 		if (!$scope.form.endDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn thời gian kết thúc!',
-			})
+			$scope.errorMessage = "Vui lòng nhập thời gian kết thúc!!";
+
+			$('#errorModal').modal('show'); // Show the modal
 			return;
 		}
 
@@ -332,29 +305,20 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		var today = new Date();
 		
 		if ($scope.form.status === 'Đang diễn ra') {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Giảm giá đang trong thời gian áp dụng',
-			})
+			$scope.errorMessage = "Giảm giá đang trong thời gian áp dụng";
+			$('#errorModal').modal('show');
 			return;
 		}
-
 		if ($scope.form.startDate < today) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Thời gian bắt đầu không thể ở quá khứ!',
-			})
+			$scope.errorMessage = "Thời gian bắt đầu phải lớn hơn ngày hiện tại";
+			console.log($scope.form.startDate);
+			$('#errorModal').modal('show');
 			return;
 		}
 
 		if ($scope.form.endDate < $scope.form.startDate) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Thời gian kết thúc phải sau ngày bắt đầu!',
-			})
+			$scope.errorMessage = "Thời gian kết thúc phải sau ngày bắt đầu";
+			$('#errorModal').modal('show');
 			return;
 		}
 
@@ -457,7 +421,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			// Đóng modal thùng rác
 			$('#recycleBinModal').modal('hide');
 
-			$scope.messageSuccess = "Khôi phục thành công";
+			$scope.messageSuccess = "khôi phục thành công";
 			$('#errorModal1').modal('show');
 			$scope.initialize();
 
@@ -475,179 +439,106 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		$('#confirmRestoreModal').modal('hide');
 	}
 
+	//Gọi đến modal xác nhận để xóa luôn
+	$scope.confirmDeleteModal11 = function(ddI) {
+		$scope.form = angular.copy(ddI);
+
+		// Đóng modal thùng rác
+		$('#recycleBinModal').modal('hide');
+
+		$('#confirmDeleteModal').modal('show');
+	}
+
+	//sau khi xác nhận thành công thì xóa luôn
+	$scope.confirmDelete = function() {
+		// Thực hiện xóa
+		$http.delete('/rest/discount/deleteDiscount/' + $scope.form.directDiscountId).then(resp => {
+			var index = $scope.directDiscountDelItem.findIndex(p => p.directDiscountId == $scope.form.directDiscountId);
+			$scope.directDiscountDelItem.splice(index, 1);
+			$scope.reset();
+			$scope.initialize();
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show');
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show');
+			console.log("Error", error);
+		});
+
+		// Đóng modal xác nhận xóa
+		$('#confirmDeleteModal').modal('hide');
+	}
+
+	//	Xóa 
+	$scope.delete = function (ddI) {
+		$http.delete('/rest/discount/delete/' + ddI.directDiscountID).then(resp => {
+			var index = $scope.directDiscountItem.findIndex(d => d.directDiscountID == ddI.directDiscountID);
+			$scope.directDiscountItem.splice(index, 1);
+			$scope.reset();
+			$scope.messageSuccess = "Xóa thành công";
+			$('#errorModal1').modal('show'); // Show the modal
+		}).catch(error => {
+			$scope.errorMessage = "Xóa thất bại";
+			$('#errorModal').modal('show'); // Show the modal
+			console.log("Error", error);
+		})
+	}
+
+	$scope.confirmDeleteModal = function() {
+		$('#confirmDeleteModal').modal('show');
+	}
+
+	$scope.confirmDeleteModal1 = function(productitem) {
+		$scope.form = angular.copy(productitem);
+		$('#confirmDeleteModal').modal('show');
+	}
+
+	// $scope.confirmDelete = function() {
+	// 	// Thực hiện xóa 
+	// 	$scope.form.startDate = new Date($scope.form.startDate);
+	// 	$scope.form.endDate = new Date($scope.form.endDate);
+	// 		var today = new Date();
+	// 		if (today>$scope.form.startDate&&today<$scope.form.endDate) {
+	// 			$scope.errorMessage = "Giảm giá đang trong thời gian diễn ra";
+	// 			$('#errorModal').modal('show'); 
+	// 	$('#confirmDeleteModal').modal('hide');
+	// 			return
+	// 		}
+	// 	$http.delete('/rest/directdiscount/delete/' + $scope.form.directDiscountID).then(resp => {
+	// 		var index = $scope.directDiscountItem.findIndex(d => d.directDiscountID == $scope.form.directDiscountID);
+	// 		$scope.directDiscountItem.splice(index, 1);
+	// 		$scope.reset();
+	// 		$scope.messageSuccess = "Xóa thành công";
+	// 		$('#errorModal1').modal('show'); // Show the modal
+	// 		$scope.initialize();
+			
+	// 	}).catch(error => {
+	// 		$scope.errorMessage = "Xóa thất bại";
+	// 		$('#errorModal').modal('show'); 
+	// 		console.log("Error", error);
+	// 	});
+
+	// 	// Đóng modal xác nhận xóa
+	// 	$('#confirmDeleteModal').modal('hide');
+	// }
+
 	//loc trang thai
 	$scope.filterStatus = ''; // Khởi tạo giá trị ban đầu
 
-	$scope.filterStatusDiscount = function (ddI) {
+	$scope.filterStatusDiscount = function (item) {
 		if ($scope.filterStatus === '') {
 			
 			return true; // Hiển thị tất cả khi bộ lọc chưa được chọn
-		} else if ($scope.filterStatus === 'dang' && ddI.status === 'Đang diễn ra') {
+		} else if ($scope.filterStatus === 'dang' && item.status === 'Đang diễn ra') {
 			return true;
-		} else if ($scope.filterStatus === 'chuadr' && ddI.status === 'Chưa diễn ra') {
+		} else if ($scope.filterStatus === 'chuadr' && item.status === 'Chưa diễn ra') {
 			return true;
-		} else if ($scope.filterStatus === 'ket' && ddI.status === 'Đã kết thúc') {
+		} else if ($scope.filterStatus === 'ket' && item.status === 'Đã kết thúc') {
 			return true;
 		}
 
 		return $scope.filterStatus === '';
 	};
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở Table)
-	$scope.confirmHideTable = function(item) {
-		$scope.form = angular.copy(item);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa giảm giá sản phẩm này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				item.deleted = true;
-				$http.put('/rest/discount/updateDiscount/' + item.directDiscountId, item).then(resp => {
-					var index = $scope.directDiscountNoDelItem.findIndex(p => p.directDiscountId == item.directDiscountId);
-					$scope.directDiscountNoDelItem[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
-	$scope.confirmHide = function() {
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa sản phẩm khuyến mãi này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				var item = angular.copy($scope.form);
-				item.deleted = true;
-				$http.put('/rest/discount/updateDiscount/' + item.directDiscountId, item).then(resp => {
-					var index = $scope.directDiscountNoDelItem.findIndex(p => p.directDiscountId == item.directDiscountId);
-					$scope.directDiscountNoDelItem[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì khôi phục từ thùng rác (Nút khôi phục ở TABLE) bắt đầu
-	$scope.restore = function(item) {
-		$scope.form = angular.copy(item);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn khôi phục sản phẩm khuyến mãi này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			console.log(result)
-			if (result.isConfirmed) {
-				item.deleted = false;
-				$http.put('/rest/discount/updateDiscount/' + item.directDiscountId, item).then(resp => {
-					var index = $scope.directDiscountItem.findIndex(p => p.directDiscountId == item.directDiscountId);
-					$scope.directDiscountItem[index] = item;
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'khôi phục thành công',
-					});
-					$scope.initialize();
-					$scope.reset();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Khôi phục thất bại!',
-					});
-					$scope.initialize();
-					$scope.reset();
-					console.log("Error", error);
-				})
-			}
-		})
-	}
-
-	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) bắt đầu
-	$scope.confirmDelete = function(ddI) {
-		$scope.form = angular.copy(ddI);
-		Swal.fire({
-			title: 'Thông báo',
-			text: "Bạn có chắc chắn muốn xóa sản phẩm khuyến mãi này không?",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			cancelButtonText: 'Không',
-			confirmButtonText: 'Đồng ý'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$http.delete('/rest/discount/deleteDiscount/' + $scope.form.directDiscountId).then(resp => {
-					var index = $scope.directDiscountDelItem.findIndex(p => p.directDiscountId == $scope.form.directDiscountId);
-					$scope.directDiscountDelItem.splice(index, 1);
-					$scope.reset();
-					Swal.fire({
-						icon: 'success',
-						title: 'Thành công',
-						text: 'Xóa thành công!',
-					});
-					$scope.initialize();
-				}).catch(error => {
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Xóa thất bại!',
-					});
-					console.log("Error", error);
-					$scope.initialize();
-					$scope.reset();
-				});
-			}
-		})
-	}
 
 	//	Phân trang
 	$scope.pager = {
@@ -708,67 +599,6 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			if (pageNumber >= 1 && pageNumber <= this.count) {
 				this.page = pageNumber - 1;
 				$scope.visiblePages = this.getPageNumbers();
-			}
-		},
-	};
-
-	//	Phân trang đã xóa
-	$scope.RestorePager = {
-		page: 0,
-		size: 5,
-		getRestorePageNumbers: function() {
-			var RestorePageCount = this.count;
-			var RestoreCurrentPage = this.page + 1;
-			var RestoreVisiblePages = [];
-
-			if (RestorePageCount <= 3) {
-				for (var i = 1; i <= RestorePageCount; i++) {
-					RestoreVisiblePages.push({ value: i });
-				}
-			} else {
-				if (RestoreCurrentPage <= 2) {
-					RestoreVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
-				} else if (RestoreCurrentPage >= RestorePageCount - 1) {
-					RestoreVisiblePages.push({ value: '...' }, { value: RestorePageCount - 2 }, { value: RestorePageCount - 1 }, { value: RestorePageCount });
-				} else {
-					RestoreVisiblePages.push({ value: '...' }, { value: RestoreCurrentPage - 1 }, { value: RestoreCurrentPage }, { value: RestoreCurrentPage + 1 }, { value: '...' });
-				}
-			}
-			return RestoreVisiblePages;
-		},
-		get directDiscountDelItem() {
-			var start = this.page * this.size;
-			return $scope.directDiscountDelItem.slice(start, start + this.size);
-		},
-		get count() {
-			return Math.ceil(1.0 * $scope.directDiscountDelItem.length / this.size);
-		},
-		first() {
-			this.page = 0;
-			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
-		},
-		prev() {
-			this.page--;
-			if (this.page < 0) {
-				this.last();
-			}
-			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
-		},
-		next() {
-			this.page++;
-			if (this.page >= this.count) {
-				this.first();
-			}
-			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
-		},
-		last() {
-			this.page = this.count - 1;
-			$scope.RestoreVisiblePages = this.getRestorePageNumbers();
-		},
-		RestoreGoto(RestorePageNumber) {
-			if (RestorePageNumber >= 1 && RestorePageNumber <= this.count) {
-				this.page = RestorePageNumber - 1;
-				$scope.RestoreVisiblePages = this.getRestorePageNumbers();
 			}
 		},
 	};

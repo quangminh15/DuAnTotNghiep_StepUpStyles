@@ -31,8 +31,5 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
     "FROM Review r " +
     "WHERE YEAR(r.reviewDate) = :year " +
     "GROUP BY MONTH(r.reviewDate)")
-    List<TotalProductRatingDTO> getReviewStatsByYear(@Param("year") Integer year);
-
-    @Query("SELECT r FROM Review r WHERE r.product.productID = :productId and r.user.usersId = :usersId and r.rating = :rating")
-    List<Review> search(@Param("productId") Integer productId, @Param("usersId") Integer usersId,@Param("rating") Integer rating);
+List<TotalProductRatingDTO> getReviewStatsByYear(@Param("year") Integer year);
 }

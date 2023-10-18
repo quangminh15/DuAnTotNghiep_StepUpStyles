@@ -109,10 +109,5 @@ public class ReviewServiceImpl implements ReviewService{
 
         return reviewDTOList;
     }
-
-    @Override
-    public List<Review> searchs(Integer productId, Integer usersId, Integer rating) {
-        return reviewDAO.search(productId, usersId, rating);
-    }
     }    
     

@@ -1,8 +1,9 @@
 package com.sts.config;
 
 import com.sts.dao.UserDAO;
-import com.sts.dto.respone.OneUserForSecurity;
-import com.sts.dto.respone.UserForSecurity;
+import com.sts.model.DTO.OneUserForSecurity;
+import com.sts.model.DTO.UserForSecurity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
