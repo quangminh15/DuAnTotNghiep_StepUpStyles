@@ -3,7 +3,7 @@ package com.sts.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.sts.model.Category;
 import com.sts.model.Product;
@@ -17,6 +17,8 @@ public interface ProductService {
 	List<Product> loadAllDeleted();
 
 	List<Product> loadAllNoDeleted();
+	
+	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
 	Product create(Product product);
 
@@ -28,7 +30,7 @@ public interface ProductService {
 
 	List<CategoryProductCountDTO> getCategoryProductCount();
 
-	List<Product> loadAllNoDeletedAndActivitiesTrue();
+//	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
 	Long countProductsByCategory(Category category);
 
@@ -36,4 +38,21 @@ public interface ProductService {
 	Long countProductsByCategoryWithConditions(Category category, Boolean activities, Boolean deleted);
 
 	List<Product> findByCategory(Category category);
+	
+	//phân trang
+	Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable);
+	
+	Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable);
+
+    Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable);
+
+    Page<Product> searchByNamePaged(String keyword, Pageable pageable);
+    
+    // sản phẩm nỏi bật
+    List<Product> findFeaturedProducts();
+
+    List<Product> findSimilarProductsByCategory(Integer categoryID);
+    
+    Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
+
 }

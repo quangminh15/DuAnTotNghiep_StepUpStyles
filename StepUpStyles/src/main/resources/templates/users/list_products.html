@@ -105,17 +105,17 @@
 										Danh mục <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
-										<li
-											th:each="category : ${categories}"
+										<li th:each="category : ${categories}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											
-												<a th:value="${category.categoryID}" href="#"><span th:text="${category.categoryName}"></span>
-										 </a><span class="badge badge-primary badge-pill"
-											>1</span>
+
+											<a th:value="${category.categoryID}"
+											th:href="@{|/list_products?cid=${category.categoryID}|}"><span
+												th:text="${category.categoryName}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
-								
+
 								<!-- màu sắc  -->
 								<div class="single-gd mb-5">
 									<h4>
@@ -124,8 +124,9 @@
 									<ul class="list-group single">
 										<li th:each="color : ${colors}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											 <a th:value="${color.colorID}" href="#"><span th:text="${color.colorName}"></span>
-										 </a><span class="badge badge-primary badge-pill">1</span>
+											<a th:value="${color.colorID}" href="#"><span
+												th:text="${color.colorName}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
@@ -138,8 +139,9 @@
 									<ul class="list-group single">
 										<li th:each="size : ${sizes}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											 <a th:value="${size.sizeID}" href="#"><span th:text="${size.sizeNumber}"></span>
-										 </a><span class="badge badge-primary badge-pill">1</span>
+											<a th:value="${size.sizeID}" href="#"><span
+												th:text="${size.sizeNumber}"></span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
@@ -203,35 +205,29 @@
 										Sản phẩm <span>nổi bật</span>
 									</h4>
 									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img
-												src="/asset/user/images/shop-88.jpg" class="img-fluid"
-												alt=""></a>
+										<!-- Lặp qua danh sách sản phẩm nổi bật và hiển thị tối đa 3 sản phẩm -->
+										<div class="row mb-3" th:each="product : ${featuredProducts}">
+											<div class="col-4 img-deals">
+												<a
+													th:href="@{/single_product/{productId}(productId=${product.productID})}">
+													<img th:src="@{${product.productImages[0].imagePath}}"
+													class="img-fluid" alt="">
+												</a>
+											</div>
+											<div class="col-8 img-deal1">
+												<h5 class="post-title">
+													<a
+														th:href="@{/single_product/{productId}(productId=${product.productID})}"
+														th:text="${product.productName}"></a>
+												</h5>
+												<a
+													th:href="@{/single_product/{productId}(productId=${product.productID})}"
+													class="price-right" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></a>
+											</div>
 										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">Blue Sweater</a>
-											</h5>
-
-											<a href="single_product.html" class="price-right">$499.00</a>
-										</div>
-
 									</div>
-									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img
-												src="assets/images/shop-77.jpg" class="img-fluid" alt=""></a>
-										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">White T-Shirt</a>
-											</h5>
-											<a href="single_product.html" class="price-right">$575.00</a>
-										</div>
-
-									</div>
-
 								</div>
+
 							</div>
 						</aside>
 						<!--//ecommerce-left-hny-->
@@ -298,6 +294,24 @@
 
 
 						</div>
+						<!--/pagination-->
+						<div class="pagination" style="margin: 0px 10px 20px;">
+							<ul>
+								<li class="prev"><a th:href="@{/list_products?page=0}"><span
+										class="fa fa-angle-double-left"></span></a></li>
+								<li th:each="i: ${#numbers.sequence(0, numberOfPages - 1)}">
+									<a
+									th:style="${'background-color:' + (i==currIndex?'orage':'orage')}"
+									th:href="@{/list_products?page=__${i}__}" th:text="${i+1}"
+									th:classappend="${i==currIndex} ? 'active'"></a>
+								</li>
+								<li class="next"><a
+									th:href="@{/list_products?page=__${numberOfPages-1}__}"><span
+										class="fa fa-angle-double-right"></span></a></li>
+							</ul>
+						</div>
+
+						<!--//pagination-->
 						<!-- //row-->
 						<!--/row2-->
 						<div class="ecom-slider-hny">
@@ -313,12 +327,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">30% Off</h6>
-														<h3 class="title-cover-9">Men's Suit</h3>
+														<h6 class="tag-cover-9">NAM GIỚI</h6>
+														<h3 class="title-cover-9">LỊCH LÃM</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>
@@ -328,12 +342,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Men's Footerwear</h3>
+														<h6 class="tag-cover-9">TRÃI NGHIỆM</h6>
+														<h3 class="title-cover-9">THOẢI MÁI & NĂNG ĐỘNG</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>
@@ -343,12 +357,12 @@
 											<div class="wrapper">
 												<div class="cover-top-center-9">
 													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Women's Footwear</h3>
+														<h6 class="tag-cover-9">XINH ĐẸP</h6>
+														<h3 class="title-cover-9">DÀNH CHO PHÁI NỮ</h3>
 
 														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
+															<a href="/list_products" class="read-btn btn">Xem
+																ngay</a>
 														</div>
 													</div>
 												</div>
@@ -376,22 +390,6 @@
 					</div>
 				</div>
 				<!--//row1-->
-
-				<!--/pagination-->
-				<div class="pagination">
-					<ul>
-						<li class="prev"><a href="#page-number"><span
-								class="fa fa-angle-double-left"></span></a></li>
-						<li><a href="#page-number" class="active">1</a></li>
-						<li><a href="#page-number">2</a></li>
-						<li><a href="#page-number">3</a></li>
-
-						<li class="next"><a href="#page-number"><span
-								class="fa fa-angle-double-right"></span></a></li>
-					</ul>
-				</div>
-				<!--//pagination-->
-
 			</div>
 		</div>
 		<!--//mag-content-->

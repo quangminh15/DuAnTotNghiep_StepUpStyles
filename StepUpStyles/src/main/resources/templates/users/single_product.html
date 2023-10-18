@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
 
-	<title>STS || CHI TIẾT</title>
+<title>STS || CHI TIẾT</title>
 
 </head>
 
 <body ng-controller="favorite-ctrl">
 
-	<div class="right-sidebar-panel-content animated fadeInRight" tabindex="5003"
-		style="overflow: hidden; outline: none;"></div>
+	<div class="right-sidebar-panel-content animated fadeInRight"
+		tabindex="5003" style="overflow: hidden; outline: none;"></div>
 	<section th:object="${productitem}" class="w3l-ecommerce-main-inn">
 		<!--/ecommerce-single-->
 		<div class="ecomrhny-content-inf py-5">
@@ -21,13 +22,18 @@
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
 
-							<!--               <ul class="slides"> -->
-							<!-- 				  <li th:each="color in ${productitem.colors}" th:attr="data-thumb=${color.colorImage}"> -->
-							<!-- 				    <div class="thumb-image"> -->
-							<!-- 				      <img th:src="|${color.colorImage}|" data-imagezoom="true" class="img-fluid" alt=" "> -->
-							<!-- 				    </div> -->
-							<!-- 				  </li> -->
-							<!-- 				</ul> -->
+							<ul class="slides">
+								<th:block th:each="image, iterStat : ${productImages}">
+									<li th:attr="data-thumb=${image.imagePath}"
+										th:if="${iterStat.count} &lt;= 4">
+										<div class="thumb-image">
+											<img th:src="@{${image.imagePath}}" data-imagezoom="true"
+												class="img-fluid" alt=" ">
+										</div>
+									</li>
+								</th:block>
+							</ul>
+
 
 							<div class="clearfix"></div>
 						</div>
@@ -35,17 +41,14 @@
 
 							<div class="transmitv single-item">
 								<form action="#" method="post">
-									<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
-										value="1"> <input type="hidden" name="transmitv_item" value="Yellow T-Shirt">
-									<input type="hidden" name="amount" value="599.99">
 									<button type="submit"
 										th:attr="ng-click=@{|addToCart(${productitem.productID},size,color,qty)|}"
 										class="transmitv-cart ptransmitv-cart add-to-cart read-2">
-										Add to Cart</button>
+										Thêm vào giỏ</button>
 								</form>
 							</div>
 							<div class="buyhny-now">
-								<a href="#buy" class="action btn">Buy Now </a>
+								<a href="#buy" class="action btn">Mua ngay </a>
 							</div>
 
 						</div>
@@ -55,83 +58,56 @@
 						<div class="caption">
 
 							<ul class="rating-single">
-								<li>4.5/5<span class="fa fa-star yellow-star" aria-hidden="true"></span>
+								<li>4.5/5<span class="fa fa-star yellow-star"
+									aria-hidden="true"></span>
 								</li>
-								<!-- <li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
-								</li>
-								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
-								</li>
-								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
-								</li>
-								<li><span class="fa fa-star yellow-star" aria-hidden="true"></span>
-								</li> -->
 							</ul>
 							<a href="#">274 đánh giá</a>
 
 							<h6>
-								<span class="item_price" th:text="${productitem.price}"></span>
+								<span class="item_price"
+									th:text="${#numbers.formatDecimal(productitem.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
 
 							</h6>
 						</div>
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size" class="form-select select-custom">
+								<select ng-model="size" class="form-control">
 									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option th:each="s: ${sizs}" th:value="${s.sizeID}" th:text="${s.sizeNumber}">
-									</option>
+									<option th:each="s: ${sizs}" th:value="${s.sizeID}"
+										th:text="${s.sizeNumber}"></option>
 								</select>
 							</div>
 						</div>
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select ng-model="color" class="form-select select-custom">
-									<option value="" disabled selected>Vui lòng chọn màu sắc</option>
-									<option th:each="s: ${cols}" th:value="${s.colorID}" th:text="${s.colorName}">
-									</option>
+								<select ng-model="color" class="form-control">
+									<option value="" disabled selected>Vui lòng chọn màu
+										sắc</option>
+									<option th:each="s: ${cols}" th:value="${s.colorID}"
+										th:text="${s.colorName}"></option>
 								</select>
 							</div>
 						</div>
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-model="qty" type="number" class="form-control select-custom">
+								<input ng-value="1" ng-model="qty" type="number"
+									class="form-control">
 							</div>
 						</div>
 						<div class="desc_single mb-4">
-							<h5>Description:</h5>
+							<h5>Mô tả:</h5>
 							<p th:text="${productitem.description}"></p>
 						</div>
-						<div class="description-apt d-grid mb-4">
-							<div class="occasional">
-								<h5 class="sp_title mb-3">Highlights:</h5>
-								<ul class="single_specific">
-									<li>Neck : Round Neck</li>
-									<li>Fit : Regular</li>
 
-									<li>Sleeve : Half Sleeve</li>
-									<li>Material : Pure Cutton</li>
-
-								</ul>
-
-							</div>
-
-							<div class="color-quality">
-								<h5 class="sp_title">Services:</h5>
-								<ul class="single_serv">
-									<li><a href="#">30 Day Return Policy</a></li>
-									<li class="gap"><a href="#">Cash on Delivery available</a>
-									</li>
-								</ul>
-							</div>
-						</div>
 						<div class="description mb-4">
-							<h5>Check delivery, payment options and charges at your
-								location</h5>
+							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5>
 							<form action="#" class="d-flex" method="post">
-								<input type="text" placeholder="Enter pincode" required>
-								<button class="submit btn" type="submit">Check</button>
+								<input type="text" placeholder="Mã giảm giá" required>
+								<button class="submit btn" type="submit">OK</button>
 							</form>
 						</div>
 
@@ -184,9 +160,9 @@
 
 				</div>
 				<h3 class="hny-title mb-0 text-center">
-					Featured <span>Products</span>
+					SẢN PHẨM <span>TƯƠNG TỰ</span>
 				</h3>
-				<p class="text-center">New Collections Shop With Us</p>
+				<p class="text-center">Có thể sẽ phù hợp với bạn</p>
 				<div style="margin: 8px auto; display: block; text-align: center;">
 
 					<!---728x90--->
@@ -194,135 +170,40 @@
 				</div>
 				<!-- /row-->
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div class="col-lg-3 col-6 product-incfhny mt-4">
+					<div th:each="p: ${similarProducts}"
+						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv">
 							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
-										src="assets/images/shop-1.jpg"> <img class="pic-2 img-fluid"
-										src="assets/images/shop-11.jpg">
+								<a th:href="@{|/single_product/${p.productID}|}"> <img
+									th:if="${not #lists.isEmpty(p.productImages)}"
+									class="pic-1 img-fluid"
+									th:src="@{|${p.productImages[0].imagePath}|}"> <img
+									th:if="${not #lists.isEmpty(p.productImages)}"
+									class="pic-2 img-fluid"
+									th:src="@{|${p.productImages[0].imagePath}|}">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-
-									<li><a href="list_products.html" data-tip="Add to Cart"><span
-												class="fa fa-shopping-bag"></span></a></li>
+									<li><a th:attr="ng-click=@{|check(${p.productID})|}">
+											<span class="fa fa-heart" aria-hidden="true"></span>
+									</a></li>
 								</ul>
 								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
-											value="1"> <input type="hidden" name="transmitv_item"
-											value="Women Maroon Top">
-										<input type="hidden" name="amount" value="899.99">
-										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-											Add to Cart</button>
-									</form>
+									<a th:href="@{|/single_product/${p.productID}|}" type="submit"
+										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+										chi tiết </a>
 								</div>
 							</div>
 							<div class="product-content">
-								<h3 class="title">
-									<a href="ecommerce-single.html">Women Maroon Top </a>
+								<h3 class="title" th:text="${p.productName}">
+									<a th:href="@{|/single_product/${p.productID}|}"></a>
 								</h3>
-								<span class="price"><del>$975.00</del>$899.99</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2">
-							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
-										src="assets/images/shop-2.jpg"> <img class="pic-2 img-fluid"
-										src="assets/images/shop-22.jpg">
-								</a>
-								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-
-									<li><a href="list_products.html" data-tip="Add to Cart"><span
-												class="fa fa-shopping-bag"></span></a></li>
-								</ul>
-								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
-											value="1"> <input type="hidden" name="transmitv_item"
-											value="Men's Pink Shirt">
-										<input type="hidden" name="amount" value="599.99">
-										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-											Add to Cart</button>
-									</form>
-								</div>
-							</div>
-							<div class="product-content">
-								<h3 class="title">
-									<a href="ecommerce-single.html">Men's Pink Shirt </a>
-								</h3>
-								<span class="price"><del>$775.00</del>$599.99</span>
-							</div>
-						</div>
-
-					</div>
-					<div class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2">
-							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
-										src="assets/images/shop-3.jpg"> <img class="pic-2 img-fluid"
-										src="assets/images/shop-33.jpg">
-								</a>
-								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-
-									<li><a href="list_products.html" data-tip="Add to Cart"><span
-												class="fa fa-shopping-bag"></span></a></li>
-								</ul>
-								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
-											value="1"> <input type="hidden" name="transmitv_item" value="Dark Blue Top">
-										<input type="hidden" name="amount" value="799.99">
-										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-											Add to Cart</button>
-									</form>
-								</div>
-							</div>
-							<div class="product-content">
-								<h3 class="title">
-									<a href="ecommerce-single.html">Dark Blue Top </a>
-								</h3>
-								<span class="price"><del>$875.00</del>$799.99</span>
-							</div>
-						</div>
-
-					</div>
-					<div class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2">
-							<div class="product-image2">
-								<a href="ecommerce-single.html"> <img class="pic-1 img-fluid"
-										src="assets/images/shop-4.jpg"> <img class="pic-2 img-fluid"
-										src="assets/images/shop-44.jpg">
-								</a>
-								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span class="fa fa-eye"></span></a></li>
-
-									<li><a href="list_products.html" data-tip="Add to Cart"><span
-												class="fa fa-shopping-bag"></span></a></li>
-								</ul>
-								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<input type="hidden" name="cmd" value="_cart"> <input type="hidden" name="add"
-											value="1"> <input type="hidden" name="transmitv_item" value="Women Tunic">
-										<input type="hidden" name="amount" value="399.99">
-										<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-											Add to Cart</button>
-									</form>
-								</div>
-							</div>
-							<div class="product-content">
-								<h3 class="title">
-									<a href="ecommerce-single.html">Women Tunic </a>
-								</h3>
-								<span class="price"><del>$475.00</del>$399.99</span>
+								<span class="price"
+									th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<!-- //row-->
 			</div>
 		</div>
@@ -337,27 +218,38 @@
 			<div class="content-singlev-ecomm py-5 bg-white">
 				<div class="row wrapper-rating">
 					<div class="col-sm-3 text-center">
-					<h2>4.5/5<span class="text-warning">★</span></h2>
+						<h2>
+							4.5/5<span class="text-warning">★</span>
+						</h2>
+					</div>
+					<div class="col-sm-8">
+						<p class="d-inline-flex gap-1">
+						<div class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">Tất cả</div>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">5 sao (12)</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">4 sao (1)</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">3 sao (2)</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">2 sao (1)</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">1 sao (1)</a>
+						</p>
+					</div>
 				</div>
-				<div class="col-sm-8">
-					<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">Tất cả</div>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">5 sao (12)</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">4 sao (1)</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">3 sao (2)</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">2 sao (1)</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;">1 sao (1)</a>
-					</p>
-				</div>
-				</div>				
 			</div>
 			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
 				<div class="row">
 					<div class="col-sm-2 text-center">
-							<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
+						<img src="link_to_user_image.jpg" alt="Hình"
+							class="img-fluid rounded-circle">
 					</div>
 					<div class="col-sm-10">
-						<p class="mb-0"><strong>{{rv.user.fullName}}</strong></p>
+						<p class="mb-0">
+							<strong>{{rv.user.fullName}}</strong>
+						</p>
 						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
 						<!-- <div class="rating mb-2">
 							<span class="fa fa-star"></span>
@@ -370,21 +262,21 @@
 						<span class="fa fa-thumbs-up"></span>
 					</div>
 				</div>
-				<hr>			
-			</div>		
+				<hr>
+			</div>
 			<div class="pagination text-center">
 				<ul>
-					<li class="prev"><a href="#page-number"><span class="fa fa-angle-double-left"></span></a>
-					</li>
+					<li class="prev"><a href="#page-number"><span
+							class="fa fa-angle-double-left"></span></a></li>
 					<li><a href="#page-number" class="active">1</a></li>
 					<li><a href="#page-number">2</a></li>
 					<li><a href="#page-number">3</a></li>
 
-					<li class="next"><a href="#page-number"><span class="fa fa-angle-double-right"></span></a>
-					</li>
+					<li class="next"><a href="#page-number"><span
+							class="fa fa-angle-double-right"></span></a></li>
 				</ul>
-			</div>		
 			</div>
+		</div>
 		</div>
 	</section>
 	<!--review-->
