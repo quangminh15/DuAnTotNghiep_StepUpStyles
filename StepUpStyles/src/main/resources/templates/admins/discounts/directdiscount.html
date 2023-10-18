@@ -1,133 +1,169 @@
-<div class="card card-border-color card-border-color-primary m-3">
-    <div class="modal fade modal-full-color modal-full-color-danger" id="errorModal" tabindex="-1"
-        aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
-                        <span class="mdi mdi-close"></span>
-                    </button>
-                </div>
-                <div class="modal-body" style="color: white;">
-                    <div class="text-center">
-                        <span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
-                            <h4 style="color: white;">{{ errorMessage }}</h4>
-                        </b>
-                        <div class="mt-8">
-                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
-                                style="background-color: white; color: red;">Đóng</button>
-                        </div>
+<div class="content-wrapper">
+    <div class="card mb-5"
+        style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+        <div class="card-body">
+            <h4 class="card-title">Form giảm giá</h4>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Sản phẩm</label>
+                    <div>
+                        <select class="select2 form-control" ng-model="form.product.productID">
+                            <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
+                            <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
+                        </select>
                     </div>
                 </div>
-                <div class="modal-footer"></div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Giảm giá (%)</label>
+                    <input class="form-control" id="inputPassword3" type="number" placeholder="% giảm giá" min="0"
+                        max="100" required="" ng-model="form.directDiscount" ng-change="validateDiscount()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Thời gian bắt đầu</label>
+                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.startDate">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Thời gian kết thúc</label>
+                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.endDate">
+                </div>
+            </div>
+            <div class="template-demo text-right mb-3">
+                <button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+                    title="Thêm giảm giá mới">
+                    <span class="ti-agenda"></span>
+                </button>
+                <button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+                    title="Cập nhật giảm giá">
+                    <span class="ti-support"></span>
+                </button>
+                <button type="button" ng-click="confirmHide()" type="submit"
+                    class="btn btn-outline-danger btn-fw" data-toggle="tooltip" title="Xóa giảm giá">
+                    <span class="ti-trash"></span>
+                </button>
+                <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+                    title="Làm mới">
+                    <span class="ti-control-shuffle"></span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal for displaying error messages -->
-    <div class="modal fade modal-full-color modal-full-color-success" id="errorModal1" tabindex="-1"
-        aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
-                        <span class="mdi mdi-close"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <span class="modal-main-icon mdi mdi-check mb-3"></span><b>
-                            <h4 style="color: white;">{{ messageSuccess }}</h4>
-                        </b>
-                        <div class="mt-8">
-                            <button class="btn btn-secondary btn-space modal-close" type="button" data-dismiss="modal"
-                                style="background-color: white; color: green;">Đóng</button>
+    <div class="card"
+        style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+
+        <!-- 	thùng rác bắt đầu -->
+        <div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
+            style="overflow: hidden;">
+            <div class="modal-dialog modal-dialog-centered modal-xl"
+                style="width: 1800px; height: 600px; margin: 0 auto;">
+                <div class="modal-content" style="background-color: #eee;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+                        <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                            <span class="mdi mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Mức giảm %</th>
+                                    <th>Thời gian bắt đầu</th>
+                                    <th>Thời gian kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th class="actions"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ddI in directDiscountDelItem">
+
+                                    <td>{{ddI.product.productName}}</td>
+                                    <td>{{ddI.directDiscount|number}}%</td>
+                                    <td>{{ddI.formattedStartDate }}</td>
+                                    <td>{{ddI.formattedEndDate}}</td>
+                                    <td
+                                        ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
+                                        {{ddI.status}}</td>
+                                    <td class="actions">
+                                        <button class="btn btn-space btn btn-primary "
+                                            ng-click="restore(ddI)">
+                                            <i class="ti-back-right"></i>
+                                        </button>
+                                        <button class="btn btn-space btn btn-danger "
+                                            ng-click="confirmDelete(ddI)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <button ng-click="RestorePager.first()" class="page-link">
+                                            <span class="ti-angle-double-left"></span>
+                                        </button>
+                                    </li>
+
+                                    <li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+                                        ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+                                        <a class="page-link" href=""
+                                            ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+                                            RestorePage.value }}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <button ng-click="RestorePager.last()" class="page-link">
+                                            <span class="ti-angle-double-right"></span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer"></div>
-            </div>
-        </div>
-    </div>
+                    <div class="modal-footer" style="background-color: #eee;">
+                        <button class="btn btn-secondary modal-close" type="button" data-dismiss="modal">Hủy</button>
 
-    <!-- modal xác nhận xóa vào thùng rác-->
-    <div class="modal fade" id="confirmHideModal" tabindex="-1" role="dialog" aria-labelledby="confirmHideModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
-                        xóa</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">Bạn có chắc chắn muốn xóa khuyến mãi sản
-                    phẩm "{{ form.product.productName }}" này không?</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-danger" ng-click="confirmHide()">Xóa</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- thùng rác kết thúc -->
+        <div class="card-body">
+            <div class="card card-table m-3">
+                <h4 class="mb-0">Danh sách sản phẩm giảm giá</h4>
+                <div class="d-flex align-items-center">
+                    <div style="width: 75%;">
+                        <form method="post" style="margin-left: 20px;">
+                            <div class="form-group">
+                                <label for="searchKeyword"></label>
+                                <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword"
+                                    placeholder="Tìm kiếm sản phẩm" ng-change="searchByProduct()">
+                            </div>
+                        </form>
+                    </div>
 
-    <!-- modal xác nhận khôi phục từ thùng rác-->
-    <div class="modal fade" id="confirmRestoreModal" tabindex="-1" role="dialog"
-        aria-labelledby="confirmRestoreModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmRestoreModalLabel">Xác nhận
-                        khôi phục</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <!-- Thẻ select box -->
+                    <select class="form-control mr-2" ng-model="filterStatus" id="filterStatus"
+                        style="width: 15%; margin-left: 10px;">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="dang">Đang diễn ra</option>
+                        <option value="chuadr">Chưa diễn ra</option>
+                        <option value="ket">Kết thúc</option>
+                    </select>
+
+                    <!-- Nút thùng rác -->
+                    <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+                        title="Thùng rác">
+                        <span class="ti-trash"></span>
                     </button>
                 </div>
-                <div class="modal-body">Bạn có chắc chắn muốn khôi phục khuyến mãi sản
-                    phẩm "{{ form.product.productName }}" này không?</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-danger" ng-click="restore()">Khôi
-                        phục</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- modal xác nhận xóa luôn-->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmHideModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmHideModalLabel">Xác nhận
-                        xóa</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">Bạn có chắc chắn muốn xóa khuyến mãi sản phẩm "{{ form.product.productName }}"
-                    này không?</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 	thùng rác bắt đầu -->
-    <div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="background-color: #eee;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-                    <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
-                        <span class="mdi mdi-close"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
+                <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
@@ -140,8 +176,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="ddI in directDiscountDelItem">
-
+                            <tr ng-repeat="ddI in directDiscountNoDelItem" ng-show="filterStatusDiscount(ddI)">
                                 <td>{{ddI.product.productName}}</td>
                                 <td>{{ddI.directDiscount|number}}%</td>
                                 <td>{{ddI.formattedStartDate }}</td>
@@ -150,182 +185,43 @@
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>
                                 <td class="actions">
-                                    <button class="btn btn-space btn btn-primary " ng-click="confirmRestoreModal1(ddI)">
-                                        <i class="mdi mdi-refresh-alt"></i>
+                                    <button ng-click="edit(ddI)" class="btn btn-inverse-primary btn-rounded btn-icon"
+                                        data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+                                        <i class="ti-pencil"></i>
                                     </button>
-                                    <button class="btn btn-space btn btn-danger " ng-click="confirmDeleteModal11(ddI)">
-                                        <i class="bi bi-trash3-fill"></i>
+                                    <button ng-click="confirmHideTable(ddI)"
+                                        class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+                                        data-placement="top" title="Xóa">
+                                        <i class="ti-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
-                    <div class="card-header d-flex justify-content-end">
+                    <div class="d-flex justify-content-end">
                         <div>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <button style="font-size: 25px" ng-click="RestorePager.first()" class="page-link">
-                                        <span class="mdi mdi-skip-previous"></span>
+                                    <button ng-click="pager.first()" class="page-link">
+                                        <span class="ti-angle-double-left"></span>
                                     </button>
                                 </li>
 
-                                <li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
-                                    ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-                                        class="page-link" href=""
-                                        ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
-                                        RestorePage.value }}</a></li>
-
+                                <li class="page-item" ng-repeat="page in visiblePages"
+                                    ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link"
+                                        href="" ng-click="pager.goto(page.value)">{{
+                                        page.value }}</a></li>
 
                                 <li class="page-item">
-                                    <button style="font-size: 25px" ng-click="RestorePager.last()" class="page-link">
-                                        <span class="mdi mdi-skip-next"></span>
+                                    <button ng-click="pager.last()" class="page-link">
+                                        <span class="ti-angle-double-right"></span>
                                     </button>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="background-color: #eee;">
-                    <button class="btn btn-secondary modal-close" type="button" data-dismiss="modal">Hủy</button>
-
-                </div>
             </div>
         </div>
     </div>
-    <!-- thùng rác kết thúc -->
-
-    <!--Form giảm giá trực tiếp-->
-    <div class="card-header card-header-divider">Giảm giá trực tiếp</div>
-    <!-- <div class="card-header" style="margin: 0;">Giảm giá trực tiếp</div> -->
-    <div class="card-body">
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label>Sản phẩm</label>
-                <div>
-                    <select class="select2 form-control" ng-model="form.product.productID">
-                        <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-                        <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword3">Giảm giá (%)</label>
-                <input class="form-control" id="inputPassword3" type="number" placeholder="% giảm giá" min="0" max="100"
-                    required="" ng-model="form.directDiscount" ng-change="validateDiscount()">
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label for="inputPassword3">Thời gian bắt đầu</label>
-                <input class="form-control" id="" type="datetime-local" required="" ng-model="form.startDate">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">Thời gian kết thúc</label>
-                <input class="form-control" id="" type="datetime-local" required="" ng-model="form.endDate">
-            </div>
-        </div>
-        <div class="row pt-0 pt-sm-5">
-            <div class="col-sm-12 pl-0">
-                <p class="text-right">
-                    <button class="btn btn-space btn btn-success" ng-click="create()" type="submit"><i
-                            class="bi bi-file-plus-fill"></i> Thêm</button>
-                    <button class="btn btn-space btn btn-primary" ng-click="update()"><i
-                            class="bi bi-pencil-square"></i> Sửa</button>
-                    <button class="btn btn-space btn btn-danger" ng-click="confirmDeleteModal()" type="submit"><i
-                            class="bi bi-trash3-fill"></i> Xóa</button>
-                    <button class="btn btn-space btn btn-dark" ng-click="reset()"><i class="bi bi-arrow-clockwise"></i>
-                        Làm mới</button>
-                </p>
-            </div>
-        </div>
-
-    </div>
-
 </div>
-<div class="card card-table m-3">
-    <div class="card-header d-flex justify-content-between align-items-center">Danh sách giảm giá trực tiếp</div>
-    <div class="d-flex align-items-center">
-        <div style="width: 75%;">
-            <form method="post" style="margin-left: 20px;">
-                <div class="form-group">
-                    <label for="searchKeyword"></label>
-                    <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword"
-                        placeholder="Tìm kiếm sản phẩm" ng-change="searchByProduct()">
-                </div>
-            </form>
-        </div>
-
-        <!-- Thẻ select box -->
-        <select class="form-control mr-2" ng-model="filterStatus" id="filterStatus"
-            style="width: 15%; margin-left: 10px;">
-            <option value="">Tất cả trạng thái</option>
-            <option value="dang">Đang diễn ra</option>
-            <option value="chuadr">Chưa diễn ra</option>
-            <option value="ket">Kết thúc</option>
-        </select>
-
-        <!-- Nút thùng rác -->
-        <button class="btn btn-space btn-danger md-trigger" ng-click="openRecycleBinForm()"
-            style="width: 50px; height: 43px">
-            <span class="mdi mdi-delete"></span>
-        </button>
-    </div>
-    <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Mức giảm %</th>
-                    <th>Thời gian bắt đầu</th>
-                    <th>Thời gian kết thúc</th>
-                    <th>Trạng thái</th>
-                    <th class="actions"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="ddI in directDiscountNoDelItem" ng-show="filterStatusDiscount(ddI)">
-                    <td>{{ddI.product.productName}}</td>
-                    <td>{{ddI.directDiscount|number}}%</td>
-                    <td>{{ddI.formattedStartDate }}</td>
-                    <td>{{ddI.formattedEndDate}}</td>
-                    <td
-                        ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
-                        {{ddI.status}}</td>
-                    <td class="actions">
-                        <button class="btn btn-space btn btn-primary" ng-click="edit(ddI)"><i
-                                class="bi bi-pencil-square"></i> </button>
-                        <button class="btn btn-space btn btn-danger" ng-click="confirmHideModal1(ddI)"><i
-                                class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-        <div class="card-header d-flex justify-content-end">
-            <div>
-                <ul class="pagination">
-                    <li class="page-item">
-                        <button style="font-size: 25px" ng-click="pager.first()" class="page-link">
-                            <span class="mdi mdi-skip-previous"></span>
-                        </button>
-                    </li>
-
-                    <li class="page-item" ng-repeat="page in visiblePages"
-                        ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
-                            ng-click="pager.goto(page.value)">{{
-                            page.value }}</a></li>
-
-                    <li class="page-item">
-                        <button style="font-size: 25px" ng-click="pager.last()" class="page-link">
-                            <span class="mdi mdi-skip-next"></span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-
-    <div style="color: #eee;">123</div>

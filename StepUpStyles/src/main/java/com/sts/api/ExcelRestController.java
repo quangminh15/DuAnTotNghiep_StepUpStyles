@@ -64,7 +64,7 @@ public class ExcelRestController {
         // Lặp qua danh sách importDetail để lấy ID phiếu nhập
         Long idImport = null;
         String supp = "";
-        String fullname =  "";
+        String fullname = "";
         Double totalAmount = null;
         for (ImportReceiptDetail item : importDetail) {
             idImport = item.getImportReceipt().getImportReceiptId();
@@ -113,16 +113,19 @@ public class ExcelRestController {
         fullnameFont.setFontHeightInPoints((short) 12);
         fullnameFont.setBold(true);
         fullnameStyle.setFont(fullnameFont);
-        // fullnameStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
-        // fullnameStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
+        // fullnameStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo
+        // chiều ngang
+        // fullnameStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa
+        // theo chiều dọc
         fullnameCell.setCellStyle(fullnameStyle);
 
         // Đặt lại kích thước của ô fullname (đã được ghép)
         for (int i = 0; i <= 3; i++) {
-            sheet.setColumnWidth(i, 4 * 256); // Đặt kích thước của các cột A, B, C, D để hiển thị đúng với nội dung đã ghép
+            sheet.setColumnWidth(i, 4 * 256); // Đặt kích thước của các cột A, B, C, D để hiển thị đúng với nội dung đã
+                                              // ghép
         }
 
-        //tạo 1 hàng trống nhà cung cấp
+        // tạo 1 hàng trống nhà cung cấp
         Row suppRow = sheet.createRow(3);
 
         // Merge cột a, b, c, d
@@ -139,24 +142,6 @@ public class ExcelRestController {
         suppFont.setBold(true);
         suppStyle.setFont(suppFont);
         suppCell.setCellStyle(suppStyle);
-
-         //tạo 1 hàng trống tổng thành tiền
-        Row totalRow = sheet.createRow(11);
-
-        // Merge cột a, b, c, d
-        sheet.addMergedRegion(new CellRangeAddress(11, 11, 0, 3));
-
-         // Tạo một ô để đặt giá trị của total
-        Cell totalCell = totalRow.createCell(0);
-        totalCell.setCellValue("Tổng thành tiền: " + formatToVND(totalAmount));
-
-        // Đặt CellStyle cho ô nhà cung cấp
-        CellStyle totalStyle = workbook.createCellStyle();
-        Font totalFont = workbook.createFont();
-        totalFont.setFontHeightInPoints((short) 12);
-        totalFont.setBold(true);
-        totalStyle.setFont(totalFont);
-        totalCell.setCellStyle(totalStyle);        
 
         // Thiết lập viền cho ô tiêu đề
         headerCellStyle.setBorderTop(BorderStyle.THIN);
@@ -206,6 +191,24 @@ public class ExcelRestController {
                 row.getCell(i).setCellStyle(dataCellStyle);
             }
         }
+
+        // Tạo hàng "Tổng thành tiền" dưới table
+        int totalRowNum = rowNum + 1;
+        Row totalRow = sheet.createRow(totalRowNum); // Sử dụng giá trị rowNum hiện tại
+        // Merge cột a, b, c, d
+        sheet.addMergedRegion(new CellRangeAddress(totalRowNum, totalRowNum, 0, 3));
+
+        // Tạo một ô để đặt giá trị của total
+        Cell totalCell = totalRow.createCell(0);
+        totalCell.setCellValue("Tổng thành tiền: " + formatToVND(totalAmount));
+
+        // Đặt CellStyle cho ô tổng thành tiền
+        CellStyle totalStyle = workbook.createCellStyle();
+        Font totalFont = workbook.createFont();
+        totalFont.setFontHeightInPoints((short) 12);
+        totalFont.setBold(true);
+        totalStyle.setFont(totalFont);
+        totalCell.setCellStyle(totalStyle);
 
         // Auto-size columns
         for (int i = 0; i < headers.length; i++) {

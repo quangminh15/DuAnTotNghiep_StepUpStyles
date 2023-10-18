@@ -54,7 +54,9 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     })
       .then(function (response) {
         // Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
-        var blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        var blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
         var url = URL.createObjectURL(blob);
 
         // Tạo một thẻ <a> để tải xuống tệp Excel
@@ -69,7 +71,6 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
         console.error("Xuất ra Excel thất bại:", error);
       });
   };
-
 
   $scope.sortableColumns = [
     { name: "importReceiptId", label: "Mã phiếu nhập" },
@@ -217,8 +218,11 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.create = function () {
     //khong chon nha cung cap
     if (!$scope.form.supplier || !$scope.form.supplier.supplierID) {
-      $scope.errorMessage = "Vui lòng chọn nhà cung cấp!";
-      $("#errorModal").modal("show"); // Show the modal
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Vui lòng chọn nhà cung cấp!",
+      });
       return;
     }
     $http.get("/api/user").then((resp) => {
@@ -239,9 +243,12 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
               data.totalAmount = 0;
               $scope.items.push(data);
               $scope.reset();
-              $scope.messageSuccess = "Thêm thành công phiếu nhập";
+              $Swal.fire({
+                icon: "success",
+                title: "Thành công",
+                text: "Thêm thành công phiếu nhập!",
+              });
               $scope.initialize();
-              $("#errorModal1").modal("show"); // Show the modal
             })
             .catch((error) => {
               $scope.initialize();
@@ -253,80 +260,6 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     });
   };
 
-  //ham update phiếu nhập
-  $scope.update = function () {
-    //khong chon nha cung cap
-    if (!$scope.form.supplier || !$scope.form.supplier.supplierID) {
-      $scope.errorMessage = "Vui lòng chọn nhà cung cấp!";
-      $("#errorModal").modal("show"); // Show the modal
-      return;
-    }
-    //ham update
-
-    $http.get("/api/user").then((resp) => {
-      const email = resp.data.username; // Lấy email từ userDetails
-      // Truy vấn cơ sở dữ liệu để lấy userID từ email
-      $http
-        .get("/rest/ImportReceipt/usersByEmail/" + email)
-        .then((userResp) => {
-          var userID = userResp.data.userID;
-          $scope.form.user = { userID: userID }; // Gán userID cho phiếu nhập
-
-          let item = angular.copy($scope.form);
-          item.user.userID = userID;
-          $http
-            .put("/rest/ImportReceipt/updateImp/" + item.importReceiptID, item)
-            .then((resp) => {
-              var index = $scope.items.findIndex(
-                (p) => p.importReceiptID == item.importReceiptID
-              );
-              $scope.items[index] = item;
-              $scope.initialize();
-              $scope.messageSuccess = "Cập nhật thành công phiếu nhập";
-              $("#errorModal1").modal("show"); // Show the modal
-            })
-            .catch((error) => {
-              alert("Loi cap nhat");
-              console.log("Error", error);
-            });
-        });
-    });
-  };
-
-  //Gọi đến modal xác nhận
-  $scope.confirmDeleteModal = function () {
-    $("#confirmDeleteModal").modal("show");
-  };
-
-  $scope.confirmDeleteModal1 = function (item) {
-    $scope.form = angular.copy(item); // Set form data for confirmation modal
-    $("#confirmDeleteModal").modal("show"); // Show the confirmation modal
-  };
-
-  //sau khi xác nhận thành công thì xóa
-  $scope.confirmDelete = function () {
-    // Thực hiện xóa nhóm sản phẩm
-    $http
-      .delete("/rest/ImportReceipt/deleteImp/" + $scope.form.importReceiptID)
-      .then((resp) => {
-        var index = $scope.items.findIndex(
-          (p) => p.importReceiptID == $scope.form.importReceiptID
-        );
-        $scope.items.splice(index, 1);
-        $scope.reset();
-        $scope.messageSuccess = "Xóa thành công phiếu nhập";
-        $("#errorModal1").modal("show"); // Show the modal
-      })
-      .catch((error) => {
-        $scope.errorMessage = "Xóa thất bại";
-        $("#errorModal").modal("show"); // Show the modal
-        console.log("Error", error);
-      });
-
-    // Đóng modal xác nhận xóa
-    $("#confirmDeleteModal").modal("hide");
-  };
-
   // Thêm chi tiết phiếu nhập
   $scope.createDetail = function () {
     //khong chon phieu nhap
@@ -334,8 +267,11 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       !$scope.formDetal.importReceipt ||
       !$scope.formDetal.importReceipt.importReceiptId
     ) {
-      $scope.errorMessage = "Vui lòng chọn phiếu nhập!";
-      $("#errorModal").modal("show"); // Show the modal
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Vui lòng chọn phiếu nhập!",
+      });
       return;
     }
     //khong chon san pham
@@ -343,34 +279,52 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       !$scope.formDetal.productDetail ||
       !$scope.formDetal.productDetail.productDetailID
     ) {
-      $scope.errorMessage = "Vui lòng chọn sản phẩm!";
-      $("#errorModal").modal("show"); // Show the modal
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Vui lòng chọn sản phẩm!",
+      });
       return;
     }
     //bo trong so luong
     if (!$scope.formDetal.quantity) {
-      $scope.errorMessage = "Vui lòng nhập số lượng!!!";
-      $("#errorModal").modal("show"); // Show the modal
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Vui lòng nhập số lượng!",
+      });
       return;
     }
     if (
       !/^\d+$/.test($scope.formDetal.quantity) ||
       parseInt($scope.formDetal.quantity) <= 0
     ) {
-      $scope.errorMessage = "Số lượng phải là số dương!!!";
-      $("#errorModal").modal("show"); // Show the modal
-      return; // Ngừng thực hiện hàm nếu có lỗi
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Số lượng phải là số dương!!!",
+      });
+      return;
     }
     //bo trong gia
     if (!$scope.formDetal.price) {
-      $scope.errorMessage = "Vui lòng nhập giá!!!";
-      $("#errorModal").modal("show"); // Show the modal
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Vui lòng nhập giá!!",
+      });
       return;
     }
-    if (!/^\d+$/.test($scope.formDetal.price) || parseInt($scope.form.price) <= 0) {
-      $scope.errorMessage = "Giá phải là số dương!!!";
-      $("#errorModal").modal("show"); // Show the modal
-      return; // Ngừng thực hiện hàm nếu có lỗi
+    if (
+      !/^\d+$/.test($scope.formDetal.price) ||
+      parseInt($scope.form.price) <= 0
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Thất bại",
+        text: "Giá phải là số dương!!!",
+      });
+      return;
     }
 
     let newItem = angular.copy($scope.formDetal);
@@ -437,6 +391,74 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     }
   };
   console.log($scope.updateSizesAndColors());
+
+  $(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+  $('.exportPdf').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportPdf();
+			}
+
+		})
+
+	});
+
+  $('.exportExcel').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportExcel();
+			}
+
+		})
+
+	});
 
   //	Phân trang
   $scope.pager = {
