@@ -124,7 +124,8 @@
 									<ul class="list-group single">
 										<li th:each="brand : ${brands}"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<a th:value="${brand.brandID}" th:href="@{|/list_products?bid=${brand.brandID}|}"><span
+											<a th:value="${brand.brandID}"
+											th:href="@{|/list_products?bid=${brand.brandID}|}"><span
 												th:text="${brand.brandName}"></span> </a><span
 											class="badge badge-primary badge-pill">1</span>
 										</li>
@@ -141,104 +142,96 @@
 											class="list-group-item d-flex justify-content-between align-items-center">
 											<button type="button"
 												class="transmitv-cart ptransmitv-cart add-to-cart read-2"
-												data-toggle="modal" data-target="#filterModal">Xem</button>
+												data-bs-toggle="offcanvas" data-bs-target="#demo">Xem</button>
 										</li>
 									</ul>
 								</div>
 
 								<!-- modal bộ lọc bắt đầu -->
-								<div class="modal fade" id="filterModal" tabindex="-1"
-									role="dialog" aria-labelledby="filterModalLabel"
-									aria-hidden="true">
-									<div class="modal-dialog modal-xl" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="filterModalLabel">Bộ lọc
-													nâng cao</h5>
-												<button type="button" class="close" data-dismiss="modal"
-													aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
+								<div class="offcanvas offcanvas-end" id="demo">
+									<div class="offcanvas-header">
+										<h1 class="offcanvas-title">Bộ lọc</h1>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="offcanvas"></button>
+									</div>
+									<div class="offcanvas-body">
+										<form class="g-3">
+											<div class="row">
+												<label for="inputZip" class="col-12 form-label">
+													<h5>Thương hiệu</h5>
+												</label>
+												<div th:each="brand : ${brands}" class="col-4">
+													<div class="form-check mb-2">
+														<input class="form-check-input" type="checkbox"
+															th:value="${brand.brandID}"> <label
+															th:text="${brand.brandName}" class="form-check-label">
+														</label>
+													</div>
+												</div>
 											</div>
-											<div class="modal-body">
-												<form class="g-3">
-													<div class="row">
-														<label for="inputZip" class="col-12 form-label">Thương
-															hiệu</label>
-														<div th:each="brand : ${brands}" class="col-3">
-															<div class="form-check mb-2">
-																<input class="form-check-input" type="checkbox"
-																	th:value="${brand.brandID}"> <label
-																	th:text="${brand.brandName}" class="form-check-label">
-																</label>
-															</div>
-														</div>
-													</div>
 
-													<div class="row">
-														<label for="inputZip" class="col-12 form-label">Danh
-															mục</label>
-														<div th:each="c : ${categories}" class="col-3">
-															<div class="form-check mb-2">
-																<input th:value="${c.categoryID}" class="form-check-input" type="checkbox">
-																<label class="form-check-label" th:text="${c.categoryName}"> </label>
-															</div>
-														</div>
+											<div class="row">
+												<label for="inputZip" class="col-12 form-label"><h5>Danh
+														mục</h5></label>
+												<div th:each="c : ${categories}" class="col-4">
+													<div class="form-check mb-2">
+														<input th:value="${c.categoryID}" class="form-check-input"
+															type="checkbox"> <label class="form-check-label"
+															th:text="${c.categoryName}"> </label>
 													</div>
-
-													<div class="row">
-														<label for="inputZip" class="col-12 form-label">Màu
-															sắc</label>
-														<div th:each="c : ${colors}" class="col-3">
-															<div class="form-check mb-2">
-																<input th:value="${c.colorID}" class="form-check-input" type="checkbox">
-																<label th:text="${c.colorName}" class="form-check-label"> </label>
-															</div>
-														</div>
-													</div>
-
-													<div class="row">
-														<label for="inputZip" class="col-12 form-label">Size</label>
-														<div th:each="c : ${sizes}" class="col-3">
-															<div class="form-check mb-2">
-																<input th:value="${c.sizeID}" class="form-check-input" type="checkbox">
-																<label th:text="${c.sizeNumber}" class="form-check-label"> 39 </label>
-															</div>
-														</div>
-													</div>
-
-													<div class="row">
-														<label for="inputZip" class="col-12 form-label">Giá</label>
-														<div class="col-12">
-															<ul class="dropdown-vjm-transitu6">
-																<li>
-
-																	<div id="slider-range"
-																		class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all mt-0">
-																		<div class="ui-slider-range ui-widget-header"
-																			style="left: 0.555556%; width: 18.5556%;"></div>
-																		<a
-																			class="ui-slider-handle ui-state-default ui-corner-all"
-																			href="#" style="left: 0.555556%;"></a><a
-																			class="ui-slider-handle ui-state-default ui-corner-all"
-																			href="#" style="left: 19.1111%;"></a>
-																	</div> <input type="text" id="amount"
-																	style="border: 0; color: #ffffff; font-weight: normal;">
-																</li>
-															</ul>
-														</div>
-													</div>
-												</form>
+												</div>
 											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary"
-													data-dismiss="modal">Đóng</button>
-												<button type="button" class="btn btn-primary">Lọc</button>
+
+											<div class="row">
+												<label for="inputZip" class="col-12 form-label"><h5>Màu
+														sắc</h5></label>
+												<div th:each="c : ${colors}" class="col-4">
+													<div class="form-check mb-2">
+														<input th:value="${c.colorID}" class="form-check-input"
+															type="checkbox"> <label th:text="${c.colorName}"
+															class="form-check-label"> </label>
+													</div>
+												</div>
 											</div>
-										</div>
+
+											<div class="row">
+												<label for="inputZip" class="col-12 form-label"><h5>Size</h5></label>
+												<div th:each="c : ${sizes}" class="col-4">
+													<div class="form-check mb-2">
+														<input th:value="${c.sizeID}" class="form-check-input"
+															type="checkbox"> <label th:text="${c.sizeNumber}"
+															class="form-check-label"> 39 </label>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<label for="inputZip" class="col-12 form-label">Giá</label>
+												<div class="col-12">
+													<ul class="dropdown-vjm-transitu6">
+														<li>
+
+															<div id="slider-range"
+																class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all mt-0">
+																<div class="ui-slider-range ui-widget-header"
+																	style="left: 0.555556%; width: 18.5556%;"></div>
+																<a
+																	class="ui-slider-handle ui-state-default ui-corner-all"
+																	href="#" style="left: 0.555556%;"></a><a
+																	class="ui-slider-handle ui-state-default ui-corner-all"
+																	href="#" style="left: 19.1111%;"></a>
+															</div> <input type="text" id="amount"
+															style="border: 0; color: #ffffff; font-weight: normal;">
+														</li>
+													</ul>
+												</div>
+											</div>
+											<div class="row m-5">
+												<button class="btn btn-secondary" type="button">Lọc</button>
+											</div>
+										</form>
 									</div>
 								</div>
-
 								<!-- modal bộ lọc kết thúc -->
 
 								<div class="single-gd mb-5">
