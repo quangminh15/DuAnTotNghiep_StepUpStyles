@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.ProductImageDAO;
 import com.sts.model.Product;
+import com.sts.model.ProductImage;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
 
@@ -24,6 +26,9 @@ import com.sts.service.ProductService;
 public class ProductRestController {
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ProductImageDAO imgDAO;
 
 	@GetMapping("/rest/products/{productID}")
 	public Product getOne(@PathVariable("productID") Integer productID) {
@@ -96,5 +101,11 @@ public class ProductRestController {
 	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
 		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
 		return ResponseEntity.ok(categoryProductCounts);
+	}
+	
+	@GetMapping("/rest/products/loadByBrandId/{brandID}")
+	public List<Product> getProductsByBrandID(@PathVariable Integer brandID) {
+	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+	    return productService.getProductsByBrandID(brandID);
 	}
 }

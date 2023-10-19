@@ -4,7 +4,7 @@
 
 <head>
 
-<title>STS || SẢN PHẨM</title>
+<title>SUS || SẢN PHẨM</title>
 
 </head>
 
@@ -100,35 +100,37 @@
 						<aside>
 							<div class="sider-bar">
 								<!-- danh mục sản phẩm -->
-								<div class="single-gd mb-5">
+								<div class="single-gd mb-5" ng-if="cates.length > 0">
 									<h4>
 										Danh mục <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
 										<li ng-repeat="category in cates"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<a><span>{{category.categoryName}}</span> <!--th:href="@{|/list_products?cid=${category.categoryID}|}" -->
-										</a><span class="badge badge-primary badge-pill">1</span>
+											<a><span>{{category.categoryName}}</span> </a><span
+											class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
 
-								<!-- màu sắc  -->
-								<div class="single-gd mb-5">
+								<!-- Thương hiệu  -->
+								<div class="single-gd mb-5" ng-if="brans.length > 0">
 									<h4>
 										Thương hiệu <span>Sản phẩm</span>
 									</h4>
 									<ul class="list-group single">
 										<li ng-repeat="brand in brans"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<!-- 					th:href="@{|/list_products?bid=${brand.brandID}|}"	-->
-											<a><span> {{brand.brandName}} </span> </a><span
-											class="badge badge-primary badge-pill">1</span>
+											<a ng-click="getProductsByBrand(brand.brandID)"><span>{{brand.brandName}}</span></a>
+											<span class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
 
-								<!-- màu sắc  -->
+
+
+
+								<!-- Bộ lọc nâng cao  -->
 								<div class="single-gd mb-5">
 									<h4>
 										Bộ lọc <span>Nâng cao</span>
@@ -152,78 +154,70 @@
 									</div>
 									<div class="offcanvas-body">
 										<form class="g-3">
+											<!-- Thương hiệu -->
 											<div class="row">
-												<label for="inputZip" class="col-12 form-label">
-													<h5>Thương hiệu</h5>
-												</label>
+												<label for="inputZip" class="col-12 form-label"><h5>Thương
+														hiệu</h5></label>
 												<div ng-repeat="brand in brans" class="col-4">
 													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"> <label
-															class="form-check-label"> {{brand.brandName}} </label>
+														<input class="form-check-input" type="checkbox"
+															name="brand" value="{{brand.brandID}}"> <label
+															class="form-check-label">{{brand.brandName}}</label>
 													</div>
 												</div>
 											</div>
 
+											<!-- Danh mục -->
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Danh
 														mục</h5></label>
 												<div ng-repeat="c in cates" class="col-4">
 													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"> <label
-															class="form-check-label"> {{c.categoryName}} </label>
+														<input class="form-check-input" type="checkbox"
+															name="category" value="{{c.categoryID}}"> <label
+															class="form-check-label">{{c.categoryName}}</label>
 													</div>
 												</div>
 											</div>
 
+											<!-- Màu sắc -->
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Màu
 														sắc</h5></label>
 												<div ng-repeat="c in colors" class="col-4">
 													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"> <label
-															class="form-check-label"> {{c.colorName}} </label>
+														<input class="form-check-input" type="checkbox"
+															name="color" value="{{c.colorID}}"> <label
+															class="form-check-label">{{c.colorName}}</label>
 													</div>
 												</div>
 											</div>
 
+											<!-- Kích thước -->
 											<div class="row">
 												<label for="inputZip" class="col-12 form-label"><h5>Size</h5></label>
 												<div ng-repeat="c in sizes" class="col-4">
 													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"> <label
-															class="form-check-label"> {{c.sizeNumber}} </label>
+														<input class="form-check-input" type="checkbox"
+															name="size" value="{{c.sizeID}}"> <label
+															class="form-check-label">{{c.sizeNumber}}</label>
 													</div>
 												</div>
 											</div>
-
-											<div class="row">
-												<label for="inputZip" class="col-12 form-label">Giá</label>
-												<div class="col-12">
-													<ul class="dropdown-vjm-transitu6">
-														<li>
-
-															<div id="slider-range"
-																class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all mt-0">
-																<div class="ui-slider-range ui-widget-header"
-																	style="left: 0.555556%; width: 18.5556%;"></div>
-																<a
-																	class="ui-slider-handle ui-state-default ui-corner-all"
-																	href="#" style="left: 0.555556%;"></a><a
-																	class="ui-slider-handle ui-state-default ui-corner-all"
-																	href="#" style="left: 19.1111%;"></a>
-															</div> <input type="text" id="amount"
-															style="border: 0; color: #ffffff; font-weight: normal;">
-														</li>
-													</ul>
+											<div class="row m-5">
+												<div class="custom-button-container">
+													<button class="btn btn-secondary" type="button"
+														ng-click="filterProducts()">Lọc</button>
+													<button class="btn btn-secondary" type="button"
+														ng-click="clearFilters()">Hủy</button>
 												</div>
 											</div>
-											<div class="row m-5">
-												<button class="btn btn-secondary" type="button">Lọc</button>
-											</div>
+
 										</form>
 									</div>
 								</div>
 								<!-- modal bộ lọc kết thúc -->
+
 
 								<div class="single-gd mb-5">
 									<h4>
@@ -285,7 +279,6 @@
 										Sản phẩm <span>nổi bật</span>
 									</h4>
 									<div class="row special-sec1 mt-4">
-										<!-- Lặp qua danh sách sản phẩm nổi bật và hiển thị tối đa 3 sản phẩm -->
 										<div class="row mb-3" th:each="product : ${featuredProducts}">
 											<div class="col-4 img-deals">
 												<a
@@ -327,47 +320,26 @@
 							<div class="col-6 ecomhny-topbar-ordering">
 
 								<div class="ecom-ordering-select d-flex">
-									<span class="fa fa-angle-down" aria-hidden="true"></span>
-									<form th:action="@{/list_products}" method="get">
-										<select id="sortSelect" name="sort" onchange="submitSort()">
-											<option value="">Tất cả</option>
-											<option value="name_asc">Sắp xếp theo tên: A -> Z</option>
-											<option value="name_desc">Sắp xếp theo tên: Z -> A</option>
-											<option value="price_desc">Sắp xếp theo giá: cao ->
-												thấp</option>
-											<option value="price_asc">Sắp xếp theo giá: thấp ->
-												cao</option>
-										</select>
-									</form>
+									<span class="fa fa-angle-down" aria-hidden="true"></span> <select
+										id="sortSelect" ng-change="filterByOption()"
+										ng-model="selectedOption">
+										<option value="">Tất cả</option>
+										<option value="name_asc">Sắp xếp theo tên: A -> Z</option>
+										<option value="name_desc">Sắp xếp theo tên: Z -> A</option>
+										<option value="price_asc">Sắp xếp theo giá: thấp ->
+											cao</option>
+										<option value="price_desc">Sắp xếp theo giá: cao ->
+											thấp</option>
+										<option value="price_0_1tr">Lọc theo giá từ 0đ đến
+											1.000.000đ</option>
+										<option value="price_1tr_2tr">Lọc theo giá từ
+											1.000.000đ đến 2.000.000đ</option>
+										<option value="price_2tr_plus">Lọc theo giá lớn hơn
+											2.000.000đ</option>
+									</select>
+
+
 								</div>
-
-								<script>
-									// Lấy giá trị từ local storage và thiết lập giá trị cho select
-									document
-											.addEventListener(
-													'DOMContentLoaded',
-													function() {
-														var sortValue = localStorage
-																.getItem('sortValue');
-														if (sortValue) {
-															document
-																	.getElementById('sortSelect').value = sortValue;
-														}
-													});
-
-									// Lưu giá trị đã chọn vào local storage khi thay đổi
-									function submitSort() {
-										var selectBox = document
-												.getElementById("sortSelect");
-										var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-										localStorage.setItem('sortValue',
-												selectedValue);
-										document.getElementById("sortSelect")
-												.closest("form").submit();
-									}
-								</script>
-
-
 							</div>
 						</div>
 						<!-- /row-->
@@ -379,7 +351,7 @@
 									<div class="product-image2">
 										<a ng-click="goToSinglePage(p.productID)"> <img
 											ng-if="p.productImages.length > 0" class="pic-1 img-fluid"
-											ng-src="{{p.productImages[0].imagePath}}"> <img
+											ng-src="{{p.productImages[0].imagePath}}" alt="123"> <img
 											ng-if="p.productImages.length > 0" class="pic-2 img-fluid"
 											ng-src="{{p.productImages[0].imagePath}}">
 										</a>

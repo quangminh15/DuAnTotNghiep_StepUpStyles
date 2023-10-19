@@ -39,7 +39,7 @@ public class ProductDetail implements Serializable {
 
 	private Integer quantity;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modify_date")
 	private Date modifyDate = new Date();
 

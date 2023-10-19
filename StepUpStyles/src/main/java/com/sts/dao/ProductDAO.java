@@ -24,9 +24,6 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	@Query("SELECT c FROM Product c WHERE c.deleted = false and c.activities = true ")
 	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
-//	@Query("SELECT c FROM Product c WHERE c.deleted = false and c.activities = true")
-//	List<Product> loadAllNoDeletedAndActivitiesTrue();
-
 	Long countByCategory(Category category);
 
 	// Đếm số lượng sản phẩm để hiển thị lên danh mục người dùng
@@ -57,13 +54,8 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	//sản phẩm tương tự
 	@Query("select p from Product p where p.category.categoryID=?1 and p.deleted = false and p.activities = true")
 	List<Product> findSimilarProductsByCategory(Integer categoryID);
-	
-	//Sắp xếp
-	List<Product> findAllByOrderByProductNameAsc();
 
-    List<Product> findAllByOrderByProductNameDesc();
+	@Query("SELECT p FROM Product p WHERE p.brand.brandID = :brandID and p.deleted = false and p.activities = true")
+	List<Product> getProductsByBrandID(@Param("brandID") Integer brandID);
 
-    List<Product> findAllByOrderByPriceAsc();
-
-    List<Product> findAllByOrderByPriceDesc();
 }
