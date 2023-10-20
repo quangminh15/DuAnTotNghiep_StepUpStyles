@@ -140,18 +140,24 @@ app.controller("review-ctrl", function($scope, $http){
 	};
 
 	$scope.searchReviews = function() {
-		if ($scope.productId || $scope.usersId || $scope.rating) {
-			// Sử dụng template string để chèn biến vào URL
+		if(!$scope.productId || !$scope.usersId || !$scope.rating){
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn đầy đủ các trường để thực hiện chức năng tìm kiếm!'
+			})
+		}else{
 			$http.get(`/rest/reviews/search?productId=${$scope.productId}&usersId=${$scope.usersId}&rating=${$scope.rating}`)
-			.then(function(response) {
-				$scope.reviewitems = response.data;
-				console.log("Dữ liệu");
-				console.log(response.data);
-				$scope.pager.first();
-			});
-		} else {
-			// Gọi hàm khởi tạo khi không có tham số tìm kiếm
-			$scope.initialize();
+            .then(function(response) {
+                $scope.reviewitems = response.data;
+				if($scope.reviewitems.length == 0){
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy kết quả phù hợp!'
+					})
+				}
+			})
 		}
 	}
 
@@ -161,5 +167,50 @@ app.controller("review-ctrl", function($scope, $http){
         $scope.usersId = "";
   		$scope.rating = "";
 	}
+
+	$scope.sortableColumns = [
+		{ name: 'reviewId', label: 'Mã đánh giá' },
+		{ name: 'product.productName', label: 'Tên sản phẩm' },
+		{ name: 'user.fullName', label: 'Tên người dùng' },
+		{ name: 'title', label: 'Nội dung' },
+		{ name: 'rating', label: 'Sao đánh giá' },
+		{ name: 'reviewDate', label: 'Ngày đánh giá' },
+	];
+
+
+	$scope.sortByColumn = function(columnName) {
+		if ($scope.sortColumn === columnName) {
+			$scope.sortReverse = !$scope.sortReverse;
+		} else {
+			$scope.sortColumn = columnName;
+			$scope.sortReverse = false;
+		}
+
+		$scope.reviewitems.sort(function(a, b) {
+			var aValue = a[columnName];
+			var bValue = b[columnName];
+			if (columnName === 'product.productName') {
+				aValue = a.product.productName;
+				bValue = b.product.productName;
+			}
+			if (columnName === 'user.fullName') {
+				aValue = a.user.fullName;
+				bValue = b.user.fullName;
+			}
+			if (typeof aValue === 'string') {
+				aValue = aValue.toLowerCase();
+			}
+			if (typeof bValue === 'string') {
+				bValue = bValue.toLowerCase();
+			}
+
+			if (aValue < bValue) {
+				return $scope.sortReverse ? 1 : -1;
+			} else if (aValue > bValue) {
+				return $scope.sortReverse ? -1 : 1;
+			}
+			return 0;
+		});
+	};
 	
 })

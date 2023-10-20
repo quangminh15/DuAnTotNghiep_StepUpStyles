@@ -4,7 +4,7 @@
 
 <head>
 
-<title>STS || CHI TIẾT</title>
+<title>SUS || CHI TIẾT</title>
 
 </head>
 
@@ -56,13 +56,15 @@
 					<div class="col-lg-7 single-right-left pl-lg-4">
 						<h3 th:text="${productitem.productName}"></h3>
 						<div class="caption">
-
 							<ul class="rating-single">
-								<li>4.5/5<span class="fa fa-star yellow-star"
+								<li ng-repeat="star in starList">
+									<span class="{{ star }}"></span>
+								</li>
+								<li>{{ averageRating }}/5<span class="fa fa-star yellow-star"
 									aria-hidden="true"></span>
 								</li>
 							</ul>
-							<a href="#">274 đánh giá</a>
+							<p>{{ numRatings }} đánh giá</p>
 
 							<h6>
 								<span class="item_price"
@@ -219,23 +221,23 @@
 				<div class="row wrapper-rating">
 					<div class="col-sm-3 text-center">
 						<h2>
-							4.5/5<span class="text-warning">★</span>
+							{{averageRating}}/5<span class="text-warning">★</span>
 						</h2>
 					</div>
 					<div class="col-sm-8">
 						<p class="d-inline-flex gap-1">
 						<div class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">Tất cả</div>
+							style="background-color: white; color: #ff7315;">Tất cả ({{ reviewCounts.total }})</div>
 						<a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">5 sao (12)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">4 sao (1)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">3 sao (2)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">2 sao (1)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">1 sao (1)</a>
+							style="background-color: white; color: #ff7315;">5 sao ({{ reviewCounts[5] }})</a>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">4 sao ({{ reviewCounts[4] }})</a>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">3 sao ({{ reviewCounts[3] }})</a>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">2 sao ({{ reviewCounts[2] }})</a>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;">1 sao ({{ reviewCounts[1] }})</a>
 						</p>
 					</div>
 				</div>
@@ -251,13 +253,9 @@
 							<strong>{{rv.user.fullName}}</strong>
 						</p>
 						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
-						<!-- <div class="rating mb-2">
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-						</div> -->
+						<div class="rating mb-2">
+							<span class="fa fa-star" ng-repeat="star in getStars(rv.rating)"></span>
+						</div>
 						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
 						<span class="fa fa-thumbs-up"></span>
 					</div>

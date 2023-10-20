@@ -154,38 +154,22 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return featuredProducts;
 	}
-	
+
 	@Override
 	public List<Product> findSimilarProductsByCategory(Integer categoryID) {
-	    // Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
-	    return productDAO.findSimilarProductsByCategory(categoryID);
+		// Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
+		return productDAO.findSimilarProductsByCategory(categoryID);
 	}
-	
+
 	@Override
 	public Page<Product> findByProductNameContaining(String keyword, Pageable pageable) {
-	    return productDAO.findByProductNameContaining(keyword, pageable);
+		return productDAO.findByProductNameContaining(keyword, pageable);
 	}
 	
-	//sắp xếp
 	@Override
-    public List<Product> findAllByOrderByProductNameAsc() {
-        return productDAO.findAllByOrderByProductNameAsc();
-    }
-
-    @Override
-    public List<Product> findAllByOrderByProductNameDesc() {
-        return productDAO.findAllByOrderByProductNameDesc();
-    }
-
-    @Override
-    public List<Product> findAllByOrderByPriceAsc() {
-        return productDAO.findAllByOrderByPriceAsc();
-    }
-
-    @Override
-    public List<Product> findAllByOrderByPriceDesc() {
-        return productDAO.findAllByOrderByPriceDesc();
-    }
+	public List<Product> getProductsByBrandID(Integer brandID) {
+	    return productDAO.getProductsByBrandID(brandID);
+	}
 
 	@Override
 	public Product getProductById(Integer productId) {
@@ -193,5 +177,9 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productDAO.findById(productId);
         return product.orElse(null); // Hoặc xử lý trường hợp sản phẩm không tồn tại
     }
+
+	public List<Product> getProductsByCategoryID(Integer categoryID) {
+		return productDAO.getProductsByCategoryID(categoryID);
+	}
 
 }

@@ -4,7 +4,7 @@
 
 <head>
 
-<title>STS || TRANG CHỦ</title>
+<title>SUS || TRANG CHỦ</title>
 
 </head>
 
@@ -175,22 +175,19 @@
 					<!---728x90--->
 
 				</div>
-				<div class="welcome-grids row mt-5">
+				<div class="welcome-grids row mt-5" ng-if="brans.length > 0">
 					<div class="col-lg-2 col-md-4 col-6 welcome-image"
-						th:each="brand : ${brands}">
+						ng-repeat="brand in brans">
 						<div class="boxhny13">
-							<a th:value="${brand.brandID}"
-								th:href="@{|/list_products?bid=${brand.brandID}|}"> <img
-								th:src="@{|${brand.brandImage}|}" class="img-fluid" alt="" />
+							<a ng-click="getProductsByBrand(brand.brandID)"> <img
+								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
 								<div class="boxhny-content">
 									<h3 class="title">Xem
 								</div>
 							</a>
 						</div>
 						<h4>
-							<a th:value="${brand.brandID}"
-								th:href="@{|/list_products?bid=${brand.brandID}|}"
-								th:text="${brand.brandName}"></a>
+							<a ng-click="getProductsByBrand(brand.brandID)">{{brand.brandName}}</a>
 						</h4>
 					</div>
 				</div>
@@ -236,7 +233,8 @@
 							</a>
 							<div id="small-dialog" class="mfp-hide">
 								<div class="search-top notify-popup">
-									<iframe src="https://www.youtube.com/embed/uZnDo6SrAQU?si=sG0xcFj0i_8brP9w1"
+									<iframe
+										src="https://www.youtube.com/embed/uZnDo6SrAQU?si=sG0xcFj0i_8brP9w1"
 										frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 								</div>
 							</div>
@@ -273,38 +271,32 @@
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div th:each="product : ${featuredProducts}"
+					<div ng-repeat="p in featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv">
 							<div class="product-image2">
-								<a
-									th:href="@{/single_product/{productID}(productID=${product.productID})}">
-									<img class="pic-1 img-fluid"
-									th:src="@{${product.productImages[0].imagePath}}"> <img
-									class="pic-2 img-fluid"
-									th:src="@{${product.productImages[0].imagePath}}">
+								<a ng-click="goToSinglePage(p.productID)"> <img
+									ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
+									ng-src="{{getImagePath(p.imagePaths[0])}}"> <img
+									ng-if="p.imagePaths.length > 0" class="pic-2 img-fluid"
+									ng-src="{{getImagePath(p.imagePaths[0])}}">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
-									<li><a href="list_products.html" data-tip="Favorite"><span
-											class="fa fa-heart"></span></a></li>
+									<li><a ng-click="check(p.productID)"><span
+											class="fa fa-heart" aria-hidden="true"></span></a></li>
 								</ul>
 								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">Add
-											to Cart</button>
-									</form>
+									<a ng-click="goToSinglePage(p.productID)" type="submit"
+										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+										chi tiết </a>
 								</div>
 							</div>
 							<div class="product-content">
 								<h3 class="title">
-									<a
-										th:href="@{/single_product/{productID}(productID=${product.productID})}"
-										th:text="${product.productName}"></a>
+									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
+										}}</a>
 								</h3>
-								<span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
+								<span class="price">{{ p.price | number:0 }} ₫</span>
 							</div>
 						</div>
 					</div>
@@ -324,7 +316,8 @@
 						<h3 class="hny-title two">
 							Sản phẩm dành riêng cho phái nữ <span>HOT</span>
 						</h3>
-						<p>Cửa hàng không chỉ phục vụ mỗi nam giới mà nữ giới cũng được </p>
+						<p>Cửa hàng không chỉ phục vụ mỗi nam giới mà nữ giới cũng
+							được</p>
 						<a href="list_products.html" class="read-more-btn2 btn"> Shop
 							Now </a>
 					</div>

@@ -1,6 +1,7 @@
 package com.sts.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,11 +85,29 @@ public class Product implements Serializable {
 	private User user;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "product" )
+	@OneToMany(mappedBy = "product")
 	private List<ProductDetail> productDetails;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
+
+	public List<String> getImagePaths() {
+		List<String> imagePaths = new ArrayList<>();
+		for (ProductImage productImage : productImages) {
+			imagePaths.add(productImage.getImagePath());
+		}
+		return imagePaths;
+	}
+
+	public List<String> getDirectDiscountInfo() {
+		List<String> directDiscountInfoList = new ArrayList<>();
+		for (DirectDiscount directDiscount : directDiscounts) {
+			String discountInfo = "Direct Discount: " + directDiscount.getDirectDiscount() + ", Price Discount: "
+					+ directDiscount.getPriceDiscount();
+			directDiscountInfoList.add(discountInfo);
+		}
+		return directDiscountInfoList;
+	}
 
 }
