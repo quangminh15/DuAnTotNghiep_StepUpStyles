@@ -149,7 +149,7 @@
                     </div>
 
                     <!-- Thẻ select box -->
-                    <select class="form-control mr-2" ng-model="filterStatus" id="filterStatus"
+                    <select class="form-control mr-2" ng-model="selectedStatus" ng-change="filterByStatus()"
                         style="width: 15%; margin-left: 10px;">
                         <option value="">Tất cả trạng thái</option>
                         <option value="dang">Đang diễn ra</option>
@@ -171,16 +171,18 @@
                                 <th>Mức giảm %</th>
                                 <th>Thời gian bắt đầu</th>
                                 <th>Thời gian kết thúc</th>
+                                <th>Giá sau khi giảm</th>
                                 <th>Trạng thái</th>
                                 <th class="actions"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="ddI in directDiscountNoDelItem" ng-show="filterStatusDiscount(ddI)">
+                            <tr ng-repeat="ddI in pager.directDiscountNoDelItem">
                                 <td>{{ddI.product.productName}}</td>
                                 <td>{{ddI.directDiscount|number}}%</td>
                                 <td>{{ddI.formattedStartDate }}</td>
                                 <td>{{ddI.formattedEndDate}}</td>
+                                <td>{{ddI.priceDiscount}}</td>
                                 <td
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>

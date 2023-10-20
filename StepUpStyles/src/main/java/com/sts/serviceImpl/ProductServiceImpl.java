@@ -2,6 +2,7 @@ package com.sts.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -184,6 +185,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAllByOrderByPriceDesc() {
         return productDAO.findAllByOrderByPriceDesc();
+    }
+
+	@Override
+	public Product getProductById(Integer productId) {
+        // Sử dụng ProductDao để truy vấn sản phẩm từ cơ sở dữ liệu
+        Optional<Product> product = productDAO.findById(productId);
+        return product.orElse(null); // Hoặc xử lý trường hợp sản phẩm không tồn tại
     }
 
 }

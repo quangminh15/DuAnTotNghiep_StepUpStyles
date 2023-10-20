@@ -63,4 +63,6 @@ public interface ProductService {
     List<Product> findAllByOrderByPriceAsc();
 
     List<Product> findAllByOrderByPriceDesc();
+
+	Product getProductById(Integer productId);
 }
