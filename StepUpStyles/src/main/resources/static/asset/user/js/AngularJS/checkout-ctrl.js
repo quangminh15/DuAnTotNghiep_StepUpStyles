@@ -142,7 +142,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			totalAmount: 666,
 			discountPrice: 0,
 			shippingAddress: $scope.addressDefault,
-			cartDetails: cartDetails
+			cartDetails: cartDetails,
+			
 		};
 		console.log($scope.cartDetails);
 		//Send the order object to your Spring Boot service

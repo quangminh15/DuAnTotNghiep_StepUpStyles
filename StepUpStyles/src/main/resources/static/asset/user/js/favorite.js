@@ -220,17 +220,26 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 	// quangminh bắt đầu
 	$scope.productitems = [];
-
+	$scope.oject={}
 	$scope.initialize = function() {
 		//load product
 		$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
 			$scope.productitems = resp.data;
 			console.log("123", resp)
-			for (var i = 0; i < $scope.productitems.length; i++) {
-				var product = $scope.productitems[i];
-				var imagePaths = product.imagePaths;
-				console.log("Đây nè: " + product.productID + ":", imagePaths);
-			}
+			
+			$scope.productitems.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+					items.image = resp.data;
+					console.log("image:", resp);
+				})
+			})
+			
+			console.log("prod",$scope.productitems);
+			// for (var i = 0; i < $scope.productitems.length; i++) {
+			// 	var product = $scope.productitems[i];
+			// 	var imagePaths = product.imagePaths;
+			// 	console.log("Đây nè: " + product.productID + ":", imagePaths);
+			// }
 			$scope.pager.first();
 		});
 

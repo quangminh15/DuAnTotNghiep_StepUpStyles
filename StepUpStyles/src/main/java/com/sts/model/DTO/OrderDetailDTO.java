@@ -29,7 +29,6 @@ public class OrderDetailDTO {
     private Cart cart;
     private Product product;
     private ProductDetail productDetail;
-    private ProductImage prodI;
     private List<Color> colors;
     private List<Size> sizes;
     private boolean isSelected;
