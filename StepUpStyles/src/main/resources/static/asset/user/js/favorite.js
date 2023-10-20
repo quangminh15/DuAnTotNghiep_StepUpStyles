@@ -91,8 +91,24 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				var imagePaths = product.imagePaths;
 				console.log("Đây nè: " + product.productID + ":", imagePaths);
 			}
+			for (var i = 0; i < $scope.productitems.length; i++) {
+				var product = $scope.productitems[i];
+				var directDiscounts = product.directDiscounts;
+				for (var j = 0; j < directDiscounts.length; j++) {
+					var directDiscount = directDiscounts[j];
+					console.log("Product ID: " + product.productID + ", Direct Discount: " + directDiscount.directDiscount + ", Price Discount: " + directDiscount.priceDiscount);
+				}
+			}
 			$scope.pager.first();
 		});
+
+		// Tạo danh sách sản phẩm nổi bật
+		$http.get("/rest/products/product-featured").then(resp => {
+			$scope.featureds = resp.data;
+			$scope.pager.first();
+		});
+
+		console.log("nổi bật", $scope.featuredProducts)
 
 		//load category
 		$http.get("/rest/categories/loadallNoDeletedAndActivitiesTrue").then(resp => {
@@ -107,7 +123,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 		//load brand
 		$http.get("/rest/brands/loadallNoDeletedAndActivitiesTrue").then(resp => {
-			// Kiểm tra nếu có sản phẩm trong danh mục
+			// Kiểm tra nếu có sản phẩm trong thương hiệu
 			let brandsWithData = resp.data.filter(brand => {
 				return $scope.productitems.some(product => product.brand.brandID === brand.brandID);
 			});
@@ -400,6 +416,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$scope.pager.first();
 		}).catch(function(error) {
 			console.error('Error occurred while fetching products by brand:', error);
+		});
+	};
+	
+	$scope.getProductsByCategory = function(categoryID) {
+		$http.get("/rest/products/loadByCategoryId/" + categoryID).then(function(resp) {
+			$scope.productitems = resp.data;
+			$scope.pager.first();
+		}).catch(function(error) {
+			console.error('Error occurred while fetching products by category:', error);
 		});
 	};
 	// quangminh kết thúc

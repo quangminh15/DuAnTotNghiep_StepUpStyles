@@ -169,4 +169,9 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> getProductsByBrandID(Integer brandID) {
 	    return productDAO.getProductsByBrandID(brandID);
 	}
+
+	@Override
+	public List<Product> getProductsByCategoryID(Integer categoryID) {
+		return productDAO.getProductsByCategoryID(categoryID);
+	}
 }
