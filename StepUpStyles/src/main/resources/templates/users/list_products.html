@@ -347,7 +347,7 @@
 
 							<div ng-repeat="p in pager.productitems"
 								class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv" th:attr="ng-click=@{|saveProductID(${p.productID})|}">
+								<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
 									<div class="product-image2">
 										<a ng-click="goToSinglePage(p.productID)"> <img
 											ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
@@ -356,21 +356,14 @@
 											ng-src="{{getImagePath(p.imagePaths[0])}}">
 										</a>
 										<ul class="social">
-											<li>												
-												<button th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fa fa-heart" aria-hidden="true"></span>
-												</button>
-											</li>
 											<li><a ng-click="check(p.productID)"><span
 													class="fa fa-heart" aria-hidden="true"></span></a></li>
 										</ul>
 										
 										<div class="transmitv single-item">
-											<a th:href="@{|/single_product/${p.productID}|}"
-											th:attr="ng-click=@{|saveProductID(${p.productID})|}"
-												type="submit"
 											<a ng-click="goToSinglePage(p.productID)" type="submit"
-												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+												class="transmitv-cart ptransmitv-cart add-to-cart"
+												> Xem
 												chi tiết </a>
 										</div>
 									</div>

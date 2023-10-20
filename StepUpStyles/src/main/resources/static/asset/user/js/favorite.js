@@ -10,7 +10,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                 if (!$scope.productbyids) {
                     $http.post('/rest/favorites/' + productID)
                         .then(function (response) {
-                            $scope.isFavorite = true;
                             console.log("bat thich");
                             // alert("Đã thích sản phẩm ")
                             Swal.fire({
@@ -26,7 +25,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                 } else {
                     $http.delete('/rest/favorites/delete/' + productID)
                         .then(function (response) {
-                            $scope.isFavorite = false;
                             console.log("tat thich");
                             alert("Đã hủy thích sản phẩm")
                         })
@@ -39,6 +37,28 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                 console.error('Error ' + error);
             });
     }
+
+	$scope.deleteFavoriteProduct = function(productID) {
+        Swal.fire({
+            title: 'Xác nhận xóa sản phẩm yêu thích?',
+            text: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                // Nếu người dùng xác nhận xóa, thì gửi yêu cầu xóa sản phẩm yêu thích
+                $http.delete('/rest/favorites/delete/' + productID)
+                    .then(function(response) {
+                        $scope.getAllUserFavorite();
+                    })
+                    .catch(function(error) {
+                        console.error('Lỗi khi xóa sản phẩm yêu thích: ' + error);
+                    });
+            }
+        });
+    };
 
 
     $scope.getAllUserFavorite = function () {
@@ -135,13 +155,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
         return starList;
     }
     
-
-    //Linh end
-
-    // quangminh bắt đầu
-
-
-    // quangminh kết thúc
 	$scope.getReviewByProduct = function(productID) {
 		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
 			$scope.allreviews = resp.data;
@@ -163,7 +176,47 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 	} else {
 	}
 
-	//Linh end   ne Minh heheehhe
+	$scope.toggleFavorite = function(productID) {
+		// Tìm sản phẩm trong danh sách userItemsFavorite bằng productID
+		var product = $scope.userItemsFavorite.find(function(item) {
+			return item.product.productID === productID;
+		});
+	
+		if (product) {
+			// Đảo ngược trạng thái favorited
+			product.product.favorited = !product.product.favorited;
+			// Gọi API để thêm hoặc xóa sản phẩm khỏi danh sách yêu thích
+			if (product.product.favorited) {
+				// Gọi API để thêm sản phẩm vào danh sách yêu thích
+				$http.post('/rest/favorites/' + productID)
+                        .then(function (response) {
+                            console.log("bat thich");
+                            // alert("Đã thích sản phẩm ")
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: 'Thích sp thành công!'
+                            })
+                        })
+                        .catch(function (error) {
+                            console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+                        });
+			} else {
+				// Gọi API để xóa sản phẩm khỏi danh sách yêu thích
+				$http.delete('/rest/favorites/delete/' + productID)
+                        .then(function (response) {
+                            console.log("tat thich");
+                            alert("Đã hủy thích sản phẩm")
+                        })
+                        .catch(function (error) {
+                            console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+                        });
+			}
+		}
+	};
+	
+
+	//Linh end 
 
 	// quangminh bắt đầu
 	$scope.productitems = [];
