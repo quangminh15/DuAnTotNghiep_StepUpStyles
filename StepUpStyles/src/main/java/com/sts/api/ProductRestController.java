@@ -1,5 +1,6 @@
 package com.sts.api;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.ProductImageDAO;
 import com.sts.model.Product;
+import com.sts.model.ProductImage;
 import com.sts.model.DTO.CategoryProductCountDTO;
-import com.sts.model.DTO.ProductWithCount;
 import com.sts.service.ProductService;
 
 @CrossOrigin("*")
@@ -24,6 +26,9 @@ import com.sts.service.ProductService;
 public class ProductRestController {
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ProductImageDAO imgDAO;
 
 	@GetMapping("/rest/products/{productID}")
 	public Product getOne(@PathVariable("productID") Integer productID) {
@@ -44,10 +49,32 @@ public class ProductRestController {
 	public List<Product> getAllNoDeleted() {
 		return productService.loadAllNoDeleted();
 	}
-	
+
 	@GetMapping("/rest/products/loadallNoDeletedAndActivitiesTrue")
 	public List<Product> getAllNoDeletedAndActivitiesTrue() {
 		return productService.loadAllNoDeletedAndActivitiesTrue();
+	}
+
+	@GetMapping("/rest/products/loadallNoDeletedAndActivitiesTrueSort")
+	public List<Product> getAllNoDeletedAndActivitiesTrueSort(@RequestParam("sort") String sort) {
+		// Xử lý logic để lấy danh sách sản phẩm đã được lọc và sắp xếp theo yêu cầu
+		List<Product> products;
+		if (sort.equals("name_asc")) {
+			products = productService.loadAllNoDeletedAndActivitiesTrue();
+			products.sort(Comparator.comparing(Product::getProductName));
+		} else if (sort.equals("name_desc")) {
+			products = productService.loadAllNoDeletedAndActivitiesTrue();
+			products.sort(Comparator.comparing(Product::getProductName).reversed());
+		} else if (sort.equals("price_asc")) {
+			products = productService.loadAllNoDeletedAndActivitiesTrue();
+			products.sort(Comparator.comparing(Product::getPrice));
+		} else if (sort.equals("price_desc")) {
+			products = productService.loadAllNoDeletedAndActivitiesTrue();
+			products.sort(Comparator.comparing(Product::getPrice).reversed());
+		} else {
+			products = productService.loadAllNoDeletedAndActivitiesTrue();
+		}
+		return products;
 	}
 
 	@PostMapping("/rest/products/create")
@@ -74,5 +101,11 @@ public class ProductRestController {
 	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
 		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
 		return ResponseEntity.ok(categoryProductCounts);
+	}
+	
+	@GetMapping("/rest/products/loadByBrandId/{brandID}")
+	public List<Product> getProductsByBrandID(@PathVariable Integer brandID) {
+	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+	    return productService.getProductsByBrandID(brandID);
 	}
 }

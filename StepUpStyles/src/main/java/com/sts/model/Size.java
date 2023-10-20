@@ -32,7 +32,7 @@ public class Size implements Serializable {
 	@Column(name = "size_number")
 	private Float sizeNumber;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modify_date")
 	private Date modifyDate = new Date();
 

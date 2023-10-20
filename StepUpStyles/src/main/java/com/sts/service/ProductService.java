@@ -51,8 +51,11 @@ public interface ProductService {
     // sản phẩm nỏi bật
     List<Product> findFeaturedProducts();
 
+    //Sản phẩm tương tự
     List<Product> findSimilarProductsByCategory(Integer categoryID);
     
     Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 
+    //Lọc sản phẩm theo brand
+	List<Product> getProductsByBrandID(Integer brandID);
 }

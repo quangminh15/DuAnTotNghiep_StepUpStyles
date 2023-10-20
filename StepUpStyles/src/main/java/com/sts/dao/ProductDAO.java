@@ -20,12 +20,10 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 
 	@Query("SELECT c FROM Product c WHERE c.deleted = false")
 	List<Product> loadAllNoDeleted();
-	
-	@Query("SELECT c FROM Product c WHERE c.deleted = false and c.activities = true ")
-	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
-//	@Query("SELECT c FROM Product c WHERE c.deleted = false and c.activities = true")
-//	List<Product> loadAllNoDeletedAndActivitiesTrue();
+	//Load all sản phẩm hoạt động và không bị xóa
+	@Query("SELECT p FROM Product p WHERE p.deleted = false AND p.activities = true")
+	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
 	Long countByCategory(Category category);
 
@@ -49,12 +47,16 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 
 	@Query("select p from Product p where p.brand.brandID=?1 and p.deleted = false and p.activities = true")
 	Page<Product> findByBrandID(Integer bid, Pageable pageable);
-	
-	//tìm kiếm sản phẩm
-	@Query("select p from Product p where p.deleted = false and p.activities = true and lower(p.productName) like lower(concat('%', ?1, '%'))")
-    Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 
-	//sản phẩm tương tự
+	// tìm kiếm sản phẩm
+	@Query("select p from Product p where p.deleted = false and p.activities = true and lower(p.productName) like lower(concat('%', ?1, '%'))")
+	Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
+
+	// sản phẩm tương tự
 	@Query("select p from Product p where p.category.categoryID=?1 and p.deleted = false and p.activities = true")
 	List<Product> findSimilarProductsByCategory(Integer categoryID);
+
+	@Query("SELECT p FROM Product p WHERE p.brand.brandID = :brandID and p.deleted = false and p.activities = true")
+	List<Product> getProductsByBrandID(@Param("brandID") Integer brandID);
+
 }

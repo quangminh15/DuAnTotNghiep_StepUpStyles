@@ -34,10 +34,10 @@ public class ProductImage implements Serializable {
 	@Column(name = "image_path")
 	private String imagePath;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modify_date")
 	private Date modifyDate = new Date();
-
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;

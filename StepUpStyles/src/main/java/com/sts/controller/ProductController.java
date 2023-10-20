@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,10 +73,28 @@ public class ProductController {
 	// Trang sản phẩm
 	@RequestMapping("/list_products")
 	public String listproducts(Model model, @RequestParam("page") Optional<Integer> page,
-			@RequestParam("cid") Optional<Integer> cid, @RequestParam("bid") Optional<Integer> bid) {
+			@RequestParam("cid") Optional<Integer> cid, @RequestParam("bid") Optional<Integer> bid,
+			@RequestParam(value = "sort", required = false) String sort) {
 
-		Pageable pageable = PageRequest.of(page.orElse(0), 9);
-		Page<Product> products = handleOtherParams(pageable, cid, bid);
+		Pageable pageable;
+
+		if (sort != null) {
+			if (sort.equals("name_asc")) {
+				pageable = PageRequest.of(page.orElse(0), 9, Sort.by("productName").ascending());
+			} else if (sort.equals("name_desc")) {
+				pageable = PageRequest.of(page.orElse(0), 9, Sort.by("productName").descending());
+			} else if (sort.equals("price_asc")) {
+				pageable = PageRequest.of(page.orElse(0), 9, Sort.by("price").ascending());
+			} else if (sort.equals("price_desc")) {
+				pageable = PageRequest.of(page.orElse(0), 9, Sort.by("price").descending());
+			} else {
+				pageable = PageRequest.of(page.orElse(0), 9);
+			}
+		} else {
+			pageable = PageRequest.of(page.orElse(0), 9);
+		}
+
+		Page<Product> products = handleOtherParams(model, pageable, cid, bid);
 
 		var numberOfPages = products.getTotalPages();
 		model.addAttribute("currIndex", page.orElse(0));
@@ -108,11 +127,27 @@ public class ProductController {
 		return "users/list_products";
 	}
 
-	private Page<Product> handleOtherParams(Pageable pageable, Optional<Integer> cid, Optional<Integer> bid) {
+	private Page<Product> handleOtherParams(Model model, Pageable pageable, Optional<Integer> cid,
+			Optional<Integer> bid) {
 		if (cid.isPresent()) {
-			return productservice.findByCategoryIDPaged(cid.get(), pageable);
+			Page<Product> productCate = productservice.findByCategoryIDPaged(cid.get(), pageable);
+
+			if (productCate.isEmpty()) {
+				model.addAttribute("notFoundMessage",
+						"Có vẻ thương hiệu này đã hết sản phẩm!! Chọn cái khác nhé");
+				return productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
+			} else {
+				return productCate;
+			}
 		} else if (bid.isPresent()) {
-			return productservice.findByBrandIDPaged(bid.get(), pageable);
+			Page<Product> productbrand = productservice.findByBrandIDPaged(bid.get(), pageable);
+			if (productbrand.isEmpty()) {
+				model.addAttribute("notFoundMessage",
+						"Sản phẩm của thương hiệu này đã hết. Bạn có thể chọn các sản phẩm khác");
+				return productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
+			} else {
+				return productbrand;
+			}
 		}
 
 		return productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
@@ -149,7 +184,13 @@ public class ProductController {
 		model.addAttribute("currIndex", page.orElse(0));
 		model.addAttribute("numberOfPages", numberOfPages);
 
-		model.addAttribute("productitems", searchResults);
+		if (searchResults.isEmpty()) {
+			model.addAttribute("notFoundMessage", "Không tìm thấy sản phẩm");
+			searchResults = productservice.loadAllNoDeletedAndActivitiesTrue(pageable);
+			model.addAttribute("productitems", searchResults);
+		} else {
+			model.addAttribute("productitems", searchResults);
+		}
 
 		List<Category> categories = categoryService.loadAllNoDeletedAndActivitiesTrue();
 		List<Brand> brands = brandService.loadAllNoDeletedAndActivitiesTrue();

@@ -1,10 +1,10 @@
 package com.sts.serviceImpl;
 
 import com.sts.dao.UserDAO;
-import com.sts.dto.respone.OneUserForSecurity;
-import com.sts.dto.respone.UserForSecurity;
 import com.sts.model.Brand;
 import com.sts.model.User;
+import com.sts.model.DTO.OneUserForSecurity;
+import com.sts.model.DTO.UserForSecurity;
 import com.sts.service.UserService;
 import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
