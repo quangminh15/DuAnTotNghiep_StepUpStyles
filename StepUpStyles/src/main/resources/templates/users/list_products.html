@@ -103,14 +103,14 @@
 									<ul class="list-group single">
 										<li ng-repeat="category in cates"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<a ng-click="getProductsByCategory(category.categoryID)"><span>{{category.categoryName}}</span> </a><span
-											class="badge badge-primary badge-pill">1</span>
+											<a ng-click="getProductsByCategory(category.categoryID)"><span>{{category.categoryName}}</span>
+										</a><span class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
 								</div>
 
 								<!-- Thương hiệu  -->
-								<div class="single-gd mb-5" >
+								<div class="single-gd mb-5">
 									<h4>
 										Thương hiệu <span>Sản phẩm</span>
 									</h4>
@@ -335,13 +335,13 @@
 
 							<div ng-repeat="p in pager.productitems"
 								class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
+								<div class="product-grid2 transmitv"
+									ng-click="saveProductID(p.productID)">
 									<div class="product-image2">
 										<a ng-click="goToSinglePage(p.productID)"> <img
-											ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
-											ng-src="{{getImagePath(p.imagePaths[0])}}" alt="123"> <img
-											ng-if="p.imagePaths.length > 0" class="pic-2 img-fluid"
-											ng-src="{{getImagePath(p.imagePaths[0])}}">
+											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}"
+											alt="123"> <img class="pic-2 img-fluid"
+											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">
 											<li><a ng-click="check(p.productID)"><span
@@ -350,8 +350,7 @@
 
 										<div class="transmitv single-item">
 											<a ng-click="goToSinglePage(p.productID)" type="submit"
-												class="transmitv-cart ptransmitv-cart add-to-cart"
-												> Xem
+												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
 												chi tiết </a>
 										</div>
 									</div>
