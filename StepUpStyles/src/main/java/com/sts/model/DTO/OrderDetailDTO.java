@@ -10,6 +10,7 @@ import com.sts.model.CartDetail;
 import com.sts.model.Color;
 import com.sts.model.Product;
 import com.sts.model.ProductDetail;
+import com.sts.model.ProductImage;
 import com.sts.model.Size;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class OrderDetailDTO {
     private Cart cart;
     private Product product;
     private ProductDetail productDetail;
+    private ProductImage prodI;
     private List<Color> colors;
     private List<Size> sizes;
     private boolean isSelected;

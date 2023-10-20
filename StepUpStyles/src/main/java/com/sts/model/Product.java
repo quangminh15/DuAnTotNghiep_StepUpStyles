@@ -92,6 +92,7 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
 	
+	@JsonIgnore
 	public List<String> getImagePaths() {
         List<String> imagePaths = new ArrayList<>();
         for (ProductImage productImage : productImages) {
