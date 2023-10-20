@@ -1,5 +1,6 @@
 app.controller("favorite-list-ctrl", function ($scope, $http) {
     $scope.userItemsFavorite = [];
+    $scope.currentItem = []
 
     $scope.showDeleteConfirmationModal = function(productID) {
         $scope.productToDeleteID = productID;
@@ -22,6 +23,7 @@ app.controller("favorite-list-ctrl", function ($scope, $http) {
     $scope.getAllUserFavorite = function(){
         $http.get("/rest/favorites/getUserFavorite").then(function(response){
             $scope.userItemsFavorite = response.data
+            // $scope.currentItem = $scope.userItemsFavorite.items[0]
             console.log(response.data);
         })
     }

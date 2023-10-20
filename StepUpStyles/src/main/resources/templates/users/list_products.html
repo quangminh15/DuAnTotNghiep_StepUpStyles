@@ -255,7 +255,7 @@
 						<div class="ecom-products-grids row">
 							<div th:each="p: ${productitems}"
 								class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv">
+								<div class="product-grid2 transmitv" th:attr="ng-click=@{|saveProductID(${p.productID})|}">
 									<div class="product-image2">
 										<a th:href="@{|/single_product/${p.productID}|}"> <img
 											th:if="${not #lists.isEmpty(p.productImages)}"
@@ -268,15 +268,13 @@
 										<ul class="social">
 											<li>												
 												<button th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fas fa-heart" aria-hidden="true"></span>
-												</button>
-												<button th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="far fa-heart" aria-hidden="true"></span>
+													<span class="fa fa-heart" aria-hidden="true"></span>
 												</button>
 											</li>
 										</ul>
 										<div class="transmitv single-item">
 											<a th:href="@{|/single_product/${p.productID}|}"
+											th:attr="ng-click=@{|saveProductID(${p.productID})|}"
 												type="submit"
 												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
 												chi tiết </a>

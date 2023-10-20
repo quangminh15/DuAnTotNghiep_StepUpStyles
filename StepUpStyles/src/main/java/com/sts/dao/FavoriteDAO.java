@@ -15,7 +15,7 @@ public interface FavoriteDAO extends JpaRepository<Favorite, Integer>{
     @Transactional
     void deleteByUserAndProduct(User user, Product product);
 
-    @Query("SELECT f FROM Favorite f WHERE f.user.usersId = ?1")
+    @Query("SELECT f FROM Favorite f JOIN FETCH f.product p JOIN FETCH p.productImages pi WHERE f.user.usersId = ?1")
     List<Favorite> findByUserId(Integer usersId);
 
     @Query("SELECT f FROM Favorite f WHERE f.user.usersId=?1 and f.product.productID=?2")
