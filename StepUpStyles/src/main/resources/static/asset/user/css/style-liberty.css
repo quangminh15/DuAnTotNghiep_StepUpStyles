@@ -21330,5 +21330,21 @@ Author URL: http://w3layouts.com
      border-color: #dee2e6;
    }
  }
+
+ .remove-favorite {
+  position: relative;
+}
+
+.remove-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff0000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
  
  /*# sourceMappingURL=style-liberty.css.map */

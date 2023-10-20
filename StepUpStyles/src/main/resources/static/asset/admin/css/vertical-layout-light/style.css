@@ -30592,4 +30592,57 @@ div.tagsinput span.tag a {
   }
 }
 
+.star-rating {
+  font-size: 24px;
+  /* Kích thước của biểu tượng sao */
+}
+
+.fa-star {
+  color: #ccc;
+  /* Màu mặc định của sao chưa được chọn */
+}
+
+.checked {
+  color: #f7d825;
+  /* Màu của sao đã được chọn */
+}
+
+/* Định dạng body của modal */
+.modal-body {
+  padding: 20px;
+  /* Khoảng cách bên trong modal body */
+}
+
+/* Định dạng label */
+label {
+  font-weight: bold;
+  /* Đậm để nổi bật label */
+}
+
+/* Định dạng phần hiển thị sao đánh giá */
+.star-rating {
+  font-size: 24px;
+  /* Kích thước của biểu tượng sao */
+  margin-top: 10px;
+  /* Khoảng cách giữa label và sao đánh giá */
+}
+
+.fa-star {
+  color: #ccc;
+  /* Màu mặc định của sao chưa được chọn */
+  margin-right: 5px;
+  /* Khoảng cách giữa các sao */
+}
+
+.checked {
+  color: #f7d825;
+  /* Màu của sao đã được chọn */
+}
+
+/* Định dạng nội dung text của sản phẩm và người dùng */
+p {
+  margin-top: 5px;
+  /* Khoảng cách giữa các phần tử p */
+}
+
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
