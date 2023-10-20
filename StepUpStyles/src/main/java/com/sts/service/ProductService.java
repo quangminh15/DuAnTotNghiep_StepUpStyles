@@ -56,6 +56,7 @@ public interface ProductService {
 
 	Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 
+	Product getProductById(Integer productId);
 	// Lọc sản phẩm theo brand
 	List<Product> getProductsByBrandID(Integer brandID);
 

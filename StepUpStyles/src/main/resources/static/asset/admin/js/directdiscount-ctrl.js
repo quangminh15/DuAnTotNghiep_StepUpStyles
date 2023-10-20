@@ -23,6 +23,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 				ddI.formattedStartDate = formatDate(ddI.startDate);
 				ddI.formattedEndDate = formatDate(ddI.endDate);
 			});
+			$scope.pager.first();
 		});
 
 		//load directdiscount
@@ -48,6 +49,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 				ddI.formattedEndDate = formatDate(ddI.endDate);
 			});
 			$scope.pager.first();
+			$scope.RestorePager.first();
 		})
 
 		//load directdiscount deleted
@@ -283,10 +285,12 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			console.log(directDiscountItem.startDate);
 			$scope.directDiscountItem.push(resp.data);
 			$scope.reset();
-			$scope.errorMessage = ''; // Xóa thông báo lỗi khi thành công
-			$scope.messageSuccess = "Thêm mới thành công";
 			$scope.initialize();
-			$('#errorModal1').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'Thêm mới thành công!',
+			})
 		}).catch(error => {
 			if (error.status === 400) {
 				$scope.errorMessage = error.data;
@@ -386,9 +390,12 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		$http.put('/rest/discount/updateDiscount/' + discountitem.directDiscountId, discountitem).then(resp => {
 			var index = $scope.directDiscountItem.findIndex(d => d.directDiscountId == discountitem.directDiscountId);
 			$scope.directDiscountItem[index] = discountitem;
-			$scope.messageSuccess = "Cập nhật thành công";
 			$scope.initialize();
-			$('#errorModal1').modal('show'); // Show the modal
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'Cập nhật thành công!',
+			})
 		}).catch(error => {
 			$scope.errorMessage = "Cập nhật thất bại";
 			$('#errorModal').modal('show'); // Show the modal
@@ -403,96 +410,52 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		$('#recycleBinModal').modal('show');
 	};
 
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal = function() {
-		$('#confirmHideModal').modal('show');
-	}
-
-	//Xóa vào thùng rác
-	$scope.confirmHide = function() {
-		var item = angular.copy($scope.form);
-		item.deleted = true;
-		$http.put('/rest/discount/updateDiscount/' + item.directDiscountId, item).then(resp => {
-			var index = $scope.directDiscountNoDelItem.findIndex(p => p.directDiscountId == item.directDiscountId);
-			$scope.directDiscountNoDelItem[index] = item;
-			$scope.messageSuccess = "Xóa thành công";
-			$scope.reset();
-			$('#errorModal1').modal('show');
-			$scope.initialize();
-		}).catch(error => {
-			$scope.errorMessage = "Xóa thất bại";
-			$('#errorModal').modal('show');
-			$scope.initialize();
-			console.log("Error", error);
-		})
-
-		// Đóng modal thùng rác
-		$('#confirmHideModal').modal('hide');
-	}
-
-	//Gọi đến modal xác nhận để xóa vào thùng rác
-	$scope.confirmHideModal1 = function(item) {
-		$scope.form = angular.copy(item);
-		$('#confirmHideModal').modal('show');
-	}
-
-	//Gọi đến modal xác nhận để khôi phục từ thùng rác
-	$scope.confirmRestoreModal1 = function(item) {
-		$scope.form = angular.copy(item);
-
-		// Đóng modal thùng rác
-		$('#recycleBinModal').modal('hide');
-
-		$('#confirmRestoreModal').modal('show');
-	}
-
-	//Khôi phục item từ thùng rác
-	$scope.restore = function() {
-		var item = angular.copy($scope.form);
-		item.deleted = false;
-		$http.put('/rest/discount/updateDiscount/' + item.directDiscountId, item).then(resp => {
-			var index = $scope.directDiscountItem.findIndex(p => p.directDiscountId == item.directDiscountId);
-			$scope.directDiscountItem[index] = item;
-			$scope.reset();
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			$scope.messageSuccess = "Khôi phục thành công";
-			$('#errorModal1').modal('show');
-			$scope.initialize();
-
-		}).catch(error => {
-			// Đóng modal thùng rác
-			$('#recycleBinModal').modal('hide');
-
-			$scope.errorMessage = "Khôi phục thất bại";
-			$('#errorModal').modal('show');
-			$scope.initialize();
-			console.log("Error", error);
-		})
-
-		// Đóng modal thùng rác
-		$('#confirmRestoreModal').modal('hide');
-	}
-
 	//loc trang thai
 	$scope.filterStatus = ''; // Khởi tạo giá trị ban đầu
 
-	$scope.filterStatusDiscount = function (ddI) {
-		if ($scope.filterStatus === '') {
-			
-			return true; // Hiển thị tất cả khi bộ lọc chưa được chọn
-		} else if ($scope.filterStatus === 'dang' && ddI.status === 'Đang diễn ra') {
-			return true;
-		} else if ($scope.filterStatus === 'chuadr' && ddI.status === 'Chưa diễn ra') {
-			return true;
-		} else if ($scope.filterStatus === 'ket' && ddI.status === 'Đã kết thúc') {
-			return true;
+	$scope.filterByStatus = function() {
+		if ($scope.selectedStatus === "") {
+			$http.get("/rest/discount/noDeletedDiscount").then(resp => {
+				$scope.itemss = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách sản phẩm!',
+				});
+
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		} else {
+			$http.get("/rest/discount/noDeletedDiscount").then(resp => {
+				const selectedStatus = $scope.filterStatus;
+				if ($scope.filterStatus === '') {
+					return true; // Hiển thị tất cả khi bộ lọc chưa được chọn
+				} else if ($scope.filterStatus === 'dang' && itemss.status === 'Đang diễn ra') {
+					return true;
+				} else if ($scope.filterStatus === 'chuadr' && itemss.status === 'Chưa diễn ra') {
+					return true;
+				} else if ($scope.filterStatus === 'ket' && itemss.status === 'Đã kết thúc') {
+					return true;
+				}
+				const filteredSizes = resp.data.filter(itemss => itemss.status === selectedStatus);
+				$scope.itemss = filteredSizes;
+				$scope.pager.first();
+			}).catch(error => {
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tải danh sách sản phẩm theo trạng thái!',
+				});
+
+				console.log("Error", error);
+				$scope.pager.first();
+			});
 		}
-
-		return $scope.filterStatus === '';
 	};
-
+	
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở Table)
 	$scope.confirmHideTable = function(item) {
 		$scope.form = angular.copy(item);
@@ -674,12 +637,12 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			console.log('visiblePages', visiblePages);
 			return visiblePages;
 		},
-		get directDiscountItem() {
+		get directDiscountNoDelItem() {
 			var start = this.page * this.size;
-			return $scope.directDiscountItem.slice(start, start + this.size);
+			return $scope.directDiscountNoDelItem.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.directDiscountItem.length / this.size);
+			return Math.ceil(1.0 * $scope.directDiscountNoDelItem.length / this.size);
 		},
 		first() {
 			this.page = 0;
