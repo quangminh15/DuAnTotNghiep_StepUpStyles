@@ -169,5 +169,4 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> getProductsByBrandID(Integer brandID) {
 	    return productDAO.getProductsByBrandID(brandID);
 	}
-
 }

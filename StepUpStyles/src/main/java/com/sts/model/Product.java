@@ -1,6 +1,7 @@
 package com.sts.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class Product implements Serializable {
 	private List<CartDetail> cartDetails;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
 	private List<ProductImage> productImages;
 
 	@JsonIgnore
@@ -90,5 +91,12 @@ public class Product implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
-
+	
+	public List<String> getImagePaths() {
+        List<String> imagePaths = new ArrayList<>();
+        for (ProductImage productImage : productImages) {
+            imagePaths.add(productImage.getImagePath());
+        }
+        return imagePaths;
+    }
 }

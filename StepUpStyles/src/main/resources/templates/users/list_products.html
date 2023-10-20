@@ -350,15 +350,16 @@
 								<div class="product-grid2 transmitv">
 									<div class="product-image2">
 										<a ng-click="goToSinglePage(p.productID)"> <img
-											ng-if="p.productImages.length > 0" class="pic-1 img-fluid"
-											ng-src="{{p.productImages[0].imagePath}}" alt="123"> <img
-											ng-if="p.productImages.length > 0" class="pic-2 img-fluid"
-											ng-src="{{p.productImages[0].imagePath}}">
+											ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
+											ng-src="{{getImagePath(p.imagePaths[0])}}" alt="123"> <img
+											ng-if="p.imagePaths.length > 0" class="pic-2 img-fluid"
+											ng-src="{{getImagePath(p.imagePaths[0])}}">
 										</a>
 										<ul class="social">
 											<li><a ng-click="check(p.productID)"><span
 													class="fa fa-heart" aria-hidden="true"></span></a></li>
 										</ul>
+										
 										<div class="transmitv single-item">
 											<a ng-click="goToSinglePage(p.productID)" type="submit"
 												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
@@ -374,8 +375,6 @@
 									</div>
 								</div>
 							</div>
-
-
 
 						</div>
 						<!--/pagination-->

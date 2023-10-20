@@ -85,31 +85,25 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		//load product
 		$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
 			$scope.productitems = resp.data;
-			console.log("123",resp)
+			console.log("123", resp)
+			for (var i = 0; i < $scope.productitems.length; i++) {
+				var product = $scope.productitems[i];
+				var imagePaths = product.imagePaths;
+				console.log("Đây nè: " + product.productID + ":", imagePaths);
+			}
 			$scope.pager.first();
 		});
 
 		//load category
-		//		$http.get("/rest/categories/loadallNoDeletedAndActivitiesTrue").then(resp => {
-		//			$scope.cates = resp.data;
-		//			$scope.pager.first();
-		//		});
 		$http.get("/rest/categories/loadallNoDeletedAndActivitiesTrue").then(resp => {
 			// Kiểm tra nếu có sản phẩm trong danh mục
 			let catesWithData = resp.data.filter(category => {
 				return $scope.productitems.some(product => product.category.categoryID === category.categoryID);
 			});
 
-			// Gán dữ liệu cho $scope.brans chỉ khi có ít nhất một sản phẩm trong mỗi danh mục
 			$scope.cates = catesWithData;
 			$scope.pager.first();
 		});
-
-		//load brand
-		//		$http.get("/rest/brands/loadallNoDeletedAndActivitiesTrue").then(resp => {
-		//			$scope.brans = resp.data;
-		//			$scope.pager.first();
-		//		});
 
 		//load brand
 		$http.get("/rest/brands/loadallNoDeletedAndActivitiesTrue").then(resp => {
@@ -118,7 +112,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				return $scope.productitems.some(product => product.brand.brandID === brand.brandID);
 			});
 
-			// Gán dữ liệu cho $scope.brans chỉ khi có ít nhất một sản phẩm trong mỗi danh mục
 			$scope.brans = brandsWithData;
 			$scope.pager.first();
 		});
@@ -143,6 +136,14 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$scope.pager.first();
 		});
 	}
+
+	$scope.getImagePath = function(imagePath) {
+		if (imagePath) {
+			return imagePath;
+		}
+		return 'https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg';
+	};
+
 
 	//	Khởi đầu
 	$scope.initialize();
