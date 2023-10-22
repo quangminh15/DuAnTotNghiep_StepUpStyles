@@ -9,6 +9,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	//Load data
 	$scope.initialize = function () {
 		$scope.tongTien=0
+		localStorage.removeItem('selectedItems');
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;

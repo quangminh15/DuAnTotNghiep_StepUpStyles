@@ -10,6 +10,7 @@ import com.sts.model.CartDetail;
 import com.sts.model.Color;
 import com.sts.model.Product;
 import com.sts.model.ProductDetail;
+import com.sts.model.ProductImage;
 import com.sts.model.Size;
 
 import lombok.AllArgsConstructor;

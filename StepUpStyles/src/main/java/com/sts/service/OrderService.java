@@ -7,5 +7,5 @@ import com.sts.model.DTO.OrderDetailDTO;
 
 public interface OrderService {
     
-    Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer address);
+    Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer address, boolean paymentStatus);
 }

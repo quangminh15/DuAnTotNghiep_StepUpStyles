@@ -63,6 +63,10 @@
 	margin-right: 5px;
 	margin-left: 5px;
 }
+
+a:hover, button:hover {
+	cursor: pointer;
+}
 </style>
 </head>
 
@@ -98,6 +102,7 @@
 		}
 	</script>
 	<!-- /move top -->
+	<script src="/asset/user/js/jquery-2.1.4.min.js"></script>
 
 	<script>
 		function updateCartCount() {
@@ -131,7 +136,8 @@
 			updateCartCount();
 		})
 		updateCartCount();
-
+	</script>
+	<script>
         function updateFavoriteCount() {
             $.ajax({
                 url: '/rest/favorites/getUserFavorite', // Thay đổi đường dẫn API endpoint tương ứng
@@ -151,7 +157,7 @@
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
-	<script src="/asset/user/js/jquery-2.1.4.min.js"></script>
+	
 	<!-- 	<script src="/asset/user/js/jquery-3.3.1.min.js"></script> -->
 	<script src="/asset/user/js/jquery.flexslider.js"></script>
 	<script src="/asset/user/js/imagezoom.js"></script>

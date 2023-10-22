@@ -39,12 +39,8 @@ public class OrderRestController {
             System.out.println(initialPrice);
             System.out.println(addressId);
 
-            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId);
-            // for (OrderDetailDTO cartData : cartDataList) {
-            //     System.out.println("CartDetailId: " + cartData.getCartDetailId());
-            //     // Handle other properties as needed
-            // }
-
+            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId,false);
+           
             // Create a success response
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");
@@ -59,5 +55,4 @@ public class OrderRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap);
         }
     }
-
 }

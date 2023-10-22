@@ -59,4 +59,7 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	@Query("SELECT p FROM Product p WHERE p.brand.brandID = :brandID and p.deleted = false and p.activities = true")
 	List<Product> getProductsByBrandID(@Param("brandID") Integer brandID);
 
+	@Query("SELECT p FROM Product p WHERE p.category.categoryID = :categoryID and p.deleted = false and p.activities = true")
+	List<Product> getProductsByCategoryID(Integer categoryID);
+
 }

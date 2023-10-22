@@ -108,4 +108,16 @@ public class ProductRestController {
 	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
 	    return productService.getProductsByBrandID(brandID);
 	}
+	
+	@GetMapping("/rest/products/loadByCategoryId/{categoryID}")
+	public List<Product> getProductsByCategoryID(@PathVariable Integer categoryID) {
+	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+	    return productService.getProductsByCategoryID(categoryID);
+	}
+	
+	@GetMapping("/rest/products/product-featured")
+	public List<Product> findFeaturedProducts() {
+	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+	    return productService.findFeaturedProducts();
+	}
 }

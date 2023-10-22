@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.sts.model.DirectDiscount;
+import com.sts.model.Product;
 import com.sts.service.DiscountService;
+import com.sts.service.ProductService;
 
 @CrossOrigin("*")
 @RestController
@@ -25,36 +27,51 @@ public class DirectDiscountRestController {
     @Autowired
     DiscountService discountService;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping
     public List<DirectDiscount> getAllDiscounts() {
         return discountService.findAll();
     }
 
     @GetMapping("/noDeletedDiscount")
-    public List<DirectDiscount> getNodeleted(){
+    public List<DirectDiscount> getNodeleted() {
         return discountService.getNodeletedDiscount();
     }
 
     @GetMapping("/deletdDiscount")
-    public List<DirectDiscount> getDeleted(){
+    public List<DirectDiscount> getDeleted() {
         return discountService.getDeletedDiscount();
     }
 
     @PostMapping("/createDiscount")
-    public DirectDiscount createDiscount(@RequestBody DirectDiscount directDis){
+    public DirectDiscount createDiscount(@RequestBody DirectDiscount directDis) {
+        // Nhận thông tin khuyến mãi từ yêu cầu POST
+
+        // Lấy giá sản phẩm từ cơ sở dữ liệu (hoặc từ đối tượng directDis nếu có)
+        Product product = productService.getProductById(directDis.getProduct().getProductID());
+
+        // Tính toán priceDiscount
+        double priceDiscount = product.getPrice() - ((directDis.getDirectDiscount() / 100) * product.getPrice());
+        directDis.setPriceDiscount(priceDiscount);
+
+        // Lưu DirectDiscount vào cơ sở dữ liệu
         discountService.saveStatus(directDis);
-        return discountService.create(directDis);
+        DirectDiscount savedDiscount = discountService.create(directDis);
+
+        return savedDiscount;
     }
 
     @PutMapping("/updateDiscount/{ddid}")
     public DirectDiscount update(@PathVariable("ddid") Long ddid, @RequestBody DirectDiscount directDis) {
-		return discountService.update(directDis);
-	}
+        return discountService.update(directDis);
+    }
 
     @DeleteMapping("/deleteDiscount/{ddid}")
-	public void delete(@PathVariable("ddid") Long ddid) {
-		discountService.delete(ddid);
-	}
+    public void delete(@PathVariable("ddid") Long ddid) {
+        discountService.delete(ddid);
+    }
 
     @GetMapping("/update-status")
     public ResponseEntity<String> updateStatus() {
@@ -63,7 +80,8 @@ public class DirectDiscountRestController {
             return new ResponseEntity<>("Trạng thái đã được cập nhật thành công", HttpStatus.OK);
         } catch (Exception e) {
             // Xử lý lỗi nếu có
-            return new ResponseEntity<>("Lỗi khi cập nhật trạng thái: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Lỗi khi cập nhật trạng thái: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
