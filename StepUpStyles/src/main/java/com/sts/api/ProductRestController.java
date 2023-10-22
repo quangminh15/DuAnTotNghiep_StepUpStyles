@@ -103,15 +103,15 @@ public class ProductRestController {
 		return ResponseEntity.ok(categoryProductCounts);
 	}
 	
+	//Load danh sách sản phẩm theo Brand
 	@GetMapping("/rest/products/loadByBrandId/{brandID}")
 	public List<Product> getProductsByBrandID(@PathVariable Integer brandID) {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
 	    return productService.getProductsByBrandID(brandID);
 	}
 	
+	//Load danh sách sản phẩm theo category
 	@GetMapping("/rest/products/loadByCategoryId/{categoryID}")
 	public List<Product> getProductsByCategoryID(@PathVariable Integer categoryID) {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
 	    return productService.getProductsByCategoryID(categoryID);
 	}
 	

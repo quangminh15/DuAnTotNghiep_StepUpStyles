@@ -279,9 +279,8 @@
 											ng-if="$index < 4">
 											<div class="col-4 img-deals">
 												<a ng-click="goToSinglePage(product.productID)"> <img
-													ng-if="product.imagePaths.length > 0"
 													class="pic-1 img-fluid"
-													ng-src="{{getImagePath(product.imagePaths[0])}}" alt="123">
+													ng-src="{{product.image[0].imagePath}}"> 
 												</a>
 											</div>
 											<div class="col-8 img-deal1">
@@ -339,8 +338,10 @@
 									ng-click="saveProductID(p.productID)">
 									<div class="product-image2">
 										<a ng-click="goToSinglePage(p.productID)"> <img
-											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}"
-											alt="123"> <img class="pic-2 img-fluid"
+											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+											<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+											ng-src="{{p.image[1].imagePath}}"> <img
+											ng-if="p.image.length <= 1" class="pic-2 img-fluid"
 											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">

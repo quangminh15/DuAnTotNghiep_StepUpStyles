@@ -3,9 +3,7 @@
 	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-
 <title>SUS || TRANG CHỦ</title>
-
 </head>
 
 <body ng-controller="index-ctrl">
@@ -179,17 +177,18 @@
 					<div class="col-lg-2 col-md-4 col-6 welcome-image"
 						ng-repeat="brand in brans">
 						<div class="boxhny13">
-							<a ng-click="getProductsByBrand(brand.brandID)"> <img
+							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
 								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
 								<div class="boxhny-content">
-									<h3 class="title">Xem
+									<h3 class="title">Xem</h3>
 								</div>
 							</a>
 						</div>
 						<h4>
-							<a ng-click="getProductsByBrand(brand.brandID)">{{brand.brandName}}</a>
+							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
 						</h4>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -276,10 +275,11 @@
 						<div class="product-grid2 transmitv">
 							<div class="product-image2">
 								<a ng-click="goToSinglePage(p.productID)"> <img
-									ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
-									ng-src="{{getImagePath(p.imagePaths[0])}}"> <img
-									ng-if="p.imagePaths.length > 0" class="pic-2 img-fluid"
-									ng-src="{{getImagePath(p.imagePaths[0])}}">
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
 									<li><a ng-click="check(p.productID)"><span
