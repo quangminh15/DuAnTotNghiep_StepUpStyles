@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sts.model.ImportReceipt;
 import com.sts.service.ImportReceiptService;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/importReceipt")
 public class ImportReceiptRestController {

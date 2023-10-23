@@ -167,13 +167,13 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Mức giảm %</th>
-                                <th>Thời gian bắt đầu</th>
-                                <th>Thời gian kết thúc</th>
-                                <th>Giá sau khi giảm</th>
-                                <th>Trạng thái</th>
-                                <th class="actions"></th>
+                                <th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+                                    column.label }}
+                                    <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+                                            class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+                                            class="ti-angle-double-up"></span>
+                                    </span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -182,7 +182,7 @@
                                 <td>{{ddI.directDiscount|number}}%</td>
                                 <td>{{ddI.formattedStartDate }}</td>
                                 <td>{{ddI.formattedEndDate}}</td>
-                                <td>{{ddI.priceDiscount}}</td>
+                                <td>{{ formatToVND(ddI.priceDiscount) }}</td>
                                 <td
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>

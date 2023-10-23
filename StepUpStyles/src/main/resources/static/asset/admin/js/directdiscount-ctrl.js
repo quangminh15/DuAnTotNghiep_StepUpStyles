@@ -8,6 +8,48 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	$scope.errorMessage = '';
 	$scope.selectedItems = [];
 
+	$scope.sortableColumns = [
+		{ name: 'product.productName', label: 'Tên sản phẩm' },
+		// { name: 'modifyDate', label: 'Thời gian' },
+		{ name: 'directDiscount', label: 'Mức giảm (%)' },
+		{ name: 'formattedStartDate', label: 'Thời gian bắt đầu' },
+		{ name: 'formattedEndDate', label: 'Thời gian kết thúc' },
+		{ name: 'priceDiscount', label: 'Giá sau khi giảm' },
+		{ name: 'status', label: 'Trạng thái' },
+	];
+
+	$scope.sortByColumn = function (columnName) {
+		if ($scope.sortColumn === columnName) {
+		  $scope.sortReverse = !$scope.sortReverse;
+		} else {
+		  $scope.sortColumn = columnName;
+		  $scope.sortReverse = false;
+		}
+	
+		$scope.directDiscountNoDelItem.sort(function (a, b) {
+		  var aValue = a[columnName];
+		  var bValue = b[columnName];
+		  if (columnName === "product.productName") {
+			aValue = a.product.productName;
+			bValue = b.product.productName;
+		  }
+	
+		  if (typeof aValue === "string") {
+			aValue = aValue.toLowerCase();
+		  }
+		  if (typeof bValue === "string") {
+			bValue = bValue.toLowerCase();
+		  }
+	
+		  if (aValue < bValue) {
+			return $scope.sortReverse ? 1 : -1;
+		  } else if (aValue > bValue) {
+			return $scope.sortReverse ? -1 : 1;
+		  }
+		  return 0;
+		});
+	};
+
 	$scope.initialize = function () {
 		//load product
 		$http.get("/rest/products/loadall").then(resp => {
@@ -611,6 +653,15 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			}
 		})
 	}
+
+	//format tien te vnd
+	$scope.formatToVND = function (priceDiscount) {
+		// Logic để định dạng số amount sang định dạng VND
+		return priceDiscount.toLocaleString("vi-VN", {
+		  style: "currency",
+		  currency: "VND",
+		});
+	};
 
 	//	Phân trang
 	$scope.pager = {

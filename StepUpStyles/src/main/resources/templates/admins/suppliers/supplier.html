@@ -165,6 +165,10 @@
                         <option value="true">Đang bật</option>
                         <option value="false">Đang tắt</option>
                     </select>
+                    <button type="button" class="btn btn-outline-danger btn-fw exportPdf" data-toggle="tooltip"
+                    title="Xuất file PDF">
+                    <span class="ti-files"></span>
+                </button>
 
                     <!-- Nút thùng rác -->
                     <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
@@ -179,8 +183,8 @@
                                 <th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
                                     column.label }}
                                     <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
-                                            class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
-                                            class="mdi mdi-long-arrow-up"></span>
+                                            class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+                                            class="ti-angle-double-up"></span>
                                     </span>
                                 </th>
                             </tr>
