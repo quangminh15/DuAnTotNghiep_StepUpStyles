@@ -269,8 +269,8 @@
 				</h3>
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
-				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div ng-repeat="p in featureds"
+				<div class="ecom-products-grids row ">
+					<div ng-repeat="p in FeaturedPager.featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv">
 							<div class="product-image2">
@@ -296,12 +296,37 @@
 									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
 										}}</a>
 								</h3>
-								<span class="price">{{ p.price | number:0 }} ₫</span>
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.discount[0].priceDiscount | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} đ
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 							</div>
 						</div>
 					</div>
-
 				</div>
+				<!--/pagination-->
+				<div class="custom-pagination">
+					<ul class="custom-pagination-list">
+						<li class="custom-pagination-item prev"><a
+							ng-click="FeaturedPager.first()"><span
+								style="color: orangered;" class="fa fa-angle-double-left"></span></a></li>
+						<li class="custom-pagination-item "
+							ng-repeat="FeaturedPage in FeaturedVisiblePages"
+							ng-class="{ 'active': (FeaturedPage.value === FeaturedPager.FeaturedPage + 1) }"><a
+							class="custom-pagination-link" href=""
+							ng-click="FeaturedPager.FeaturedGoto(FeaturedPage.value)"
+							ng-style="FeaturedPage.value === (FeaturedPager.FeaturedPage + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+								{{ FeaturedPage.value }} </a></li>
+						<li class="custom-pagination-item next"><a
+							ng-click="FeaturedPager.last()"><span
+								style="color: orangered;" class="fa fa-angle-double-right"></span></a></li>
+					</ul>
+				</div>
+				<!--//pagination-->
 				<!-- //row-->
 			</div>
 		</div>

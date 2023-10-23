@@ -280,7 +280,7 @@
 											<div class="col-4 img-deals">
 												<a ng-click="goToSinglePage(product.productID)"> <img
 													class="pic-1 img-fluid"
-													ng-src="{{product.image[0].imagePath}}"> 
+													ng-src="{{product.image[0].imagePath}}">
 												</a>
 											</div>
 											<div class="col-8 img-deal1">
@@ -288,8 +288,16 @@
 													<a ng-click="goToSinglePage(product.productID)">
 														{{product.productName}} </a>
 												</h5>
-												<a ng-click="goToSinglePage(product.productID)"
-													class="price-right"> {{product.price | number:0}} ₫ </a>
+												<a ng-click="goToSinglePage(product.productID)"> <span
+													class="price-right"
+													ng-if="product.discount[0].priceDiscount == null">{{product.price
+														| number:0}} ₫</span> <span class="price-right"
+													ng-if="product.discount[0].status === 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.discount[0].priceDiscount | number:0 }} đ</span>
+														<span class="price-right"
+													ng-if="product.discount[0].status !== 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.price | number:0 }} đ</span>
+												</a>
 											</div>
 										</div>
 									</div>
@@ -360,7 +368,16 @@
 											<a ng-click="goToSinglePage(p.productID)">{{
 												p.productName }}</a>
 										</h3>
-										<span class="price">{{ p.price | number:0 }} ₫</span>
+										<span class="price"
+											ng-if="p.discount[0].priceDiscount == null"> {{
+											p.price | number:0 }} ₫</span> <span class="price"
+											ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+											<del>{{ p.discount[0].priceDiscount | number:0 }} ₫</del> {{
+											p.discount[0].priceDiscount | number:0 }} đ
+										</span> <span class="price"
+											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+											{{ p.price | number:0 }} ₫ </span>
+
 									</div>
 								</div>
 							</div>
@@ -372,18 +389,16 @@
 								<li class="prev"><a ng-click="pager.first()"><span
 										class="fa fa-angle-double-left"></span></a></li>
 								<li class="page-item" ng-repeat="page in visiblePages"
-									ng-class="{ 'active': (page.value === pager.page + 1) }">
-									<a class="page-link" href="" ng-click="pager.goto(page.value)"
+									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+									class="page-link" href="" ng-click="pager.goto(page.value)"
 									ng-style="page.value === (pager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
-										{{ page.value }} </a>
-								</li>
+										{{ page.value }} </a></li>
 
 
 								<li class="next"><a ng-click="pager.last()"><span
 										class="fa fa-angle-double-right"></span></a></li>
 							</ul>
 						</div>
-
 						<!--//pagination-->
 						<!-- //row-->
 						<!--/row2-->

@@ -52,6 +52,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style type="text/css">
+/* nút lọc của trang sản phẩm START */
 .custom-button-container {
 	display: flex;
 	justify-content: space-between;
@@ -67,10 +68,48 @@
 a:hover, button:hover {
 	cursor: pointer;
 }
+/* nút lọc của trang sản phẩm END */
+
+/* CSS phân trang trang chủ sản phẩm nổi bật Start */
+.custom-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 10px;
+}
+
+.custom-pagination-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-pagination-item {
+    display: inline;
+    margin-right: 10px;
+}
+
+.custom-pagination-link {
+    text-decoration: none;
+    color: orangered;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-pagination-link:hover {
+    background: orangered;
+    border-color: orangered;
+    color: white; /* Màu chữ chuyển sang trắng khi hover */
+}
+
+
+
+/* CSS phân trang trang chủ sản phẩm nổi bật END */
+
 </style>
 </head>
 
-<body ng-app="app">
+<body ng-app="app" ng-controller="favorite-ctrl">
 
 	<div th:replace="~{/users/layout/_menu_index}"></div>
 
@@ -136,22 +175,22 @@ a:hover, button:hover {
 		})
 		updateCartCount();
 
-        function updateFavoriteCount() {
-            $.ajax({
-                url: '/rest/favorites/getUserFavorite', // Thay đổi đường dẫn API endpoint tương ứng
-                method: 'GET',
-                success: function (data) {
-                    // Cập nhật số lượng yêu thích trên giao diện
-                    $('#favoriteCount').text(data.favoriteCount);
-                },
-                error: function () {
-                    console.error('Lỗi khi lấy số lượng yêu thích.');
-                }
-            });
-        }
+		function updateFavoriteCount() {
+			$.ajax({
+				url : '/rest/favorites/getUserFavorite', // Thay đổi đường dẫn API endpoint tương ứng
+				method : 'GET',
+				success : function(data) {
+					// Cập nhật số lượng yêu thích trên giao diện
+					$('#favoriteCount').text(data.favoriteCount);
+				},
+				error : function() {
+					console.error('Lỗi khi lấy số lượng yêu thích.');
+				}
+			});
+		}
 
-        // Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
-        updateFavoriteCount();
+		// Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
+		updateFavoriteCount();
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
