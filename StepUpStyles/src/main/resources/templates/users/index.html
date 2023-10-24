@@ -273,7 +273,7 @@
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
 					<div ng-repeat="p in featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
+						<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
 							<div class="product-image2">
 								<a ng-click="goToSinglePage(p.productID)"> <img
 									ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
@@ -282,8 +282,10 @@
 									ng-src="{{getImagePath(p.imagePaths[0])}}">
 								</a>
 								<ul class="social">
-									<li><a ng-click="check(p.productID)"><span
-											class="fa fa-heart" aria-hidden="true"></span></a></li>
+									<li>
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
 									<a ng-click="goToSinglePage(p.productID)" type="submit"
@@ -450,54 +452,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c4.jpg" class="img-fluid"
-														alt="">
-													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
 									</div>
 									<!--.row-->
 								</div>
@@ -517,54 +471,6 @@
 													<img src="asset/user/images/c4.jpg" class="img-fluid"
 														alt="">
 													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c1.jpg" class="img-fluid"
-														alt="">
-													<h5>Smith Roy</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
 
 												</div>
 											</div>

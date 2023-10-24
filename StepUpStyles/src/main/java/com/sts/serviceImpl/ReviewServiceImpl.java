@@ -8,10 +8,8 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -113,6 +111,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<Review> searchs(Integer productId, Integer usersId, Integer rating) {
         return reviewDAO.search(productId, usersId, rating);
+    }
+
+    @Override
+    public Review createReview(Review review) {
+        return reviewDAO.save(review);
     }
     }    
     

@@ -8,13 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Review;
 import com.sts.model.DTO.TotalProductRatingDTO;
+import com.sts.service.ProductService;
 import com.sts.service.ReviewService;
+import com.sts.service.UserService;
 
 @CrossOrigin("*")
 @RestController
@@ -22,25 +26,41 @@ public class ReviewRestController {
     @Autowired
     ReviewService reviewService;
 
+    @Autowired
+    ProductService pService;
+
+    @Autowired
+    UserService uService;
+
     @GetMapping("/rest/reviews/loadall")
     public List<Review> getAll(){
         return reviewService.findAll();
     }
 
-@GetMapping("/rest/reviews/{reviewID}")
-public Review getReviewID(@PathVariable("reviewID") Integer reviewID){
-        return reviewService.findById(reviewID);
-    }
-
-@PutMapping("/rest/reviews/{reviewId}/hide")
-public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId) {
-        boolean success = reviewService.hidReview(reviewId);
-        if (success) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @PostMapping("/rest/reviews/create/{productID}")
+    public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID){
+        try {
+            reviewService.createReview(review);
+            return new ResponseEntity<>("Đánh giá đã được tạo thành công.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Lỗi khi tạo đánh giá.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/rest/reviews/{reviewID}")
+    public Review getReviewID(@PathVariable("reviewID") Integer reviewID){
+            return reviewService.findById(reviewID);
+        }
+
+    @PutMapping("/rest/reviews/{reviewId}/hide")
+    public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId) {
+            boolean success = reviewService.hidReview(reviewId);
+            if (success) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
     @GetMapping("/rest/reviews/loadbyproducts/{productId}")
 	public List<Review> getProductByProduct(@PathVariable Integer productId) {
 		return reviewService.getProductByProductId(productId);

@@ -139,21 +139,28 @@ a:hover, button:hover {
 	</script>
 	<script>
         function updateFavoriteCount() {
-            $.ajax({
-                url: '/rest/favorites/getUserFavorite', // Thay đổi đường dẫn API endpoint tương ứng
-                method: 'GET',
-                success: function (data) {
-                    // Cập nhật số lượng yêu thích trên giao diện
-                    $('#favoriteCount').text(data.favoriteCount);
-                },
-                error: function () {
-                    console.error('Lỗi khi lấy số lượng yêu thích.');
-                }
-            });
+			var count = 0
+			$.ajax({
+				type : 'GET',
+				url : '/rest/favorites/getUserFavorite',
+
+				data : JSON.stringify(count),
+				contentType : "application/json",
+				success : function(data) {
+					// Update the cart count with the received data
+					count = data.length
+					$('#favoriteCount').text(count);
+				},
+				error : function() {
+					// Handle errors here
+					console.log('Error fetching cart items.');
+				}
+			});
         }
 
         // Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
         updateFavoriteCount();
+
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>

@@ -11,12 +11,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                     $http.post('/rest/favorites/' + productID)
                         .then(function (response) {
                             console.log("bat thich");
-                            // alert("Đã thích sản phẩm ")
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công',
-                                text: 'Sản phẩm đã được thêm vào yêu thích!'
-                            })
+							$scope.getAllUserFavorite();
                         })
                         .catch(function (error) {
                             console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
@@ -26,7 +21,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
                     $http.delete('/rest/favorites/delete/' + productID)
                         .then(function (response) {
                             console.log("tat thich");
-                            alert("Đã hủy thích sản phẩm")
+							$scope.getAllUserFavorite();
                         })
                         .catch(function (error) {
                             console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
@@ -65,16 +60,24 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 	$scope.getAllUserFavorite = function() {
 		$http.get("/rest/favorites/getUserFavorite").then(function(response) {
 			$scope.userItemsFavorite = response.data
-			console.log(response.data);
+			$scope.userItemsFavorite.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.image = resp.data;
+				})
+			})
+			console.log("Linhttwststst" ,$scope.userItemsFavorite);
 		})
 	}
 
-    // $scope.isFavorite = function (productID) {
-    //     return $scope.userItemsFavorite.some(function (item) {
-    //         return item.product.productID === productID;
-    //     });
-    // }
-
+    $scope.isFavorited = function(productId) {
+		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
+		return $scope.userItemsFavorite.some(function(item) {
+			return item.product.productID === productId;
+		});
+	};
+	
+	// Hàm cập nhật trạng thái yêu thích
+    
 
 
 	$scope.getAllUserFavorite();
