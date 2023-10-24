@@ -22,8 +22,8 @@
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
 							<ul class="slides">
-								<li ng-repeat="image in productDetails.image"
-									ng-if="$index < 4" data-thumb="{{image.imagePath}}">
+								<li ng-repeat="image in productDetails.image" ng-if="$index < 4"
+									data-thumb="{{image.imagePath}}">
 									<div class="thumb-image">
 										<img ng-src="{{image.imagePath}}" data-imagezoom="true"
 											class="img-fluid" alt="">
@@ -68,11 +68,16 @@
 							</h6>
 
 							<h6
+								style="display: flex; align-items: center; width: 100%; white-space: nowrap;"
 								ng-if="productDetails.discount[0].status === 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
+								<del style="margin-right: 10px;">{{ productDetails.price |
+									number:0 }} ₫</del>
 								<span class="item_price">{{
 									productDetails.discount[0].priceDiscount | number:0 }} ₫</span>
-								<del>{{ productDetails.price | number:0 }} ₫</del>
 							</h6>
+
+
+
 
 							<h6
 								ng-if="productDetails.discount[0].status !== 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
