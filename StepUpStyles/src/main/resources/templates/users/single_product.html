@@ -76,9 +76,6 @@
 									productDetails.discount[0].priceDiscount | number:0 }} ₫</span>
 							</h6>
 
-
-
-
 							<h6
 								ng-if="productDetails.discount[0].status !== 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
 								<span class="item_price">{{ productDetails.price |
@@ -90,29 +87,31 @@
 							<div class="col-md-9">
 								<select ng-model="size" class="form-control">
 									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option th:each="s: ${sizs}" th:value="${s.sizeID}"
-										th:text="${s.sizeNumber}"></option>
+									<option ng-repeat="s in sizes" value="{{s.sizeID}}">{{s.sizeNumber}}</option>
 								</select>
 							</div>
 						</div>
-						<div class="desc_single my-4">
+
+						<div class="desc_single my-4" ng-show="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
 								<select ng-model="color" class="form-control">
 									<option value="" disabled selected>Vui lòng chọn màu
 										sắc</option>
-									<option th:each="s: ${cols}" th:value="${s.colorID}"
-										th:text="${s.colorName}"></option>
+									<option ng-repeat="c in colors" value="{{c.colorID}}">{{c.colorName}}</option>
 								</select>
 							</div>
 						</div>
-						<div class="desc_single my-4">
+
+						<div class="desc_single my-4" ng-show="color">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
 								<input ng-value="1" ng-model="qty" type="number"
 									class="form-control">
 							</div>
 						</div>
+
+
 						<div class="desc_single mb-4">
 							<h5>Mô tả:</h5>
 							<p>{{ productDetails.description }}</p>
