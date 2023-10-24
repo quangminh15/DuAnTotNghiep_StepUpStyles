@@ -26,7 +26,7 @@ import com.sts.service.ProductService;
 public class ProductRestController {
 	@Autowired
 	ProductService productService;
-	
+
 	@Autowired
 	ProductImageDAO imgDAO;
 
@@ -56,24 +56,8 @@ public class ProductRestController {
 	}
 
 	@GetMapping("/rest/products/loadallNoDeletedAndActivitiesTrueSort")
-	public List<Product> getAllNoDeletedAndActivitiesTrueSort(@RequestParam("sort") String sort) {
-		// Xử lý logic để lấy danh sách sản phẩm đã được lọc và sắp xếp theo yêu cầu
-		List<Product> products;
-		if (sort.equals("name_asc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getProductName));
-		} else if (sort.equals("name_desc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getProductName).reversed());
-		} else if (sort.equals("price_asc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getPrice));
-		} else if (sort.equals("price_desc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getPrice).reversed());
-		} else {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-		}
+	public List<Product> getAllNoDeletedAndActivitiesTrueSort() {
+		List<Product> products = productService.loadAllNoDeletedAndActivitiesTrue();
 		return products;
 	}
 
@@ -102,22 +86,22 @@ public class ProductRestController {
 		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
 		return ResponseEntity.ok(categoryProductCounts);
 	}
-	
-	//Load danh sách sản phẩm theo Brand
+
+	// Load danh sách sản phẩm theo Brand
 	@GetMapping("/rest/products/loadByBrandId/{brandID}")
 	public List<Product> getProductsByBrandID(@PathVariable Integer brandID) {
-	    return productService.getProductsByBrandID(brandID);
+		return productService.getProductsByBrandID(brandID);
 	}
-	
-	//Load danh sách sản phẩm theo category
+
+	// Load danh sách sản phẩm theo category
 	@GetMapping("/rest/products/loadByCategoryId/{categoryID}")
 	public List<Product> getProductsByCategoryID(@PathVariable Integer categoryID) {
-	    return productService.getProductsByCategoryID(categoryID);
+		return productService.getProductsByCategoryID(categoryID);
 	}
-	
+
 	@GetMapping("/rest/products/product-featured")
 	public List<Product> findFeaturedProducts() {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
-	    return productService.findFeaturedProducts();
+		// Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+		return productService.findFeaturedProducts();
 	}
 }

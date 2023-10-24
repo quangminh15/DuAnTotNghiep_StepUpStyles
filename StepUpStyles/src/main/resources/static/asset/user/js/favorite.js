@@ -261,7 +261,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$scope.featureds.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
 					items.image = resp.data;
-					console.log("image:", resp);
 				})
 			})
 
@@ -311,7 +310,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		//load image
 		$http.get("/rest/productimages/loadall").then(resp => {
 			$scope.images = resp.data;
-			console.log($scope.images)
 			$scope.pager.first(); $scope.FeaturedPager.first();
 		});
 
@@ -450,9 +448,86 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 	//phân trang trang chủ product featureds END
 
+	//load trang sản phẩm chi tiết START
+
 	$scope.goToSinglePage = function(productID) {
 		window.location.href = `/single_product/${productID}`;
 	};
+
+	// Hàm load thông tin sản phẩm từ API
+	$scope.loadProductFromLocalStorage = function() {
+		var storedProductID = localStorage.getItem('productID');
+
+		$http.get('/rest/products/' + storedProductID).then(function(response) {
+			$scope.productDetails = response.data;
+
+			$http.get('/rest/productimages/loadbyproduct/' + storedProductID).then(function(response) {
+				$scope.productDetails.image = response.data;
+			}).catch(function(error) {
+				console.error('Error fetching product images', error);
+			});
+
+			$http.get('/rest/discount/loadbyproduct/' + storedProductID).then(function(response) {
+				$scope.productDetails.discount = response.data;
+			}).catch(function(error) {
+				console.error('Error fetching product discount', error);
+			});
+		}).catch(function(error) {
+			console.error('Error fetching product details', error);
+		});
+	};
+
+	// Gọi hàm loadProductFromLocalStorage khi trang chi tiết sản phẩm được tải
+	$scope.loadProductFromLocalStorage();
+
+	// Hàm để tải sản phẩm theo categoryID
+	$scope.getProductsByCategory = function() {
+		var storedProductID = localStorage.getItem('productID');
+
+		$http.get('/rest/products/' + storedProductID).then(function(response) {
+			$scope.productDetails = response.data;
+
+			$http.get('/rest/productimages/loadbyproduct/' + storedProductID).then(function(response) {
+				$scope.productDetails.image = response.data;
+			}).catch(function(error) {
+				console.error('Error fetching product images', error);
+			});
+
+			$http.get('/rest/discount/loadbyproduct/' + storedProductID).then(function(response) {
+				$scope.productDetails.discount = response.data;
+			}).catch(function(error) {
+				console.error('Error fetching product discount', error);
+			});
+
+			$http.get("/rest/products/loadByCategoryId/" + $scope.productDetails.category.categoryID).then(function(resp) {
+				$scope.productDetailss = resp.data;
+
+				$scope.productDetailss.forEach(items => {
+					$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+						items.image = resp.data;
+					})
+				})
+
+				$scope.productDetailss.forEach(item => {
+					$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
+						item.discount = resp.data;
+					})
+				})
+				console.log("getProductsByCategory: ", $scope.productDetailss)
+			}).catch(function(error) {
+				console.error('Error occurred while fetching products by category:', error);
+			});
+		}).catch(function(error) {
+			console.error('Error fetching product details', error);
+		});
+	};
+
+	$scope.getProductsByCategory();
+
+	//load sản phẩm tương tự END
+
+
+	//Load trang sản phẩm chi tiết END
 
 	//sắp xếp bắt đầu
 	$scope.sortByPropertyName = function() {

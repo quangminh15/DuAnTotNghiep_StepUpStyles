@@ -272,7 +272,8 @@
 				<div class="ecom-products-grids row ">
 					<div ng-repeat="p in FeaturedPager.featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
 							<div class="product-image2" style="position: relative;">
 								<div class="discount-circle"
 									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{

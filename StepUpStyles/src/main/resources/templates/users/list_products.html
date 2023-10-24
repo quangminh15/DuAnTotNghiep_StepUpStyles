@@ -276,15 +276,15 @@
 									</h4>
 									<div class="row special-sec1 mt-4">
 										<div class="row mb-3" ng-repeat="product in featureds"
-											ng-if="$index < 4">
-											<div class="col-4 img-deals">
+											ng-if="$index < 4" ng-click="saveProductID(product.productID)">
+											<div class="col-4 img-deals" >
 												<a ng-click="goToSinglePage(product.productID)"> <img
 													class="pic-1 img-fluid"
 													ng-src="{{product.image[0].imagePath}}">
 												</a>
 											</div>
-											<div class="col-8 img-deal1">
-												<h5 class="post-title">
+											<div class="col-8 img-deal1" >
+												<h5 class="post-title title">
 													<a ng-click="goToSinglePage(product.productID)">
 														{{product.productName}} </a>
 												</h5>
