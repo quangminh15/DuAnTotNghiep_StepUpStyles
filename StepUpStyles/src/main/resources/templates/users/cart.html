@@ -304,16 +304,72 @@
 
 				</div>
 				<div class="row mt-3">
+					<!-- <div class="col-lg-6 .ftco-cart cart-wrap ftco-animate">
+					
+						<div class="cart-total mb-3">
+							<h3>Vận Chuyển</h3>
+							<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+									aria-expanded="false" aria-controls="collapseExample">Nhập vào địa chỉ của bạn để
+									ước
+									tính phí ship</a></p>
+
+							<div class="collapse" id="collapseExample">
+								<div class="card card-body">
+									<form action="#" class="info">
+									
+
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg address" id="province"
+												ng-model="selectedProvince"
+												ng-options="province.ProvinceName for province in provinces"
+												ng-change="loadDistricts()"
+												>
+												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Quận/Huyện</label>
+											<select class="form-control form-control-lg" id="district"
+												ng-model="selectedDistrict"
+												ng-options="district.DistrictName for district in selectedProvince.Districts"
+												ng-change="loadWards()"
+												ng-disabled="selectedProvince.Districts==null">
+												<option value="" disabled selected>Chọn Quận/Huyện</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Phường/Xã</label>
+											<select class="form-control form-control-lg" id="ward"
+												ng-model="selectedWard"
+												ng-options="ward.WardName for ward in selectedDistrict.Wards">
+												<option value="" disabled selected>Chọn Phường/Xã</option>
+											</select>
+										</div>
+
+
+									</form>
+									<p><a ng-click="calculateShipping()" class="btn btn-primary py-3 px-4">Áp Dụng</a></p>
+								</div>
+							</div>
+
+						</div>
+						
+
+					</div> -->
+
+
+					<!-- <div class=" justify-content-end"> -->
 					<div class="col-lg-12  ftco-animate ">
 
 						<div class="cart-total mb-3 " style="background-color: #fff;">
 							<div class="row">
 
-								<div class="col-md-9">
+								<div class="col-md-7">
 
 								</div>
 
-								<div class="col-md-3">
+								<div class="col-md-5">
 
 									<h3>Tổng Cộng Giỏ Hàng</h3>
 									<p class="d-flex">

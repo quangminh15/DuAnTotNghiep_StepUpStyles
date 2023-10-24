@@ -7,6 +7,18 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
+
+	$scope.index_of_province = function (address) {
+		return $scope.province.findIndex(a => a.ProvinceName === address);
+	}
+
+	$scope.index_of_district = function (address) {
+		return $scope.district.findIndex(a => a.DistrictName === address);
+	}
+
+	$scope.index_of_ward = function (address) {
+		return $scope.ward.findIndex(a => a.WardName === address);
+	}
 	$scope.initialize = function () {
 		$scope.tongTien = 0
 		localStorage.removeItem('selectedItems');
@@ -91,11 +103,94 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			});
 
 
+			$http.get(`/rest/address/default`)
+			.then(resp => {
+				$scope.addressDefault = resp.data
+				console.log(resp.data);
+				$scope.getAddressToShippingFee($scope.addressDefault.province, $scope.addressDefault.district, $scope.addressDefault.ward)
+
+			})
+			.catch(function (error) {
+				console.error('Error fetching cart items:', error);
+			});
+
+
 	}
 
 	$scope.initialize();
 
-	
+	$scope.getAddressToShippingFee = function (p, d, w) {
+		$scope.dataAddress = {
+			"service_type_id": 2,
+			"insurance_value": null,
+			"coupon": null,
+			"from_district_id": 1574,
+			"to_district_id": null,
+			"to_ward_code": null,
+			"height": 15,
+			"length": 38,
+			"weight": 1000,
+			"width": 15
+		}
+		$http({
+			method: 'GET',
+			url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+			headers: {
+				'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+			}
+		}).then(function successCallback(response) {
+			$scope.province = response.data.data;
+			// console.log($scope.province);
+			$scope.current_province = $scope.province[$scope.index_of_province(p)]
+			console.log($scope.current_province);
+			$http({
+				method: 'GET',
+				url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
+				headers: {
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
+					'ShopId': '4551956'
+				}
+			}).then(function successCallback(response) {
+				$scope.district = response.data.data;
+				console.log($scope.district);
+				$scope.dataAddress.to_district_id = $scope.district[$scope.index_of_district(d)].DistrictID
+				$http({
+					method: 'GET',
+					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.dataAddress.to_district_id,
+					headers: {
+						'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+					}
+				}).then(function successCallback(response) {
+					$scope.ward = response.data.data
+					console.log($scope.ward);
+					$scope.dataAddress.to_ward_code = $scope.ward[$scope.index_of_ward(w)].WardID
+					$http({
+						method: 'POST',
+						url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+						data: $scope.dataAddress,
+						headers: {
+							'Token': '62a1bc3a-43d0-11ee-af43-6ead57e9219a',
+							'ShopId': '4490048'
+						}
+					}).then(function (response) {
+						$scope.data2 = response.data.data
+						//$scope.total = $scope.tongTien + $scope.data2.total;
+						var shippingCost = $scope.data2.total;
+						// alert('Tiền ship là: ' + Math.floor(shippingCost));
+						$scope.shippingFee = Math.floor(shippingCost);
+					})
+						.catch(function (error) {
+							console.error('Error calculating shipping:', error);
+						});
+				}
+				)
+			})
+		})
+
+
+	}
+
+
 
 	$scope.checkout = function () {
 		var storedItems = localStorage.getItem('selectedItems');
