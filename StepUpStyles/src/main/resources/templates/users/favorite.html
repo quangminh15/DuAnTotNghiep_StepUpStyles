@@ -128,13 +128,13 @@
 									<div class="product-grid2 transmitv" ng-click="saveProductID(item.product.productID)">
 										<div class="product-image2">
 											<a ng-click="goToSinglePage(item.product.productID)"> <img
-												ng-if="item.product.imagePaths.length > 0" class="pic-1 img-fluid"
-												ng-src="{{getImagePath(item.product.imagePaths[0])}}" alt="123"> <img
-												ng-if="item.product.imagePaths.length > 0" class="pic-2 img-fluid"
-												ng-src="{{getImagePath(item.product.imagePaths[0])}}">
+												ng-if="item.product.image[0].imagePath.length > 0" class="pic-1 img-fluid"
+												ng-src="{{item.product.image[0].imagePath}}" alt="123"> <img
+												ng-if="item.product.image[0].imagePath.length > 0" class="pic-2 img-fluid"
+												ng-src="{{item.product.image[0].imagePath}}">
 											</a>
 											<ul class="social">
-												<li><a ng-click="deleteFavoriteProduct(item.product.productID)" ng-class="{ 'favorited-heart': item.product.favorited }"><span class="fa fa-heart"></span></a></li>
+												<li><a ng-click="deleteFavoriteProduct(item.product.productID)"><span class="fa fa-heart"></span></a></li>
 											</ul>
 											<div class="transmitv single-item">
 												<a ng-click="goToSinglePage(item.product.productID)" type="submit"

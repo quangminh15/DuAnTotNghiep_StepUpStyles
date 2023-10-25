@@ -1,6 +1,7 @@
 app.controller("index-ctrl", function($scope, $http) {
-	
-	
+	//HAI Start
+	localStorage.removeItem('selectedItems');
+	//HAI End
 	
 	// quangminh bắt đầu
 	$scope.productitems = [];

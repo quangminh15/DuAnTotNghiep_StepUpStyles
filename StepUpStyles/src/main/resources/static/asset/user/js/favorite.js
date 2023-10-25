@@ -1,42 +1,38 @@
-app.controller("favorite-ctrl", function($scope, $http) {
-	$scope.userItemsFavorite = [];
-	$scope.userRatings = []
-	//Linh
-	$scope.check = function(productID) {
-		$http.get('/rest/favorites/check/' + productID)
-			.then(function(response) {
-				$scope.productbyids = response.data;
-				console.log($scope.productbyids.favoriteId);
-				if (!$scope.productbyids) {
-					$http.post('/rest/favorites/' + productID)
-						.then(function(response) {
-							console.log("bat thich");
-							// alert("Đã thích sản phẩm ")
-							Swal.fire({
-								icon: 'success',
-								title: 'Thành công',
-								text: 'Thích sp thành công!'
-							})
-						})
-						.catch(function(error) {
-							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
-						});
-					console.log(1);
-				} else {
-					$http.delete('/rest/favorites/delete/' + productID)
-						.then(function(response) {
-							console.log("tat thich");
-							alert("Đã hủy thích sản phẩm")
-						})
-						.catch(function(error) {
-							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
-						});
-				}
-			})
-			.catch(function(error) {
-				console.error('Error ' + error);
-			});
-	}
+app.controller("favorite-ctrl", function ($scope, $http) {
+    $scope.userItemsFavorite = [];
+    $scope.userRatings = []
+    //Linh
+    $scope.check = function (productID) {
+        $http.get('/rest/favorites/check/' + productID)
+            .then(function (response) {
+                $scope.productbyids = response.data;
+                console.log($scope.productbyids.favoriteId);
+                if (!$scope.productbyids) {
+                    $http.post('/rest/favorites/' + productID)
+                        .then(function (response) {
+                            console.log("bat thich");
+							$scope.getAllUserFavorite();
+                        })
+                        .catch(function (error) {
+                            console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+                        });
+                    console.log(1);
+                } else {
+                    $http.delete('/rest/favorites/delete/' + productID)
+                        .then(function (response) {
+                            console.log("tat thich");
+							$scope.getAllUserFavorite();
+                        })
+                        .catch(function (error) {
+                            console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+                        });
+                }
+            })
+            .catch(function (error) {
+                console.error('Error ' + error);
+            });
+    }
+
 
 	$scope.deleteFavoriteProduct = function(productID) {
 		Swal.fire({
@@ -64,15 +60,25 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.getAllUserFavorite = function() {
 		$http.get("/rest/favorites/getUserFavorite").then(function(response) {
 			$scope.userItemsFavorite = response.data
-			console.log(response.data);
+			$scope.userItemsFavorite.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.image = resp.data;
+				})
+			})
+			console.log("Linhttwststst" ,$scope.userItemsFavorite);
 		})
 	}
 
-	$scope.isFavorite = function(productID) {
+    $scope.isFavorited = function(productId) {
+		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
 		return $scope.userItemsFavorite.some(function(item) {
-			return item.product.productID === productID;
+			return item.product.productID === productId;
 		});
-	}
+	};
+	
+	// Hàm cập nhật trạng thái yêu thích
+    
+
 
 	$scope.getAllUserFavorite();
 
@@ -155,55 +161,23 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		return starList;
 	}
 
-	$scope.getReviewByProduct = function(productID) {
-		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
-			$scope.allreviews = resp.data;
-			console.log(resp.data);
-			console.log("Hi " + productID);
-		}).catch(error => {
-			console.log("Error", error);
-		});
-	};
+    function createStarList(rating) {
+        var starList = [];
+        for (var i = 0; i < 5; i++) {
+            if (rating >= i + 1) {
+                starList.push('fa fa-star yellow-star');
+            } else if (rating > i) {
+                starList.push('fa fa-star-half-o yellow-star');
+            } else {
+                starList.push('fa fa-star-o yellow-star');
+            }
+        }
+        return starList;
+    }
 
-	$scope.toggleFavorite = function(productID) {
-		// Tìm sản phẩm trong danh sách userItemsFavorite bằng productID
-		var product = $scope.userItemsFavorite.find(function(item) {
-			return item.product.productID === productID;
-		});
+	///////
 
-		if (product) {
-			// Đảo ngược trạng thái favorited
-			product.product.favorited = !product.product.favorited;
-			// Gọi API để thêm hoặc xóa sản phẩm khỏi danh sách yêu thích
-			if (product.product.favorited) {
-				// Gọi API để thêm sản phẩm vào danh sách yêu thích
-				$http.post('/rest/favorites/' + productID)
-					.then(function(response) {
-						console.log("bat thich");
-						// alert("Đã thích sản phẩm ")
-						Swal.fire({
-							icon: 'success',
-							title: 'Thành công',
-							text: 'Thích sp thành công!'
-						})
-					})
-					.catch(function(error) {
-						console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
-					});
-			} else {
-				// Gọi API để xóa sản phẩm khỏi danh sách yêu thích
-				$http.delete('/rest/favorites/delete/' + productID)
-					.then(function(response) {
-						console.log("tat thich");
-						alert("Đã hủy thích sản phẩm")
-					})
-					.catch(function(error) {
-						console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
-					});
-			}
-		}
-	};
-
+	
 
 	//Linh end 
 

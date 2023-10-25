@@ -56,6 +56,34 @@ app.controller("supplier-ctrl", function($scope, $http){
 		});
 	};
 
+	$scope.exportPdf = function () {
+		$http({
+		  method: "POST",
+		  url: "/supplier-pdf",
+		  data: $scope.itemss,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+			var blob = new Blob([response.data], { type: "application/pdf" });
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ a để tải xuống tệp PDF
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "DSSupplier.pdf";
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất PDF thất bại:", error);
+		});
+	};
+
     $scope.initialize = function () {
 		//load all supplier
 		$http.get("/rest/supplier").then(resp => {
@@ -591,6 +619,41 @@ app.controller("supplier-ctrl", function($scope, $http){
 		}
 	};
 	
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+  $('.exportPdf').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportPdf();
+			}
+
+		})
+
+	});
 
     //Phân trang
 	$scope.pager = {
@@ -651,6 +714,12 @@ app.controller("supplier-ctrl", function($scope, $http){
 				$scope.visiblePages = this.getPageNumbers();
 			}
 		},
+	};
+
+	$scope.getColumnWidth = function(item) {
+		// Thực hiện logic để xác định chiều rộng dựa trên dữ liệu item
+		// Trả về một đối tượng chứa thuộc tính 'width' với giá trị cụ thể
+		return {'width': item.width + 'px'};
 	};
 
 	//	Phân trang đã xóa

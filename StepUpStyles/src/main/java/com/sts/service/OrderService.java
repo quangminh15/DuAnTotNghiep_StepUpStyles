@@ -3,9 +3,15 @@ package com.sts.service;
 import java.util.List;
 
 import com.sts.model.Order;
+import com.sts.model.OrderStatus;
+import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
 
 public interface OrderService {
     
-    Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer address);
+    Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer address, boolean paymentStatus);
+
+    List<Order> loadByUser(User user);
+    
+    List<Order> loadByStatus(OrderStatus status);
 }

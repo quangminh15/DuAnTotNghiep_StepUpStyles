@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.ImportReceiptDetailDAO;
+import com.sts.model.ImportReceiptDetail;
 import com.sts.model.Supplier;
 import com.sts.service.SupplierService;
 
@@ -23,6 +25,14 @@ import com.sts.service.SupplierService;
 public class SupplierRestController {
     @Autowired
     SupplierService supplierService;
+
+     @Autowired
+    ImportReceiptDetailDAO dao;
+
+    @PostMapping("/testCreate")
+    public ImportReceiptDetail testCreate(@RequestBody ImportReceiptDetail imports){
+        return dao.save(imports);
+    }
 
     @GetMapping
     public List<Supplier> getAll(){
