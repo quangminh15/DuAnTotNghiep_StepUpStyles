@@ -716,6 +716,12 @@ app.controller("supplier-ctrl", function($scope, $http){
 		},
 	};
 
+	$scope.getColumnWidth = function(item) {
+		// Thực hiện logic để xác định chiều rộng dựa trên dữ liệu item
+		// Trả về một đối tượng chứa thuộc tính 'width' với giá trị cụ thể
+		return {'width': item.width + 'px'};
+	};
+
 	//	Phân trang đã xóa
 	$scope.RestorePager = {
 		page: 0,

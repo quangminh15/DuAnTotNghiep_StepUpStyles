@@ -656,12 +656,15 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 
 	//format tien te vnd
 	$scope.formatToVND = function (priceDiscount) {
-		// Logic để định dạng số amount sang định dạng VND
+		// Làm tròn đến hàng nghìn
+		priceDiscount = Math.round(priceDiscount / 1000) * 1000;
+		
+		// Định dạng số amount sang định dạng VND
 		return priceDiscount.toLocaleString("vi-VN", {
 		  style: "currency",
 		  currency: "VND",
 		});
-	};
+	};	
 
 	//	Phân trang
 	$scope.pager = {

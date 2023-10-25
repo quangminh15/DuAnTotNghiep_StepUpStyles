@@ -44,15 +44,15 @@
             </div>
             <div class="template-demo text-right mb-3">
                 <button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-                    title="Thêm giảm giá mới">
+                    title="Thêm nhà cung cấp mới">
                     <span class="ti-agenda"></span>
                 </button>
                 <button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-                    title="Cập nhật giảm giá">
+                    title="Cập nhật nhà cung cấp">
                     <span class="ti-support"></span>
                 </button>
                 <button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
-                    data-toggle="tooltip" title="Xóa giảm giá">
+                    data-toggle="tooltip" title="Xóa nhà cung cấp">
                     <span class="ti-trash"></span>
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
@@ -152,29 +152,35 @@
                             <div class="form-group">
                                 <label for="searchKeyword"></label>
                                 <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword"
-                                    placeholder="Tìm kiếm nhà cung cấp" ng-change="searchByName()">
+                                    placeholder="Tìm kiếm nhà cung cấp" ng-change="searchByName()"
+                                    title="Tìm kiếm nhà cung cấp">
                             </div>
                         </form>
                     </div>
 
                     <!-- Thẻ select box -->
                     <select class="form-control mr-2" ng-model="selectedDisplay" ng-change="filterByDisplay()"
-                        data-toggle="tooltip" title="Lọc theo trạng thái sản phẩm"
-                        style="width: 15%; margin-left: 10px;">
+                        data-toggle="tooltip" title="Lọc theo trạng thái" style="width: 15%; margin-left: 10px;">
                         <option value="">Tất cả trạng thái</option>
                         <option value="true">Đang bật</option>
                         <option value="false">Đang tắt</option>
                     </select>
-                    <button type="button" class="btn btn-outline-danger btn-fw exportPdf" data-toggle="tooltip"
-                    title="Xuất file PDF">
-                    <span class="ti-files"></span>
-                </button>
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-outline-success btn-fw mr-2 exportExcel" data-toggle="tooltip"
+                            title="Xuất file Excel">
+                            <span class="fa ti-file"></span>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-fw exportPdf" data-toggle="tooltip"
+                            title="Xuất file PDF" style="margin-right: 10px;">
+                            <span class="ti-files"></span>
+                        </button>
 
-                    <!-- Nút thùng rác -->
-                    <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-                        title="Thùng rác">
-                        <span class="ti-trash"></span>
-                    </button>
+                        <!-- Nút thùng rác -->
+                        <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw"
+                            data-toggle="tooltip" title="Thùng rác">
+                            <span class="ti-trash"></span>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table">

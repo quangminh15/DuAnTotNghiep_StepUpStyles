@@ -217,7 +217,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   //	Thêm mới phiếu nhập
   $scope.create = function () {
     //khong chon nha cung cap
-    if (!$scope.form.supplier || !$scope.form.supplier.supplierID) {
+    if (!$scope.form.supplier || !$scope.form.supplier.supplierId) {
       Swal.fire({
         icon: "error",
         title: "Thất bại",
@@ -225,23 +225,19 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       });
       return;
     }
-    $http.get("/api/user").then((resp) => {
-      const email = resp.data.username; // Lấy email từ userDetails
-      // Truy vấn cơ sở dữ liệu để lấy userID từ email
-      $http
-        .get("/rest/ImportReceipt/usersByEmail/" + email)
-        .then((userResp) => {
-          var userID = userResp.data.userID;
-          $scope.form.user = { userID: userID }; // Gán userID cho phiếu nhập
-          let newItem = angular.copy($scope.form);
-          newItem.importDate = new Date(); // Lấy ngày giờ hiện tại
+    $http.get("/rest/users/Idprofile").then((resp) => {
+      var userID = resp.data;
+			$scope.form.user = { userID: userID };
+      $scope.form.importDate = new Date();
+      var newItem = angular.copy($scope.form);
+      newItem.user.userID = userID;
           $http
             .post(`/rest/ImportReceipt/createImp`, newItem)
-            .then((response) => {
-              let data = response.data;
-              data.importDate = new Date(data.importDate); // Chuyển đổi ngày giờ từ response
-              data.totalAmount = 0;
-              $scope.items.push(data);
+            .then((resp) => {
+              resp.data.importDate = new Date(resp.data.importDate); // Chuyển đổi ngày giờ từ response
+              resp.data.totalAmount = 0;
+              $scope.items.push(resp.data);
+              $scope.initialize();
               $scope.reset();
               $Swal.fire({
                 icon: "success",
@@ -257,7 +253,6 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
               console.log("Error", error);
             });
         });
-    });
   };
 
   // Thêm chi tiết phiếu nhập
@@ -336,8 +331,11 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
         $scope.importDetail.push(data);
         $scope.reset();
         $scope.initialize();
-        $scope.messageSuccess = "Thêm thành công chi tiết phiếu nhập";
-        $("#errorModal1").modal("show"); // Show the modal
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công',
+          text: 'Thêm chi tiết phiếu nhập thành công!',
+        })
       })
       .catch((error) => {
         alert("Lỗi");

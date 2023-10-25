@@ -56,7 +56,7 @@ public class ImportReceiptDetailRestController {
         }
     }
 
-    @PostMapping("/createImportDetailsss")
+    @PostMapping("/createImportDetailss")
     public ImportReceiptDetail createDetail(@RequestBody ImportReceiptDetail importReceiptDetail) {
         ImportReceiptDetail createdImportReceiptDetail = importReceiptDetailService.create(importReceiptDetail);
 
