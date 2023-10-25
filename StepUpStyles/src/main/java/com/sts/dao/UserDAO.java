@@ -2,6 +2,7 @@ package com.sts.dao;
 
 import com.sts.dto.respone.OneUserForSecurity;
 import com.sts.dto.respone.UserForSecurity;
+import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,8 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 
 	@Query(value = "SELECT u.users_id FROM users u WHERE u.email = ?1" ,nativeQuery = true)
 	Integer getIdByEmail(String keyword);
+
+	@Query(value = "select u from User u")
+	List<LResponseUser> findAllUser();
 
 }

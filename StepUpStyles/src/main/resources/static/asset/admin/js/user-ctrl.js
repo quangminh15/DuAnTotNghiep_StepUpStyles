@@ -10,13 +10,21 @@ app.controller("user-ctrl", function($scope, $http) {
 	$scope.userDetails = null;
 
 	$scope.initialize = function() {
-		//load product
-		$http.get("/rest/Users/loadall").then(resp => {
+		//load user
+		$http.get("/user").then(resp => {
 			$scope.uList = resp.data;
-			$scope.pager.first(); 
+			$scope.pager.first();
 		});
-		
 	}
+
+	$scope.sortableColumns = [
+		{ name: 'categoryID', label: 'Mã người dùng' },
+		{ name: 'categoryName', label: 'Họ và tên' },
+		{ name: 'categoryID', label: 'Hình ảnh' },
+		{ name: 'categoryImage', label: 'Email' },
+		{ name: 'modifyDate', label: 'Số điện thoại' },
+		{ name: 'activities', label: 'Quyền' },
+	];
 
 	//	Xóa form
 	$scope.reset = function() {
@@ -213,7 +221,7 @@ app.controller("user-ctrl", function($scope, $http) {
 	//Phân trang
 	$scope.pager = {
 		page: 0,
-		size: 5,
+		size: 10,
 		getPageNumbers: function() {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;

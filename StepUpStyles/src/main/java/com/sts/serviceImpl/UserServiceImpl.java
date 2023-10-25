@@ -4,6 +4,7 @@ import com.sts.dao.UserDAO;
 import com.sts.dto.respone.OneUserForSecurity;
 import com.sts.dto.respone.UserForSecurity;
 import com.sts.model.Brand;
+import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 import com.sts.service.UserService;
 import com.sts.service.UserService;
@@ -26,8 +27,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findAll() {
-		return userDAO.findAll();
+	public List<LResponseUser> findAll() {
+		return userDAO.findAllUser();
 	}
 
 	@Override
