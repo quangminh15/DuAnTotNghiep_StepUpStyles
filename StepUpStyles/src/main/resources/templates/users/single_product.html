@@ -174,7 +174,7 @@
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
 					<div th:each="p: ${similarProducts}"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
+						<div class="product-grid2 transmitv" th:attr="ng-click=@{|saveProductID(${p.productID})|}">
 							<div class="product-image2">
 								<a th:href="@{|/single_product/${p.productID}|}"> <img
 									th:if="${not #lists.isEmpty(p.productImages)}"

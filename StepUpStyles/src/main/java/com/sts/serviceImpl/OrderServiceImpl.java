@@ -107,6 +107,16 @@ public class OrderServiceImpl implements OrderService {
         return dateFormat.format(date);
     }
 
+    @Override
+    public List<Order> loadByUser(User user) {
+       return orderDao.findByUser(user);
+    }
+
+    @Override
+    public List<Order> loadByStatus(OrderStatus status) {
+       return orderDao.findByOrderStatus(status);
+    }
+
    
 
 }

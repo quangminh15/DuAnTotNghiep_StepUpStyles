@@ -5,7 +5,7 @@
 <head>
 
 <title>SUS || SẢN PHẨM</title>
-
+	
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -344,8 +344,11 @@
 											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">
-											<li><a ng-click="check(p.productID)"><span
-													class="fa fa-heart" aria-hidden="true"></span></a></li>
+											<li> 
+												<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+												<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+
+											</li>
 										</ul>
 
 										<div class="transmitv single-item">
