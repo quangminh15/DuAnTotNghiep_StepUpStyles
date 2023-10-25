@@ -472,10 +472,29 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			}).catch(function(error) {
 				console.error('Error fetching product discount', error);
 			});
+
+			// Gọi API để lấy sản phẩm chi tiết
+			$http.get('/rest/productdetails/loadbyproduct/' + storedProductID).then(function(response) {
+				$scope.productDetails.productDetail = response.data;
+
+				// Lấy danh sách size của sản phẩm chi tiết
+				var productDetailID = $scope.productDetails.productDetail.productDetailID;
+				$http.get('/rest/sizes/loadbyproductdetail/' + productDetailID).then(function(response) {
+					$scope.productDetails.productDetail.sizes = response.data;
+				}).catch(function(error) {
+					console.error('Error fetching sizes', error);
+				});
+
+			}).catch(function(error) {
+				console.error('Error fetching product details', error);
+			});
+
+			console.error('loadProductFromLocalStorage', $scope.productDetails);
 		}).catch(function(error) {
 			console.error('Error fetching product details', error);
 		});
 	};
+
 
 	// Gọi hàm loadProductFromLocalStorage khi trang chi tiết sản phẩm được tải
 	$scope.loadProductFromLocalStorage();
