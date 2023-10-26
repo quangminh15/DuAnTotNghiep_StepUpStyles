@@ -451,19 +451,11 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$http.get('/rest/productdetails/loadbyproduct/' + storedProductID).then(function(response) {
 				$scope.productDetails.productDetail = response.data;
 
-				// Lấy danh sách size của sản phẩm chi tiết
-				var productDetailID = $scope.productDetails.productDetail.productDetailID;
-				$http.get('/rest/sizes/loadbyproductdetail/' + productDetailID).then(function(response) {
-					$scope.productDetails.productDetail.sizes = response.data;
-				}).catch(function(error) {
-					console.error('Error fetching sizes', error);
-				});
-
 			}).catch(function(error) {
 				console.error('Error fetching product details', error);
 			});
 
-			console.error('loadProductFromLocalStorage', $scope.productDetails);
+			console.log('loadProductFromLocalStorage', $scope.productDetails);
 		}).catch(function(error) {
 			console.error('Error fetching product details', error);
 		});
@@ -478,16 +470,16 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		var storedProductID = localStorage.getItem('productID');
 
 		$http.get('/rest/products/' + storedProductID).then(function(response) {
-			$scope.productDetails = response.data;
+			$scope.products = response.data;
 
 			$http.get('/rest/productimages/loadbyproduct/' + storedProductID).then(function(response) {
-				$scope.productDetails.image = response.data;
+				$scope.products.image = response.data;
 			}).catch(function(error) {
 				console.error('Error fetching product images', error);
 			});
 
 			$http.get('/rest/discount/loadbyproduct/' + storedProductID).then(function(response) {
-				$scope.productDetails.discount = response.data;
+				$scope.products.discount = response.data;
 			}).catch(function(error) {
 				console.error('Error fetching product discount', error);
 			});

@@ -1,6 +1,5 @@
 package com.sts.api;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.dao.ProductImageDAO;
 import com.sts.model.Product;
-import com.sts.model.ProductImage;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
+import com.sts.serviceImpl.ProductDetailServiceImpl;
 
 @CrossOrigin("*")
 @RestController
@@ -29,6 +28,9 @@ public class ProductRestController {
 
 	@Autowired
 	ProductImageDAO imgDAO;
+	
+	@Autowired
+	ProductDetailServiceImpl productDetail;
 
 	@GetMapping("/rest/products/{productID}")
 	public Product getOne(@PathVariable("productID") Integer productID) {
@@ -104,4 +106,5 @@ public class ProductRestController {
 		// Viết mã để lấy các sản phẩm dựa trên brandID ở đây
 		return productService.findFeaturedProducts();
 	}
+	
 }
