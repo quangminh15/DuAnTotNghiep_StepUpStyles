@@ -21,29 +21,55 @@
 				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
-							<!-- 														<ul class="slides"> -->
-							<!-- 															<li ng-repeat="image in productDetails.image"  -->
-							<!-- 																data-thumb="{{image.imagePath}}"> -->
-							<!-- 																<div class="thumb-image"> -->
-							<!-- 																	<img ng-src="{{image.imagePath}}" data-imagezoom="true" -->
-							<!-- 																		class="img-fluid" alt=""> -->
-							<!-- 																</div> -->
-							<!-- 															</li> -->
-							<!-- 														</ul> -->
-											
+							<!-- 							<div th:if="${productDetails}"> -->
+							<!-- 								<ul class="slides"> -->
+							<!-- 									<th:block th:each="image : ${productDetails.image}" -->
+							<!-- 										th:limit="4"> -->
+							<!-- 										<li th:attr="data-thumb=${image.imagePath}"> -->
+							<!-- 											<div class="thumb-image"> -->
+							<!-- 												<img th:src="@{${image.imagePath}}" data-imagezoom="true" -->
+							<!-- 													class="img-fluid" alt=" "> -->
+							<!-- 											</div> -->
+							<!-- 										</li> -->
+							<!-- 									</th:block> -->
+							<!-- 								</ul> -->
+							<!-- 							</div> -->
+							<!-- 							<ul class="slides"> -->
+							<!-- 								<li ng-repeat="image in productDetails.image" -->
+							<!-- 									data-thumb="{{image.imagePath}}"> -->
+							<!-- 									<div class="thumb-image"> -->
+							<!-- 										<img ng-src="{{image.imagePath}}" data-imagezoom="true" -->
+							<!-- 											class="img-fluid" alt=" "> -->
+							<!-- 									</div> -->
+							<!-- 								</li> -->
+							<!-- 							</ul> -->
 
+							<!-- 							test -->
+							<!-- 							<div class="img-card"> -->
+							<!-- 								<img -->
+							<!-- 									src="https://github.com/mdalmamunit427/product-details-page-html-css-js/blob/main/img/product%20details%20page.png?raw=true" -->
+							<!-- 									alt="" id="featured-image"> -->
+							<!-- 								small img -->
+							<!-- 								<div class="small-Card"> -->
+							<!-- 									<img ng-repeat="image in productDetails.image" -->
+							<!-- 										ng-src="{{image.imagePath}}" alt="" class="small-Img"> -->
+							<!-- 								</div> -->
+							<!-- 							</div> -->
 
-							<ul class="slides" >
-								<li ng-repeat="image in productDetails.image" 
-									data-thumb="{{image.imagePath}}">
-									<div class="thumb-image">
-										<img ng-src="{{image.imagePath}}" data-imagezoom="true"
-											class="img-fluid" alt="">
+							<div class="img-card">
+								<img ng-src="{{productDetails.featuredImage}}" alt=""
+									id="featured-image">
+								<!-- small img -->
+								<div class="small-Card">
+									<div ng-repeat="image in productDetails.image"
+										class="small-Img"
+										ng-click="updateFeaturedImage(image.imagePath)">
+										<img ng-src="{{image.imagePath}}" alt="" class="small-Img">
 									</div>
-								</li>
-							</ul>
+								</div>
+							</div>
 
-
+							<!-- test -->
 							<div class="clearfix"></div>
 						</div>
 						<div class="eco-buttons mt-5">
@@ -74,7 +100,8 @@
 							</ul>
 							<p>{{ numRatings }} đánh giá</p>
 
-							<h6 style="white-space: nowrap;" ng-if="productDetails.discount[0].priceDiscount == null">
+							<h6 style="white-space: nowrap;"
+								ng-if="productDetails.discount[0].priceDiscount == null">
 								<span class="item_price">{{ productDetails.price |
 									number:0 }} ₫</span>
 							</h6>
