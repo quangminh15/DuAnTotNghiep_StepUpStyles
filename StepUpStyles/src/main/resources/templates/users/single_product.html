@@ -61,12 +61,13 @@
 									id="featured-image">
 								<!-- small img -->
 								<div class="small-Card">
-									<div ng-repeat="image in productDetails.image"
+									<div ng-repeat="image in productDetails.image.slice(0, 4)"
 										class="small-Img"
 										ng-click="updateFeaturedImage(image.imagePath)">
 										<img ng-src="{{image.imagePath}}" alt="" class="small-Img">
 									</div>
 								</div>
+
 							</div>
 
 							<!-- test -->

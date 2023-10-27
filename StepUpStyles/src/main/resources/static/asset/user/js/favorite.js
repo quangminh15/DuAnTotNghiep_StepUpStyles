@@ -521,7 +521,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$scope.currentIndex = ($scope.currentIndex + 1) % $scope.productDetails.image.length;
 			$scope.productDetails.featuredImage = $scope.productDetails.image[$scope.currentIndex].imagePath;
 			$scope.$apply(); // Áp dụng sự thay đổi để cập nhật giao diện người dùng
-		}, 1500); // Đổi ảnh sau mỗi 1,5s
+		}, 3000); // Đổi ảnh sau mỗi 1,5s
 	};
 
 	// Gọi hàm chuyển đổi ảnh tự động khi trang được tải lên
