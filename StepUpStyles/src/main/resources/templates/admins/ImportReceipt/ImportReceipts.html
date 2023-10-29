@@ -12,9 +12,9 @@
                 <div class="form-group col-md-6">
                     <label>Nhà cung cấp</label>
                     <div>
-                        <select class="select2 form-control" ng-model="form.supplier.supplierID">
+                        <select class="select2 form-control" ng-model="form.supplier.supplierId">
                             <option value="" disabled selected>Vui lòng chọn nhà cung cấp</option>
-                            <option ng-repeat="i in importSup" ng-value="i.supplierID">{{i.supplierName}}</option>
+                            <option ng-repeat="i in importSup" ng-value="i.supplierId">{{i.supplierName}}</option>
                         </select>
                     </div>
                 </div>
@@ -131,8 +131,8 @@
                                 <th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
                                     column.label }}
                                     <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
-                                            class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
-                                            class="mdi mdi-long-arrow-up"></span>
+                                            class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+                                            class="ti-angle-double-up"></span>
                                     </span>
                                 </th>
                             </tr>

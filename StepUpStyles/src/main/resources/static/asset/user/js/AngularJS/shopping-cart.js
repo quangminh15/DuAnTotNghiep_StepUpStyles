@@ -617,4 +617,6 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		}
 	};
 	//--------------
+	
+	
 }])

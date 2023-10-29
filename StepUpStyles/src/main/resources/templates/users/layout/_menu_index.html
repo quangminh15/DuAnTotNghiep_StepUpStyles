@@ -14,11 +14,11 @@
 				<div id="search" class="pop-overlay">
 					<div class="popup">
 
-						<form th:action="@{/search_products}" method="get"
+						<form method=""
 							class="search-box">
-							<input type="search" placeholder="Nhập" name="search"
+							<input type="search" placeholder="Nhập" ng-model="searchKeyword"
 								required="required" autofocus="">
-							<button type="submit" class="btn">Tìm kiếm</button>
+							<button type="submit" class="btn" ng-click="searchProductByName()">Tìm kiếm</button>
 						</form>
 
 					</div>
@@ -55,8 +55,8 @@
 						</form>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="/favorite">
-						<span class="far fa-heart"></span><span
-						class="badge badge-pill badge-dark" id="favoriteCount"></span>
+						<span class="far fa-heart" style="font-size: 24px;"></span><span
+						class="badge badge-pill badge-danger" id="favoriteCount"></span>
 					</a>
 					</li>
 					<li class="transmitvcart galssescart2 cart cart box_1">

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.dao.ImportReceiptDAO;
+import com.sts.dao.ImportReceiptDetailDAO;
 import com.sts.dao.ProductDetailDAO;
 import com.sts.model.ImportReceipt;
 import com.sts.model.ImportReceiptDetail;
@@ -21,7 +22,7 @@ import com.sts.model.ProductDetail;
 import com.sts.service.ImportReceiptDetailService;
 import com.sts.service.ImportReceiptService;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/importReceiptDetails")
 public class ImportReceiptDetailRestController {
@@ -36,6 +37,9 @@ public class ImportReceiptDetailRestController {
 
     @Autowired
     ProductDetailDAO pro;
+
+    @Autowired
+    ImportReceiptDetailDAO dao;
 
     @GetMapping
     public List<ImportReceiptDetail> getAll() {

@@ -5,7 +5,7 @@
 <head>
 
 <title>SUS || SẢN PHẨM</title>
-
+	
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -276,21 +276,28 @@
 									</h4>
 									<div class="row special-sec1 mt-4">
 										<div class="row mb-3" ng-repeat="product in featureds"
-											ng-if="$index < 4">
-											<div class="col-4 img-deals">
+											ng-if="$index < 4" ng-click="saveProductID(product.productID)">
+											<div class="col-4 img-deals" >
 												<a ng-click="goToSinglePage(product.productID)"> <img
-													ng-if="product.imagePaths.length > 0"
 													class="pic-1 img-fluid"
-													ng-src="{{getImagePath(product.imagePaths[0])}}" alt="123">
+													ng-src="{{product.image[0].imagePath}}">
 												</a>
 											</div>
-											<div class="col-8 img-deal1">
-												<h5 class="post-title">
+											<div class="col-8 img-deal1" >
+												<h5 class="post-title title">
 													<a ng-click="goToSinglePage(product.productID)">
 														{{product.productName}} </a>
 												</h5>
-												<a ng-click="goToSinglePage(product.productID)"
-													class="price-right"> {{product.price | number:0}} ₫ </a>
+												<a ng-click="goToSinglePage(product.productID)"> <span
+													class="price-right"
+													ng-if="product.discount[0].priceDiscount == null">{{product.price
+														| number:0}} ₫</span> <span class="price-right"
+													ng-if="product.discount[0].status === 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.discount[0].priceDiscount | number:0 }} đ</span> <span
+													class="price-right"
+													ng-if="product.discount[0].status !== 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.price | number:0 }} đ</span>
+												</a>
 											</div>
 										</div>
 									</div>
@@ -332,22 +339,28 @@
 						</div>
 						<!-- /row-->
 						<div class="ecom-products-grids row">
-
 							<div ng-repeat="p in pager.productitems"
 								class="col-lg-4 col-6 product-incfhny mb-4">
 								<div class="product-grid2 transmitv"
 									ng-click="saveProductID(p.productID)">
-									<div class="product-image2">
+									<div class="product-image2" style="position: relative;">
+										<div class="discount-circle"
+											ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+											p.discount[0].directDiscount }}%</div>
 										<a ng-click="goToSinglePage(p.productID)"> <img
-											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}"
-											alt="123"> <img class="pic-2 img-fluid"
+											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+											<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+											ng-src="{{p.image[1].imagePath}}"> <img
+											ng-if="p.image.length <= 1" class="pic-2 img-fluid"
 											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">
-											<!-- <li><a ng-click="check(p.productID)"><span
-													class="far fa-heart" aria-hidden="true"></span></a></li> -->
-										</ul>
+											<li> 
+												<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+												<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
 
+											</li>
+										</ul>
 										<div class="transmitv single-item">
 											<a ng-click="goToSinglePage(p.productID)" type="submit"
 												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
@@ -359,11 +372,17 @@
 											<a ng-click="goToSinglePage(p.productID)">{{
 												p.productName }}</a>
 										</h3>
-										<span class="price">{{ p.price | number:0 }} ₫</span>
+										<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 									</div>
 								</div>
 							</div>
-
 						</div>
 						<!--/pagination-->
 						<div class="pagination" style="margin: 0px 10px 20px;">
@@ -371,18 +390,16 @@
 								<li class="prev"><a ng-click="pager.first()"><span
 										class="fa fa-angle-double-left"></span></a></li>
 								<li class="page-item" ng-repeat="page in visiblePages"
-									ng-class="{ 'active': (page.value === pager.page + 1) }">
-									<a class="page-link" href="" ng-click="pager.goto(page.value)"
+									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+									class="page-link" href="" ng-click="pager.goto(page.value)"
 									ng-style="page.value === (pager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
-										{{ page.value }} </a>
-								</li>
+										{{ page.value }} </a></li>
 
 
 								<li class="next"><a ng-click="pager.last()"><span
 										class="fa fa-angle-double-right"></span></a></li>
 							</ul>
 						</div>
-
 						<!--//pagination-->
 						<!-- //row-->
 						<!--/row2-->

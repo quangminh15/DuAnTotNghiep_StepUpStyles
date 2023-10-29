@@ -1,4 +1,4 @@
-package com.sts.api;
+package com.sts.apiFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sts.model.ImportReceiptDetail;
 
 @Controller
-public class ExcelRestController {
+public class ExcelImportRestController {
     @PostMapping("/export-excel")
     @ResponseBody
     public void exportExcel(HttpServletResponse response, @RequestBody List<ImportReceiptDetail> importDetail)

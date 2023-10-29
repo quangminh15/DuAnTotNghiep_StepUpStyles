@@ -32,12 +32,12 @@ public class ProductDetailRestController {
 	public List<ProductDetail> getAll() {
 		return productDetailService.findAll();
 	}
-	
+
 	@GetMapping("/rest/productdetails/loadallDeleted")
 	public List<ProductDetail> getAllDeleted() {
 		return productDetailService.loadAllDeleted();
 	}
-	
+
 	@GetMapping("/rest/productdetails/loadallNoDeleted")
 	public List<ProductDetail> getAllNoDeleted() {
 		return productDetailService.loadAllNoDeleted();
@@ -65,17 +65,17 @@ public class ProductDetailRestController {
 		return productDetailService.searchByName(keyword);
 	}
 
-	// Lọc danh sách hình ảnh theo sản phẩm
+	// Lọc danh sách sản phẩm chi tiết theo sản phẩm
 	@GetMapping("/rest/productdetails/loadbyproduct/{productId}")
 	public List<ProductDetail> getProductDetailByProduct(@PathVariable Integer productId) {
 		return productDetailService.getProductDetailByProduct(productId);
 	}
-	
-	//test
-	@GetMapping("/rest/productdetails/byCategory/{categoryId}")
-    public ResponseEntity<List<ProductDetail>> getProductDetailsByCategory(@PathVariable("categoryId") Integer categoryId) {
-        List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(categoryId);
-        return ResponseEntity.ok(productDetails);
-    }
 
+	// test
+	@GetMapping("/rest/productdetails/byCategory/{categoryId}")
+	public ResponseEntity<List<ProductDetail>> getProductDetailsByCategory(
+			@PathVariable("categoryId") Integer categoryId) {
+		List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(categoryId);
+		return ResponseEntity.ok(productDetails);
+	}
 }

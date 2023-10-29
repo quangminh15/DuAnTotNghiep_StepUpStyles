@@ -1,4 +1,4 @@
-package com.sts.api;
+package com.sts.apiFile;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -24,7 +24,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class PDFRestController {
+public class PDFImportRestController {
     @PostMapping("/export-pdf")
     @ResponseBody
     public void exportPdf(HttpServletResponse response, @RequestBody List<ImportReceiptDetail> importDetail)

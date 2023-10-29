@@ -7,6 +7,7 @@ import com.sts.model.DTO.TotalProductRatingDTO;
 
 public interface ReviewService {
     List<Review> findAll();
+    Review createReview(Review review);
     Review findById(Integer reviewID);
     boolean hidReview (Integer reviewID);
     List<Review> getProductByProductId(Integer productId);

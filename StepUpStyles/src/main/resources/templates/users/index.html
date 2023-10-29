@@ -3,9 +3,7 @@
 	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-
 <title>SUS || TRANG CHỦ</title>
-
 </head>
 
 <body ng-controller="index-ctrl">
@@ -179,17 +177,18 @@
 					<div class="col-lg-2 col-md-4 col-6 welcome-image"
 						ng-repeat="brand in brans">
 						<div class="boxhny13">
-							<a ng-click="getProductsByBrand(brand.brandID)"> <img
+							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
 								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
 								<div class="boxhny-content">
-									<h3 class="title">Xem
+									<h3 class="title">Xem</h3>
 								</div>
 							</a>
 						</div>
 						<h4>
-							<a ng-click="getProductsByBrand(brand.brandID)">{{brand.brandName}}</a>
+							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
 						</h4>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -270,20 +269,27 @@
 				</h3>
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
-				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div ng-repeat="p in featureds"
+				<div class="ecom-products-grids row ">
+					<div ng-repeat="p in FeaturedPager.featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
-							<div class="product-image2">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
+							<div class="product-image2" style="position: relative;">
+								<div class="discount-circle"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+									p.discount[0].directDiscount }}%</div>
 								<a ng-click="goToSinglePage(p.productID)"> <img
-									ng-if="p.imagePaths.length > 0" class="pic-1 img-fluid"
-									ng-src="{{getImagePath(p.imagePaths[0])}}"> <img
-									ng-if="p.imagePaths.length > 0" class="pic-2 img-fluid"
-									ng-src="{{getImagePath(p.imagePaths[0])}}">
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li><a ng-click="check(p.productID)"><span
-											class="fa fa-heart" aria-hidden="true"></span></a></li>
+									<li>
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
 									<a ng-click="goToSinglePage(p.productID)" type="submit"
@@ -296,12 +302,40 @@
 									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
 										}}</a>
 								</h3>
-								<span class="price">{{ p.price | number:0 }} ₫</span>
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 							</div>
 						</div>
 					</div>
-
 				</div>
+				<!--/pagination-->
+				<div class="custom-pagination" style="margin: 0px 10px 20px;">
+					<ul>
+						<li class="custom-prev"><a ng-click="FeaturedPager.first()">
+								<span class="fa fa-angle-double-left"></span>
+						</a></li>
+						<li class="custom-page-item"
+							ng-repeat="page in FeaturedVisiblePages"
+							ng-class="{ 'custom-active': (page.value === FeaturedPager.page + 1) }">
+							<a class="custom-page-link" href=""
+							ng-click="FeaturedPager.FeaturedGoto(page.value)"
+							ng-style="(page.value === (FeaturedPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {})">
+								{{ page.value }} </a>
+						</li>
+						<li class="custom-next"><a ng-click="FeaturedPager.last()">
+								<span class="fa fa-angle-double-right"></span>
+						</a></li>
+					</ul>
+				</div>
+
+
+				<!--//pagination-->
 				<!-- //row-->
 			</div>
 		</div>
@@ -450,54 +484,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c4.jpg" class="img-fluid"
-														alt="">
-													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
 									</div>
 									<!--.row-->
 								</div>
@@ -517,54 +503,6 @@
 													<img src="asset/user/images/c4.jpg" class="img-fluid"
 														alt="">
 													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c1.jpg" class="img-fluid"
-														alt="">
-													<h5>Smith Roy</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
 
 												</div>
 											</div>
