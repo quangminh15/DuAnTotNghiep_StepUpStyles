@@ -1,37 +1,37 @@
-app.controller("favorite-ctrl", function ($scope, $http) {
-    $scope.userItemsFavorite = [];
-    $scope.userRatings = []
-    //Linh
-    $scope.check = function (productID) {
-        $http.get('/rest/favorites/check/' + productID)
-            .then(function (response) {
-                $scope.productbyids = response.data;
-                console.log($scope.productbyids.favoriteId);
-                if (!$scope.productbyids) {
-                    $http.post('/rest/favorites/' + productID)
-                        .then(function (response) {
-                            console.log("bat thich");
+app.controller("favorite-ctrl", function($scope, $http) {
+	//Linh
+	$scope.userItemsFavorite = [];
+	$scope.userRatings = []
+	$scope.check = function(productID) {
+		$http.get('/rest/favorites/check/' + productID)
+			.then(function(response) {
+				$scope.productbyids = response.data;
+				console.log($scope.productbyids.favoriteId);
+				if (!$scope.productbyids) {
+					$http.post('/rest/favorites/' + productID)
+						.then(function(response) {
+							console.log("bat thich");
 							$scope.getAllUserFavorite();
-                        })
-                        .catch(function (error) {
-                            console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
-                        });
-                    console.log(1);
-                } else {
-                    $http.delete('/rest/favorites/delete/' + productID)
-                        .then(function (response) {
-                            console.log("tat thich");
+						})
+						.catch(function(error) {
+							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+						});
+					console.log(1);
+				} else {
+					$http.delete('/rest/favorites/delete/' + productID)
+						.then(function(response) {
+							console.log("tat thich");
 							$scope.getAllUserFavorite();
-                        })
-                        .catch(function (error) {
-                            console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
-                        });
-                }
-            })
-            .catch(function (error) {
-                console.error('Error ' + error);
-            });
-    }
+						})
+						.catch(function(error) {
+							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+						});
+				}
+			})
+			.catch(function(error) {
+				console.error('Error ' + error);
+			});
+	}
 
 
 	$scope.deleteFavoriteProduct = function(productID) {
@@ -65,19 +65,19 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 					items.product.image = resp.data;
 				})
 			})
-			console.log("Linhttwststst" ,$scope.userItemsFavorite);
+			console.log("Linhttwststst", $scope.userItemsFavorite);
 		})
 	}
 
-    $scope.isFavorited = function(productId) {
+	$scope.isFavorited = function(productId) {
 		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
 		return $scope.userItemsFavorite.some(function(item) {
 			return item.product.productID === productId;
 		});
 	};
-	
+
 	// Hàm cập nhật trạng thái yêu thích
-    
+
 
 
 	$scope.getAllUserFavorite();
@@ -158,19 +158,19 @@ app.controller("favorite-ctrl", function ($scope, $http) {
         return stars;
     };
 
-    function createStarList(rating) {
-        var starList = [];
-        for (var i = 0; i < 5; i++) {
-            if (rating >= i + 1) {
-                starList.push('fa fa-star yellow-star');
-            } else if (rating > i) {
-                starList.push('fa fa-star-half-o yellow-star');
-            } else {
-                starList.push('fa fa-star-o yellow-star');
-            }
-        }
-        return starList;
-    }
+	function createStarList(rating) {
+		var starList = [];
+		for (var i = 0; i < 5; i++) {
+			if (rating >= i + 1) {
+				starList.push('fa fa-star yellow-star');
+			} else if (rating > i) {
+				starList.push('fa fa-star-half-o yellow-star');
+			} else {
+				starList.push('fa fa-star-o yellow-star');
+			}
+		}
+		return starList;
+	}
 
 	///////
 
