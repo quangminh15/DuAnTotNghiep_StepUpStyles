@@ -86,7 +86,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
 			$scope.allreviews = resp.data;
 			$scope.countReviews($scope.allreviews);
-
+			$scope.reviewPager.first()
 			// Tạo danh sách sao để hiển thị
 			$scope.starList = createStarList($scope.averageRating);
 			console.log("Sao " + $scope.starList);
@@ -147,19 +147,16 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 		});
 	};
 
-	function createStarList(rating) {
-		var starList = [];
-		for (var i = 0; i < 5; i++) {
-			if (rating >= i + 1) {
-				starList.push('fa fa-star yellow-star');
-			} else if (rating > i) {
-				starList.push('fa fa-star-half-o yellow-star');
-			} else {
-				starList.push('fa fa-star-o yellow-star');
-			}
-		}
-		return starList;
-	}
+	$scope.getStars = function(rating) {
+        var stars = [];
+        var fullStars = Math.floor(rating);
+        
+        for (var i = 0; i < fullStars; i++) {
+            stars.push({});
+        }
+
+        return stars;
+    };
 
     function createStarList(rating) {
         var starList = [];
@@ -177,6 +174,86 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 	///////
 
+	$scope.getStarToAvgs = function(averageRating) {
+		var stars = [];
+        var rating = averageRating;
+		console.log("Sao before ", rating);
+		    while (stars.length < 5) {
+            if (rating >= 1) {
+                stars.push({ full : true});
+            } else if (rating >= 0.5) {
+                stars.push({ half: true });
+            } else {
+                stars.push({ empty: true });
+            }
+            rating -= 1;
+        }
+		console.log("Sao after ", rating);
+		console.log("Linhtstw ", stars);
+
+        return stars;
+	};
+
+	//Phân trang đánh giá sản phẩm
+	$scope.reviewPager = {
+		page: 0,
+		size: 1,
+		getReviewPageNumbers: function() {
+			var reviewPageCount = this.count;
+			var reviewCurrentPage = this.page + 1;
+			var reviewVisiblePages = [];
+
+			if (reviewPageCount <= 3) {
+				for (var i = 1; i <= reviewPageCount; i++) {
+					reviewVisiblePages.push({ value: i });
+				}
+			} else {
+				if (reviewCurrentPage <= 2) {
+					reviewVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (reviewCurrentPage >= reviewPageCount - 1) {
+					reviewVisiblePages.push({ value: '...' }, { value: reviewPageCount - 2 }, { value: reviewPageCount - 1 }, { value: reviewPageCount });
+				} else {
+					reviewVisiblePages.push({ value: '...' }, { value: reviewCurrentPage - 1 }, { value: reviewCurrentPage }, { value: reviewCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return reviewVisiblePages;
+		},
+		get allreviews() {
+			var start = this.page * this.size;
+			return $scope.allreviews.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.allreviews.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		gotoReview(reviewPageNumber) {
+			if (reviewPageNumber >= 1 && reviewPageNumber <= this.count) {
+				this.page = reviewPageNumber - 1;
+				$scope.reviewVisiblePages = this.getReviewPageNumbers();
+			}
+		},
+	};
 	
 
 	//Linh end 
