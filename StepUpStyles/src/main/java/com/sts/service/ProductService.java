@@ -62,4 +62,6 @@ public interface ProductService {
 
 	// Lọc sản phẩm theo category
 	List<Product> getProductsByCategoryID(Integer categoryID);
+
+	List<Product> loadDiscountedProducts();
 }

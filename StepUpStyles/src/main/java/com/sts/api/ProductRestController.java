@@ -28,7 +28,7 @@ public class ProductRestController {
 
 	@Autowired
 	ProductImageDAO imgDAO;
-	
+
 	@Autowired
 	ProductDetailServiceImpl productDetail;
 
@@ -106,5 +106,9 @@ public class ProductRestController {
 		// Viết mã để lấy các sản phẩm dựa trên brandID ở đây
 		return productService.findFeaturedProducts();
 	}
-	
+
+	@GetMapping("/rest/products/loadDiscountedProducts")
+	public List<Product> loadDiscountedProducts() {
+		return productService.loadDiscountedProducts();
+	}
 }
