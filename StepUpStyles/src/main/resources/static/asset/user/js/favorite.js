@@ -493,7 +493,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				return item.size.sizeNumber === parseFloat(selectedSize);
 			})
 			.map(function(item) {
-				return item.color.colorName;
+				return item.color;
 			});
 
 		console.log("Màu lọc được: ", $scope.filteredColors);
