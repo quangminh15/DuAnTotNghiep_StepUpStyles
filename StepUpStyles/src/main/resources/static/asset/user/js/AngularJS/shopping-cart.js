@@ -92,6 +92,18 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// Now, cartItems will have color and size information for each product
 				$scope.items = cartItems;
 				$scope.cartitems = cartItems
+
+				$scope.items.forEach(item => {
+					$http.get("/rest/discount/loadbyproduct/" + item.product.productID).then(resp => {
+						item.product.discount = resp.data;
+						console.log("dis", item.product.discount);
+						if (item.product.discount) {
+							item.product.price = item.product.price - (item.product.price * item.product.discount[0].directDiscount / 100)
+							console.log("afterProce", item.product.price);
+						}
+					})
+
+				})
 				if ($scope.items.length > 0) {
 					$scope.page = true
 				} else
@@ -104,7 +116,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			});
 
 
-			$http.get(`/rest/address/default`)
+		$http.get(`/rest/address/default`)
 			.then(resp => {
 				$scope.addressDefault = resp.data
 				console.log(resp.data);
@@ -117,13 +129,49 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 
 	}
+	$scope.singleProd=[]
+	$scope.showQuantityStock = function (id, size, color) {
+		
+		$http.get(`/rest/productdetails/find?id=${1}&size=${3}&color=${1}`)
+			.then(function (response) {
+				$scope.singleProd=response.data
+				console.log("prod", $scope.singleProd);
+				
+			})
+
+			.catch(function (error) {
+				console.error('Failed to add to cart:', error);
+			});
+	}
+	$scope.checkQuantity = function ( qty) {
+		if ($scope.singleProd.quantity<qty) {
+			const Toast = Swal.mixin({
+				toast: true,
+				position: 'top',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'error',
+				title: 'Số lượng không đủ',
+
+			})
+			$scope.qty=$scope.singleProd.quantity
+		}
+	}
 
 	$scope.initialize();
 
 	$scope.getAddressToShippingFee = function (p, d, w) {
-		if (!p||!d||!w) {
-			$scope.shippingFee =0
-		}else{
+		if (!p || !d || !w) {
+			$scope.shippingFee = 0
+		} else {
 
 			$scope.dataAddress = {
 				"service_type_id": 2,
@@ -196,7 +244,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 	}
 
-	$scope.countcartItems= function () {
+	$scope.countcartItems = function () {
 		return $scope.cartitems.length
 	}
 
@@ -205,30 +253,30 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.checkout = function () {
 		var storedItems = localStorage.getItem('selectedItems');
 		var parseData = JSON.parse(storedItems);
-		 var handle = ""
-		var check=true
+		var handle = ""
+		var check = true
 		if (Array.isArray(parseData)) {
-			if (parseData.length>0) {
-				check=true
+			if (parseData.length > 0) {
+				check = true
 				console.log(check);
-				handle=""
-				console.log("han",handle);
-			}else{
-				check=false
+				handle = ""
+				console.log("han", handle);
+			} else {
+				check = false
 				console.log(check);
-				
-				handle="data-swal-toast-template"
-				console.log("han1",handle);
+
+				handle = "data-swal-toast-template"
+				console.log("han1", handle);
 			}
-		} else{
-			check=false
+		} else {
+			check = false
 		}
 
-		if (check==true) {
+		if (check == true) {
 			console.log("true");
 			console.log("Length of parseData:", parseData.length);
 			window.location.href = '/checkout';
-		} else  {
+		} else {
 			console.log(false);
 			const Toast = Swal.mixin({
 				toast: true,
@@ -237,16 +285,16 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				timer: 3000,
 				timerProgressBar: true,
 				didOpen: (toast) => {
-				  toast.addEventListener('mouseenter', Swal.stopTimer)
-				  toast.addEventListener('mouseleave', Swal.resumeTimer)
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
 				}
-			  })
-			  
-			  Toast.fire({
+			})
+
+			Toast.fire({
 				icon: 'error',
 				title: 'Vui lòng chọn ít nhất 1 sản phẩm',
-				
-			  })
+
+			})
 		}
 	}
 	//Unique productDetai in cart
@@ -617,6 +665,6 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		}
 	};
 	//--------------
-	
-	
+
+
 }])
