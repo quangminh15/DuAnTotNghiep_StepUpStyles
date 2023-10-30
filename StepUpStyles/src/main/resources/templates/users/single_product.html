@@ -21,41 +21,6 @@
 				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
-							<!-- 							<div th:if="${productDetails}"> -->
-							<!-- 								<ul class="slides"> -->
-							<!-- 									<th:block th:each="image : ${productDetails.image}" -->
-							<!-- 										th:limit="4"> -->
-							<!-- 										<li th:attr="data-thumb=${image.imagePath}"> -->
-							<!-- 											<div class="thumb-image"> -->
-							<!-- 												<img th:src="@{${image.imagePath}}" data-imagezoom="true" -->
-							<!-- 													class="img-fluid" alt=" "> -->
-							<!-- 											</div> -->
-							<!-- 										</li> -->
-							<!-- 									</th:block> -->
-							<!-- 								</ul> -->
-							<!-- 							</div> -->
-							<!-- 							<ul class="slides"> -->
-							<!-- 								<li ng-repeat="image in productDetails.image" -->
-							<!-- 									data-thumb="{{image.imagePath}}"> -->
-							<!-- 									<div class="thumb-image"> -->
-							<!-- 										<img ng-src="{{image.imagePath}}" data-imagezoom="true" -->
-							<!-- 											class="img-fluid" alt=" "> -->
-							<!-- 									</div> -->
-							<!-- 								</li> -->
-							<!-- 							</ul> -->
-
-							<!-- 							test -->
-							<!-- 							<div class="img-card"> -->
-							<!-- 								<img -->
-							<!-- 									src="https://github.com/mdalmamunit427/product-details-page-html-css-js/blob/main/img/product%20details%20page.png?raw=true" -->
-							<!-- 									alt="" id="featured-image"> -->
-							<!-- 								small img -->
-							<!-- 								<div class="small-Card"> -->
-							<!-- 									<img ng-repeat="image in productDetails.image" -->
-							<!-- 										ng-src="{{image.imagePath}}" alt="" class="small-Img"> -->
-							<!-- 								</div> -->
-							<!-- 							</div> -->
-
 							<div class="img-card">
 								<img ng-src="{{productDetails.featuredImage}}" alt=""
 									id="featured-image">
@@ -125,9 +90,10 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option ng-repeat="s in sizes" value="{{s.sizeID}}">{{s.sizeNumber}}</option>
+								<select ng-model="size" ng-change="setSelectedSize(size)"
+									class="form-control">
+									<option value="" disabled selected>-- Chọn size --</option>
+									<option ng-repeat="s in sizess">{{s.sizeNumber}}</option>
 								</select>
 							</div>
 						</div>
@@ -136,12 +102,12 @@
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
 								<select ng-model="color" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn màu
-										sắc</option>
-									<option ng-repeat="c in colors" value="{{c.colorID}}">{{c.colorName}}</option>
+									<option value="" disabled selected>-- Chọn màu --</option>
+									<option ng-repeat="c in filteredColors">{{c}}</option>
 								</select>
 							</div>
 						</div>
+
 
 						<div class="desc_single my-4" ng-show="color">
 							<span class="col-md-3 size1">Số lượng</span>

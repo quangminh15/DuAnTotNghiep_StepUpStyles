@@ -183,6 +183,11 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	// quangminh bắt đầu
 	$scope.productitems = [];
+	$scope.sizess = [];
+	$scope.colorss = [];
+	$scope.filteredColors = [];
+	$scope.productDetails = [];
+	$scope.size = '';
 
 	$scope.getProductsAndNavigate = function(brandID) {
 		localStorage.setItem('brandID', brandID);
@@ -455,7 +460,17 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			// Gọi API để lấy sản phẩm chi tiết
 			$http.get('/rest/productdetails/loadbyproduct/' + storedProductID).then(function(response) {
 				$scope.productDetails.productDetail = response.data;
-
+				$scope.productDetails.productDetail.forEach(function(item) {
+					if (item.size) {
+						$scope.sizess.push(item.size);
+					}
+					if (item.color) {
+						$scope.colorss.push(item.color);
+					}
+				});
+				$scope.sizess = $scope.sizess.filter((v, i, a) => a.findIndex(t => t.sizeNumber === v.sizeNumber) === i);
+				console.log("sizess: ", $scope.sizess)
+				console.log("colorss: ", $scope.colorss)
 			}).catch(function(error) {
 				console.error('Error fetching product details', error);
 			});
@@ -467,6 +482,25 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	// Gọi hàm loadProductFromLocalStorage khi trang chi tiết sản phẩm được tải
 	$scope.loadProductFromLocalStorage();
+
+	$scope.setSelectedSize = function(selectedSize) {
+		$scope.size = selectedSize;
+		console.log("size đã chọn: ", selectedSize);
+
+		// Lọc danh sách màu dựa trên size đã chọn
+		$scope.filteredColors = $scope.productDetails.productDetail
+			.filter(function(item) {
+				return item.size.sizeNumber === parseFloat(selectedSize);
+			})
+			.map(function(item) {
+				return item.color.colorName;
+			});
+
+		console.log("Màu lọc được: ", $scope.filteredColors);
+	};
+
+
+
 	$scope.updateFeaturedImage = function(imagePath) {
 		$scope.productDetails.featuredImage = imagePath;
 	};
@@ -520,8 +554,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		setInterval(function() {
 			$scope.currentIndex = ($scope.currentIndex + 1) % $scope.productDetails.image.length;
 			$scope.productDetails.featuredImage = $scope.productDetails.image[$scope.currentIndex].imagePath;
-			$scope.$apply(); // Áp dụng sự thay đổi để cập nhật giao diện người dùng
-		}, 3000); // Đổi ảnh sau mỗi 1,5s
+			$scope.$apply();
+		}, 3000);
 	};
 
 	// Gọi hàm chuyển đổi ảnh tự động khi trang được tải lên
