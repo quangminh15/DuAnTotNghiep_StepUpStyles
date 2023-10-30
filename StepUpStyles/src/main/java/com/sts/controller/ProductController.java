@@ -1,5 +1,8 @@
 package com.sts.controller;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sts.dao.ProductDAO;
+import com.sts.model.ProductImage;
 import com.sts.service.BrandService;
 import com.sts.service.CategoryService;
 import com.sts.service.ColorService;
@@ -59,6 +63,12 @@ public class ProductController {
 	// Trang sản phẩm chi tiết
 	@RequestMapping("/single_product/{productID}")
 	public String single_product(Model model, @PathVariable("productID") Integer productID) {
+		List<ProductImage> productImageList = productImageService.getImagesByProduct(productID);
+		for (ProductImage productImage : productImageList) {
+			System.out.println(productImage.getImagePath());
+		}
+		model.addAttribute("productImageList",productImageList);
+		
 		return "users/single_product";
 	}
 

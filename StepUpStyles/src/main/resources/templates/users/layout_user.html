@@ -141,35 +141,6 @@ a:hover, button:hover {
 	font-weight: 700;
 }
 /* hiện phần trăm giảm giá END*/
-
-/* test hiện ảnh detail */
-.img-card img {
-	width: 100%;
-	flex-shrink: 0;
-	border-radius: 4px;
-	height:100%;
-	object-fit: cover;
-}
-
-.small-Card {
-	display: flex;
-	justify-content: start;
-	align-items: center;
-	margin-top: 15px;
-	gap: 12px;
-}
-
-.small-Card img {
-	width: 104px;
-	height: 104px;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-.small-Card img:active {
-	border: 1px solid #17696a;
-}
-/* test hiện ảnh detail */
 </style>
 </head>
 
@@ -379,53 +350,6 @@ a:hover, button:hover {
 		});
 	</script>
 	<!-- navbar scroll -->
-
-	<script>
-        let featuedImg = document.getElementById('featured-image');
-let smallImgs = document.getElementsByClassName('small-Img');
-
-smallImgs[0].addEventListener('click', () => {
-    featuedImg.src = smallImgs[0].src;
-    smallImgs[0].classList.add('sm-card')
-    smallImgs[1].classList.remove('sm-card')
-    smallImgs[2].classList.remove('sm-card')
-    smallImgs[3].classList.remove('sm-card')
-    smallImgs[4].classList.remove('sm-card')
-})
-smallImgs[1].addEventListener('click', () => {
-    featuedImg.src = smallImgs[1].src;
-    smallImgs[0].classList.remove('sm-card')
-    smallImgs[1].classList.add('sm-card')
-    smallImgs[2].classList.remove('sm-card')
-    smallImgs[3].classList.remove('sm-card')
-    smallImgs[4].classList.remove('sm-card')
-})
-smallImgs[2].addEventListener('click', () => {
-    featuedImg.src = smallImgs[2].src;
-    smallImgs[0].classList.remove('sm-card')
-    smallImgs[1].classList.remove('sm-card')
-    smallImgs[2].classList.add('sm-card')
-    smallImgs[3].classList.remove('sm-card')
-    smallImgs[4].classList.remove('sm-card')
-})
-smallImgs[3].addEventListener('click', () => {
-    featuedImg.src = smallImgs[3].src;
-    smallImgs[0].classList.remove('sm-card')
-    smallImgs[1].classList.remove('sm-card')
-    smallImgs[2].classList.remove('sm-card')
-    smallImgs[3].classList.add('sm-card')
-    smallImgs[4].classList.remove('sm-card')
-})
-smallImgs[4].addEventListener('click', () => {
-    featuedImg.src = smallImgs[4].src;
-    smallImgs[0].classList.remove('sm-card')
-    smallImgs[1].classList.remove('sm-card')
-    smallImgs[2].classList.remove('sm-card')
-    smallImgs[3].classList.remove('sm-card')
-    smallImgs[4].classList.add('sm-card')
-})
-    </script>
-
 	<!-- count cartitem -->
 
 

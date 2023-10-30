@@ -188,6 +188,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.filteredColors = [];
 	$scope.productDetails = [];
 	$scope.size = '';
+	$scope.color = '';
 
 	$scope.getProductsAndNavigate = function(brandID) {
 		localStorage.setItem('brandID', brandID);
@@ -499,7 +500,10 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		console.log("Màu lọc được: ", $scope.filteredColors);
 	};
 
-
+	$scope.setSelectedColor = function(selectedColor) {
+		$scope.color = selectedColor;
+		console.log("color đã chọn: ", selectedColor);
+	};
 
 	$scope.updateFeaturedImage = function(imagePath) {
 		$scope.productDetails.featuredImage = imagePath;

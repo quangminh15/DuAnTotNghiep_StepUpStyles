@@ -145,8 +145,8 @@
 						</h4>
 					</div>
 				</div>
-
 			</div>
+		</div>
 	</section>
 
 	<div class="right-sidebar-panel-content animated fadeInRight"
@@ -286,10 +286,10 @@
 									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li>
-										<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart"></span>
-										<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o"></span>
-									</li>
+									<li><span ng-if="isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart"></span> <span
+										ng-if="!isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart-o"></span></li>
 								</ul>
 								<div class="transmitv single-item">
 									<a ng-click="goToSinglePage(p.productID)" type="submit"

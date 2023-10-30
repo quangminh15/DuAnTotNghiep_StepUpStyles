@@ -21,21 +21,17 @@
 				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
-							<div class="img-card">
-								<img ng-src="{{productDetails.featuredImage}}" alt=""
-									id="featured-image">
-								<!-- small img -->
-								<div class="small-Card">
-									<div ng-repeat="image in productDetails.image.slice(0, 4)"
-										class="small-Img"
-										ng-click="updateFeaturedImage(image.imagePath)">
-										<img ng-src="{{image.imagePath}}" alt="" class="small-Img">
-									</div>
-								</div>
-
-							</div>
-
-							<!-- test -->
+							<ul class="slides">
+								<th:block th:each="image, iterStat : ${productImageList}">
+									<li th:attr="data-thumb=${image.imagePath}"
+										th:if="${iterStat.count} &lt;= 4">
+										<div class="thumb-image">
+											<img th:src="@{${image.imagePath}}" data-imagezoom="true"
+												class="img-fluid" alt=" ">
+										</div>
+									</li>
+								</th:block>
+							</ul>
 							<div class="clearfix"></div>
 						</div>
 						<div class="eco-buttons mt-5">
@@ -101,7 +97,8 @@
 						<div class="desc_single my-4" ng-show="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select ng-model="color" class="form-control">
+								<select ng-model="color" ng-change="setSelectedColor(color)"
+									class="form-control">
 									<option value="" disabled selected>-- Chọn màu --</option>
 									<option ng-repeat="c in filteredColors">{{c.colorName}}</option>
 								</select>
@@ -116,7 +113,6 @@
 									class="form-control">
 							</div>
 						</div>
-
 
 						<div class="desc_single mb-4">
 							<h5>Mô tả:</h5>
@@ -147,9 +143,10 @@
 						<div class="pro-grid-one">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									WOMEN'S FASHION <br>50% OFF
+									Thời trang nữ giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>
@@ -158,9 +155,10 @@
 						<div class="pro-grid-one pro-grid-two">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									MEN'S FASHION <br>60% OFF
+									Thời trang nam giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>
