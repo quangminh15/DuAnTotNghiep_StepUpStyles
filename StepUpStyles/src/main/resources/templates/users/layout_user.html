@@ -51,6 +51,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
 <style type="text/css">
 /* nút lọc của trang sản phẩm START */
 .custom-button-container {
@@ -152,7 +153,7 @@ a:hover, button:hover {
 </style>
 </head>
 
-<body ng-app="app" ng-controller="favorite-ctrl">
+<body ng-app="app" >
 
 	<div th:replace="~{/users/layout/_menu_index}"></div>
 
@@ -220,25 +221,24 @@ a:hover, button:hover {
 		updateCartCount();
 	</script>
 	<script>
-		function updateFavoriteCount() {
-			var count = 0
-			$.ajax({
-				type : 'GET',
-				url : '/rest/favorites/getUserFavorite',
+        function updateFavoriteCount() {
+    $.ajax({
+        type: 'GET',
+        url: '/rest/favorites/getUserFavorite',
+        contentType: "application/json",
+        success: function(data) {
+            // Update the cart count with the received data
+            var count = data.length;
+            $('#favoriteCount').text(count);
+        },
+        error: function() {
+            // Handle errors here
+            console.log('Error fetching favorite items.');
+        }
+    });
+}
 
-				data : JSON.stringify(count),
-				contentType : "application/json",
-				success : function(data) {
-					// Update the cart count with the received data
-					count = data.length
-					$('#favoriteCount').text(count);
-				},
-				error : function() {
-					// Handle errors here
-					console.log('Error fetching cart items.');
-				}
-			});
-		}
+updateFavoriteCount();
 
 		// Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
 		updateFavoriteCount();

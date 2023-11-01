@@ -20,7 +20,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		$http.get(`/rest/address/default`)
 			.then(resp => {
 				$scope.addressDefault = resp.data
-				console.log(resp.data);
+				
 				$scope.getAddressToShippingFee($scope.addressDefault.province, $scope.addressDefault.district, $scope.addressDefault.ward)
 
 			})
@@ -32,14 +32,14 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			.then(response => {
 				$scope.check = true
 				$scope.address = response.data
-				console.log(response.data);
+				
 				if (Array.isArray(response.data) && response.data.length === 0) {
-					console.log(1); // This will execute for an empty array.
+					
 					$scope.check = false
 					$('#ModalAddress').modal('show');
 				} else {
 					$scope.check = true
-					console.log(2); // This will execute for non-empty arrays or any other non-null values.
+					// This will execute for non-empty arrays or any other non-null values.
 				}
 
 
@@ -73,7 +73,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
             tongTien += value.product.price * value.quantity;
             
         });
-		console.log(tongTien);
+		
         $scope.tongTien = tongTien;
     }
 	$scope.sendDataToJava = function () {

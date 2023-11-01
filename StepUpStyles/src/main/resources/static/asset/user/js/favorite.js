@@ -1,40 +1,75 @@
-app.controller("favorite-ctrl", function($scope, $http) {
+app.controller("favorite-ctrl", function ($scope, $http) {
 	//Linh
 	$scope.userItemsFavorite = [];
 	$scope.userRatings = []
-	$scope.check = function(productID) {
+	$scope.allreviews = []
+	$scope.check = function (productID) {
 		$http.get('/rest/favorites/check/' + productID)
-			.then(function(response) {
+			.then(function (response) {
 				$scope.productbyids = response.data;
 				console.log($scope.productbyids.favoriteId);
 				if (!$scope.productbyids) {
 					$http.post('/rest/favorites/' + productID)
-						.then(function(response) {
-							console.log("bat thich");
+						.then(function (response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+								  toast.addEventListener('mouseenter', Swal.stopTimer)
+								  toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							  })
+							  
+							  Toast.fire({
+								icon: 'success',
+								title: 'Đã thêm sản phẩm vào danh sách yêu thích',
+								
+							  })
 							$scope.getAllUserFavorite();
+							updateFavoriteCount();
 						})
-						.catch(function(error) {
+						.catch(function (error) {
 							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
 						});
 					console.log(1);
 				} else {
 					$http.delete('/rest/favorites/delete/' + productID)
-						.then(function(response) {
-							console.log("tat thich");
+						.then(function (response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+								  toast.addEventListener('mouseenter', Swal.stopTimer)
+								  toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							  })
+							  
+							  Toast.fire({
+								icon: 'success',
+								title: 'Đã xóa sản phẩm vào danh sách yêu thích',
+								
+							  })
 							$scope.getAllUserFavorite();
+							updateFavoriteCount();
 						})
-						.catch(function(error) {
+						.catch(function (error) {
 							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
 						});
 				}
 			})
-			.catch(function(error) {
+			.catch(function (error) {
 				console.error('Error ' + error);
 			});
 	}
 
 
-	$scope.deleteFavoriteProduct = function(productID) {
+	$scope.deleteFavoriteProduct = function (productID) {
 		Swal.fire({
 			title: 'Xác nhận xóa sản phẩm yêu thích?',
 			text: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?',
@@ -42,14 +77,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			showCancelButton: true,
 			confirmButtonText: 'Xóa',
 			cancelButtonText: 'Hủy',
-		}).then(function(result) {
+		}).then(function (result) {
 			if (result.isConfirmed) {
 				// Nếu người dùng xác nhận xóa, thì gửi yêu cầu xóa sản phẩm yêu thích
 				$http.delete('/rest/favorites/delete/' + productID)
-					.then(function(response) {
+					.then(function (response) {
 						$scope.getAllUserFavorite();
+						updateFavoriteCount();
 					})
-					.catch(function(error) {
+					.catch(function (error) {
 						console.error('Lỗi khi xóa sản phẩm yêu thích: ' + error);
 					});
 			}
@@ -57,41 +93,51 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 
 
-	$scope.getAllUserFavorite = function() {
-		$http.get("/rest/favorites/getUserFavorite").then(function(response) {
+	$scope.getAllUserFavorite = function () {
+		$http.get("/rest/favorites/getUserFavorite").then(function (response) {
 			$scope.userItemsFavorite = response.data
 			$scope.userItemsFavorite.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.product.productID).then(resp => {
 					items.product.image = resp.data;
 				})
 			})
-			console.log("Linhttwststst", $scope.userItemsFavorite);
 		})
 	}
 
-	$scope.isFavorited = function(productId) {
+	$scope.isFavorited = function (productId) {
 		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
-		return $scope.userItemsFavorite.some(function(item) {
+		return $scope.userItemsFavorite.some(function (item) {
 			return item.product.productID === productId;
 		});
 	};
 
 	// Hàm cập nhật trạng thái yêu thích
-
-
-
 	$scope.getAllUserFavorite();
 
-	$scope.getReviewByProduct = function(productID) {
+	$scope.getReviewByProduct = function (productID) {
 		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
 			$scope.allreviews = resp.data;
-			$scope.countReviews($scope.allreviews);
 
+			$scope.filterByRating = function (rating) {
+				$scope.selectedRating = rating;
+				// Nếu rating là null hoặc undefined, hiển thị tất cả đánh giá
+				if (rating === null || rating === undefined) {
+					$scope.filteredReviews = $scope.allreviews;
+				} else {
+					// Lọc đánh giá theo số sao đã chọn
+					$scope.filteredReviews = $scope.allreviews.filter(function (review) {
+						return review.rating === rating;
+					});
+				}
+				console.log("Tesst thoi ne", $scope.allreviews);
+			};
+			
+			$scope.countReviews($scope.allreviews);
 			// Tạo danh sách sao để hiển thị
 			$scope.starList = createStarList($scope.averageRating);
 			console.log("Sao " + $scope.starList);
 			// Tính toán điểm số trung bình
-			$scope.ratings = $scope.allreviews.map(function(review) {
+			$scope.ratings = $scope.allreviews.map(function (review) {
 				return review.rating;
 			});
 			$scope.averageRating = calculateAverageRating($scope.ratings);
@@ -102,7 +148,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		});
 	};
 
-	$scope.saveProductID = function(productID) {
+	$scope.saveProductID = function (productID) {
 		localStorage.setItem('productID', productID);
 		$scope.getReviewByProduct(productID);
 	};
@@ -117,13 +163,13 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	function calculateAverageRating(ratings) {
 		if (ratings.length === 0) return 0;
 
-		var totalRating = ratings.reduce(function(acc, rating) {
+		var totalRating = ratings.reduce(function (acc, rating) {
 			return acc + rating;
 		}, 0);
 		return (totalRating / ratings.length).toFixed(1);
 	}
 
-	$scope.getStars = function(rating) {
+	$scope.getStars = function (rating) {
 		var stars = [];
 		for (var i = 0; i < rating; i++) {
 			stars.push(i);
@@ -140,26 +186,23 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		1: 0
 	};
 
-	$scope.countReviews = function(reviews) {
+	$scope.countReviews = function (reviews) {
 		$scope.reviewCounts.total = reviews.length;
-		reviews.forEach(function(review) {
+		reviews.forEach(function (review) {
 			$scope.reviewCounts[review.rating] += 1;
 		});
 	};
 
-	function createStarList(rating) {
-		var starList = [];
-		for (var i = 0; i < 5; i++) {
-			if (rating >= i + 1) {
-				starList.push('fa fa-star yellow-star');
-			} else if (rating > i) {
-				starList.push('fa fa-star-half-o yellow-star');
-			} else {
-				starList.push('fa fa-star-o yellow-star');
-			}
+	$scope.getStars = function (rating) {
+		var stars = [];
+		var fullStars = Math.floor(rating);
+
+		for (var i = 0; i < fullStars; i++) {
+			stars.push({});
 		}
-		return starList;
-	}
+
+		return stars;
+	};
 
 	function createStarList(rating) {
 		var starList = [];
@@ -177,8 +220,124 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	///////
 
+	// $scope.getStarToAvgs = function(averageRating) {
+	// 	var stars = [];
+	// 	var fullStars = Math.floor(averageRating);
+	// 	var halfStar = averageRating - fullStars >= 0.5 ? 'fa fa-star-half-o yellow-star' : '';
 
+	// 	for (var i = 0; i < fullStars; i++) {
+	// 		stars.push('fa fa-star yellow-star');
+	// 	}
 
+	// 	if (halfStar) {
+	// 		stars.push(halfStar);
+	// 	}
+
+	// 	while (stars.length < 5) {
+	// 		stars.push('fa fa-star-o yellow-star');
+	// 	}
+
+	// 	return stars;
+	// };
+	$scope.getStarToAvgs = function (averageRating) {
+		var stars = [];
+		var rating = averageRating;
+
+		for (var i = 0; i < 5; i++) {
+			if (rating >= 1) {
+				stars.push('fa fa-star yellow-star');
+			} else if (rating >= 0.5) {
+				stars.push('fa fa-star-half-o yellow-star');
+			} else {
+				stars.push('fa fa-star-o yellow-star');
+			}
+			rating -= 1;
+		}
+
+		return stars;
+	};
+
+	//Phân trang đánh giá sản phẩm
+	$scope.reviewPager = {
+		page: 0,
+		size: 1,
+		getReviewPageNumbers: function () {
+			var reviewPageCount = this.count;
+			var reviewCurrentPage = this.page + 1;
+			var reviewVisiblePages = [];
+
+			if (reviewPageCount <= 3) {
+				for (var i = 1; i <= reviewPageCount; i++) {
+					reviewVisiblePages.push({ value: i });
+				}
+			} else {
+				if (reviewCurrentPage <= 2) {
+					reviewVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (reviewCurrentPage >= reviewPageCount - 1) {
+					reviewVisiblePages.push({ value: '...' }, { value: reviewPageCount - 2 }, { value: reviewPageCount - 1 }, { value: reviewPageCount });
+				} else {
+					reviewVisiblePages.push({ value: '...' }, { value: reviewCurrentPage - 1 }, { value: reviewCurrentPage }, { value: reviewCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return reviewVisiblePages;
+		},
+		get allreviews() {
+			var start = this.page * this.size;
+			return $scope.allreviews.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.allreviews.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.reviewVisiblePages = this.getReviewPageNumbers();
+		},
+		gotoReview(reviewPageNumber) {
+			if (reviewPageNumber >= 1 && reviewPageNumber <= this.count) {
+				this.page = reviewPageNumber - 1;
+				$scope.reviewVisiblePages = this.getReviewPageNumbers();
+			}
+		},
+	};
+
+	// Lọc đánh giá theo sao
+	$scope.filteredReviews = $scope.allreviews;
+	$scope.selectedRating = null; // Số sao người dùng đã chọn để lọc
+
+	// Hàm lọc đánh giá theo số sao
+	$scope.filterByRating = function (rating) {
+		$scope.selectedRating = rating;
+		// Nếu rating là null hoặc undefined, hiển thị tất cả đánh giá
+		if (rating === null || rating === undefined) {
+			$scope.filteredReviews = $scope.allreviews;
+		} else {
+			// Lọc đánh giá theo số sao đã chọn
+			$scope.filteredReviews = $scope.allreviews.filter(function (review) {
+				return review.rating === rating;
+			});
+		}
+		console.log("Tesst thoi ne", $scope.allreviews);
+	};
+
+	console.log("Tesst thoi", $scope.allreviews);
 	//Linh end 
 
 	// quangminh bắt đầu
@@ -204,13 +363,13 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		$('#myModal').modal('hide');
 	};
 
-	$scope.getProductsAndNavigate = function(brandID) {
+	$scope.getProductsAndNavigate = function (brandID) {
 		localStorage.setItem('brandID', brandID);
 		window.location.href = '/list_products';
 	};
 
-	$scope.getProductsByBrand = function(brandID) {
-		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
+	$scope.getProductsByBrand = function (brandID) {
+		$http.get("/rest/products/loadByBrandId/" + brandID).then(function (resp) {
 			$scope.productitems = resp.data;
 
 			$scope.productitems.forEach(items => {
@@ -766,7 +925,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.pager = {
 		page: 0,
 		size: 9,
-		getPageNumbers: function() {
+		getPageNumbers: function () {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
 			var visiblePages = [];
@@ -828,7 +987,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.FeaturedPager = {
 		page: 0,
 		size: 8,
-		getFeaturedPageNumbers: function() {
+		getFeaturedPageNumbers: function () {
 			var FeaturedPageCount = this.count;
 			var FeaturedCurrentPage = this.page + 1;
 			var FeaturedVisiblePages = [];

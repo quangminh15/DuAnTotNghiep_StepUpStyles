@@ -21346,5 +21346,25 @@ Author URL: http://w3layouts.com
   cursor: pointer;
 }
 
- 
+.badge {
+  position: absolute;
+  font-size: 12px;
+  top: 15%;
+  right: 15%;
+  transform: translate(50%, -50%); /* Đưa badge lên góc phải */
+}
+
+/* Định dạng cho nút yêu thích */
+.top_transmitv_cart {
+  position: relative; 
+}
+
+.top-baged{
+  position: relative; 
+}
+
+.liked:hover, .not-liked:hover{
+  cursor: pointer;
+}
+
  /*# sourceMappingURL=style-liberty.css.map */
