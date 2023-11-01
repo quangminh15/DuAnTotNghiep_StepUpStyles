@@ -132,7 +132,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.singleProd=[]
 	$scope.showQuantityStock = function (id, size, color) {
 		
-		$http.get(`/rest/productdetails/find?id=${1}&size=${3}&color=${1}`)
+		$http.get(`/rest/productdetails/find?id=${id}&size=${size}&color=${color}`)
 			.then(function (response) {
 				$scope.singleProd=response.data
 				console.log("prod", $scope.singleProd);
