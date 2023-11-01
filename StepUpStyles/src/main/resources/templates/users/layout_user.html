@@ -50,7 +50,6 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 <style type="text/css">
@@ -215,27 +214,23 @@ a:hover, button:hover {
 	</script>
 	<script>
         function updateFavoriteCount() {
-			var count = 0
-			$.ajax({
-				type : 'GET',
-				url : '/rest/favorites/getUserFavorite',
-
-				data : JSON.stringify(count),
-				contentType : "application/json",
-				success : function(data) {
-					// Update the cart count with the received data
-					count = data.length
-					$('#favoriteCount').text(count);
-				},
-				error : function() {
-					// Handle errors here
-					console.log('Error fetching cart items.');
-				}
-			});
+    $.ajax({
+        type: 'GET',
+        url: '/rest/favorites/getUserFavorite',
+        contentType: "application/json",
+        success: function(data) {
+            // Update the cart count with the received data
+            var count = data.length;
+            $('#favoriteCount').text(count);
+        },
+        error: function() {
+            // Handle errors here
+            console.log('Error fetching favorite items.');
         }
+    });
+}
 
-        // Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
-        updateFavoriteCount();
+updateFavoriteCount();
 
 	</script>
 	<!-- -------------- -->

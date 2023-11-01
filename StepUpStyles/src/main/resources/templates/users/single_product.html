@@ -93,7 +93,7 @@
 						<div class="caption">
 							<ul class="rating-single">
 								<li ng-repeat="star in getStarToAvgs(averageRating)">
-									<span ng-class="{ 'fa fa-star yellow-star': star.full, 'fa fa-star-half-o yellow-star': star.half, 'fa fa-star-o yellow-star': star.empty }" aria-hidden="true"></span>
+									<span ng-class="star" aria-hidden="true"></span>
 								</li>
 								<li>{{ averageRating }}/5<span
 									class="fa fa-star yellow-star" aria-hidden="true"></span>
@@ -239,8 +239,10 @@
 									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li><a ng-click="check(p.productID)"><span
-											class="fa fa-heart" aria-hidden="true"></span></a></li>
+									<li> 
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
 									<a ng-click="goToSinglePage(p.productID)" type="submit"
@@ -286,22 +288,14 @@
 					</div>
 					<div class="col-sm-8">
 						<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">Tất cả ({{
-							reviewCounts.total }})</div>
-						<a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">5 sao ({{
-							reviewCounts[5] }})</a> <a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">4 sao ({{
-							reviewCounts[4] }})</a> <a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">3 sao ({{
-							reviewCounts[3] }})</a> <a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">2 sao ({{
-							reviewCounts[2] }})</a> <a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">1 sao ({{
-							reviewCounts[1] }})</a>
+							<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(null)">Tất cả ({{ reviewCounts.total }})</div>
+							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a>
+							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a>
+							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a>
+							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a>
+							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
 						</p>
-					</div>
+					</div>					
 				</div>
 			</div>
 			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
