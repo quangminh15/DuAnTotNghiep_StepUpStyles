@@ -78,4 +78,15 @@ public class ProductDetailRestController {
 		List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(categoryId);
 		return ResponseEntity.ok(productDetails);
 	}
+
+	//Hai
+	@GetMapping("/rest/productdetails/find")
+	public ResponseEntity<ProductDetail>findProdDetail(
+		@RequestParam("id") Integer productId,
+		@RequestParam("size") Integer sizeId,
+		@RequestParam("color") Integer colorId)
+		 {
+		ProductDetail productDetail = productDetailService.findProdDetail(productId, sizeId, colorId);
+		return ResponseEntity.ok(productDetail);
+	}
 }

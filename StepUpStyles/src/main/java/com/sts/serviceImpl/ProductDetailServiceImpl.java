@@ -10,7 +10,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sts.dao.ColorDAO;
+import com.sts.dao.ProductDAO;
 import com.sts.dao.ProductDetailDAO;
+import com.sts.dao.SizeDAO;
+import com.sts.model.Color;
 import com.sts.model.Product;
 import com.sts.model.ProductDetail;
 import com.sts.model.Size;
@@ -82,4 +86,21 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
 		return productDetailsByCategory;
 	}
+
+	// Hai
+	@Autowired
+	ProductDAO prodDao;
+	@Autowired
+	ColorDAO colorDao;
+	@Autowired
+	SizeDAO sizeDao;
+
+	@Override
+	public ProductDetail findProdDetail(Integer prodId, Integer sizeId, Integer colorId) {
+		Product prod = prodDao.findById(prodId).get();
+		Size size = sizeDao.findById(sizeId).get();
+		Color color = colorDao.findById(colorId).get();
+		return productDetailDAO.findProductDetail(prod, size, color);
+	}
+
 }
