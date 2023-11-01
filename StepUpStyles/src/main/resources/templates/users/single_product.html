@@ -21,55 +21,17 @@
 				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
-							<!-- 														<ul class="slides"> -->
-							<!-- 															<li ng-repeat="image in productDetails.image"  -->
-							<!-- 																data-thumb="{{image.imagePath}}"> -->
-							<!-- 																<div class="thumb-image"> -->
-							<!-- 																	<img ng-src="{{image.imagePath}}" data-imagezoom="true" -->
-							<!-- 																		class="img-fluid" alt=""> -->
-							<!-- 																</div> -->
-							<!-- 															</li> -->
-							<!-- 														</ul> -->
-<!-- 														<ul class="slides"> -->
-<!-- 															<li data-thumb="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg"> -->
-<!-- 																<div class="thumb-image"> -->
-<!-- 																	<img src="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg" data-imagezoom="true" -->
-<!-- 																		class="img-fluid" alt=" "> -->
-<!-- 																</div> -->
-<!-- 															</li> -->
-<!-- 															<li data-thumb="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg"> -->
-<!-- 																<div class="thumb-image"> -->
-<!-- 																	<img src="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg" data-imagezoom="true" -->
-<!-- 																		class="img-fluid" alt=" "> -->
-<!-- 																</div> -->
-<!-- 															</li> -->
-<!-- 															<li data-thumb="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg"> -->
-<!-- 																<div class="thumb-image"> -->
-<!-- 																	<img src="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg" data-imagezoom="true" -->
-<!-- 																		class="img-fluid" alt=" "> -->
-<!-- 																</div> -->
-<!-- 															</li> -->
-<!-- 															<li data-thumb="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg"> -->
-<!-- 																<div class="thumb-image"> -->
-<!-- 																	<img src="https://image-us.24h.com.vn/upload/2-2018/images/2018-05-28/1527503621-660-1-1527481499-width650height410.jpg" data-imagezoom="true" -->
-<!-- 																		class="img-fluid" alt=" "> -->
-<!-- 																</div> -->
-<!-- 															</li> -->
-<!-- 														</ul> -->
-
-
-
-							<ul class="slides" >
-								<li ng-repeat="image in productDetails.image"
-									data-thumb="{{image.imagePath}}">
-									<div class="thumb-image">
-										<img ng-src="{{image.imagePath}}" data-imagezoom="true"
-											class="img-fluid" alt="">
-									</div>
-								</li>
+							<ul class="slides">
+								<th:block th:each="image, iterStat : ${productImageList}">
+									<li th:attr="data-thumb=${image.imagePath}"
+										th:if="${iterStat.count} &lt;= 4">
+										<div class="thumb-image">
+											<img th:src="@{${image.imagePath}}" data-imagezoom="true"
+												class="img-fluid" alt=" ">
+										</div>
+									</li>
+								</th:block>
 							</ul>
-
-
 							<div class="clearfix"></div>
 						</div>
 						<div class="eco-buttons mt-5">
@@ -101,7 +63,8 @@
 							</ul>
 							<p>{{ numRatings }} đánh giá</p>
 
-							<h6 style="white-space: nowrap;" ng-if="productDetails.discount[0].priceDiscount == null">
+							<h6 style="white-space: nowrap;"
+								ng-if="productDetails.discount[0].priceDiscount == null">
 								<span class="item_price">{{ productDetails.price |
 									number:0 }} ₫</span>
 							</h6>
@@ -124,9 +87,10 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option ng-repeat="s in sizes" value="{{s.sizeID}}">{{s.sizeNumber}}</option>
+								<select ng-model="size" ng-change="setSelectedSize(size)"
+									class="form-control">
+									<option value="" disabled selected>-- Chọn size --</option>
+									<option ng-repeat="s in sizess">{{s.sizeNumber}}</option>
 								</select>
 							</div>
 						</div>
@@ -134,13 +98,14 @@
 						<div class="desc_single my-4" ng-show="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select ng-model="color" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn màu
-										sắc</option>
-									<option ng-repeat="c in colors" value="{{c.colorID}}">{{c.colorName}}</option>
+								<select ng-model="color" ng-change="setSelectedColor(color)"
+									class="form-control">
+									<option value="" disabled selected>-- Chọn màu --</option>
+									<option ng-repeat="c in filteredColors">{{c.colorName}}</option>
 								</select>
 							</div>
 						</div>
+
 
 						<div class="desc_single my-4" ng-show="color">
 							<span class="col-md-3 size1">Số lượng</span>
@@ -149,7 +114,6 @@
 									class="form-control">
 							</div>
 						</div>
-
 
 						<div class="desc_single mb-4">
 							<h5>Mô tả:</h5>
@@ -180,9 +144,10 @@
 						<div class="pro-grid-one">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									WOMEN'S FASHION <br>50% OFF
+									Thời trang nữ giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>
@@ -191,9 +156,10 @@
 						<div class="pro-grid-one pro-grid-two">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									MEN'S FASHION <br>60% OFF
+									Thời trang nam giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>

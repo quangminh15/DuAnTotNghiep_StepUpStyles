@@ -74,18 +74,4 @@ public class SizeRestController {
 	public List<Size> searchSizeByName(@RequestParam("keyword") Float keyword) {
 		return sizeService.searchByName(keyword);
 	}
-
-	@GetMapping("/rest/sizes/loadbyproductdetail/{productDetailID}")
-	public List<Size> getSizesByProductDetail(@PathVariable("productDetailID") Integer productDetailID) {
-	    Optional<ProductDetail> productDetailOptional = produtDetailDAO.findById(productDetailID);
-	    if (productDetailOptional.isPresent()) {
-	        ProductDetail productDetail = productDetailOptional.get();
-	        return Arrays.asList(productDetail.getSize());
-	    } else {
-	        // Xử lý trường hợp không tìm thấy sản phẩm chi tiết
-	        return new ArrayList<>();
-	    }
-	}
-
-
 }

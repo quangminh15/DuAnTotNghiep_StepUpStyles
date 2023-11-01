@@ -3,11 +3,17 @@ package com.sts.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.ProductDetailDAO;
+import com.sts.model.Product;
 import com.sts.model.ProductDetail;
+import com.sts.model.Size;
 import com.sts.service.ProductDetailService;
 
 @Service
@@ -76,5 +82,4 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
 		return productDetailsByCategory;
 	}
-
 }
