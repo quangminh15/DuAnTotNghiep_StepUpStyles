@@ -189,6 +189,20 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.productDetails = [];
 	$scope.size = '';
 	$scope.color = '';
+	$scope.searchKeyword = '';
+	$scope.searchedProductItems = [];
+
+	// Hàm hiển thị modal khi tìm kiếm
+	$scope.showModalFunction = function() {
+		$('#search').hide();
+		$('#myModal').modal('show');
+		$('.modal-backdrop').removeClass('show');
+	};
+
+	// Hàm ẩn modal
+	$scope.hideModalFunction = function() {
+		$('#myModal').modal('hide');
+	};
 
 	$scope.getProductsAndNavigate = function(brandID) {
 		localStorage.setItem('brandID', brandID);
@@ -216,24 +230,113 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		});
 	};
 
-	$scope.initialize = function() {
-		//load product
-		$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
-			$scope.productitems = resp.data;
-			$scope.productitems.forEach(items => {
-				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
-					items.image = resp.data;
-				})
-			})
+	// Tìm kiếm START 
+	$scope.searchProductByName = function() {
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+			$http.get("/rest/products/search", {
+				params: { keyword: $scope.searchKeyword }
+			}).then(resp => {
+				$scope.searchedProductItems = resp.data.filter(item => item.deleted === false && item.activities === true);
 
-			$scope.productitems.forEach(item => {
-				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
-					item.discount = resp.data.filter(discount => !discount.deleted);
+				// Sử dụng Promise.all để thực hiện tất cả các yêu cầu cùng một lúc
+				const imageRequests = $scope.searchedProductItems.map(item => $http.get("/rest/productimages/loadbyproduct/" + item.productID));
+				const discountRequests = $scope.searchedProductItems.map(item => $http.get("/rest/discount/loadbyproduct/" + item.productID));
+
+				Promise.all([...imageRequests, ...discountRequests])
+					.then(responses => {
+						const imageResponses = responses.slice(0, $scope.searchedProductItems.length);
+						const discountResponses = responses.slice($scope.searchedProductItems.length);
+
+						imageResponses.forEach((resp, index) => {
+							$scope.searchedProductItems[index].image = resp.data;
+						});
+
+						discountResponses.forEach((resp, index) => {
+							$scope.searchedProductItems[index].discount = resp.data.filter(discount => !discount.deleted);
+						});
+
+						console.log("tìm kiếm: ", $scope.searchedProductItems);
+						$scope.pager.first();
+						$scope.DiscountPager.first();
+						$scope.FeaturedPager.first();
+
+						if (resp.data.length === 0) {
+							$scope.initialize();
+							Swal.fire({
+								icon: 'error',
+								title: 'Thất bại',
+								text: 'Không tìm thấy sản phẩm có tên ' + $scope.searchKeyword,
+							});
+						} else {
+							localStorage.setItem('searchedProductItems', JSON.stringify($scope.productitems));
+							$scope.showModalFunction();
+						}
+					})
+					.catch(error => {
+						Swal.fire({
+							icon: 'error',
+							title: 'Thất bại',
+							text: 'Lỗi khi tìm kiếm sản phẩm!',
+						});
+						console.log("Error", error);
+						$scope.pager.first();
+						$scope.DiscountPager.first();
+						$scope.FeaturedPager.first();
+					});
+			}).catch(error => {
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Lỗi khi tìm kiếm sản phẩm!',
+				});
+				console.log("Error", error);
+				$scope.pager.first();
+				$scope.DiscountPager.first();
+				$scope.FeaturedPager.first();
+			});
+		} else {
+			$scope.initialize();
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Không tìm thấy tên sản phẩm mà bạn mong muốn!',
+			});
+		}
+	};
+
+	var storedProductItems = localStorage.getItem('searchedProductItems');
+	if (storedProductItems) {
+		$scope.searchedProductItems = JSON.parse(storedProductItems);
+		$scope.showModalFunction
+		localStorage.removeItem('searchedProductItems');
+	}
+
+	// Tìm kiếm END 
+
+	$scope.initialize = function() {
+		var storedProductItems = localStorage.getItem('searchedProductItems');
+
+		if (!storedProductItems) {
+			//load product
+			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
+				$scope.productitems = resp.data;
+				$scope.productitems.forEach(items => {
+					$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+						items.image = resp.data;
+					})
 				})
-			})
-			console.log("ff", $scope.productitems)
-			$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
-		});
+
+				$scope.productitems.forEach(item => {
+					$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
+						item.discount = resp.data.filter(discount => !discount.deleted);
+					})
+				})
+				$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
+			});
+		} else {
+			$scope.productitems = JSON.parse(storedProductItems);
+			localStorage.removeItem('searchedProductItems');
+		}
 
 		// Tạo danh sách sản phẩm nổi bật
 		$http.get("/rest/products/product-featured").then(resp => {
@@ -249,11 +352,30 @@ app.controller("favorite-ctrl", function($scope, $http) {
 					item.discount = resp.data.filter(discount => !discount.deleted);
 				})
 			})
-			console.log("nổi bật giá: ", $scope.featureds)
 			$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
 		});
 
 		// Tạo danh sách sản phẩm sắp giảm giá
+		$scope.startCountdown = function(startDate, index) {
+			var x = setInterval(function() {
+				var now = new Date().getTime();
+				var distance = startDate - now;
+
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+				var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+				// Sử dụng id duy nhất cho mỗi phần tử trong vòng lặp
+				document.getElementById("countdown_" + index).innerHTML = days + " ngày " + hours + "h " + minutes + "m " + seconds + "s ";
+
+				if (distance < 0) {
+					clearInterval(x);
+					document.getElementById("countdown_" + index).innerHTML = "Đã bắt đầu!";
+				}
+			}, 1000);
+		};
+
 		$http.get("/rest/products/loadDiscountedProducts").then(resp => {
 			$scope.discountedProducts = resp.data;
 			$scope.discountedProducts.forEach(items => {
@@ -265,36 +387,16 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			$scope.discountedProducts.forEach((item, index) => {
 				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
 					item.discount = resp.data.filter(discount => discount.status === "Chưa diễn ra");
-					console.log("item.discount: ", item.discount);
 
 					// Đếm ngược thời gian giảm giá bắt đầu
 					var startDate = new Date(item.discount[0].startDate).getTime();
-					console.log("startDate: ", startDate);
-
-					var x = setInterval(function() {
-						var now = new Date().getTime();
-						var distance = startDate - now;
-
-						var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-						var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-						var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-						var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-						// Sử dụng id duy nhất cho mỗi phần tử trong vòng lặp
-						document.getElementById("countdown_" + index).innerHTML = days + " ngày " + hours + "h " + minutes + "m " + seconds + "s ";
-
-						if (distance < 0) {
-							clearInterval(x);
-							document.getElementById("countdown_" + index).innerHTML = "Đã bắt đầu!";
-						}
-					}, 1000);
-					// Đếm ngược thời gian giảm giá kết thúc
+					$scope.startCountdown(startDate, index);
 				});
 			});
-			console.log("Sắp giảm giá: ", $scope.discountedProducts);
 			$scope.pager.first(); $scope.DiscountPager.first();
 			$scope.FeaturedPager.first();
 		});
+
 
 		//load category
 		$http.get("/rest/categories/loadallNoDeletedAndActivitiesTrue").then(resp => {
@@ -303,6 +405,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				return $scope.productitems.some(product => product.category.categoryID === category.categoryID);
 			});
 			$scope.cates = catesWithData;
+			//			$scope.cates = resp.data;
 			$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
 		});
 
@@ -314,6 +417,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			});
 
 			$scope.brans = brandsWithData;
+			//			$scope.brans = resp.data;
 			$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
 		});
 
@@ -353,8 +457,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		window.location.href = `/single_product/${productID}`;
 	};
 
-	$scope.currentIndex = 0;
-
 	// Hàm load thông tin sản phẩm từ API
 	$scope.loadProductFromLocalStorage = function() {
 		var storedProductID = localStorage.getItem('productID');
@@ -392,13 +494,12 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			}).catch(function(error) {
 				console.error('Error fetching product details', error);
 			});
-			console.log('loadProductFromLocalStorage', $scope.productDetails);
+			//			console.log('loadProductFromLocalStorage', $scope.productDetails);
 		}).catch(function(error) {
 			console.error('Error fetching product details', error);
 		});
 	};
 
-	// Gọi hàm loadProductFromLocalStorage khi trang chi tiết sản phẩm được tải
 	$scope.loadProductFromLocalStorage();
 
 	$scope.setSelectedSize = function(selectedSize) {
@@ -426,7 +527,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		$scope.productDetails.featuredImage = imagePath;
 	};
 
-	// Hàm để tải sản phẩm theo categoryID
+	//load sản phẩm tương tự START
 	$scope.getProductsByCategory = function() {
 		var storedProductID = localStorage.getItem('productID');
 
@@ -459,7 +560,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 						item.discount = resp.data;
 					})
 				})
-				console.log("getProductsByCategory: ", $scope.productDetailss)
 			}).catch(function(error) {
 				console.error('Error occurred while fetching products by category:', error);
 			});
@@ -469,20 +569,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 
 	$scope.getProductsByCategory();
-
-	// Hàm chuyển đổi ảnh tự động
-	$scope.startImageSlider = function() {
-		setInterval(function() {
-			$scope.currentIndex = ($scope.currentIndex + 1) % $scope.productDetails.image.length;
-			$scope.productDetails.featuredImage = $scope.productDetails.image[$scope.currentIndex].imagePath;
-			$scope.$apply();
-		}, 3000);
-	};
-
-	// Gọi hàm chuyển đổi ảnh tự động khi trang được tải lên
-	$scope.startImageSlider();
-
 	//load sản phẩm tương tự END
+
 	//Load trang sản phẩm chi tiết END
 
 	//sắp xếp bắt đầu
@@ -651,10 +739,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 	//sắp xếp kết thúc
 
-
-
-
-	$scope.getProductsByCategory = function(categoryID) {
+	//load sản phẩm theo danh mục của trang sản phẩm bắt đầu 
+	$scope.getProductsByCategory1 = function(categoryID) {
 		$http.get("/rest/products/loadByCategoryId/" + categoryID).then(function(resp) {
 			$scope.productitems = resp.data;
 			$scope.productitems.forEach(items => {
@@ -674,44 +760,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			console.error('Error occurred while fetching products by category:', error);
 		});
 	};
-
-	// Tìm kiếm START 
-	$scope.searchProductByName = function() {
-		if (searchKeyword && searchKeyword.trim() !== "") {
-			$http.get("/rest/products/search", {
-				params: { keyword: searchKeyword }
-			}).then(resp => {
-				$scope.productitems = resp.data;
-				console.log("tìm kiếm: ", resp)
-				$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
-
-				if (resp.data.length === 0) {
-					$scope.initialize();
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Không tìm thấy sản phẩm có tên ' + searchKeyword,
-					});
-				}
-			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tìm kiếm sản phẩm!',
-				});
-				console.log("Error", error);
-				$scope.pager.first(); $scope.DiscountPager.first(); $scope.FeaturedPager.first();
-			});
-		} else {
-			$scope.initialize();
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Không tìm thấy tên sản phẩm mà bạn mong muốn!',
-			});
-		}
-	};
-	// Tìm kiếm END 
+	//load sản phẩm theo danh mục của trang sản phẩm Kết thúc
 
 	//phân trang trang sản phẩm bắt đầu
 	$scope.pager = {

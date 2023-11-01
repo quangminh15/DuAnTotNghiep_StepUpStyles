@@ -3,9 +3,8 @@
 	<nav class="navbar navbar-expand-lg navbar-light">
 		<div class="container-fluid serarc-fluid">
 			<a href="/index"> <img src="/asset/user/img/banner/logo3.png"
-				style="display: block; margin: auto;" width="60%" alt=""></a>
-
-			<div class="search-right">
+				style="display: block; margin: auto;" width="60%" alt=""></a> <
+			<div ng-controller="favorite-ctrl" class="search-right">
 
 				<a href="#search" title="search"><span class="fa fa-search mr-2"
 					aria-hidden="true"></span> <span class="search-text">Tìm
@@ -14,17 +13,122 @@
 				<div id="search" class="pop-overlay">
 					<div class="popup">
 
-						<form method=""
-							class="search-box">
+						<form method="" class="search-box">
 							<input type="search" placeholder="Nhập" ng-model="searchKeyword"
 								required="required" autofocus="">
-							<button type="submit" class="btn" ng-click="searchProductByName()">Tìm kiếm</button>
+							<button type="submit" class="btn"
+								ng-click="searchProductByName()">Tìm kiếm</button>
 						</form>
 
 					</div>
 					<a class="close" href="#">×</a>
 				</div>
 				<!-- /search popup -->
+				<!-- The Modal Start-->
+				<div class="modal" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog custom-modal-size" role="document">
+						<div class="modal-content">
+
+							<!-- Modal Header -->
+							<div class="modal-header">
+								<h4 class="modal-title"></h4>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+							</div>
+
+							<!-- Modal body -->
+							<div class="modal-body">
+								<section class="w3l-ecommerce-main"
+									ng-show="searchedProductItems.length > 0">
+									<!-- /products-->
+									<div class="ecom-contenthny pb-5">
+										<div class="container">
+											<!-- /row-->
+											<div class="ecom-products-grids row ">
+												<div ng-repeat="p in searchedProductItems"
+													class="col-lg-4 col-6 product-incfhny mb-4">
+													<div class="product-grid2 transmitv"
+														ng-click="saveProductID(p.productID)">
+														<div class="product-image2" style="position: relative;">
+															<div class="discount-circle"
+																ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+																p.discount[0].directDiscount }}%</div>
+															<a ng-click="goToSinglePage(p.productID)"> <img
+																class="pic-1 img-fluid"
+																ng-src="{{p.image[0].imagePath}}"> <img
+																ng-if="p.image.length > 1" class="pic-2 img-fluid"
+																ng-src="{{p.image[1].imagePath}}"> <img
+																ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+																ng-src="{{p.image[0].imagePath}}">
+															</a>
+															<ul class="social">
+																<li><span ng-if="isFavorited(p.productID)"
+																	ng-click="check(p.productID)" class="fa fa-heart liked"
+																	style="font-size: 24px; color: red;"></span> <span
+																	ng-if="!isFavorited(p.productID)"
+																	ng-click="check(p.productID)"
+																	class="fa fa-heart-o not-liked"
+																	style="font-size: 24px; color: red; font-weight: bold;"></span>
+
+																</li>
+															</ul>
+															<div class="transmitv single-item">
+																<a ng-click="goToSinglePage(p.productID)" type="submit"
+																	class="transmitv-cart ptransmitv-cart add-to-cart">
+																	Xem chi tiết </a>
+															</div>
+														</div>
+														<div class="product-content">
+															<h3 class="title">
+																<a ng-click="goToSinglePage(p.productID)">{{
+																	p.productName }}</a>
+															</h3>
+															<span class="price"
+																ng-if="p.discount[0].priceDiscount == null"> {{
+																p.price | number:0 }} ₫</span> <span class="price"
+																ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+																<del>{{ p.price | number:0 }} ₫</del> {{
+																p.discount[0].priceDiscount | number:0 }} ₫
+															</span> <span class="price"
+																ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+																{{ p.price | number:0 }} ₫ </span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!--/pagination-->
+											<!-- 											<div class="custom-pagination" style="margin: 0px 10px 20px;"> -->
+											<!-- 												<ul> -->
+											<!-- 													<li class="custom-prev"><a -->
+											<!-- 														ng-click="DiscountPager.first()"> <span -->
+											<!-- 															class="fa fa-angle-double-left"></span> -->
+											<!-- 													</a></li> -->
+											<!-- 													<li class="custom-page-item" -->
+											<!-- 														ng-repeat="page in DiscountVisiblePages" -->
+											<!-- 														ng-class="{ 'custom-active': (page.value === DiscountPager.page + 1) }"> -->
+											<!-- 														<a class="custom-page-link" href="" -->
+											<!-- 														ng-click="DiscountPager.DiscountGoto(page.value)" -->
+											<!-- 														ng-style="(page.value === (DiscountPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {})"> -->
+											<!-- 															{{ page.value }} </a> -->
+											<!-- 													</li> -->
+											<!-- 													<li class="custom-next"><a -->
+											<!-- 														ng-click="DiscountPager.last()"> <span -->
+											<!-- 															class="fa fa-angle-double-right"></span> -->
+											<!-- 													</a></li> -->
+											<!-- 												</ul> -->
+											<!-- 											</div> -->
+
+
+											<!--//pagination-->
+											<!-- //row-->
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- The Modal End-->
 			</div>
 			<!--//search-right-->
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -55,10 +159,9 @@
 						</form>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="/favorite">
-						<span class="far fa-heart" style="font-size: 24px;"></span><span
-						class="badge badge-pill badge-danger" id="favoriteCount"></span>
-					</a>
-					</li>
+							<span class="far fa-heart" style="font-size: 24px;"></span><span
+							class="badge badge-pill badge-danger" id="favoriteCount"></span>
+					</a></li>
 					<li class="transmitvcart galssescart2 cart cart box_1">
 						<form action="#" method="post" class="last"
 							ng-controller="cart-ctrl">
@@ -77,4 +180,5 @@
 		</div>
 	</nav>
 	<!--//nav-->
+
 </section>
