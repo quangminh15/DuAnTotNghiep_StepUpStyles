@@ -56,14 +56,9 @@ public class DiscountServiceImpl implements DiscountService {
                                                                           // với định dạng của thuộc tính startDate
         try {
             Date startDate = dateFormat.parse(directDis.getStartDate());
-            Date endDate = dateFormat.parse(directDis.getEndDate());
 
             if (startDate.after(currentDate)) {
                 directDis.setStatus("Chưa diễn ra");
-            } else if (endDate.before(currentDate)) {
-                directDis.setStatus("Đã kết thúc");
-            } else {
-                directDis.setStatus("Đang diễn ra");
             }
         } catch (ParseException e) {
             // Xử lý ngoại lệ nếu không thể chuyển đổi startDate thành Date

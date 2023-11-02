@@ -84,6 +84,36 @@ app.controller("supplier-ctrl", function($scope, $http){
 		});
 	};
 
+	$scope.exportExcel = function () {
+		$http({
+		  method: "POST",
+		  url: "/export-excelSup", // Thay thế với URL phía máy chủ đúng
+		  data: $scope.itemss,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+			var blob = new Blob([response.data], {
+			  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			});
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ <a> để tải xuống tệp Excel
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "SupplierStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất ra Excel thất bại:", error);
+		  });
+	  };
+
     $scope.initialize = function () {
 		//load all supplier
 		$http.get("/rest/supplier").then(resp => {
@@ -655,6 +685,38 @@ app.controller("supplier-ctrl", function($scope, $http){
 
 	});
 
+	$('.exportExcel').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportExcel();
+			}
+
+		})
+
+	});
+
     //Phân trang
 	$scope.pager = {
 		page: 0,
@@ -714,12 +776,6 @@ app.controller("supplier-ctrl", function($scope, $http){
 				$scope.visiblePages = this.getPageNumbers();
 			}
 		},
-	};
-
-	$scope.getColumnWidth = function(item) {
-		// Thực hiện logic để xác định chiều rộng dựa trên dữ liệu item
-		// Trả về một đối tượng chứa thuộc tính 'width' với giá trị cụ thể
-		return {'width': item.width + 'px'};
 	};
 
 	//	Phân trang đã xóa

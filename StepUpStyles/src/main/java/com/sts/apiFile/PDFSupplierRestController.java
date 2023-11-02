@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.config.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,17 +57,33 @@ public class PDFSupplierRestController {
 
         document.open();
 
+        float rowHeight = 30f;
         // Thêm nội dung vào tài liệu PDF từ danh sách chi tiết phiếu nhập
         for (Supplier item : suppliers) {
             font = new Font(baseFont);
 
-            float[] columnWidths = { 60f, 70f, 40f, 70f }; // Thiết lập chiều rộng cho từng cột
+            float[] columnWidths = { 80f, 100f, 70f, 100f }; // Thiết lập chiều rộng cho từng cột
             table.setWidths(columnWidths);
 
-            table.addCell(new PdfPCell(new Paragraph(item.getSupplierName(), font)));
-            table.addCell(new PdfPCell(new Paragraph(item.getAddresss(), font)));
-            table.addCell(new PdfPCell(new Paragraph(item.getPhone(), font)));
-            table.addCell(new PdfPCell(new Paragraph(item.getEmail(), font)));
+            PdfPCell cell1 = new PdfPCell(new Paragraph(item.getSupplierName(), font));
+            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell1.setFixedHeight(rowHeight);
+            table.addCell(cell1);
+
+            PdfPCell cell2 = new PdfPCell(new Paragraph(item.getAddresss(), font));
+            cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell2.setFixedHeight(rowHeight);
+            table.addCell(cell2);
+
+            PdfPCell cell3 = new PdfPCell(new Paragraph(item.getPhone(), font));
+            cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell3.setFixedHeight(rowHeight);
+            table.addCell(cell3);
+
+            PdfPCell cell4 = new PdfPCell(new Paragraph(item.getEmail(), font));
+            cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell4.setFixedHeight(rowHeight);
+            table.addCell(cell4);
         }
 
         Font nghiengFont = new Font(baseFont, 10, Font.ITALIC);
