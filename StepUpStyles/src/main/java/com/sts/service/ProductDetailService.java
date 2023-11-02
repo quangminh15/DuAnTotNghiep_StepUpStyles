@@ -24,4 +24,6 @@ public interface ProductDetailService {
 	List<ProductDetail> getProductDetailByProduct(Integer productId);
 
 	 List<ProductDetail> getProductDetailsByCategory(Integer categoryId);
+
+	ProductDetail findProdDetail(Integer prodId,Integer sizeId,Integer colorId);
 }

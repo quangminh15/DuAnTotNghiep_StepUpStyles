@@ -51,7 +51,9 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
 <style type="text/css">
+/* nút lọc của trang sản phẩm START */
 .custom-button-container {
 	display: flex;
 	justify-content: space-between;
@@ -67,10 +69,91 @@
 a:hover, button:hover {
 	cursor: pointer;
 }
+/* nút lọc của trang sản phẩm END */
+
+/* CSS phân trang trang chủ sản phẩm nổi bật Start */
+.custom-pagination {
+	display: flex;
+	justify-content: flex-end;
+	margin: 0px 10px 20px;
+}
+
+.custom-pagination ul {
+	list-style-type: none;
+	padding: 0;
+	display: flex;
+}
+
+.custom-pagination li {
+	display: inline;
+	margin-right: 10px;
+}
+
+.custom-pagination a {
+	text-decoration: none;
+	padding: 10px 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	color: orangered;
+}
+
+.custom-pagination a:hover {
+	background: orangered;
+	border-color: orangered;
+	color: white;
+}
+
+.custom-pagination .custom-active a {
+	background: orangered;
+	border-color: orangered;
+	color: white;
+}
+
+.custom-pagination .custom-prev a, .custom-pagination .custom-next a {
+	color: orangered;
+	border: none;
+}
+
+.custom-pagination .custom-prev a:hover, .custom-pagination .custom-next a:hover
+	{
+	background: none;
+	color: black;
+	border-color: none;
+}
+
+/* CSS phân trang trang chủ sản phẩm nổi bật END */
+
+/* hiện phần trăm giảm giá START*/
+.discount-circle {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	background-color: orangered;
+	color: #dfdede;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 14px;
+	box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1)
+		0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+	font-weight: 700;
+}
+/* hiện phần trăm giảm giá END*/
+.modal-backdrop {
+	display: none !important;
+}
+
+.custom-modal-size {
+	max-width: 90%;
+	width: 90%;
+}
 </style>
 </head>
 
-<body ng-app="app">
+<body ng-app="app" >
 
 	<div th:replace="~{/users/layout/_menu_index}"></div>
 
@@ -139,32 +222,30 @@ a:hover, button:hover {
 	</script>
 	<script>
         function updateFavoriteCount() {
-			var count = 0
-			$.ajax({
-				type : 'GET',
-				url : '/rest/favorites/getUserFavorite',
-
-				data : JSON.stringify(count),
-				contentType : "application/json",
-				success : function(data) {
-					// Update the cart count with the received data
-					count = data.length
-					$('#favoriteCount').text(count);
-				},
-				error : function() {
-					// Handle errors here
-					console.log('Error fetching cart items.');
-				}
-			});
+    $.ajax({
+        type: 'GET',
+        url: '/rest/favorites/getUserFavorite',
+        contentType: "application/json",
+        success: function(data) {
+            // Update the cart count with the received data
+            var count = data.length;
+            $('#favoriteCount').text(count);
+        },
+        error: function() {
+            // Handle errors here
+            console.log('Error fetching favorite items.');
         }
+    });
+}
 
-        // Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
-        updateFavoriteCount();
+updateFavoriteCount();
 
+		// Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
+		updateFavoriteCount();
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
-	
+
 	<!-- 	<script src="/asset/user/js/jquery-3.3.1.min.js"></script> -->
 	<script src="/asset/user/js/jquery.flexslider.js"></script>
 	<script src="/asset/user/js/imagezoom.js"></script>
@@ -277,9 +358,6 @@ a:hover, button:hover {
 		});
 	</script>
 	<!-- navbar scroll -->
-
-
-
 	<!-- count cartitem -->
 
 

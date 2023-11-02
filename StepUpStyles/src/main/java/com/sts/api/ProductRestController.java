@@ -1,6 +1,5 @@
 package com.sts.api;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.dao.ProductImageDAO;
 import com.sts.model.Product;
-import com.sts.model.ProductImage;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
+import com.sts.serviceImpl.ProductDetailServiceImpl;
 
 @CrossOrigin("*")
 @RestController
 public class ProductRestController {
 	@Autowired
 	ProductService productService;
-	
+
 	@Autowired
 	ProductImageDAO imgDAO;
+
+	@Autowired
+	ProductDetailServiceImpl productDetail;
 
 	@GetMapping("/rest/products/{productID}")
 	public Product getOne(@PathVariable("productID") Integer productID) {
@@ -56,24 +58,8 @@ public class ProductRestController {
 	}
 
 	@GetMapping("/rest/products/loadallNoDeletedAndActivitiesTrueSort")
-	public List<Product> getAllNoDeletedAndActivitiesTrueSort(@RequestParam("sort") String sort) {
-		// Xử lý logic để lấy danh sách sản phẩm đã được lọc và sắp xếp theo yêu cầu
-		List<Product> products;
-		if (sort.equals("name_asc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getProductName));
-		} else if (sort.equals("name_desc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getProductName).reversed());
-		} else if (sort.equals("price_asc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getPrice));
-		} else if (sort.equals("price_desc")) {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-			products.sort(Comparator.comparing(Product::getPrice).reversed());
-		} else {
-			products = productService.loadAllNoDeletedAndActivitiesTrue();
-		}
+	public List<Product> getAllNoDeletedAndActivitiesTrueSort() {
+		List<Product> products = productService.loadAllNoDeletedAndActivitiesTrue();
 		return products;
 	}
 
@@ -102,22 +88,27 @@ public class ProductRestController {
 		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
 		return ResponseEntity.ok(categoryProductCounts);
 	}
-	
+
+	// Load danh sách sản phẩm theo Brand
 	@GetMapping("/rest/products/loadByBrandId/{brandID}")
 	public List<Product> getProductsByBrandID(@PathVariable Integer brandID) {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
-	    return productService.getProductsByBrandID(brandID);
+		return productService.getProductsByBrandID(brandID);
 	}
-	
+
+	// Load danh sách sản phẩm theo category
 	@GetMapping("/rest/products/loadByCategoryId/{categoryID}")
 	public List<Product> getProductsByCategoryID(@PathVariable Integer categoryID) {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
-	    return productService.getProductsByCategoryID(categoryID);
+		return productService.getProductsByCategoryID(categoryID);
 	}
-	
+
 	@GetMapping("/rest/products/product-featured")
 	public List<Product> findFeaturedProducts() {
-	    // Viết mã để lấy các sản phẩm dựa trên brandID ở đây
-	    return productService.findFeaturedProducts();
+		// Viết mã để lấy các sản phẩm dựa trên brandID ở đây
+		return productService.findFeaturedProducts();
+	}
+
+	@GetMapping("/rest/products/loadDiscountedProducts")
+	public List<Product> loadDiscountedProducts() {
+		return productService.loadDiscountedProducts();
 	}
 }

@@ -182,7 +182,7 @@ app.controller("product-ctrl", function($scope, $http) {
 		},
 	};
 
-	// Tìm kiếm  
+	// Tìm kiếm START 
 	$scope.searchProductByName = async function() {
 		const { value: searchKeyword } = await Swal.fire({
 			title: 'Tìm kiếm tên sản phẩm',
@@ -224,6 +224,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			});
 		}
 	};
+	// Tìm kiếm END 
 
 	$scope.initialize = function() {
 		//load productitems hết luôn
