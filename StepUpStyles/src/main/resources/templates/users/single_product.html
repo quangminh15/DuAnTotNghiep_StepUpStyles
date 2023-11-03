@@ -87,20 +87,20 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size" ng-change="setSelectedSize(size)"
-									class="form-control">
+								<select ng-model="size" ng-change="setSelectedSize(size.sizeNumber)" class="form-control">
 									<option value="" disabled selected>-- Chọn size --</option>
-									<option ng-repeat="s in sizess">{{s.sizeNumber}}</option>
+									<option ng-repeat="s in sizess" ng-value="{{s}}">{{s.sizeNumber}}</option>
 								</select>
+								
 							</div>
 						</div>
 
-						<div class="desc_single my-4" ng-if="size">
+						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select  ng-model="color" class="form-control" ng-change="showQuantityStock(productDetails.productID, size, color)">
+								<select  ng-model="color" class="form-control"  ng-change="showQuantityStock(productDetails.productID, size.sizeID, color.colorID)">
 									<option value="" disabled selected>-- Chọn size --</option>
-									<option ng-repeat="c in filteredColors">{{c.colorName}}</option>
+									<option ng-repeat="c in filteredColors" ng-value="{{c}}">{{c.colorName}}</option>
 								</select>
 							</div>
 						</div>
