@@ -5,7 +5,7 @@
 <head>
 
 <title>SUS || SẢN PHẨM</title>
-	
+
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -103,7 +103,7 @@
 									<ul class="list-group single">
 										<li ng-repeat="category in cates"
 											class="list-group-item d-flex justify-content-between align-items-center">
-											<a ng-click="getProductsByCategory(category.categoryID)"><span>{{category.categoryName}}</span>
+											<a ng-click="getProductsByCategory1(category.categoryID)"><span>{{category.categoryName}}</span>
 										</a><span class="badge badge-primary badge-pill">1</span>
 										</li>
 									</ul>
@@ -276,14 +276,15 @@
 									</h4>
 									<div class="row special-sec1 mt-4">
 										<div class="row mb-3" ng-repeat="product in featureds"
-											ng-if="$index < 4" ng-click="saveProductID(product.productID)">
-											<div class="col-4 img-deals" >
+											ng-if="$index < 4"
+											ng-click="saveProductID(product.productID)">
+											<div class="col-4 img-deals">
 												<a ng-click="goToSinglePage(product.productID)"> <img
 													class="pic-1 img-fluid"
 													ng-src="{{product.image[0].imagePath}}">
 												</a>
 											</div>
-											<div class="col-8 img-deal1" >
+											<div class="col-8 img-deal1">
 												<h5 class="post-title title">
 													<a ng-click="goToSinglePage(product.productID)">
 														{{product.productName}} </a>
@@ -355,9 +356,12 @@
 											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">
-											<li> 
-												<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
-												<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+											<li><span ng-if="isFavorited(p.productID)"
+												ng-click="check(p.productID)" class="fa fa-heart liked"
+												style="font-size: 24px; color: red;"></span> <span
+												ng-if="!isFavorited(p.productID)"
+												ng-click="check(p.productID)" class="fa fa-heart-o liked"
+												style="font-size: 24px; color: red; font-weight: bold;"></span>
 											</li>
 										</ul>
 										<div class="transmitv single-item">
@@ -371,14 +375,15 @@
 											<a ng-click="goToSinglePage(p.productID)">{{
 												p.productName }}</a>
 										</h3>
-										<span class="price" ng-if="p.discount[0].priceDiscount == null">
-									{{ p.price | number:0 }} ₫</span> <span class="price"
-									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
-									<del>{{ p.price | number:0 }} ₫</del> {{
-									p.discount[0].priceDiscount | number:0 }} ₫
-								</span> <span class="price"
-									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
-									{{ p.price | number:0 }} ₫ </span>
+										<span class="price"
+											ng-if="p.discount[0].priceDiscount == null"> {{
+											p.price | number:0 }} ₫</span> <span class="price"
+											ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+											<del>{{ p.price | number:0 }} ₫</del> {{
+											p.discount[0].priceDiscount | number:0 }} ₫
+										</span> <span class="price"
+											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+											{{ p.price | number:0 }} ₫ </span>
 									</div>
 								</div>
 							</div>

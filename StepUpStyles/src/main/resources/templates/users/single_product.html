@@ -95,19 +95,18 @@
 							</div>
 						</div>
 
-						<div class="desc_single my-4" ng-show="size">
+						<div class="desc_single my-4" ng-if="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
 								<select  ng-model="color" class="form-control" ng-change="showQuantityStock(productDetails.productID, size, color)">
-									<option value="" disabled selected>Vui lòng chọn màu
-										sắc</option>
-									<option ng-repeat="c in colors" value="{{c.colorID}}">{{c.colorName}}</option>
+									<option value="" disabled selected>-- Chọn size --</option>
+									<option ng-repeat="c in filteredColors">{{c.colorName}}</option>
 								</select>
 							</div>
 						</div>
 
 
-						<div class="desc_single my-4" ng-show="color">
+						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
 								<input ng-value="1" ng-change="checkQuantity(qty)" ng-model="qty" type="number"

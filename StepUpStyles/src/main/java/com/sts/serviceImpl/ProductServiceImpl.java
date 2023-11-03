@@ -14,8 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CategoryDAO;
+import com.sts.dao.DirectDiscountDAO;
 import com.sts.dao.ProductDAO;
 import com.sts.model.Category;
+import com.sts.model.DirectDiscount;
 import com.sts.model.Product;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
@@ -27,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	CategoryDAO categoryDAO;
+	
+	@Autowired
+	DirectDiscountDAO discountDAO;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -180,6 +185,20 @@ public class ProductServiceImpl implements ProductService {
 
 	public List<Product> getProductsByCategoryID(Integer categoryID) {
 		return productDAO.getProductsByCategoryID(categoryID);
+	}
+
+	@Override
+	public List<Product> loadDiscountedProducts() {
+		List<Product> discountedProducts = new ArrayList<>();
+	    List<DirectDiscount> directDiscounts = discountDAO.findByStatus("Chưa diễn ra");
+
+	    for (DirectDiscount discount : directDiscounts) {
+	        if (discount.getProduct() != null) {
+	            discountedProducts.add(discount.getProduct());
+	        }
+	    }
+
+	    return discountedProducts;
 	}
 
 }
