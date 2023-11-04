@@ -367,9 +367,12 @@
 								</a>
 								<ul class="social">
 									<li><span ng-if="isFavorited(p.productID)"
-										ng-click="check(p.productID)" class="fa fa-heart"></span> <span
+										ng-click="check(p.productID)" class="fa fa-heart liked"
+										style="font-size: 24px; color: red;"></span> <span
 										ng-if="!isFavorited(p.productID)"
-										ng-click="check(p.productID)" class="fa fa-heart-o"></span></li>
+										ng-click="check(p.productID)" class="fa fa-heart-o liked"
+										style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
 									<a ng-click="goToSinglePage(p.productID)" type="submit"
