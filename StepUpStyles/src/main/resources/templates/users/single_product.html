@@ -45,18 +45,52 @@
 								</form>
 							</div>
 							<div class="buyhny-now">
-								<a href="#buy" class="action btn">Mua ngay </a>
+								<a class="action btn" data-toggle="modal" data-target="#myModal">Thông tin</a>
 							</div>
+							<!-- The Modal -->
+							<div class="modal" id="myModal">
+								<div class="modal-dialog modal-xl">
+									<div class="modal-content">
+										<!-- Modal body -->
+										<div class="modal-body">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<!-- Nav tabs -->
+											<ul class="nav nav-tabs">
+												<li class="nav-item"><a class="nav-link active"
+													data-toggle="tab" href="#home">Mô tả</a></li>
+												<li class="nav-item"><a class="nav-link"
+													data-toggle="tab" href="#menu1">Chọn size</a></li>
+											</ul>
 
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div id="home" class="container tab-pane active">
+													<h5>Mô tả:</h5>
+													<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4>
+												</div>
+												<div id="menu1" class="container tab-pane fade">
+													<br>
+													<h3>Menu 1</h3>
+													<p>Ut enim ad minim veniam, quis nostrud exercitation
+														ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+												</div>
+											</div>
+										</div>
+
+										<!-- Modal footer -->
+
+
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-lg-7 single-right-left pl-lg-4">
 						<h3>{{ productDetails.productName }}</h3>
 						<div class="caption">
 							<ul class="rating-single">
-								<li ng-repeat="star in getStarToAvgs(averageRating)">
-									<span ng-class="star" aria-hidden="true"></span>
-								</li>
+								<li ng-repeat="star in getStarToAvgs(averageRating)"><span
+									ng-class="star" aria-hidden="true"></span></li>
 								<li>{{ averageRating }}/5<span
 									class="fa fa-star yellow-star" aria-hidden="true"></span>
 								</li>
@@ -98,7 +132,8 @@
 						<div class="desc_single my-4" ng-if="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select  ng-model="color" class="form-control" ng-change="showQuantityStock(productDetails.productID, size, color)">
+								<select ng-model="color" class="form-control"
+									ng-change="showQuantityStock(productDetails.productID, size, color)">
 									<option value="" disabled selected>-- Chọn size --</option>
 									<option ng-repeat="c in filteredColors">{{c.colorName}}</option>
 								</select>
@@ -109,16 +144,17 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-change="checkQuantity(qty)" ng-model="qty" type="number"
-									class="form-control">
+								<input ng-value="1" ng-change="checkQuantity(qty)"
+									ng-model="qty" type="number" class="form-control">
 							</div>
-							<p class="col-md-12 size1">Số lượng Trong Kho: {{singleProd.quantity}}</p>
+							<p class="col-md-12 size1">Số lượng Trong Kho:
+								{{singleProd.quantity}}</p>
 						</div>
 
-						<div class="desc_single mb-4">
-							<h5>Mô tả:</h5>
-							<p>{{ productDetails.description }}</p>
-						</div>
+						<!-- 						<div class="desc_single mb-4"> -->
+						<!-- 							<h5>Mô tả:</h5> -->
+						<!-- 							<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4> -->
+						<!-- 						</div> -->
 
 						<div class="description mb-4">
 							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5>
@@ -205,9 +241,12 @@
 									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li> 
-										<span ng-if="isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
-										<span ng-if="!isFavorited(p.productID)" ng-click="check(p.productID)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									<li><span ng-if="isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart liked"
+										style="font-size: 24px; color: red;"></span> <span
+										ng-if="!isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart-o not-liked"
+										style="font-size: 24px; color: red; font-weight: bold;"></span>
 									</li>
 								</ul>
 								<div class="transmitv single-item">
@@ -254,14 +293,27 @@
 					</div>
 					<div class="col-sm-8">
 						<p class="d-inline-flex gap-1">
-							<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(null)">Tất cả ({{ reviewCounts.total }})</div>
-							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a>
-							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a>
-							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a>
-							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a>
-							<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;" ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
+						<div class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(null)">Tất cả ({{
+							reviewCounts.total }})</div>
+						<a class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a> <a
+							class="btn mx-2 btn-outline-warning"
+							style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
 						</p>
-					</div>					
+					</div>
 				</div>
 			</div>
 			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
@@ -291,7 +343,8 @@
 							class="fa fa-angle-double-left"></span></a></li>
 					<li class="page-item" ng-repeat="page in reviewVisiblePages"
 						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a
-						class="page-link" href="" ng-click="reviewPager.gotoReview(page.value)"
+						class="page-link" href=""
+						ng-click="reviewPager.gotoReview(page.value)"
 						ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
 							{{ page.value }} </a></li>
 					<li class="next"><a ng-click="reviewPager.last()"><span

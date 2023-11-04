@@ -1,3 +1,9 @@
+app.filter('unsafeHtml', ['$sce', function ($sce) {
+    return function (val) {
+        return $sce.trustAsHtml(val);
+    };
+}]);
+
 app.controller("favorite-ctrl", function($scope, $http) {
 	//Linh
 	$scope.userItemsFavorite = [];
@@ -352,6 +358,10 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.searchedProductItems = [];
 	$scope.discountedProducts = [];
 	$scope.featureds = [];
+
+	$scope.trustedHtml = function(htmlCode) {
+		return $sce.trustAsHtml(htmlCode);
+	};
 
 	// Lắng nghe sự kiện click trên lớp phủ
 	var overlay = document.getElementById("overlay");
