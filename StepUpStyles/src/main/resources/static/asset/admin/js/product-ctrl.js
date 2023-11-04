@@ -331,27 +331,23 @@ app.controller("product-ctrl", function($scope, $http) {
 		// Gọi API để lấy thông tin sản phẩm chi tiết dựa vào productID
 		$http.get("/rest/products/" + productitem.productID).then(function(resp) {
 			var productDetails = resp.data;
+			console.log("productDetails: ", productDetails)
+			$scope.form = angular.copy(productitem);
+			// Cập nhật giá trị CKEditor
+			$scope.form.description = productitem.description;
+			CKEDITOR.instances.description.setData($scope.form.description);
 
 			// Gọi API để lấy danh sách hình ảnh của sản phẩm dựa vào productId
 			$http.get("/rest/productimages/loadbyproduct/" + productitem.productID).then(function(imageResp) {
 				var productImages = imageResp.data;
-
+				console.log("productImages: ", productImages)
 				// Kiểm tra xem sản phẩm có hình ảnh hay không
 				if (productImages.length > 0) {
 					// Sản phẩm có hình ảnh, cho phép cập nhật sản phẩm
-					$scope.form = angular.copy(productitem);
 					checkImage = false;
-					// Cập nhật giá trị CKEditor
-					$scope.form.description = productitem.description;
-					CKEDITOR.instances.description.setData($scope.form.description);
-
 				} else {
-					// Sản phẩm chưa có ảnh, không cho phép cập nhật sản phẩm
-					// Hiển thị thông báo hoặc xử lý khác tùy ý
-					$scope.form = angular.copy(productitem);
+					// Sản phẩm không có ảnh và activities = true thì cho phép cập nhật sản phẩm
 					checkImage = true;
-					// Cập nhật giá trị CKEditor
-					CKEDITOR.instances.description.setData($scope.form.description);
 				}
 			}).catch(function(imageError) {
 				console.error("Lỗi khi lấy danh sách hình ảnh:", imageError);
@@ -564,19 +560,17 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-
-
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
-		if (checkImage == true) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
-			})
-			var productitem = angular.copy($scope.form);
-			console.log("ảnh lỗi: ", productitem)
-			return;
-		}
+//		if (checkImage == true) {
+//			Swal.fire({
+//				icon: 'error',
+//				title: 'Thất bại',
+//				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+//			})
+//			return;
+//		}
+
+
 		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
 		var descriptionEditor = CKEDITOR.instances.description;
 		$scope.form.description = descriptionEditor.getData();
@@ -590,7 +584,15 @@ app.controller("product-ctrl", function($scope, $http) {
 
 			var productitem = angular.copy($scope.form);
 			productitem.user.userID = userID;
-
+			// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
+			if (checkImage == true && $scope.form.activities == true) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+				})
+				return;
+			}
 			$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
 				var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
 				resp.data.modifyDate = new Date(resp.data.modifyDate);

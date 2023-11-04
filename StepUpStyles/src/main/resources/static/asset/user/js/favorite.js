@@ -1,7 +1,7 @@
-app.filter('unsafeHtml', ['$sce', function ($sce) {
-    return function (val) {
-        return $sce.trustAsHtml(val);
-    };
+app.filter('unsafeHtml', ['$sce', function($sce) {
+	return function(val) {
+		return $sce.trustAsHtml(val);
+	};
 }]);
 
 app.controller("favorite-ctrl", function($scope, $http) {
@@ -405,7 +405,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 
 	// Tìm kiếm START 
-	// Hàm ẩn lớp phủ
+
+	// Hàm ẩn lớp phủ bắ đầu 
 	$scope.hideOverlay = function() {
 		var overlay = document.getElementById("overlay");
 		if (overlay) {
@@ -414,7 +415,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			console.error("Không tìm thấy lớp phủ.");
 		}
 	}
-
+	// Hàm ẩn lớp phủ kết thúc
+	
 	// Sử dụng hàm ẩn lớp phủ trong hàm searchProductByName
 	$scope.searchProductByName = function() {
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
