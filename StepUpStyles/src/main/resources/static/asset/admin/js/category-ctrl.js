@@ -326,6 +326,17 @@ app.controller("category-ctrl", function($scope, $http) {
 			});
 			return;
 		}
+		
+		//Lỗi trùng tên danh mục sản phẩm
+		let existingCategoryName = $scope.categoryitems.find(categoryitem => categoryitem.categoryName === $scope.form.categoryName);
+		if (existingCategoryName) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Tên danh mục đã tồn tại!',
+			});
+			return;
+		}
 
 		//Lỗi không chọn ảnh
 		if (!document.querySelector('#photo').files[0]) {

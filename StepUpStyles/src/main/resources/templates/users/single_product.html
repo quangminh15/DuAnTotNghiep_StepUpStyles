@@ -46,9 +46,41 @@
 							
 							</div>
 							<div class="buyhny-now">
-								<a href="#buy" class="action btn">Mua ngay </a>
+								<a class="action btn" data-toggle="modal" data-target="#myModal">Thông tin</a>
 							</div>
+							<!-- The Modal -->
+							<div class="modal fade" id="myModal">
+								<div class="modal-dialog modal-xl">
+									<div class="modal-content">
+										<!-- Modal body -->
+										<div class="modal-body">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<!-- Nav tabs -->
+											<ul class="nav nav-tabs">
+												<li class="nav-item"><a class="nav-link active"
+													data-toggle="tab" href="#home">Mô tả</a></li>
+												<li class="nav-item"><a class="nav-link"
+													data-toggle="tab" href="#menu1">Chọn size</a></li>
+											</ul>
 
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div id="home" class="container tab-pane active">
+													<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4>
+												</div>
+												<div id="menu1" class="container tab-pane fade">
+													<br>
+													<img alt="" src="/asset/user/img/BangDoSize.jpg" height="100%" width="100%" align="Hướng dẫn chọn size">
+												</div>
+											</div>
+										</div>
+
+										<!-- Modal footer -->
+
+
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-lg-7 single-right-left pl-lg-4">
@@ -114,16 +146,17 @@
 						<div class="desc_single my-4" ng-if="checkColor">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-change="checkQuantity(qty)" ng-model="qty" type="number"
-									class="form-control">
+								<input ng-value="1" ng-change="checkQuantity(qty)"
+									ng-model="qty" type="number" class="form-control">
 							</div>
-							<p class="col-md-12 size1">Số lượng Trong Kho: {{singleProd.quantity}}</p>
+							<p class="col-md-12 size1">Số lượng Trong Kho:
+								{{singleProd.quantity}}</p>
 						</div>
 
-						<div class="desc_single mb-4">
-							<h5>Mô tả:</h5>
-							<p>{{ productDetails.description }}</p>
-						</div>
+						<!-- 						<div class="desc_single mb-4"> -->
+						<!-- 							<h5>Mô tả:</h5> -->
+						<!-- 							<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4> -->
+						<!-- 						</div> -->
 
 						<div class="description mb-4">
 							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5>
