@@ -12979,10 +12979,11 @@ h5,
 }
 
 .table tbody tr td.image-prod .img {
-  display: block;
+  
   width: 100px;
   height: 100px;
-  margin: 0 auto;
+  margin: 0 0;
+ 
 }
 
 .table tbody tr td.product-name {
@@ -13425,10 +13426,11 @@ h5,
 }
 
 .table tbody tr td.image-prod img {
-  display: block;
+  
   width: 100px;
   height: 100px;
-  margin: 0 auto;
+  margin: 0 0;
+  
 }
 @media(min-width: 560){
   .image-prod img{

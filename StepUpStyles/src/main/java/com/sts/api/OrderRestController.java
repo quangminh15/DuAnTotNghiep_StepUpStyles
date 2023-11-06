@@ -8,14 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.OrderDAO;
+import com.sts.dao.UserDAO;
 import com.sts.model.Order;
+import com.sts.model.OrderDetail;
 import com.sts.model.ShippingAddress;
+import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
 
@@ -26,6 +31,10 @@ public class OrderRestController {
 
     @Autowired
     OrderService orderService;
+     @Autowired
+    OrderDAO orderdao;
+    @Autowired
+    UserDAO userdao;
 
     @PostMapping("/receiveCartData")
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
@@ -54,5 +63,18 @@ public class OrderRestController {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap);
         }
+    }
+
+    @GetMapping("/listOrder")
+    public List<Order> getListOrder(){
+        User user = userdao.findById(2).get();
+        
+        return orderService.loadByUser(user);
+    }
+    @GetMapping("/listOrder/detail")
+    public List<OrderDetail> getListOrderdetail(@RequestParam ("orderid") Integer orderid){
+        
+        Order order = orderdao.findById(orderid).get();
+        return orderService.loadByOrder(order);
     }
 }

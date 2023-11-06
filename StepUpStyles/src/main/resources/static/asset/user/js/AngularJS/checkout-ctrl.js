@@ -3,6 +3,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 	$scope.cartDetails = []
 
 
+
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
 	}
@@ -312,11 +313,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 	}
 	$scope.createAddress = function (checked, name, phone, detail) {
-
-
-		if (!$scope.form.selectedWard || !$scope.form.nameReceiver || !$scope.form.phone || !$scope.form.addressDetails) {
-			alert("vui longf nhap day du thong tin")
-		} else {
+		alert(1)
+		
 			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
 			$scope.dataAddress = {
 				// Truyền thông tin địa chỉ vào yêu cầu
@@ -325,16 +323,20 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				ward_name: $scope.form.selectedWard.WardName,
 				// Các thông tin khác cần thiết
 			}
-			$http.post(`/rest/address/create?defaultCheck=${$scope.form.checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
+			alert(2)
+			console.log($scope.dataAddress );
+			$http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
 				.then(resp => {
+					alert(3)
 					console.log("add");
 					$scope.reset()
 					$scope.initialize()
 				}).catch(function (error) {
 					console.error('Error fetching districts:', error);
+					alert(4)
 				});
 
-		}
+		
 	}
 
 	//address load

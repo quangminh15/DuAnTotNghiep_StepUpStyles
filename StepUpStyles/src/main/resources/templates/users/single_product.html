@@ -37,12 +37,12 @@
 						<div class="eco-buttons mt-5">
 
 							<div class="transmitv single-item">
-								<form action="#" method="post">
+								
 									<button type="submit"
 										ng-click="addToCart(productDetails.productID, size, color, qty)"
 										class="transmitv-cart ptransmitv-cart add-to-cart read-2">
 										Thêm vào giỏ</button>
-								</form>
+							
 							</div>
 							<div class="buyhny-now">
 								<a href="#buy" class="action btn">Mua ngay </a>
@@ -95,7 +95,7 @@
 							</div>
 						</div>
 
-						<div class="desc_single my-4">
+						<div class="desc_single my-4" ng-if="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
 								<select  ng-model="color" class="form-control"  ng-change="showQuantityStock(productDetails.productID, size.sizeID, color.colorID)">
@@ -106,7 +106,7 @@
 						</div>
 
 
-						<div class="desc_single my-4">
+						<div class="desc_single my-4" ng-if="checkColor">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
 								<input ng-value="1" ng-change="checkQuantity(qty)" ng-model="qty" type="number"

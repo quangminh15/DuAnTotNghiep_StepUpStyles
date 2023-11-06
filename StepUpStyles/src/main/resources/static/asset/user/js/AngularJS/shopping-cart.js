@@ -130,8 +130,14 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 	}
 	$scope.singleProd=[]
+	
 	$scope.showQuantityStock = function (id, size, color) {
 		
+		
+			$scope.checkColor = color;
+			
+			console.log("color đã chọn: ", $scope.checkColor);
+	
 		$http.get(`/rest/productdetails/find?id=${id}&size=${size}&color=${color}`)
 			.then(function (response) {
 				$scope.singleProd=response.data
@@ -142,6 +148,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			.catch(function (error) {
 				console.error('Failed to add to cart:', error);
 			});
+			
 	}
 	$scope.checkQuantity = function ( qty) {
 		if ($scope.singleProd.quantity<qty) {
@@ -163,6 +170,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 			})
 			$scope.qty=$scope.singleProd.quantity
+			console.log("qty",$scope.qty,$scope.singleProd.quantity);
 		}
 	}
 
@@ -395,35 +403,22 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	};
 	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
+		console.log("test",id, size, color, qty);
 
-		$http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
-			// Nếu không sử dụng Object data cho phương thức bên RestController
-			// Thì gán thằng biến lên URL --> truyền data cho @RequestParam(...)
-			.then(function (response) {
-				console.log('Added to cart: ');
-				$scope.initialize()
-				$scope.countcartItems()
-				// $scope.itemQuantity = qty;
-				// $scope.showAlert = true;
-				// alert("Đã thêm "+qty+" sản phẩm giỏ hàng")
-				// Hide the alert after 5 seconds
+		// $http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
+			
+		// 	.then(function (response) {
+		// 		console.log('Added to cart: ');
+				
+		// 		$scope.initialize()
+		// 		$scope.countcartItems()
+				
+		// 	})
 
-			})
-
-			.catch(function (error) {
-				console.error('Failed to add to cart:', error);
-			});
-		// get amount() {
-		// 	return this.cartItems.map(item => item.quantity * item.productVariant.products.price)
-		// 		.reduce((total, qty) => total += qty, 0)
-		// },
-		// get count() {
-		// 	return this.cartItems.map(item => item.quantity)
-		// 		.reduce((total, qty) => total += qty, 0)
-		// },
-		// getSubtotalForItem(item) {
-		// return item.quantity * item.productVariant.products.price;
-		// }
+		// 	.catch(function (error) {
+		// 		console.error('Failed to add to cart:', error);
+		// 	});
+		
 
 	};
 

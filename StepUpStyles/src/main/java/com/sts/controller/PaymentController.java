@@ -94,7 +94,7 @@ public class PaymentController {
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
 
-        return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/index";
+        return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/paysuccess";
     }
 
 }
