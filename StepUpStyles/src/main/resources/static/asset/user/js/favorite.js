@@ -679,6 +679,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 	$scope.setSelectedColor = function (selectedColor) {
 		$scope.color = selectedColor;
+		
 		console.log("color đã chọn: ", selectedColor);
 	};
 

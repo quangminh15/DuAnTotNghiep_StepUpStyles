@@ -69,9 +69,7 @@
 												Sản Phẩm
 											</label>
 										</th>
-										<th></th>
-										<th></th>
-										<th></th>
+										
 										<th>
 											<div class="subth">Thuộc Tính</div>
 										</th>
@@ -100,19 +98,25 @@
 
 										<td class="image-prod ">
 
+											<div class="d-flex">
+												
+													<img src="/asset/user/img/wave.jpg" alt="">
+												
+												
+													<span  style="max-width: 300px; overflow: hidden;display: -webkit-box;
+												-webkit-box-orient: vertical;
+												-webkit-line-clamp: 3;" class="ml-3 text-left align-middle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora minima asperiores labore dolorem iusto, incidunt eum? Impedit necessitatibus dolor odit pariatur harum, maiores sequi! Error facilis temporibus debitis voluptatibus tenetur!{{item.product.productName}}</span>
+													<div ng-if="item.quantity > item.productDetail.quantity"
+														class="alert alert-warning" role="alert">
+														Hết hàng rồi
+													</div>
+												
 
-											<img src="/asset/user/img/wave.jpg" alt="">
 
-										</td>
-										<td colspan="3">
-											<p style="max-width: 300px; overflow: hidden;     display: -webkit-box;
-											-webkit-box-orient: vertical;
-											-webkit-line-clamp: 3;" class="align-middle text-left">{{item.product.productName}}</p>
-											<div ng-if="item.quantity > item.productDetail.quantity"
-												class="alert alert-warning" role="alert">
-												Hết hàng rồi
 											</div>
+
 										</td>
+										
 
 										<!-- <td class="product-name">
 											<h3>{{item.product.productName}}</h3>
@@ -389,8 +393,8 @@
 										<span>Tổng Tiền</span>
 										<span class="text-right">{{tongTien}}</span>
 									</p>
-									<p><a ng-click="checkout()" 
-											class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+									<p><a ng-click="checkout()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh
+											Toán</a></p>
 								</div>
 							</div>
 
