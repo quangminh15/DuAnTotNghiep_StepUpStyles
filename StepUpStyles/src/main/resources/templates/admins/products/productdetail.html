@@ -100,7 +100,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<table class="table">
+						<table class="table" style="text-align: center;">
 							<thead>
 								<tr>
 									<th ng-repeat="column in sortableColumns"
@@ -166,7 +166,7 @@
 			</div>
 		</div>
 		<!-- thùng rác kết thúc -->
-		<div class="card-body">
+		<div class="card-body" style="text-align: center;">
 			<div class="d-flex justify-content-between align-items-center">
 				<h4 class="mb-0">Sản phẩm chi tiết</h4>
 				<div class="d-flex">
@@ -214,7 +214,14 @@
 						<td>{{productdetailitem.product.productName}}</td>
 						<td>{{productdetailitem.color.colorName}}</td>
 						<td>{{productdetailitem.size.sizeNumber}}</td>
-						<td>{{productdetailitem.quantity}}</td>
+						<td
+							ng-style="{
+        'background-color': productdetailitem.quantity == 0 ? '#fa0e0ec7' : 
+                           (productdetailitem.quantity < 10 ? '#dcdc1a' : 'none'),
+        'font-weight': productdetailitem.quantity == 0 || productdetailitem.quantity < 10 ? 'bold' : 'normal'
+    }">
+							{{productdetailitem.quantity}}</td>
+
 						<td class="actions">
 							<button ng-click="edit(productdetailitem)"
 								class="btn btn-inverse-primary btn-rounded btn-icon"

@@ -783,4 +783,98 @@ app.controller("index-ctrl", function($scope, $http) {
 	//phân trang trang chủ product discount END
 
 	//quangminh kết thúc
+
+	//Linh 
+	$scope.userItemsFavorite = [];
+	$scope.userRatings = []
+	$scope.allreviews = []
+	$scope.averageRating = []
+	$scope.check = function(productID) {
+		$http.get('/rest/favorites/check/' + productID)
+			.then(function(response) {
+				$scope.productbyids = response.data;
+				console.log($scope.productbyids.favoriteId);
+				if (!$scope.productbyids) {
+					$http.post('/rest/favorites/' + productID)
+						.then(function(response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+									toast.addEventListener('mouseenter', Swal.stopTimer)
+									toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							})
+
+							Toast.fire({
+								icon: 'success',
+								title: 'Đã thêm sản phẩm vào danh sách yêu thích',
+
+							})
+							$scope.getAllUserFavorite();
+							updateFavoriteCount();
+						})
+						.catch(function(error) {
+							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+						});
+					console.log(1);
+				} else {
+					$http.delete('/rest/favorites/delete/' + productID)
+						.then(function(response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+									toast.addEventListener('mouseenter', Swal.stopTimer)
+									toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							})
+
+							Toast.fire({
+								icon: 'success',
+								title: 'Đã xóa sản phẩm vào danh sách yêu thích',
+
+							})
+							$scope.getAllUserFavorite();
+							updateFavoriteCount();
+						})
+						.catch(function(error) {
+							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+						});
+				}
+			})
+			.catch(function(error) {
+				console.error('Error ' + error);
+			});
+	}
+
+	$scope.getAllUserFavorite = function() {
+		$http.get("/rest/favorites/getUserFavorite").then(function(response) {
+			$scope.userItemsFavorite = response.data
+			$scope.favoritePager.first()
+			$scope.userItemsFavorite.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.image = resp.data;
+				})
+				$http.get("/rest/discount/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.discount = resp.data.filter(discount => !discount.deleted);
+				})
+			})
+		})
+	}
+
+	$scope.isFavorited = function(productId) {
+		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
+		return $scope.userItemsFavorite.some(function(item) {
+			return item.product.productID === productId;
+		});
+	};
+	$scope.getAllUserFavorite();
+	//Linh
 })

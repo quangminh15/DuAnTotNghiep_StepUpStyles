@@ -323,7 +323,8 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		var isDuplicate = $scope.productdetailitems.some(function(item) {
 			return (
 				item.product.productID === productdetailitem.product.productID &&
-				item.color.colorID === productdetailitem.color.colorID
+				item.color.colorID === productdetailitem.color.colorID &&
+				item.size.sizeID === productdetailitem.size.sizeID
 			);
 		});
 
@@ -358,7 +359,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Đã tồn tại sản phẩm chi tiết có tên và màu này rồi!',
+				text: 'Đã tồn tại sản phẩm chi tiết có size và màu này rồi!',
 			});
 			return;
 		}
@@ -673,9 +674,9 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	}
 	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) Kết thúc
 
-	$(function() {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
 
 	$('.export').click(function() {
 

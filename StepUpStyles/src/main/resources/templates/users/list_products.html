@@ -95,125 +95,100 @@
 						<!--/ecommerce-left-hny-->
 						<aside>
 							<div class="sider-bar">
-								<!-- danh mục sản phẩm -->
-								<div class="single-gd mb-5" ng-if="cates.length > 0">
-									<h4>
-										Danh mục <span>Sản phẩm</span>
-									</h4>
-									<ul class="list-group single">
-										<li ng-repeat="category in cates"
-											class="list-group-item d-flex justify-content-between align-items-center">
-											<a ng-click="getProductsByCategory1(category.categoryID)"><span>{{category.categoryName}}</span>
-										</a><span class="badge badge-primary badge-pill">1</span>
-										</li>
-									</ul>
-								</div>
-
-								<!-- Thương hiệu  -->
-								<div class="single-gd mb-5">
-									<h4>
-										Thương hiệu <span>Sản phẩm</span>
-									</h4>
-									<ul class="list-group single">
-										<li ng-repeat="brand in brans"
-											class="list-group-item d-flex justify-content-between align-items-center">
-											<a ng-click="getProductsByBrand(brand.brandID)"><span>{{brand.brandName}}</span></a>
-											<span class="badge badge-primary badge-pill">1</span>
-										</li>
-									</ul>
-								</div>
-
-
-
-
-								<!-- Bộ lọc nâng cao  -->
-								<div class="single-gd mb-5">
-									<h4>
-										Bộ lọc <span>Nâng cao</span>
-									</h4>
-									<ul class="list-group single">
-										<li
-											class="list-group-item d-flex justify-content-between align-items-center">
-											<button type="button"
-												class="transmitv-cart ptransmitv-cart add-to-cart read-2"
-												data-bs-toggle="offcanvas" data-bs-target="#demo">Xem</button>
-										</li>
-									</ul>
-								</div>
-
-								<!-- modal bộ lọc bắt đầu -->
-								<div class="offcanvas offcanvas-end" id="demo">
-									<div class="offcanvas-header">
-										<h1 class="offcanvas-title">Bộ lọc</h1>
-										<button type="button" class="btn-close"
-											data-bs-dismiss="offcanvas"></button>
+								<!-- bộ lọc bắt đầu -->
+								<form>
+									<!-- danh mục sản phẩm bắt đầu-->
+									<div class="single-gd mb-5" ng-if="cates.length > 0">
+										<h4 class="mb-2">
+											Danh mục <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="c in cates"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="category" value="{{c.categoryID}}">
+													{{c.categoryName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
 									</div>
-									<div class="offcanvas-body">
-										<form class="g-3">
-											<!-- Thương hiệu -->
-											<div class="row">
-												<label for="inputZip" class="col-12 form-label"><h5>Thương
-														hiệu</h5></label>
-												<div ng-repeat="brand in brans" class="col-4">
-													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"
-															name="brand" value="{{brand.brandID}}"> <label
-															class="form-check-label">{{brand.brandName}}</label>
-													</div>
-												</div>
-											</div>
+									<!-- danh mục sản phẩm kết thúc-->
 
-											<!-- Danh mục -->
-											<div class="row">
-												<label for="inputZip" class="col-12 form-label"><h5>Danh
-														mục</h5></label>
-												<div ng-repeat="c in cates" class="col-4">
-													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"
-															name="category" value="{{c.categoryID}}"> <label
-															class="form-check-label">{{c.categoryName}}</label>
-													</div>
-												</div>
-											</div>
-
-											<!-- Màu sắc -->
-											<div class="row">
-												<label for="inputZip" class="col-12 form-label"><h5>Màu
-														sắc</h5></label>
-												<div ng-repeat="c in colors" class="col-4">
-													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"
-															name="color" value="{{c.colorID}}"> <label
-															class="form-check-label">{{c.colorName}}</label>
-													</div>
-												</div>
-											</div>
-
-											<!-- Kích thước -->
-											<div class="row">
-												<label for="inputZip" class="col-12 form-label"><h5>Size</h5></label>
-												<div ng-repeat="c in sizes" class="col-4">
-													<div class="form-check mb-2">
-														<input class="form-check-input" type="checkbox"
-															name="size" value="{{c.sizeID}}"> <label
-															class="form-check-label">{{c.sizeNumber}}</label>
-													</div>
-												</div>
-											</div>
-											<div class="row m-5">
-												<div class="custom-button-container">
-													<button class="btn btn-secondary" type="button"
-														ng-click="filterProducts()">Lọc</button>
-													<button class="btn btn-secondary" type="button"
-														ng-click="clearFilters()">Hủy</button>
-												</div>
-											</div>
-
-										</form>
+									<!-- Thương hiệu bắt đầu-->
+									<div class="single-gd mb-5">
+										<h4 class="mb-2">
+											Thương hiệu <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="brand in brans"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="brand" value="{{brand.brandID}}">
+													{{brand.brandName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
 									</div>
-								</div>
-								<!-- modal bộ lọc kết thúc -->
+									<!-- Thương hiệu kết thúc-->
 
+									<!-- Size bắt đầu-->
+									<div class="single-gd mb-5">
+										<h4 class="mb-2">
+											Size <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="size in sizes"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="size" value="{{size.sizeID}}">
+													{{size.sizeNumber}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- Size kết thúc-->
+									
+									<!-- Màu sắc bắt đầu-->
+									<div class="single-gd mb-2">
+										<h4 class="mb-2">
+											Màu <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="color in colors"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="color" value="{{color.colorID}}">
+													{{color.colorName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- Màu sắc kết thúc-->
+
+									<div class="single-gd mb-5">
+										<ul class="list-group single">
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<button type="button"
+													class="transmitv-cart ptransmitv-cart add-to-cart read-2"
+													ng-click="filterProducts()" data-toggle="tooltip"
+													title="Vui lòng chọn sau đó ấn 'Lọc'">Lọc</button>
+											</li>
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<button type="button"
+													class="transmitv-cart ptransmitv-cart add-to-cart read-2"
+													ng-click="clearFilters()" data-toggle="tooltip"
+													title="Hủy các phần đã chọn">Hủy</button>
+											</li>
+										</ul>
+									</div>
+								</form>
+								<!-- bộ lọc kết thúc -->
 
 								<div class="single-gd mb-5">
 									<h4>
@@ -240,32 +215,32 @@
 								</div>
 
 								<div class="single-gd left-side mb-5">
-									<h4>Customer Ratings</h4>
+									<h4>Đánh giá</h4>
 									<ul class="ratingshyny">
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>5.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>4.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>3.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>2.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>1.0</span>
+										<li><a > <span class="fa fa-star"
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
 									</ul>
 								</div>
@@ -384,6 +359,7 @@
 										</span> <span class="price"
 											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
 											{{ p.price | number:0 }} ₫ </span>
+											<p>Điểm trung bình: {{ p.avgrev }} sao</p>
 									</div>
 								</div>
 							</div>

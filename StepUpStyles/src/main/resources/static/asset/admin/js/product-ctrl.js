@@ -1,3 +1,4 @@
+
 app.controller("product-ctrl", function($scope, $http) {
 	$scope.productitems = [];
 	$scope.productitemss = [];
@@ -12,6 +13,8 @@ app.controller("product-ctrl", function($scope, $http) {
 	$scope.selectedActivity = "all";
 
 	var checkImage = false;
+
+	CKEDITOR.replace('description');
 
 	$scope.sortableColumns = [
 		{ name: 'productID', label: 'Mã sản phẩm' },
@@ -236,6 +239,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			$scope.productitems.sort((a, b) => b.modifyDate - a.modifyDate);
 			$scope.pager.first();
 			$scope.RestorePager.first();
+			console.log("$scope.productitemsLoadAll: ", $scope.productitemsLoadAll)
 		});
 
 		//load productitems
@@ -314,6 +318,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			activities: false,
 			deleted: false,
 			featured: false,
+			description: '',
 		};
 	}
 
@@ -322,32 +327,27 @@ app.controller("product-ctrl", function($scope, $http) {
 	$scope.reset();
 
 	//	Hiển thị lên form
-	//		$scope.edit = function(productitem) {
-	//			$scope.form = angular.copy(productitem);
-	//		}
-
 	$scope.edit = function(productitem) {
 		// Gọi API để lấy thông tin sản phẩm chi tiết dựa vào productID
 		$http.get("/rest/products/" + productitem.productID).then(function(resp) {
 			var productDetails = resp.data;
+			console.log("productDetails: ", productDetails)
+			$scope.form = angular.copy(productitem);
+			// Cập nhật giá trị CKEditor
+			$scope.form.description = productitem.description;
+			CKEDITOR.instances.description.setData($scope.form.description);
 
 			// Gọi API để lấy danh sách hình ảnh của sản phẩm dựa vào productId
 			$http.get("/rest/productimages/loadbyproduct/" + productitem.productID).then(function(imageResp) {
 				var productImages = imageResp.data;
-
+				console.log("productImages: ", productImages)
 				// Kiểm tra xem sản phẩm có hình ảnh hay không
 				if (productImages.length > 0) {
 					// Sản phẩm có hình ảnh, cho phép cập nhật sản phẩm
-					$scope.form = angular.copy(productitem);
 					checkImage = false;
-
 				} else {
-					// Sản phẩm chưa có ảnh, không cho phép cập nhật sản phẩm
-					// Hiển thị thông báo hoặc xử lý khác tùy ý
-					$scope.form = angular.copy(productitem);
+					// Sản phẩm không có ảnh và activities = true thì cho phép cập nhật sản phẩm
 					checkImage = true;
-
-
 				}
 			}).catch(function(imageError) {
 				console.error("Lỗi khi lấy danh sách hình ảnh:", imageError);
@@ -400,6 +400,17 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
+		
+		//Lỗi trùng tên sản phẩm
+		let existingProductName = $scope.productitems.find(productitem => productitem.productName === $scope.form.productName);
+		if (existingProductName) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Tên sản phẩm đã tồn tại!',
+			});
+			return;
+		}
 
 		// Lỗi bỏ trống giá sản phẩm
 		if (!$scope.form.price) {
@@ -422,6 +433,9 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
+		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
+		var descriptionEditor = CKEDITOR.instances.description;
+		$scope.form.description = descriptionEditor.getData();
 
 		// Lỗi giá sản phẩm > 100.000.000
 		if ($scope.form.price > 100000000) {
@@ -434,15 +448,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Lỗi bỏ trống mô tả
-		if (!$scope.form.description) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập mô tả sản phẩm!',
-			})
-			return;
-		}
+
 
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
 		if (checkImage == true) {
@@ -495,6 +501,8 @@ app.controller("product-ctrl", function($scope, $http) {
 
 	//	Cập nhật sản phẩm 
 	$scope.update = function() {
+
+
 		//Không chọn danh mục
 		if (!$scope.form.category || !$scope.form.category.categoryID) {
 			Swal.fire({
@@ -563,25 +571,20 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-		//Lỗi bỏ trống mô tả
-		if (!$scope.form.description) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng nhập mô tả sản phẩm!',
-			})
-			return;
-		}
-
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
-		if (checkImage == true) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
-			})
-			return;
-		}
+//		if (checkImage == true) {
+//			Swal.fire({
+//				icon: 'error',
+//				title: 'Thất bại',
+//				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+//			})
+//			return;
+//		}
+
+
+		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
+		var descriptionEditor = CKEDITOR.instances.description;
+		$scope.form.description = descriptionEditor.getData();
 
 		// Lấy thông tin người dùng từ API /rest/users/Idprofile
 		$http.get("/rest/users/Idprofile").then(resp => {
@@ -592,7 +595,15 @@ app.controller("product-ctrl", function($scope, $http) {
 
 			var productitem = angular.copy($scope.form);
 			productitem.user.userID = userID;
-
+			// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
+			if (checkImage == true && $scope.form.activities == true) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+				})
+				return;
+			}
 			$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
 				var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
 				resp.data.modifyDate = new Date(resp.data.modifyDate);
