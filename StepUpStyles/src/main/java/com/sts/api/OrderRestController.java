@@ -77,4 +77,8 @@ public class OrderRestController {
         Order order = orderdao.findById(orderid).get();
         return orderService.loadByOrder(order);
     }
+    @GetMapping("/listOrder/find")
+    public List<Order> findall(){
+        return orderService.loadAll();
+    }
 }
