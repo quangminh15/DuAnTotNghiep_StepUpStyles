@@ -6,6 +6,12 @@
 
 <title>SUS || CHI TIẾT</title>
 
+<style>
+	.yellow-star {
+    color: yellow;
+}
+
+</style>
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -86,14 +92,11 @@
 						<h3>{{ productDetails.productName }}</h3>
 						<div class="caption">
 							<ul class="rating-single">
-								<li ng-repeat="star in getStarToAvgs(averageRating)"><span
-									ng-class="star" aria-hidden="true"></span></li>
 								<li>{{ averageRating }}/5<span
-									class="fa fa-star yellow-star" aria-hidden="true"></span>
+									class="fa fa-star" aria-hidden="true"></span>
 								</li>
 							</ul>
-							<p>{{ numRatings }} đánh giá</p>
-
+							<p>{{ reviewCounts.total }} đánh giá</p>
 							<h6 style="white-space: nowrap;"
 								ng-if="productDetails.discount[0].priceDiscount == null">
 								<span class="item_price">{{ productDetails.price |
@@ -166,6 +169,11 @@
 			</div>
 			<!--//row1-->
 		</div>
+
+		<!--tab start-->
+		
+		<!--tab end-->
+
 		<!--//ecommerce-single-->
 	</section>
 	<section class="w3l-ecommerce-main w3l-ecommerce-main-inn">
@@ -289,31 +297,22 @@
 						</h2>
 					</div>
 					<div class="col-sm-8">
-						<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(null)">Tất cả ({{
-							reviewCounts.total }})</div>
-						<a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
-						</p>
-					</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(null)}" ng-click="filterByRatingAndCheck(null)">Tất cả ({{ reviewCounts.total }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(5)}" ng-click="filterByRatingAndCheck(5)">5 sao ({{ reviewCounts[5] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(4)}" ng-click="filterByRatingAndCheck(4)">4 sao ({{ reviewCounts[4] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(3)}" ng-click="filterByRatingAndCheck(3)">3 sao ({{ reviewCounts[3] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(2)}" ng-click="filterByRatingAndCheck(2)">2 sao ({{ reviewCounts[2] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(1)}" ng-click="filterByRatingAndCheck(1)">1 sao ({{ reviewCounts[1] }})</div>
+					</div>						
 				</div>
 			</div>
-			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
+			<div class="row col-sm-12 text-center mt-5">
+				<p ng-if="noReviewsMessage">
+					<img src="/asset/user/img/empty_data_icon.png" alt="empty_data_icon" style="width: 30%;"> <br>
+					<strong>{{ noReviewsMessage }}</strong>
+				</p>
+			</div>
+				<div class="content-singlev-ecomm py-3" ng-repeat="rv in reviewPager.allreviews">	
 				<div class="row">
 					<div class="col-sm-2 text-center">
 						<img src="link_to_user_image.jpg" alt="Hình"
@@ -325,7 +324,8 @@
 						</p>
 						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
 						<div class="rating mb-2">
-							<span class="fa fa-star" ng-repeat="star in getStars(rv.rating)"></span>
+							<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
+                            ng-class="{'fa-star': star <= rv.rating, 'fa-star-o': star > rv.rating}"></span>
 						</div>
 						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
 						<span class="fa fa-thumbs-up"></span>
@@ -333,15 +333,15 @@
 				</div>
 				<hr>
 			</div>
+			
 			<!--/pagination-->
-			<div class="pagination" style="margin: 0px 10px 20px;">
+			<div class="pagination" ng-if="!noReviewsMessage" style="margin: 0px 10px 20px;">
 				<ul>
 					<li class="prev"><a ng-click="reviewPager.first()"><span
 							class="fa fa-angle-double-left"></span></a></li>
 					<li class="page-item" ng-repeat="page in reviewVisiblePages"
 						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a
-						class="page-link" href=""
-						ng-click="reviewPager.gotoReview(page.value)"
+						class="page-link" ng-click="reviewPager.gotoReview(page.value)"
 						ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
 							{{ page.value }} </a></li>
 					<li class="next"><a ng-click="reviewPager.last()"><span
