@@ -313,6 +313,17 @@ app.controller("color-ctrl", function($scope, $http) {
 			});
 			return;
 		}
+		
+		//Lỗi trùng tên màu sản phẩm
+		let existingColorName = $scope.coloritems.find(coloritem => coloritem.colorName === $scope.form.colorName);
+		if (existingColorName) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Tên màu đã tồn tại!',
+			});
+			return;
+		}
 
 		// Thực hiện việc lưu vào db
 		var coloritem = angular.copy($scope.form);

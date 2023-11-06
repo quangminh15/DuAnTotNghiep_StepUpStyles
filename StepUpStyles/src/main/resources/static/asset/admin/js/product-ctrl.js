@@ -400,6 +400,17 @@ app.controller("product-ctrl", function($scope, $http) {
 			})
 			return;
 		}
+		
+		//Lỗi trùng tên sản phẩm
+		let existingProductName = $scope.productitems.find(productitem => productitem.productName === $scope.form.productName);
+		if (existingProductName) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Tên sản phẩm đã tồn tại!',
+			});
+			return;
+		}
 
 		// Lỗi bỏ trống giá sản phẩm
 		if (!$scope.form.price) {
