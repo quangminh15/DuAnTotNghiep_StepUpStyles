@@ -151,7 +151,10 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			
 	}
 	$scope.checkQuantity = function ( qty) {
+		
 		if ($scope.singleProd.quantity<qty) {
+			$scope.qty=$scope.singleProd.quantity
+			console.log("qty",$scope.qty,$scope.singleProd.quantity);
 			const Toast = Swal.mixin({
 				toast: true,
 				position: 'top',
@@ -169,10 +172,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				title: 'Số lượng không đủ',
 
 			})
-			$scope.qty=$scope.singleProd.quantity
-			console.log("qty",$scope.qty,$scope.singleProd.quantity);
+			
 		}
+		$scope.qty=$scope.singleProd.quantity
 	}
+
 
 	$scope.initialize();
 
