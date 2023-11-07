@@ -45,17 +45,17 @@ public class ReviewServiceImpl implements ReviewService{
 		return reviewDAO.findById(reviewID).get();
 	}
 
-    @Override
-    public boolean hidReview(Integer reviewID) {
-        Optional<Review> reviewOptional = reviewDAO.findById(reviewID);
-        if (reviewOptional.isPresent()) {
-            Review review = reviewOptional.get();
-            review.setDisplay(!review.isDisplay());
-            reviewDAO.save(review);
-            return true;
-        }
-        return false;
-    }
+    // @Override
+    // public boolean hidReview(Integer reviewID) {
+    //     Optional<Review> reviewOptional = reviewDAO.findById(reviewID);
+    //     if (reviewOptional.isPresent()) {
+    //         Review review = reviewOptional.get();
+    //         review.setDisplay(!review.isDisplay());
+    //         reviewDAO.save(review);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     @Override
     public List<Review> getProductByProductId(Integer productId) {
