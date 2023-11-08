@@ -3,6 +3,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 	$scope.cartDetails = []
 
 
+
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
 	}
@@ -15,14 +16,12 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		return $scope.ward.findIndex(a => a.WardName === address);
 	}
 
-
-
 	$scope.initialize = function () {
 
 		$http.get(`/rest/address/default`)
 			.then(resp => {
 				$scope.addressDefault = resp.data
-				console.log(resp.data);
+				
 				$scope.getAddressToShippingFee($scope.addressDefault.province, $scope.addressDefault.district, $scope.addressDefault.ward)
 
 			})
@@ -34,14 +33,14 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			.then(response => {
 				$scope.check = true
 				$scope.address = response.data
-				console.log(response.data);
+				
 				if (Array.isArray(response.data) && response.data.length === 0) {
-					console.log(1); // This will execute for an empty array.
+					
 					$scope.check = false
 					$('#ModalAddress').modal('show');
 				} else {
 					$scope.check = true
-					console.log(2); // This will execute for non-empty arrays or any other non-null values.
+					// This will execute for non-empty arrays or any other non-null values.
 				}
 
 
@@ -75,7 +74,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
             tongTien += value.product.price * value.quantity;
             
         });
-		console.log(tongTien);
+		
         $scope.tongTien = tongTien;
     }
 	$scope.sendDataToJava = function () {
@@ -93,6 +92,37 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			console.error('Error:', error);
 		});
 	};
+
+	$scope.getDataPayment = function () {
+		$http({
+			method: 'POST',
+			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}`,
+			data: $scope.cartIs, // Assuming $scope.cartIs is an array
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			console.log('done:', response.data);
+			
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
+	}
+
+	$scope.removeDataPayment = function () {
+		$http({
+			method: 'GET',
+			url: `/payment/removedata`,
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			localStorage.removeItem('selectedItems');
+			console.log("remove");
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
+	}
 
 	// Function to create an order
 	$scope.createOrder = function () {
@@ -113,7 +143,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			totalAmount: 666,
 			discountPrice: 0,
 			shippingAddress: $scope.addressDefault,
-			cartDetails: cartDetails
+			cartDetails: cartDetails,
+			
 		};
 		console.log($scope.cartDetails);
 		//Send the order object to your Spring Boot service
@@ -190,7 +221,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 						$scope.data2 = response.data.data
 						//$scope.total = $scope.tongTien + $scope.data2.total;
 						var shippingCost = $scope.data2.total;
-						alert('Tiền ship là: ' + Math.floor(shippingCost));
+						// alert('Tiền ship là: ' + Math.floor(shippingCost));
 						$scope.shippingFee = Math.floor(shippingCost);
 					})
 						.catch(function (error) {
@@ -282,11 +313,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 	}
 	$scope.createAddress = function (checked, name, phone, detail) {
-
-
-		if (!$scope.form.selectedWard || !$scope.form.nameReceiver || !$scope.form.phone || !$scope.form.addressDetails) {
-			alert("vui longf nhap day du thong tin")
-		} else {
+		alert(1)
+		
 			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
 			$scope.dataAddress = {
 				// Truyền thông tin địa chỉ vào yêu cầu
@@ -295,16 +323,20 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				ward_name: $scope.form.selectedWard.WardName,
 				// Các thông tin khác cần thiết
 			}
-			$http.post(`/rest/address/create?defaultCheck=${$scope.form.checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
+			alert(2)
+			console.log($scope.dataAddress );
+			$http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
 				.then(resp => {
+					alert(3)
 					console.log("add");
 					$scope.reset()
 					$scope.initialize()
 				}).catch(function (error) {
 					console.error('Error fetching districts:', error);
+					alert(4)
 				});
 
-		}
+		
 	}
 
 	//address load

@@ -1,4 +1,4 @@
-package com.sts.dto.respone;
+package com.sts.model.DTO;
 
 public interface OneUserForSecurity {
     public Integer getUsersId();

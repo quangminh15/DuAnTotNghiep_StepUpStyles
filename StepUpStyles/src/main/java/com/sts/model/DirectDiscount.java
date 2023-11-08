@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +22,7 @@ public class DirectDiscount implements Serializable {
 	private Long directDiscountId;
 
 	@Column(name="direct_discount")
-	private BigDecimal directDiscount;
+	private Double directDiscount;
 
 	@Column(name="end_date")
 	private String endDate;

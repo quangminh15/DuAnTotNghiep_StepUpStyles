@@ -70,7 +70,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #fff;
+  background-color: #F5F5F5;
 }
 
 [tabindex="-1"]:focus {
@@ -205,7 +205,7 @@ a:not([href]):not([tabindex]):focus {
 }
 
 a:not([href]):not([tabindex]):focus {
-  
+
   outline: 0;
 }
 
@@ -296,14 +296,14 @@ button,
 }
 
 input[type='radio'] {
- 
+
   margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   transform: scale(1.5) !important;
- 
+
 }
 
 button::-moz-focus-inner,
@@ -614,6 +614,7 @@ pre code {
   .container {
     max-width: 720px;
   }
+
 }
 
 @media (min-width: 992px) {
@@ -624,8 +625,9 @@ pre code {
 
 @media (min-width: 1200px) {
   .container {
-    max-width: 1540px;
+    max-width: 1780px;
   }
+
 }
 
 .container-fluid {
@@ -1939,11 +1941,37 @@ pre code {
   background-color: transparent;
 }
 
+@media (min-width: 768px) {
+  table .subth {
+    visibility: hidden !important;
+  }
+}
+
+@media (min-width: 560px) {
+  table .subth {
+    visibility: hidden !important;
+  }
+}
+
+@media (min-width: 992px) {
+  table .subth {
+    visibility: visible !important;
+  }
+}
+
+
+@media (min-width: 1200px) {
+  table .subth {
+    visibility: visible !important;
+  }
+}
+
 .table th,
 .table td {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
+ 
 }
 
 .table thead th {
@@ -3699,7 +3727,7 @@ input[type="button"].btn-block {
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 200%;
+  min-width: 50%;
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
@@ -12322,6 +12350,7 @@ h5,
   color: #fff;
 }
 
+
 .btn.btn-primary:hover {
   border: 1px solid #177196;
   background: transparent;
@@ -12917,7 +12946,7 @@ h5,
 .table .thead-primary tr th {
   text-wrap: nowrap;
   padding: 20px 10px;
-  color: #fff !important;
+  color: #000 !important;
   border: 1px solid transparent !important;
 }
 
@@ -12945,15 +12974,16 @@ h5,
   color: #fff;
 }
 
-.table tbody tr td.quantity {
-  width: 10%;
+.table tbody tr td>.quantity {
+  width: 20%;
 }
 
 .table tbody tr td.image-prod .img {
-  display: block;
+  
   width: 100px;
   height: 100px;
-  margin: 0 auto;
+  margin: 0 0;
+ 
 }
 
 .table tbody tr td.product-name {
@@ -13359,16 +13389,17 @@ h5,
 .table .thead-primary tr th {
   text-wrap: nowrap;
   padding: 20px 10px;
-  color: #fff !important;
-  border: 1px solid transparent !important;
+  color: #000 !important;
+  border-bottom: 1px solid rgba(200, 200, 200) !important;
 }
 
 .table tbody tr td {
-  text-align: center !important;
+  text-align: left !important;
   vertical-align: middle;
   /* padding: 40px 10px; */
   border: 1px solid transparent !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  width: fit-content;
 }
 
 .table tbody tr td.product-remove a {
@@ -13390,17 +13421,22 @@ h5,
   color: #fff;
 }
 
-.table tbody tr td.quantity {
+.table tbody tr td>.quantity {
   width: 30%;
 }
 
-.table tbody tr td.image-prod .img {
-  display: block;
+.table tbody tr td.image-prod img {
+  
   width: 100px;
   height: 100px;
-  margin: 0 auto;
+  margin: 0 0;
+  
 }
-
+@media(min-width: 560){
+  .image-prod img{
+    width: 100px;
+  }
+}
 .table tbody tr td.product-name {
   width: 30%;
 }
@@ -13731,12 +13767,13 @@ textarea.form-control {
 }
 
 .ftco-section {
-  padding: 6em 0;
+  padding: 2em 0;
   position: relative;
 }
 
 .ftco-no-pt {
   padding-top: 0 !important;
+  /* background-color: #fff; */
 }
 
 .ftco-no-pb {
@@ -13749,8 +13786,9 @@ textarea.form-control {
 
 .ftco-footer {
   font-size: 14px;
-  padding: 7em 0;
+  padding: 3em 0;
   color: #000000;
+  background-color: #F5F5F5;
 }
 
 .ftco-footer .ftco-footer-logo {
@@ -14902,4 +14940,12 @@ textarea.form-control {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px;
   }
+
+  
+}
+
+.dropdown> a , .dropdown>a:not([href]):not([tabindex]){
+  background: none;
+ 
+  color: #000;
 }

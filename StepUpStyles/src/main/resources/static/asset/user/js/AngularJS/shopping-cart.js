@@ -5,15 +5,29 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.prods = [];
 	$scope.cartitems = [];
 	$scope.selectedColors = {};
-	$scope.cout=0
+	$scope.cout = 0
 	//Load data
+
+	$scope.index_of_province = function (address) {
+		return $scope.province.findIndex(a => a.ProvinceName === address);
+	}
+
+	$scope.index_of_district = function (address) {
+		return $scope.district.findIndex(a => a.DistrictName === address);
+	}
+
+	$scope.index_of_ward = function (address) {
+		return $scope.ward.findIndex(a => a.WardName === address);
+	}
 	$scope.initialize = function () {
-		$scope.tongTien=0
+		$scope.tongTien = 0
+		//localStorage.removeItem('selectedItems');
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;
-				 //console.log(cartItems);
-				 
+				$scope.cartitems = resp.data;
+				//console.log(cartItems);
+
 				$scope.updateCount(cartItems.length)
 				// Initialize the disabledColors object
 				$scope.disabledSizes = {};
@@ -35,7 +49,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/sizes?prodID=${productId}&colorID=${colorId}`)
 						.then(sizeResp => {
 							cartItem.sizes = sizeResp.data;
-							console.log("size",cartItem.sizes)
+							console.log("size", cartItem.sizes)
 
 							if (!$scope.disabledSizes[productId]) {
 								$scope.disabledSizes[productId] = {};
@@ -54,7 +68,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/colors?prodID=${productId}&sizeID=${sizeId}`)
 						.then(colorResp => {
 							cartItem.colors = colorResp.data;
-							console.log("color",cartItem.colors)
+							console.log("color", cartItem.colors)
 
 							// Set disabled colors for the product
 							if (!$scope.disabledColors[productId]) {
@@ -78,22 +92,223 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// Now, cartItems will have color and size information for each product
 				$scope.items = cartItems;
 				$scope.cartitems = cartItems
-				if ($scope.items.length>0) {
-					$scope.page = true
-				}else
-				$scope.page = false
 
-				
+				$scope.items.forEach(item => {
+					$http.get("/rest/discount/loadbyproduct/" + item.product.productID).then(resp => {
+						item.product.discount = resp.data;
+						console.log("dis", item.product.discount);
+						if (item.product.discount) {
+							item.product.price = item.product.price - (item.product.price * item.product.discount[0].directDiscount / 100)
+							console.log("afterProce", item.product.price);
+						}
+					})
+
+				})
+				if ($scope.items.length > 0) {
+					$scope.page = true
+				} else
+					$scope.page = false
+
+
 			})
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);
 			});
 
+
+		$http.get(`/rest/address/default`)
+			.then(resp => {
+				$scope.addressDefault = resp.data
+				console.log(resp.data);
+				$scope.getAddressToShippingFee($scope.addressDefault.province, $scope.addressDefault.district, $scope.addressDefault.ward)
+
+			})
+			.catch(function (error) {
+				console.error('Error fetching cart items:', error);
+			});
+
+
+	}
+	$scope.singleProd=[]
+	
+	$scope.showQuantityStock = function (id, size, color) {
+		
+		
+			$scope.checkColor = color;
+			
+			console.log("color đã chọn: ", $scope.checkColor);
+	
+		$http.get(`/rest/productdetails/find?id=${id}&size=${size}&color=${color}`)
+			.then(function (response) {
+				$scope.singleProd=response.data
+				console.log("prod", $scope.singleProd);
+				
+			})
+
+			.catch(function (error) {
+				console.error('Failed to add to cart:', error);
+			});
 			
 	}
+	$scope.checkQuantity = function ( qty) {
+		
+		if ($scope.singleProd.quantity<qty) {
+			$scope.qty=$scope.singleProd.quantity
+			console.log("qty",$scope.qty,$scope.singleProd.quantity);
+			const Toast = Swal.mixin({
+				toast: true,
+				position: 'top',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'error',
+				title: 'Số lượng không đủ',
+
+			})
+			
+		}
+		$scope.qty=$scope.singleProd.quantity
+	}
+
 
 	$scope.initialize();
 
+	$scope.getAddressToShippingFee = function (p, d, w) {
+		if (!p || !d || !w) {
+			$scope.shippingFee = 0
+		} else {
+
+			$scope.dataAddress = {
+				"service_type_id": 2,
+				"insurance_value": null,
+				"coupon": null,
+				"from_district_id": 1574,
+				"to_district_id": null,
+				"to_ward_code": null,
+				"height": 15,
+				"length": 38,
+				"weight": 1000,
+				"width": 15
+			}
+			$http({
+				method: 'GET',
+				url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+				headers: {
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+				}
+			}).then(function successCallback(response) {
+				$scope.province = response.data.data;
+				// console.log($scope.province);
+				$scope.current_province = $scope.province[$scope.index_of_province(p)]
+				console.log($scope.current_province);
+				$http({
+					method: 'GET',
+					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
+					headers: {
+						'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
+						'ShopId': '4551956'
+					}
+				}).then(function successCallback(response) {
+					$scope.district = response.data.data;
+					console.log($scope.district);
+					$scope.dataAddress.to_district_id = $scope.district[$scope.index_of_district(d)].DistrictID
+					$http({
+						method: 'GET',
+						url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.dataAddress.to_district_id,
+						headers: {
+							'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+						}
+					}).then(function successCallback(response) {
+						$scope.ward = response.data.data
+						console.log($scope.ward);
+						$scope.dataAddress.to_ward_code = $scope.ward[$scope.index_of_ward(w)].WardID
+						$http({
+							method: 'POST',
+							url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+							data: $scope.dataAddress,
+							headers: {
+								'Token': '62a1bc3a-43d0-11ee-af43-6ead57e9219a',
+								'ShopId': '4490048'
+							}
+						}).then(function (response) {
+							$scope.data2 = response.data.data
+							//$scope.total = $scope.tongTien + $scope.data2.total;
+							var shippingCost = $scope.data2.total;
+							// alert('Tiền ship là: ' + Math.floor(shippingCost));
+							$scope.shippingFee = Math.floor(shippingCost);
+						})
+							.catch(function (error) {
+								console.error('Error calculating shipping:', error);
+							});
+					}
+					)
+				})
+			})
+		}
+
+
+	}
+
+	$scope.countcartItems = function () {
+		return $scope.cartitems.length
+	}
+
+
+
+	$scope.checkout = function () {
+		var storedItems = localStorage.getItem('selectedItems');
+		var parseData = JSON.parse(storedItems);
+		var handle = ""
+		var check = true
+		if (Array.isArray(parseData)) {
+			if (parseData.length > 0) {
+				check = true
+				console.log(check);
+				handle = ""
+				console.log("han", handle);
+			} else {
+				check = false
+				console.log(check);
+
+				handle = "data-swal-toast-template"
+				console.log("han1", handle);
+			}
+		} else {
+			check = false
+		}
+
+		if (check == true) {
+			console.log("true");
+			console.log("Length of parseData:", parseData.length);
+			window.location.href = '/checkout';
+		} else {
+			console.log(false);
+			const Toast = Swal.mixin({
+				toast: true,
+				position: 'top',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'error',
+				title: 'Vui lòng chọn ít nhất 1 sản phẩm',
+
+			})
+		}
+	}
 	//Unique productDetai in cart
 	$scope.isColorDisabled = function (productId, colorId, sizeId) {
 		if ($scope.disabledColors[productId] && $scope.disabledColors[productId][sizeId]) {
@@ -114,9 +329,9 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 	//Check cart 
 	$scope.checkButton = function () {
-	if ($scope.tongTien==0) {
+		if ($scope.tongTien == 0) {
 			return false
-		}else 
+		} else
 			return true
 	}
 	$scope.checkOne = function (index) {
@@ -134,25 +349,25 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		} else {
 			unCheckAll();
 		}
-		 setTongTien();
+		setTongTien();
 	}
 
 	function checkCheck() {
 		var checkAll = true;
 		angular.forEach($scope.items, function (value, key) {
-			
-			if (!value.isSelected ) {
+
+			if (!value.isSelected) {
 				console.log(value.isSelected);
 				checkAll = false;
-				console.log(1,checkAll);
+				console.log(1, checkAll);
 			}
 		});
 
-		console.log(3,checkAll);
+		console.log(3, checkAll);
 
 		var check = document.getElementById("checkAll");
 
-		if (checkAll == true ) {
+		if (checkAll == true) {
 			check.checked = true;
 		} else {
 			check.checked = false;
@@ -161,11 +376,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	function checkAll() {
 		angular.forEach($scope.items, function (value, key) {
 			// if (value.inventory >= value.quantity) {
-				if (value.quantity <= value.productDetail.quantity) {
-					
-					value.isSelected = true;
-					updateLocalStorage()
-				}
+			if (value.quantity <= value.productDetail.quantity) {
+
+				value.isSelected = true;
+				updateLocalStorage()
+			}
 
 			// }
 		});
@@ -185,41 +400,29 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		// Save selected items as JSON in local storage
 		localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
 	}
-	
-$scope.updateCount = function (newCount) {
-    $scope.count = newCount;
-    console.log($scope.count);
-};
+
+	$scope.updateCount = function (newCount) {
+		$scope.count = newCount;
+		console.log($scope.count);
+	};
 	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
+		console.log("test",id, size, color, qty);
 
-		$http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
-			// Nếu không sử dụng Object data cho phương thức bên RestController
-			// Thì gán thằng biến lên URL --> truyền data cho @RequestParam(...)
-			.then(function (response) {
-				console.log('Added to cart: ');
-				$scope.initialize()
-				// $scope.itemQuantity = qty;
-				// $scope.showAlert = true;
-				// alert("Đã thêm "+qty+" sản phẩm giỏ hàng")
-				// Hide the alert after 5 seconds
+		// $http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
+			
+		// 	.then(function (response) {
+		// 		console.log('Added to cart: ');
+				
+		// 		$scope.initialize()
+		// 		$scope.countcartItems()
+				
+		// 	})
 
-			})
-
-			.catch(function (error) {
-				console.error('Failed to add to cart:', error);
-			});
-		// get amount() {
-		// 	return this.cartItems.map(item => item.quantity * item.productVariant.products.price)
-		// 		.reduce((total, qty) => total += qty, 0)
-		// },
-		// get count() {
-		// 	return this.cartItems.map(item => item.quantity)
-		// 		.reduce((total, qty) => total += qty, 0)
-		// },
-		// getSubtotalForItem(item) {
-		// return item.quantity * item.productVariant.products.price;
-		// }
+		// 	.catch(function (error) {
+		// 		console.error('Failed to add to cart:', error);
+		// 	});
+		
 
 	};
 
@@ -282,13 +485,13 @@ $scope.updateCount = function (newCount) {
 			item.quantity -= 1
 			console.log(item.quantity);
 		} else {
-			 var maxQuantity = item.productDetail.quantity;
-			 console.log(maxQuantity);
+			var maxQuantity = item.productDetail.quantity;
+			console.log(maxQuantity);
 			// var qty = item.quantity;
 
 			var newValue = $scope.items[index].quantity;
 			console.log("New value:", newValue);
-			
+
 
 			if (newValue > maxQuantity) {
 				item.quantity = maxQuantity;
@@ -332,130 +535,135 @@ $scope.updateCount = function (newCount) {
 		// You can perform additional actions with the new value here
 	};
 	function setTongTien() {
-        var tongTien = 0;
-        angular.forEach($scope.items, function (value, key) {
-			console.log(1,value.isSelected);
-            if (value.isSelected == true) {
+		var tongTien = 0;
+		angular.forEach($scope.items, function (value, key) {
+			console.log(1, value.isSelected);
+			if (value.isSelected == true) {
 				console.log(value.isSelected);
-                tongTien += value.product.price * value.quantity;
-            }
-        });
+				tongTien += value.product.price * value.quantity;
+			}
+		});
 		console.log(tongTien);
-        $scope.tongTien = tongTien;
-    }
+		$scope.tongTien = tongTien;
+	}
 
 	//ADDRESS load -------------
-	
 
 
-	  $scope.loadDistricts = function () {
+
+	$scope.loadDistricts = function () {
 		console.log('loadDistricts function called');
 		if ($scope.selectedProvince) {
 			$http({
 				method: 'GET',
 				url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${$scope.selectedProvince.ProvinceID}`,
 				headers: {
-				  'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
-				}})
-			.then(function (response) {
-				console.log(response.data.data);
-			  $scope.selectedProvince.Districts = response.data.data;
-			  
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+				}
 			})
-			.catch(function (error) {
-			  console.error('Error fetching districts:', error);
-			});
+				.then(function (response) {
+					console.log(response.data.data);
+					$scope.selectedProvince.Districts = response.data.data;
+
+				})
+				.catch(function (error) {
+					console.error('Error fetching districts:', error);
+				});
 		} else {
-		  $scope.selectedDistrict = null;
-		  $scope.selectedWard = null;
+			$scope.selectedDistrict = null;
+			$scope.selectedWard = null;
 		}
-	  };
-	
-	  $scope.loadWards = function () {
+	};
+
+	$scope.loadWards = function () {
 		if ($scope.selectedDistrict) {
 			$http({
 				method: 'GET',
 				url: `https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${$scope.selectedDistrict.DistrictID}`,
 				headers: {
-				  'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
-				}})
-		 
-			.then(function (response) {
-				console.log($scope.selectedDistrict.DistrictID);
-			  $scope.selectedDistrict.Wards = response.data.data;
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+				}
 			})
-			.catch(function (error) {
-			  console.error('Error fetching wards:', error);
-			});
-		} else {
-		  $scope.selectedWard = null;
-		}
-	  };
 
-	  $http({
+				.then(function (response) {
+					console.log($scope.selectedDistrict.DistrictID);
+					$scope.selectedDistrict.Wards = response.data.data;
+				})
+				.catch(function (error) {
+					console.error('Error fetching wards:', error);
+				});
+		} else {
+			$scope.selectedWard = null;
+		}
+	};
+
+	$http({
 		method: 'GET',
 		url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
 		headers: {
-		  'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+			'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
 		}
-	  }).then(function(response) {
-		$scope.provinces = response.data.data.sort(function(a, b) {
+	}).then(function (response) {
+		$scope.provinces = response.data.data.sort(function (a, b) {
 			return a.ProvinceName.localeCompare(b.ProvinceName);
-		console.log(response.data);})
-	  })
-	  .catch(function(error) {
-		console.error('Error fetching provinces:', error);
-	  });
+			console.log(response.data);
+		})
+	})
+		.catch(function (error) {
+			console.error('Error fetching provinces:', error);
+		});
 
-	  
-	 
 
-	  $scope.calculateShipping = function () {
+
+
+	$scope.calculateShipping = function () {
 		if ($scope.selectedWard) {
-		  // Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
-		  $scope.dataAddress= {
-			// Truyền thông tin địa chỉ vào yêu cầu
-			province_id: $scope.selectedProvince.ProvinceID,
-			district_id: $scope.selectedDistrict.DistrictID,
-			ward_id: $scope.selectedWard.WardID,
-			// Các thông tin khác cần thiết
-		  }
+			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
+			$scope.dataAddress = {
+				// Truyền thông tin địa chỉ vào yêu cầu
+				province_id: $scope.selectedProvince.ProvinceID,
+				district_id: $scope.selectedDistrict.DistrictID,
+				ward_id: $scope.selectedWard.WardID,
+				// Các thông tin khác cần thiết
+			}
 
-		  $scope.data1 = {
-			"service_type_id": 2,
-			"insurance_value": null,
-			"coupon": null,
-			"from_district_id": 1574,
-			"to_district_id": $scope.dataAddress.district_id,
-			"to_ward_code": $scope.dataAddress.ward_id,
-			"height": 15,
-			"length": 38,
-			"weight": 1000,
-			"width": 15
-		}
-		  $http({
-			
-			method: 'POST', // Hoặc phương thức GET tùy theo yêu cầu của API
-			url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
-			data: $scope.data1,
-			headers: {
-			  'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
-			  'ShopId': '4551956'
-			},
-		  })
-		  .then(function (response) {
-			$scope.data2 = response.data.data
-			//$scope.total = $scope.tongTien + $scope.data2.total;
-			var shippingCost = $scope.data2.total;
-			alert('Tiền ship là: ' + shippingCost);
-			$scope.shippingFee =shippingCost;
-		  })
-		  .catch(function (error) {
-			console.error('Error calculating shipping:', error);
-		  });
+			$scope.data1 = {
+				"service_type_id": 2,
+				"insurance_value": null,
+				"coupon": null,
+				"from_district_id": 1574,
+				"to_district_id": $scope.dataAddress.district_id,
+				"to_ward_code": $scope.dataAddress.ward_id,
+				"height": 15,
+				"length": 38,
+				"weight": 1000,
+				"width": 15
+			}
+			$http({
+
+				method: 'POST', // Hoặc phương thức GET tùy theo yêu cầu của API
+				url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+				data: $scope.data1,
+				headers: {
+					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
+					'ShopId': '4551956'
+				},
+			})
+				.then(function (response) {
+					$scope.data2 = response.data.data
+					//$scope.total = $scope.tongTien + $scope.data2.total;
+					var shippingCost = $scope.data2.total;
+					alert('Tiền ship là: ' + shippingCost);
+					$scope.shippingFee = shippingCost;
+				})
+				.catch(function (error) {
+					console.error('Error calculating shipping:', error);
+				});
 		} else {
-		  alert('Vui lòng chọn địa chỉ đầy đủ để tính tiền ship.');
+			alert('Vui lòng chọn địa chỉ đầy đủ để tính tiền ship.');
 		}
-	  };
+	};
 	//--------------
+
+
 }])

@@ -4,7 +4,7 @@
 
 <head>
 
-<title>STS || SẢN PHẨM</title>
+<title>SUS || SẢN PHẨM</title>
 
 </head>
 
@@ -88,10 +88,6 @@
 		<div class="ecomrhny-content-inf py-5">
 			<div class="container py-lg-5">
 				<div style="margin: 8px auto; display: block; text-align: center;">
-
-					<!---728x90--->
-
-
 				</div>
 				<!--/row1-->
 				<div class="ecommerce-grids row">
@@ -99,52 +95,101 @@
 						<!--/ecommerce-left-hny-->
 						<aside>
 							<div class="sider-bar">
-								<!-- danh mục sản phẩm -->
-								<div class="single-gd mb-5">
-									<h4>
-										Danh mục <span>Sản phẩm</span>
-									</h4>
-									<ul class="list-group single">
-										<li th:each="category : ${categories}"
-											class="list-group-item d-flex justify-content-between align-items-center">
+								<!-- bộ lọc bắt đầu -->
+								<form>
+									<!-- danh mục sản phẩm bắt đầu-->
+									<div class="single-gd mb-5" ng-if="cates.length > 0">
+										<h4 class="mb-2">
+											Danh mục <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="c in cates"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="category" value="{{c.categoryID}}">
+													{{c.categoryName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- danh mục sản phẩm kết thúc-->
 
-											<a th:value="${category.categoryID}"
-											th:href="@{|/list_products?cid=${category.categoryID}|}"><span
-												th:text="${category.categoryName}"></span> </a><span
-											class="badge badge-primary badge-pill">1</span>
-										</li>
-									</ul>
-								</div>
+									<!-- Thương hiệu bắt đầu-->
+									<div class="single-gd mb-5">
+										<h4 class="mb-2">
+											Thương hiệu <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="brand in brans"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="brand" value="{{brand.brandID}}">
+													{{brand.brandName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- Thương hiệu kết thúc-->
 
-								<!-- màu sắc  -->
-								<div class="single-gd mb-5">
-									<h4>
-										Nhóm màu <span>Sản phẩm</span>
-									</h4>
-									<ul class="list-group single">
-										<li th:each="color : ${colors}"
-											class="list-group-item d-flex justify-content-between align-items-center">
-											<a th:value="${color.colorID}" href="#"><span
-												th:text="${color.colorName}"></span> </a><span
-											class="badge badge-primary badge-pill">1</span>
-										</li>
-									</ul>
-								</div>
+									<!-- Size bắt đầu-->
+									<div class="single-gd mb-5">
+										<h4 class="mb-2">
+											Size <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="size in sizes"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="size" value="{{size.sizeID}}">
+													{{size.sizeNumber}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- Size kết thúc-->
+									
+									<!-- Màu sắc bắt đầu-->
+									<div class="single-gd mb-2">
+										<h4 class="mb-2">
+											Màu <span>Sản phẩm</span>
+										</h4>
+										<ul class="list-group single">
+											<li ng-repeat="color in colors"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<label> <input class="form-check-input"
+													type="checkbox" name="color" value="{{color.colorID}}">
+													{{color.colorName}} <span
+													class="badge badge-primary badge-pill" style="top: 70%">1</span>
+											</label>
+											</li>
+										</ul>
+									</div>
+									<!-- Màu sắc kết thúc-->
 
-								<!-- màu sắc  -->
-								<div class="single-gd mb-5">
-									<h4>
-										Size <span>Sản phẩm</span>
-									</h4>
-									<ul class="list-group single">
-										<li th:each="size : ${sizes}"
-											class="list-group-item d-flex justify-content-between align-items-center">
-											<a th:value="${size.sizeID}" href="#"><span
-												th:text="${size.sizeNumber}"></span> </a><span
-											class="badge badge-primary badge-pill">1</span>
-										</li>
-									</ul>
-								</div>
+									<div class="single-gd mb-5">
+										<ul class="list-group single">
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<button type="button"
+													class="transmitv-cart ptransmitv-cart add-to-cart read-2"
+													ng-click="filterProducts()" data-toggle="tooltip"
+													title="Vui lòng chọn sau đó ấn 'Lọc'">Lọc</button>
+											</li>
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center">
+												<button type="button"
+													class="transmitv-cart ptransmitv-cart add-to-cart read-2"
+													ng-click="clearFilters()" data-toggle="tooltip"
+													title="Hủy các phần đã chọn">Hủy</button>
+											</li>
+										</ul>
+									</div>
+								</form>
+								<!-- bộ lọc kết thúc -->
+
 								<div class="single-gd mb-5">
 									<h4>
 										Tìm kiếm theo <span>Giá</span>
@@ -170,60 +215,65 @@
 								</div>
 
 								<div class="single-gd left-side mb-5">
-									<h4>Customer Ratings</h4>
+									<h4>Đánh giá</h4>
 									<ul class="ratingshyny">
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>5.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>4.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>3.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
+										<li><a > <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>2.0</span>
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
-										<li><a href="#"> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>1.0</span>
+										<li><a > <span class="fa fa-star"
+												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
 									</ul>
 								</div>
 
-								<div class="single-gd mb-5 border-0">
+								<div class="single-gd border-0">
 									<h4>
 										Sản phẩm <span>nổi bật</span>
 									</h4>
 									<div class="row special-sec1 mt-4">
-										<!-- Lặp qua danh sách sản phẩm nổi bật và hiển thị tối đa 3 sản phẩm -->
-										<div class="row mb-3" th:each="product : ${featuredProducts}">
+										<div class="row mb-3" ng-repeat="product in featureds"
+											ng-if="$index < 4"
+											ng-click="saveProductID(product.productID)">
 											<div class="col-4 img-deals">
-												<a
-													th:href="@{/single_product/{productId}(productId=${product.productID})}">
-													<img th:src="@{${product.productImages[0].imagePath}}"
-													class="img-fluid" alt="">
+												<a ng-click="goToSinglePage(product.productID)"> <img
+													class="pic-1 img-fluid"
+													ng-src="{{product.image[0].imagePath}}">
 												</a>
 											</div>
 											<div class="col-8 img-deal1">
-												<h5 class="post-title">
-													<a
-														th:href="@{/single_product/{productId}(productId=${product.productID})}"
-														th:text="${product.productName}"></a>
+												<h5 class="post-title title">
+													<a ng-click="goToSinglePage(product.productID)">
+														{{product.productName}} </a>
 												</h5>
-												<a
-													th:href="@{/single_product/{productId}(productId=${product.productID})}"
+												<a ng-click="goToSinglePage(product.productID)"> <span
 													class="price-right"
-													th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></a>
+													ng-if="product.discount[0].priceDiscount == null">{{product.price
+														| number:0}} ₫</span> <span class="price-right"
+													ng-if="product.discount[0].status === 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.discount[0].priceDiscount | number:0 }} đ</span> <span
+													class="price-right"
+													ng-if="product.discount[0].status !== 'Đang diễn ra' && product.discount[0].priceDiscount">{{
+														product.price | number:0 }} đ</span>
+												</a>
 											</div>
 										</div>
 									</div>
@@ -237,82 +287,99 @@
 						<div class="row ecomhny-topbar">
 							<div class="col-6 ecomhny-result">
 								<h4 class="ecomhny-result-count"></h4>
-								<div th:if="${notFoundMessage}">
-									<div class="alert alert-danger"
-										style="height: 50px; margin: 0;" role="alert">
-										<p th:text="${notFoundMessage}"></p>
-									</div>
-								</div>
 							</div>
 							<div class="col-6 ecomhny-topbar-ordering">
 
 								<div class="ecom-ordering-select d-flex">
-									<span class="fa fa-angle-down" aria-hidden="true"></span> <select>
-										<option value="menu_order" selected="selected">Tất cả</option>
-										<option value="popularity">Sắp xếp theo tên: A -> Z</option>
-										<option value="rating">Sắp xếp theo tên: Z -> A</option>
-										<option value="date">Sắp xếp theo giá: cao -> thấp</option>
-										<option value="price">Sắp xếp theo giá: thấp -> cao</option>
+									<span class="fa fa-angle-down" aria-hidden="true"></span> <select
+										id="sortSelect" ng-change="filterByOption()"
+										ng-model="selectedOption">
+										<option value="">Tất cả</option>
+										<option value="name_asc">Sắp xếp theo tên: A -> Z</option>
+										<option value="name_desc">Sắp xếp theo tên: Z -> A</option>
+										<option value="price_asc">Sắp xếp theo giá: thấp ->
+											cao</option>
+										<option value="price_desc">Sắp xếp theo giá: cao ->
+											thấp</option>
+										<option value="price_0_1tr">Lọc theo giá từ 0đ đến
+											1.000.000đ</option>
+										<option value="price_1tr_2tr">Lọc theo giá từ
+											1.000.000đ đến 2.000.000đ</option>
+										<option value="price_2tr_plus">Lọc theo giá lớn hơn
+											2.000.000đ</option>
 									</select>
+
+
 								</div>
 							</div>
 						</div>
 						<!-- /row-->
 						<div class="ecom-products-grids row">
-
-							<div th:each="p: ${productitems}"
+							<div ng-repeat="p in pager.productitems"
 								class="col-lg-4 col-6 product-incfhny mb-4">
-								<div class="product-grid2 transmitv">
-									<div class="product-image2">
-										<a th:href="@{|/single_product/${p.productID}|}"> <img
-											th:if="${not #lists.isEmpty(p.productImages)}"
-											class="pic-1 img-fluid"
-											th:src="@{|${p.productImages[0].imagePath}|}"> <img
-											th:if="${not #lists.isEmpty(p.productImages)}"
-											class="pic-2 img-fluid"
-											th:src="@{|${p.productImages[0].imagePath}|}">
+								<div class="product-grid2 transmitv"
+									ng-click="saveProductID(p.productID)">
+									<div class="product-image2" style="position: relative;">
+										<div class="discount-circle"
+											ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+											p.discount[0].directDiscount }}%</div>
+										<a ng-click="goToSinglePage(p.productID)"> <img
+											class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+											<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+											ng-src="{{p.image[1].imagePath}}"> <img
+											ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+											ng-src="{{p.image[0].imagePath}}">
 										</a>
 										<ul class="social">
-											<li><a th:attr="ng-click=@{|check(${p.productID})|}">
-													<span class="fa fa-heart" aria-hidden="true"></span>
-											</a></li>
+											<li><span ng-if="isFavorited(p.productID)"
+												ng-click="check(p)" class="fa fa-heart liked"
+												style="font-size: 24px; color: red;"></span> <span
+												ng-if="!isFavorited(p.productID)"
+												ng-click="check(p)" class="fa fa-heart-o liked"
+												style="font-size: 24px; color: red; font-weight: bold;"></span>
+											</li>
 										</ul>
 										<div class="transmitv single-item">
-											<a th:href="@{|/single_product/${p.productID}|}"
-												type="submit"
+											<a ng-click="goToSinglePage(p.productID)" type="submit"
 												class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
 												chi tiết </a>
 										</div>
 									</div>
 									<div class="product-content">
-										<h3 class="title" th:text="${p.productName}">
-											<a th:href="@{|/single_product/${p.productID}|}"></a>
+										<h3 class="title">
+											<a ng-click="goToSinglePage(p.productID)">{{
+												p.productName }}</a>
 										</h3>
 										<span class="price"
-											th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
+											ng-if="p.discount[0].priceDiscount == null"> {{
+											p.price | number:0 }} ₫</span> <span class="price"
+											ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+											<del>{{ p.price | number:0 }} ₫</del> {{
+											p.discount[0].priceDiscount | number:0 }} ₫
+										</span> <span class="price"
+											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+											{{ p.price | number:0 }} ₫ </span>
+											<p class="text-warning">{{ p.avgrev }}/5</p>
 									</div>
 								</div>
 							</div>
-
-
 						</div>
 						<!--/pagination-->
 						<div class="pagination" style="margin: 0px 10px 20px;">
 							<ul>
-								<li class="prev"><a th:href="@{/list_products?page=0}"><span
+								<li class="prev"><a ng-click="pager.first()"><span
 										class="fa fa-angle-double-left"></span></a></li>
-								<li th:each="i: ${#numbers.sequence(0, numberOfPages - 1)}">
-									<a
-									th:style="${'background-color:' + (i==currIndex?'orage':'orage')}"
-									th:href="@{/list_products?page=__${i}__}" th:text="${i+1}"
-									th:classappend="${i==currIndex} ? 'active'"></a>
-								</li>
-								<li class="next"><a
-									th:href="@{/list_products?page=__${numberOfPages-1}__}"><span
+								<li class="page-item" ng-repeat="page in visiblePages"
+									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+									class="page-link" href="" ng-click="pager.goto(page.value)"
+									ng-style="page.value === (pager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+										{{ page.value }} </a></li>
+
+
+								<li class="next"><a ng-click="pager.last()"><span
 										class="fa fa-angle-double-right"></span></a></li>
 							</ul>
 						</div>
-
 						<!--//pagination-->
 						<!-- //row-->
 						<!--/row2-->

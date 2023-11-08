@@ -1,6 +1,9 @@
 package com.sts.api;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,15 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.ProductDetailDAO;
+import com.sts.model.ProductDetail;
 import com.sts.model.Size;
 import com.sts.service.SizeService;
-
 
 @CrossOrigin("*")
 @RestController
 public class SizeRestController {
 	@Autowired
 	SizeService sizeService;
+
+	@Autowired
+	ProductDetailDAO produtDetailDAO;
 
 	@GetMapping("/rest/sizes/{sizeID}")
 	public Size getOne(@PathVariable("sizeID") Integer sizeID) {
@@ -32,17 +39,17 @@ public class SizeRestController {
 	public List<Size> getAll() {
 		return sizeService.findAll();
 	}
-	
+
 	@GetMapping("/rest/sizes/loadallDeleted")
 	public List<Size> getAllDeleted() {
 		return sizeService.loadAllDeleted();
 	}
-	
+
 	@GetMapping("/rest/sizes/loadallNoDeleted")
 	public List<Size> getAllNoDeleted() {
 		return sizeService.loadAllNoDeleted();
 	}
-	
+
 	@GetMapping("/rest/sizes/loadallNoDeletedAndActivitiesTrue")
 	public List<Size> getAllNoDeletedAndActivitiesTrue() {
 		return sizeService.loadAllNoDeletedAndActivitiesTrue();
@@ -65,7 +72,6 @@ public class SizeRestController {
 
 	@GetMapping("/rest/sizes/search")
 	public List<Size> searchSizeByName(@RequestParam("keyword") Float keyword) {
-	    return sizeService.searchByName(keyword);
+		return sizeService.searchByName(keyword);
 	}
-
 }

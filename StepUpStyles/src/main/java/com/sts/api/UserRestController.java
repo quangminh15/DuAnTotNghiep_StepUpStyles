@@ -6,6 +6,7 @@ import java.util.List;
 import com.sts.dao.UserDAO;
 import com.sts.dto.respone.OneUserForSecurity;
 import com.sts.model.DTO.LResponseUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import com.sts.model.User;
+import com.sts.model.DTO.OneUserForSecurity;
 import com.sts.service.UserService;
 
 @CrossOrigin("*")

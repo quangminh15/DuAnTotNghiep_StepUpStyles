@@ -3,11 +3,11 @@
 
 <head>
 
-	<title>STS || YÊU THÍCH</title>
+	<title>SUS || YÊU THÍCH</title>
 
 </head>
 
-<body ng-controller="favorite-list-ctrl">
+<body ng-controller="favorite-ctrl">
 	<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		  <div class="modal-content">
@@ -90,12 +90,12 @@
 				<div class="breadcrumb-contentnhy">
 					<div class="container">
 						<nav aria-label="breadcrumb">
-							<h2 class="hny-title text-center">Favorite</h2>
+							<h2 class="hny-title text-center">Yêu thích</h2>
 							<ol class="breadcrumb mb-0">
-								<li><a href="/index">Home</a>
+								<li><a href="/index">Trang chủ</a>
 									<span class="fa fa-angle-double-right"></span>
 								</li>
-								<li class="active">Favorite</li>
+								<li class="active">Yêu thích</li>
 							</ol>
 						</nav>
 					</div>
@@ -109,246 +109,9 @@
 		<!--/mag-content-->
 		<div class="ecomrhny-content-inf py-5">
 			<div class="container py-lg-5">
-				<div style="margin: 8px auto; display: block; text-align:center;">
-
-					<!---728x90--->
-
-
-				</div>
 				<!--/row1-->
-				<div class="ecommerce-grids row">
-					<div class="ecommerce-left-hny col-lg-4">
-						<!--/ecommerce-left-hny-->
-						<aside>
-							<div class="sider-bar">
-								<div class="single-gd mb-5">
-
-									<h4>Search <span>here</span></h4>
-									<form action="#" method="post" class="search-trans-form">
-										<input class="form-control" type="search" name="search"
-											placeholder="Tìm kiếm..." required="">
-										<button class="btn read-2">
-											<span class="fa fa-search"></span>
-										</button>
-
-									</form>
-								</div>
-								<!-- /Gallery-imgs -->
-
-								<div class="single-gd mb-5">
-									<h4>Product <span>Categories</span></h4>
-									<ul class="list-group single">
-										<li class="list-group-item d-flex justify-content-between align-items-center">
-											Accessories
-											<span class="badge badge-primary badge-pill">14</span>
-										</li>
-										<li class="list-group-item d-flex justify-content-between align-items-center">
-											Suits
-											<span class="badge badge-primary badge-pill">18</span>
-										</li>
-										<li class="list-group-item d-flex justify-content-between align-items-center">
-											Footwear
-											<span class="badge badge-primary badge-pill">12</span>
-										</li>
-										<li class="list-group-item d-flex justify-content-between align-items-center">
-											Blazers
-											<span class="badge badge-primary badge-pill">10</span>
-										</li>
-									</ul>
-								</div>
-								<div class="single-gd mb-5">
-									<h4>Filter by <span>Price</span></h4>
-
-									<ul class="dropdown-vjm-transitu6">
-										<li>
-
-											<div id="slider-range"
-												class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-												<div class="ui-slider-range ui-widget-header"
-													style="left: 0.555556%; width: 18.5556%;"></div><a
-													class="ui-slider-handle ui-state-default ui-corner-all" href="#"
-													style="left: 0.555556%;"></a><a
-													class="ui-slider-handle ui-state-default ui-corner-all" href="#"
-													style="left: 19.1111%;"></a>
-											</div>
-											<input type="text" id="amount"
-												style="border: 0; color: #ffffff; font-weight: normal;">
-										</li>
-									</ul>
-
-
-									<!--//Gallery-imgs-->
-								</div>
-
-								<div class="single-gd mb-5">
-									<h4>Discount </h4>
-									<div classes="box-hny">
-										<label class="containerhny-checkbox">15% or More
-											<input type="checkbox" checked="checked">
-											<span class="checkmark"></span>
-										</label>
-										<label class="containerhny-checkbox">20% or More
-											<input type="checkbox">
-											<span class="checkmark"></span>
-										</label>
-										<label class="containerhny-checkbox">35% or More
-											<input type="checkbox">
-											<span class="checkmark"></span>
-										</label>
-										<label class="containerhny-checkbox">55% or More
-											<input type="checkbox">
-											<span class="checkmark"></span>
-										</label>
-
-										<label class="containerhny-checkbox">65% or More
-											<input type="checkbox">
-											<span class="checkmark"></span>
-										</label>
-										<label class="containerhny-checkbox">75% or More
-											<input type="checkbox">
-											<span class="checkmark"></span>
-										</label>
-
-									</div>
-
-								</div>
-								<div class="single-gd customer-rev left-side mb-5">
-									<h4>Customer <span>Color</span></h4>
-
-									<ul class="product-color">
-										<li>
-											<input type="checkbox" name="color-check" id="redcheck" checked="checked" />
-											<label for="redcheck" style="background-color:red;"></label>
-										</li>
-										<li>
-											<input type="checkbox" name="color-check" id="#A2C2C9check"
-												checked="checked" />
-											<label for="#A2C2C9check" style="background-color:#A2C2C9;"></label>
-										</li>
-										<li>
-											<input type="checkbox" name="color-check" id="#EFDBD4check"
-												checked="checked" />
-											<label for="#EFDBD4check" style="background-color:#EFDBD4;"></label>
-										</li>
-										<li>
-											<input type="checkbox" name="color-check" id="#2196F3check"
-												checked="checked" />
-											<label for="#2196F3check" style="background-color:#2196F3;"></label>
-										</li>
-										<li>
-											<input type="checkbox" name="color-check" id="#4CAF50check"
-												checked="checked" />
-											<label for="#4CAF50check" style="background-color:#4CAF50;"></label>
-										</li>
-										<li>
-											<input type="checkbox" name="color-check" id="#00BCD4check"
-												checked="checked" />
-											<label for="#00BCD4check" style="background-color:#00BCD4;"></label>
-										</li>
-									</ul>
-								</div>
-								<div class="single-gd left-side mb-5">
-									<h4>Customer Ratings</h4>
-									<ul class="ratingshyny">
-										<li>
-											<a href="#">
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span>5.0</span>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span>4.0</span>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span>3.0</span>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span>2.0</span>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<span class="fa fa-star" aria-hidden="true"></span>
-												<span>1.0</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-
-								<div class="single-gd mb-5 border-0">
-									<h4>Recent <span>Products</span></h4>
-									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img src="assets/images/shop-88.jpg"
-													class="img-fluid" alt=""></a>
-										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">Blue Sweater</a>
-											</h5>
-
-											<a href="single_product.html" class="price-right">$499.00</a>
-										</div>
-
-									</div>
-									<div class="row special-sec1 mt-4">
-										<div class="col-4 img-deals">
-											<a href="single_product.html"><img src="assets/images/shop-77.jpg"
-													class="img-fluid" alt=""></a>
-										</div>
-										<div class="col-8 img-deal1">
-											<h5 class="post-title">
-												<a href="single_product.html">White T-Shirt</a>
-											</h5>
-											<a href="single_product.html" class="price-right">$575.00</a>
-										</div>
-
-									</div>
-
-								</div>
-							</div>
-						</aside>
-						<!--//ecommerce-left-hny-->
-					</div>
-					<div class="ecommerce-right-hny col-lg-8">
-						<div class="row ecomhny-topbar">
-							<div class="col-6 ecomhny-result">
-								<h4 class="ecomhny-result-count"> Showing all 9 Results</h4>
-							</div>
-							<div class="col-6 ecomhny-topbar-ordering">
-
-								<div class="ecom-ordering-select d-flex">
-									<span class="fa fa-angle-down" aria-hidden="true"></span>
-									<select>
-										<option value="menu_order" selected="selected">Default Sorting</option>
-										<option value="popularity">Sort by Popularity</option>
-										<option value="rating">Sort by Average rating</option>
-										<option value="date">Sort by latest</option>
-										<option value="price">Sort by Price: low to high</option>
-										<option value="price-desc">Sort by Price: high to low</option>
-									</select>
-								</div>
-
-							</div>
-						</div>
+					<div class="ecommerce-right-hny">
+					
 						<h2>SẢN PHẨM ĐƯỢC BẠN YÊU THÍCH</h2>
 						<div ng-show="userItemsFavorite.length == 0" style="text-align: center; justify-content: center; margin: 10px;">
 							<p>Bạn chưa có sản phẩm yêu thích.</p>
@@ -356,167 +119,71 @@
 						</div>
 						<div ng-show="userItemsFavorite">
 							<!-- Hiển thị danh sách sản phẩm yêu thích -->
-							<!-- <div class="ecom-products-grids row">
-								<div th:each="p: ${favoriteitems}" class="col-lg-4 col-6 product-incfhny mb-4">
-									<div class="product-grid2 transmitv">
-										<div class="product-image2">
-											<a th:href="@{|/single_product/${p.product.productID}|}">
-												<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-1 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
-												<img th:if="${not #lists.isEmpty(p.product.productImages)}" class="pic-2 img-fluid" th:src="@{|${p.product.productImages[0].imagePath}|}">
-											</a>
-											<ul class="social">
-												
-												<li>
-															<a th:attr="ng-click=@{|showDeleteConfirmationModal(${p.product.productID})|}"><span class="fa fa-heart"></span></a>
-												</li>
-											</ul>
-											<div class="transmitv single-item">
-													<a th:href="@{|/single_product/${p.product.productID}|}" type="submit"
-														class="transmitv-cart ptransmitv-cart add-to-cart">
-														Xem chi tiết
-													</a>
-											</div>
-										</div>
-										<div class="product-content">
-											<h3 class="title" th:text="${p.product.productName}"><a th:href="@{|/single_product/${p.product.productID}|}"></a>
-											</h3>
-											<span class="price" th:text="${p.product.price}"></span>
-										</div>
-									</div>
-								</div>
-							</div> -->
-							
 							<div class="ecom-products-grids row">
-								<div ng-repeat="item in userItemsFavorite" class="col-lg-4 col-6 product-incfhny mb-4">
-									<div class="product-grid2 transmitv">
+								<div ng-repeat="item in favoritePager.userItemsFavorite" class="col-lg-3 col-6 product-incfhny mb-4">
+									<div class="product-grid2 transmitv" ng-click="saveProductID(item.product.productID)">
 										<div class="product-image2">
-											<a ng-href="/single_product/{{item.product.productID}}">
-												<img ng-if="!item.product.productImages.isEmpty()" class="pic-1 img-fluid" src="{{item.product.productImages[0].imagePath}}">
-												<img ng-if="!item.product.productImages.isEmpty()" class="pic-2 img-fluid" src="{{item.product.productImages[0].imagePath}}">
+											<div class="discount-circle"
+											ng-if="item.product.discount[0].status === 'Đang diễn ra' && item.product.discount[0].priceDiscount">{{
+												item.product.discount[0].directDiscount }}%</div>
+											<a ng-click="goToSinglePage(item.product.productID)"> <img
+												ng-if="item.product.image[0].imagePath.length > 0" class="pic-1 img-fluid"
+												ng-src="{{item.product.image[0].imagePath}}" alt="123"> <img
+												ng-if="item.product.image[0].imagePath.length > 0" class="pic-2 img-fluid"
+												ng-src="{{item.product.image[0].imagePath}}">
 											</a>
 											<ul class="social">
-												<li>
-													<a ng-click="showDeleteConfirmationModal(item.product.productID)"><span class="fa fa-heart"></span></a>
-												</li>
+												<li><a ng-click="deleteFavoriteProduct(item.product)"><span class="fa fa-heart"></span></a></li>
 											</ul>
 											<div class="transmitv single-item">
-												<a ng-href="/single_product/{{item.product.productID}}" type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
-													Xem chi tiết
-												</a>
+												<a ng-click="goToSinglePage(item.product.productID)" type="submit"
+													class="transmitv-cart ptransmitv-cart add-to-cart"
+													> Xem
+													chi tiết </a>
 											</div>
 										</div>
 										<div class="product-content">
-											<h3 class="title" ng-bind="item.product.productName"></h3>
-											<span class="price" ng-bind="item.product.price"></span>
+											<h3 class="title">
+												<a ng-click="goToSinglePage(item.product.productID)">{{
+													item.product.productName }}</a>
+											</h3>
+											<span class="price"
+												ng-if="item.product.discount[0].priceDiscount == null"> {{
+													item.product.price | number:0 }} ₫</span> <span class="price"
+												ng-if="item.product.discount[0].status === 'Đang diễn ra' && item.product.discount[0].priceDiscount">
+												<del>{{ item.product.price | number:0 }} ₫</del> {{
+													item.product.discount[0].priceDiscount | number:0 }} ₫
+											</span> <span class="price"
+												ng-if="item.product.discount[0].status !== 'Đang diễn ra' && item.product.discount[0].priceDiscount">
+												{{ item.product.price | number:0 }} ₫ </span>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<!-- //row-->
-						<!--/row2-->
-						<div class="ecom-slider-hny">
-							<div class="ecommerce-banv covers-9">
-								<div class="csslider infinity" id="slider1">
-									<input type="radio" name="slides" checked="checked" id="slides_1" />
-									<input type="radio" name="slides" id="slides_2" />
-									<input type="radio" name="slides" id="slides_3" />
-
-									<ul class="banner_slide_bg">
-										<li>
-											<div class="wrapper">
-												<div class="cover-top-center-9">
-													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">30% Off</h6>
-														<h3 class="title-cover-9">Men's Suit</h3>
-
-														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="wrapper">
-												<div class="cover-top-center-9">
-													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Men's Footerwear</h3>
-
-														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="wrapper">
-												<div class="cover-top-center-9">
-													<div class="w3ls_cover_txt-9">
-														<h6 class="tag-cover-9">50% Off</h6>
-														<h3 class="title-cover-9">Women's Footwear</h3>
-
-														<div class="read-more-button">
-															<a href="single_product.html" class="read-btn btn">Shop
-																Now</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</li>
-
-									</ul>
-									<div class="arrows">
-										<label for="slides_1"></label>
-										<label for="slides_2"></label>
-										<label for="slides_3"></label>
-
-									</div>
-									<div class="navigation">
-										<div>
-											<label for="slides_1"></label>
-											<label for="slides_2"></label>
-											<label for="slides_3"></label>
-
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!--//row22-->
 					</div>
-				</div>
 				<!--//row1-->
 
 				<!--/pagination-->
-				<!-- <div class="pagination">
+				<div class="pagination" style="margin: 0px 10px 20px;">
 					<ul>
-						<li class="prev"><a href="#page-number"><span class="fa fa-angle-double-left"></span></a>
-						</li>
-						<li><a href="#page-number" class="active">1</a></li>
-						<li><a href="#page-number">2</a></li>
-						<li><a href="#page-number">3</a></li>
-
-						<li class="next"><a href="#page-number"><span class="fa fa-angle-double-right"></span></a>
-						</li>
+						<li class="prev"><a ng-click="favoritePager.first()"><span
+								class="fa fa-angle-double-left"></span></a></li>
+						<li class="page-item" ng-repeat="page in favoriteVisiblePages"
+							ng-class="{ 'active': (page.value === favoritePager.page + 1) }"><a
+							class="page-link" ng-click="favoritePager.gotoFavorite(page.value)"
+							ng-style="page.value === (favoritePager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+								{{ page.value }} </a></li>
+						<li class="next"><a ng-click="favoritePager.last()"><span
+								class="fa fa-angle-double-right"></span></a></li>
 					</ul>
-				</div> -->
+				</div>
 				<!--//pagination-->
 
 			</div>
 		</div>
 		<!--//mag-content-->
 	</section>
-	<div style="margin: 8px auto; display: block; text-align:center;">
-
-		<!---728x90--->
-
-	</div>
 </body>
 
 </html>

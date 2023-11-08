@@ -84,11 +84,10 @@ public class Product implements Serializable {
 	private User user;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "product" )
+	@OneToMany(mappedBy = "product")
 	private List<ProductDetail> productDetails;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Review> reviews;
-
 }

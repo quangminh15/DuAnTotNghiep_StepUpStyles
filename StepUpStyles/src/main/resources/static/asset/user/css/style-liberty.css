@@ -3802,9 +3802,9 @@ Author URL: http://w3layouts.com
  }
  
  .w3l-banner-slider-main nav.navbar {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.7);
    padding: 10px 0;
-   position: fixed;
+   /* position: fixed; */
    z-index: 999;
    width: 100%;
    transition: background-color 0.s ease, box-shadow 0.5s ease; /* Apply transition to box-shadow */
@@ -3814,7 +3814,7 @@ Author URL: http://w3layouts.com
  .w3l-banner-slider-main nav.navbar-scrolled{
     background-color: #1d1c1c;   
      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2); /* Add a box shadow */
-
+     position: fixed;
  }
  
  .w3l-banner-slider-main a.navbar-brand {
@@ -6209,7 +6209,7 @@ Author URL: http://w3layouts.com
  }
  
  .video-gd-right {
-   background: url(../images/33.jpg) no-repeat center;
+   background: url(../img/pksu.png) no-repeat center;
    background-size: cover;
    -webkit-background-size: cover;
    -o-background-size: cover;
@@ -8625,8 +8625,8 @@ Author URL: http://w3layouts.com
  .w3l-ecommerce-main-inn .pagination a {
    width: 40px;
    display: block;
-   height: 40px;
-   line-height: 40px;
+/*    height: 40px; */
+/*    line-height: 40px; */
    text-align: center;
    border-radius: 4px;
    color: #ff7315;
@@ -9498,7 +9498,7 @@ Author URL: http://w3layouts.com
  .w3l-ecommerce-main-inn .caption {
    display: grid;
    align-items: center;
-   grid-template-columns: 2fr 8fr;
+   grid-template-columns: 4fr;
    grid-gap: 4px;
  }
  
@@ -21330,5 +21330,42 @@ Author URL: http://w3layouts.com
      border-color: #dee2e6;
    }
  }
- 
+
+ .remove-favorite {
+  position: relative;
+}
+
+.remove-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff0000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.count_menu {
+  position: absolute;
+  font-size: 12px;
+  top: 15%;
+  right: 15%;
+  transform: translate(50%, -50%); /* Đưa badge lên góc phải */
+}
+
+/* Định dạng cho nút yêu thích */
+.top_transmitv_cart {
+  position: relative; 
+}
+
+.top-baged{
+  position: relative; 
+}
+
+.liked:hover, .not-liked:hover{
+  cursor: pointer;
+}
+
+
  /*# sourceMappingURL=style-liberty.css.map */

@@ -1,4 +1,4 @@
-package com.sts.api;
+package com.sts.apiFile;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -24,7 +24,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class PDFRestController {
+public class PDFImportRestController {
     @PostMapping("/export-pdf")
     @ResponseBody
     public void exportPdf(HttpServletResponse response, @RequestBody List<ImportReceiptDetail> importDetail)
@@ -35,9 +35,7 @@ public class PDFRestController {
 
         // Tạo một đối tượng Document của iText
         Document document = new Document();
-
-        String relativePath = "src\\main\\resources\\font-times-new-roman\\font-times-new-roman.ttf";
-        String relativePath1 = "/font-times-new-roman/font-times-new-roman.ttf";
+        String relativePath = "/font-times-new-roman/font-times-new-roman.ttf";
         BaseFont baseFont = BaseFont.createFont(relativePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         // String relativePath = "/font-times-new-roman/font-times-new-roman.ttf";
         // InputStream inputStream = getClass().getResourceAsStream(relativePath);

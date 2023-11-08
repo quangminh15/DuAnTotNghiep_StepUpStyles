@@ -8,10 +8,8 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -47,17 +45,17 @@ public class ReviewServiceImpl implements ReviewService{
 		return reviewDAO.findById(reviewID).get();
 	}
 
-    @Override
-    public boolean hidReview(Integer reviewID) {
-        Optional<Review> reviewOptional = reviewDAO.findById(reviewID);
-        if (reviewOptional.isPresent()) {
-            Review review = reviewOptional.get();
-            review.setDisplay(!review.isDisplay());
-            reviewDAO.save(review);
-            return true;
-        }
-        return false;
-    }
+    // @Override
+    // public boolean hidReview(Integer reviewID) {
+    //     Optional<Review> reviewOptional = reviewDAO.findById(reviewID);
+    //     if (reviewOptional.isPresent()) {
+    //         Review review = reviewOptional.get();
+    //         review.setDisplay(!review.isDisplay());
+    //         reviewDAO.save(review);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     @Override
     public List<Review> getProductByProductId(Integer productId) {
@@ -113,6 +111,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<Review> searchs(Integer productId, Integer usersId, Integer rating) {
         return reviewDAO.search(productId, usersId, rating);
+    }
+
+    @Override
+    public Review createReview(Review review) {
+        return reviewDAO.save(review);
     }
     }    
     

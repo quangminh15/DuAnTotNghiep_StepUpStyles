@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
 
-    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId) {
+    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
         User user = userDao.findById(1).get();
 
         ShippingAddress address = addressDao.findById(addressId).get();
@@ -105,6 +105,26 @@ public class OrderServiceImpl implements OrderService {
     private String formatDeliveryDate(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
+    }
+
+    @Override
+    public List<Order> loadByUser(User user) {
+       return orderDao.findByUser(user);
+    }
+
+    @Override
+    public List<Order> loadByStatus(OrderStatus status) {
+       return orderDao.findByOrderStatus(status);
+    }
+
+    @Override
+    public List<OrderDetail> loadByOrder(Order order) {
+       return orderDetailDao.findByOrder(order);
+    }
+
+    @Override
+    public List<Order> loadAll() {
+       return orderDao.findAll();
     }
 
    

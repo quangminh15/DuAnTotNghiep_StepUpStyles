@@ -6,21 +6,24 @@ import com.sts.model.DirectDiscount;
 
 public interface DiscountService {
 
-    List<DirectDiscount> findAll();
+	List<DirectDiscount> findAll();
 
-    List<DirectDiscount> getNodeletedDiscount();
+	List<DirectDiscount> getNodeletedDiscount();
 
-    List<DirectDiscount> getDeletedDiscount();
+	List<DirectDiscount> getDeletedDiscount();
 
-    DirectDiscount create(DirectDiscount directDis);
+	DirectDiscount create(DirectDiscount directDis);
 
-    DirectDiscount update(DirectDiscount directDis);
+	DirectDiscount update(DirectDiscount directDis);
 
-    void delete(Long ddid);
+	void delete(Long ddid);
 
-    void saveStatus(DirectDiscount directDis);
+	void saveStatus(DirectDiscount directDis);
 
-    void updateDiscountStatus();
+	void updateDiscountStatus();
 
-    List<DirectDiscount> findByDiscountProduct(String keyword);
+	List<DirectDiscount> findByDiscountProduct(String keyword);
+
+	// Lọc danh sách giảm giá theo sản phẩm
+	List<DirectDiscount> getdiscountsByProduct(Integer productId);
 }

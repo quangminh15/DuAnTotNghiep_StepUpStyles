@@ -4,7 +4,7 @@
 
 <head>
 
-<title>STS || CHI TIẾT</title>
+<title>SUS || CHI TIẾT</title>
 
 </head>
 
@@ -12,7 +12,8 @@
 
 	<div class="right-sidebar-panel-content animated fadeInRight"
 		tabindex="5003" style="overflow: hidden; outline: none;"></div>
-	<section th:object="${productitem}" class="w3l-ecommerce-main-inn">
+		
+	<section class="w3l-ecommerce-main-inn">
 		<!--/ecommerce-single-->
 		<div class="ecomrhny-content-inf py-5">
 			<div class="container py-lg-5">
@@ -21,9 +22,8 @@
 				<div ng-controller="cart-ctrl" class="sp-store-single-page row">
 					<div class="col-lg-5 single-right-left">
 						<div class="flexslider1">
-
 							<ul class="slides">
-								<th:block th:each="image, iterStat : ${productImages}">
+								<th:block th:each="image, iterStat : ${productImageList}">
 									<li th:attr="data-thumb=${image.imagePath}"
 										th:if="${iterStat.count} &lt;= 4">
 										<div class="thumb-image">
@@ -33,75 +33,130 @@
 									</li>
 								</th:block>
 							</ul>
-
-
 							<div class="clearfix"></div>
 						</div>
 						<div class="eco-buttons mt-5">
 
 							<div class="transmitv single-item">
-								<form action="#" method="post">
+								
 									<button type="submit"
-										th:attr="ng-click=@{|addToCart(${productitem.productID},size,color,qty)|}"
+										ng-click="addToCart(productDetails.productID, size, color, qty)"
 										class="transmitv-cart ptransmitv-cart add-to-cart read-2">
 										Thêm vào giỏ</button>
-								</form>
+							
 							</div>
 							<div class="buyhny-now">
-								<a href="#buy" class="action btn">Mua ngay </a>
+								<a class="action btn" data-toggle="modal" data-target="#myModal">Thông tin</a>
 							</div>
+							<!-- The Modal -->
+							<div class="modal fade" id="myModal">
+								<div class="modal-dialog modal-xl">
+									<div class="modal-content">
+										<!-- Modal body -->
+										<div class="modal-body">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<!-- Nav tabs -->
+											<ul class="nav nav-tabs">
+												<li class="nav-item"><a class="nav-link active"
+													data-toggle="tab" href="#home">Mô tả</a></li>
+												<li class="nav-item"><a class="nav-link"
+													data-toggle="tab" href="#menu1">Chọn size</a></li>
+											</ul>
 
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div id="home" class="container tab-pane active">
+													<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4>
+												</div>
+												<div id="menu1" class="container tab-pane fade">
+													<br>
+													<img alt="" src="/asset/user/img/BangDoSize.jpg" height="100%" width="100%" align="Hướng dẫn chọn size">
+												</div>
+											</div>
+										</div>
+
+										<!-- Modal footer -->
+
+
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-lg-7 single-right-left pl-lg-4">
-						<h3 th:text="${productitem.productName}"></h3>
+						<h3>{{ productDetails.productName }}</h3>
 						<div class="caption">
+							<div ng-if="noRating">
+								<p>{{noRating}}</p>
+							</div>
+							<div ng-if="!noRating">
+								<ul class="rating-single">
+									<li class="text-warning font-weight-bold">{{ averageRating }}/5<span
+										class="fa fa-star" aria-hidden="true"></span>
+									</li>
+									<li><div class="vertical-line" style="width: 1px; height: 16px; background-color: gray; margin: 0 10px;"></div></li>
+									<li>
+										<p>{{ reviewCounts.total }} đánh giá</p>
+									</li>							
+								</ul>
+							</div>
+							<h6 style="white-space: nowrap;"
+								ng-if="productDetails.discount[0].priceDiscount == null">
+								<span class="item_price">{{ productDetails.price |
+									number:0 }} ₫</span>
+							</h6>
 
-							<ul class="rating-single">
-								<li>4.5/5<span class="fa fa-star yellow-star"
-									aria-hidden="true"></span>
-								</li>
-							</ul>
-							<a href="#">274 đánh giá</a>
+							<h6
+								style="display: flex; align-items: center; width: 100%; white-space: nowrap;"
+								ng-if="productDetails.discount[0].status === 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
+								<del style="margin-right: 10px;">{{ productDetails.price |
+									number:0 }} ₫</del>
+								<span class="item_price">{{
+									productDetails.discount[0].priceDiscount | number:0 }} ₫</span>
+							</h6>
 
-							<h6>
-								<span class="item_price"
-									th:text="${#numbers.formatDecimal(productitem.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
-
+							<h6 style="white-space: nowrap;"
+								ng-if="productDetails.discount[0].status !== 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
+								<span class="item_price">{{ productDetails.price |
+									number:0 }} ₫</span>
 							</h6>
 						</div>
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn size</option>
-									<option th:each="s: ${sizs}" th:value="${s.sizeID}"
-										th:text="${s.sizeNumber}"></option>
+								<select ng-model="size" ng-change="setSelectedSize(size.sizeNumber)" class="form-control">
+									<option value="" disabled selected>-- Chọn size --</option>
+									<option ng-repeat="s in sizess" ng-value="{{s}}">{{s.sizeNumber}}</option>
 								</select>
+								
 							</div>
 						</div>
-						<div class="desc_single my-4">
+
+						<div class="desc_single my-4" ng-if="size">
 							<span class="col-md-3 size1">Màu sắc</span>
 							<div class="col-md-9">
-								<select ng-model="color" class="form-control">
-									<option value="" disabled selected>Vui lòng chọn màu
-										sắc</option>
-									<option th:each="s: ${cols}" th:value="${s.colorID}"
-										th:text="${s.colorName}"></option>
+								<select  ng-model="color" class="form-control"  ng-change="showQuantityStock(productDetails.productID, size.sizeID, color.colorID)">
+									<option value="" disabled selected>-- Chọn size --</option>
+									<option ng-repeat="c in filteredColors" ng-value="{{c}}">{{c.colorName}}</option>
 								</select>
 							</div>
 						</div>
-						<div class="desc_single my-4">
+
+
+						<div class="desc_single my-4" ng-if="color">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-model="qty" type="number"
-									class="form-control">
+								<input ng-value="1" ng-change="checkQuantity(qty)"
+									ng-model="qty" type="number" class="form-control">
 							</div>
+							<p class="col-md-12 size1">Số lượng Trong Kho:
+								{{singleProd.quantity}}</p>
 						</div>
-						<div class="desc_single mb-4">
-							<h5>Mô tả:</h5>
-							<p th:text="${productitem.description}"></p>
-						</div>
+
+						<!-- 						<div class="desc_single mb-4"> -->
+						<!-- 							<h5>Mô tả:</h5> -->
+						<!-- 							<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4> -->
+						<!-- 						</div> -->
 
 						<div class="description mb-4">
 							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5>
@@ -116,6 +171,11 @@
 			</div>
 			<!--//row1-->
 		</div>
+
+		<!--tab start-->
+		
+		<!--tab end-->
+
 		<!--//ecommerce-single-->
 	</section>
 	<section class="w3l-ecommerce-main w3l-ecommerce-main-inn">
@@ -127,9 +187,10 @@
 						<div class="pro-grid-one">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									WOMEN'S FASHION <br>50% OFF
+									Thời trang nữ giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>
@@ -138,9 +199,10 @@
 						<div class="pro-grid-one pro-grid-two">
 							<div class="product-des-hny">
 								<h4 class="text-wthree">
-									MEN'S FASHION <br>60% OFF
+									Thời trang nam giới <br>Siêu hot
 								</h4>
-								<a href="#" class="read-more-btn2 btn"> Shop Now </a>
+								<a href="/list_products" class="read-more-btn2 btn"> Xem
+									ngay </a>
 							</div>
 						</div>
 					</div>
@@ -170,35 +232,46 @@
 				</div>
 				<!-- /row-->
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div th:each="p: ${similarProducts}"
+					<div ng-repeat="p in productDetailss"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
-							<div class="product-image2">
-								<a th:href="@{|/single_product/${p.productID}|}"> <img
-									th:if="${not #lists.isEmpty(p.productImages)}"
-									class="pic-1 img-fluid"
-									th:src="@{|${p.productImages[0].imagePath}|}"> <img
-									th:if="${not #lists.isEmpty(p.productImages)}"
-									class="pic-2 img-fluid"
-									th:src="@{|${p.productImages[0].imagePath}|}">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
+							<div class="product-image2" style="position: relative;">
+								<div class="discount-circle"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+									p.discount[0].directDiscount }}%</div>
+								<a ng-click="goToSinglePage(p.productID)"> <img
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li><a th:attr="ng-click=@{|check(${p.productID})|}">
-											<span class="fa fa-heart" aria-hidden="true"></span>
-									</a></li>
+									<li> 
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
-									<a th:href="@{|/single_product/${p.productID}|}" type="submit"
+									<a ng-click="goToSinglePage(p.productID)" type="submit"
 										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
 										chi tiết </a>
 								</div>
 							</div>
 							<div class="product-content">
-								<h3 class="title" th:text="${p.productName}">
-									<a th:href="@{|/single_product/${p.productID}|}"></a>
+								<h3 class="title">
+									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
+										}}</a>
 								</h3>
-								<span class="price"
-									th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 							</div>
 						</div>
 					</div>
@@ -219,31 +292,29 @@
 				<div class="row wrapper-rating">
 					<div class="col-sm-3 text-center">
 						<h2>
-							4.5/5<span class="text-warning">★</span>
+							{{averageRating}}/5<span class="text-warning">★</span>
 						</h2>
 					</div>
 					<div class="col-sm-8">
-						<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">Tất cả</div>
-						<a class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">5 sao (12)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">4 sao (1)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">3 sao (2)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">2 sao (1)</a> <a
-							class="btn mx-2 btn-outline-warning"
-							style="background-color: white; color: #ff7315;">1 sao (1)</a>
-						</p>
-					</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(null)}" ng-click="filterByRatingAndCheck(null)">Tất cả ({{ reviewCounts.total }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(5)}" ng-click="filterByRatingAndCheck(5)">5 sao ({{ reviewCounts[5] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(4)}" ng-click="filterByRatingAndCheck(4)">4 sao ({{ reviewCounts[4] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(3)}" ng-click="filterByRatingAndCheck(3)">3 sao ({{ reviewCounts[3] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(2)}" ng-click="filterByRatingAndCheck(2)">2 sao ({{ reviewCounts[2] }})</div>
+						<div class="btn mx-2 btn-outline-secondary" ng-class="{'btn-outline-warning': isButtonSelected(1)}" ng-click="filterByRatingAndCheck(1)">1 sao ({{ reviewCounts[1] }})</div>
+					</div>						
 				</div>
 			</div>
-			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
+			<div class="row text-center mt-5">
+				<p ng-if="noReviewsMessage" class="col-sm-12">
+					<img src="/asset/user/img/empty_data_icon.png" alt="empty_data_icon" style="width: 30%;"> <br>
+					<strong>{{ noReviewsMessage }}</strong>
+				</p>
+			</div>
+				<div class="content-singlev-ecomm py-3" ng-repeat="rv in reviewPager.allreviews">	
 				<div class="row">
 					<div class="col-sm-2 text-center">
-						<img src="link_to_user_image.jpg" alt="Hình"
+						<img src="" alt="Hình"
 							class="img-fluid rounded-circle">
 					</div>
 					<div class="col-sm-10">
@@ -251,31 +322,32 @@
 							<strong>{{rv.user.fullName}}</strong>
 						</p>
 						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
-						<!-- <div class="rating mb-2">
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-							<span class="fa fa-star"></span>
-						</div> -->
+						<div class="rating mb-2 text-warning">
+							<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
+                            ng-class="{'fa-star': star <= rv.rating, 'fa-star-o': star > rv.rating}"></span>
+						</div>
 						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
 						<span class="fa fa-thumbs-up"></span>
 					</div>
 				</div>
 				<hr>
 			</div>
-			<div class="pagination text-center">
+			
+			<!--/pagination-->
+			<div class="pagination" ng-if="!noReviewsMessage" style="margin: 0px 10px 20px;">
 				<ul>
-					<li class="prev"><a href="#page-number"><span
+					<li class="prev"><a ng-click="reviewPager.first()"><span
 							class="fa fa-angle-double-left"></span></a></li>
-					<li><a href="#page-number" class="active">1</a></li>
-					<li><a href="#page-number">2</a></li>
-					<li><a href="#page-number">3</a></li>
-
-					<li class="next"><a href="#page-number"><span
+					<li class="page-item" ng-repeat="page in reviewVisiblePages"
+						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a
+						class="page-link" ng-click="reviewPager.gotoReview(page.value)"
+						ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+							{{ page.value }} </a></li>
+					<li class="next"><a ng-click="reviewPager.last()"><span
 							class="fa fa-angle-double-right"></span></a></li>
 				</ul>
 			</div>
+			<!--//pagination-->
 		</div>
 		</div>
 	</section>

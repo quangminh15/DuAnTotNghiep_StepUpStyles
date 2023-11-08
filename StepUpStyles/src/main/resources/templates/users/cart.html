@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-	<title>STS | GIỎ HÀNG</title>
+	<title>SUS | GIỎ HÀNG</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -36,9 +36,9 @@
 	<link rel="stylesheet" href="/asset/user/css/cart/style.css">
 	<!-- END nav -->
 
-	<div class="hero-wrap hero-bread"
+	<!-- <div class="hero-wrap hero-bread"
 		style="background-image: url('/asset/user/img/nautica.png');background-position-y: 70%;">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
 					<p class="breadcrumbs"><span class="mr-2"><a th:href="@{/index}">Trang Chủ</a></span> > <span>Giỏ
@@ -48,27 +48,41 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div ng-show="page==true">
-		<section class="ftco-section ftco-cart">
+		<section style="background-color: #F5F5F5;" class="ftco-section ftco-cart">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-8  ftco-animate">
+					<div class="col-lg-12  ftco-animate">
 						<div class="cart-list">
+
 							<table class="table">
 								<thead class="thead-primary">
-									<tr class="text-center">
-										<th>
-											<input  type="checkbox" ng-click="checkBox()" id="checkAll"
-												ng-model="item.isSelected"/>
+									<tr class="text-left ">
+										<th class="align-middle">
+											<input type="checkbox" ng-click="checkBox()" id="checkAll"
+												ng-model="item.isSelected" />
+
 										</th>
-										<th></th>
-										<th>Tên Sản Phẩm</th>
-										<th>Màu Sắc</th>
-										<th>Kích Thước</th>
-										<th>Đơn Giá</th>
-										<th>Số Lượng</th>
-										<th>Thành Tiền</th>
+										<th class="text-left">
+											<label>
+												Sản Phẩm
+											</label>
+										</th>
+										
+										<th>
+											<div class="subth">Thuộc Tính</div>
+										</th>
+
+										<th>
+											<div class="subth">Đơn Giá</div>
+										</th>
+										<th>
+											<div class="subth">Số Lượng</div>
+										</th>
+										<th>
+											<div class="subth">Thành Tiền</div>
+										</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -76,64 +90,88 @@
 
 
 
-									<tr class="text-center" ng-repeat="item in items">
+									<tr class="text-left" ng-repeat="item in items">
 										<td>
-											<input ng-if="item.quantity <= item.productDetail.quantity" type="checkbox" ng-checked="item.isSelected"
-												ng-click="checkOne($index)"/>
+											<input ng-if="item.quantity <= item.productDetail.quantity" type="checkbox"
+												ng-checked="item.isSelected" ng-click="checkOne($index)" />
 										</td>
 
-										<td class="image-prod">
-											<div class="img" style="background-image:url(/asset/user/img/wave.jpg);">
+										<td class="image-prod ">
+
+											<div class="d-flex">
+												
+													<img src="/asset/user/img/wave.jpg" alt="">
+												
+												
+													<span  style="max-width: 300px; overflow: hidden;display: -webkit-box;
+												-webkit-box-orient: vertical;
+												-webkit-line-clamp: 3;" class="ml-3 text-left align-middle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora minima asperiores labore dolorem iusto, incidunt eum? Impedit necessitatibus dolor odit pariatur harum, maiores sequi! Error facilis temporibus debitis voluptatibus tenetur!{{item.product.productName}}</span>
+													<div ng-if="item.quantity > item.productDetail.quantity"
+														class="alert alert-warning" role="alert">
+														Hết hàng rồi
+													</div>
+												
+
+
 											</div>
-										</td>
 
-										<td class="product-name">
+										</td>
+										
+
+										<!-- <td class="product-name">
 											<h3>{{item.product.productName}}</h3>
-											<!-- <p>Far far away, behind the word mountains, far from the countries</p> -->
-											<div ng-if="item.quantity > item.productDetail.quantity" class="alert alert-warning" role="alert">
-												Hết hàng rồi
-											  </div>
+											 <p>Far far away, behind the word mountains, far from the countries</p> -->
+										<div ng-if="item.quantity > item.productDetail.quantity"
+											class="alert alert-warning" role="alert">
+											Hết hàng rồi
+										</div>
 										</td>
 										<td>
-											<div class="dropdown">
-												<a class="btn btn-primary dropdown-toggle" role="button"
-													id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-													aria-expanded="false">
-													{{item.productDetail.color.colorName}}
-												</a>
+											<div class="row text-left">
 
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item" style="color: black;"
-														ng-repeat="c in item.colors| unique:'colorName' "
-														ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
-														ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
-														{{c.colorName}}
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1">
+
+													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
+														data-toggle="dropdown" aria-haspopup="true"
+														aria-expanded="false">
+														Màu: {{item.productDetail.color.colorName}}
 													</a>
 
+
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+														<a class="dropdown-item" style="color: black; width: 20px;"
+															ng-repeat="c in item.colors| unique:'colorName' "
+															ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
+															ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
+															{{c.colorName}}
+														</a>
+
+													</div>
+												</div>
+
+
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1">
+													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
+														data-toggle="dropdown" aria-haspopup="true"
+														aria-expanded="false">
+														Size: {{item.productDetail.size.sizeNumber}}
+													</a>
+
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+														<a class="dropdown-item" style="color: black;"
+															ng-repeat="s in item.sizes| unique:'sizeNumber'"
+															ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
+															ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
+															{{s.sizeNumber}}
+														</a>
+
+													</div>
 												</div>
 											</div>
-
 										</td>
-										<td>
-											<div class="dropdown">
-												<a class="btn btn-primary dropdown-toggle" role="button"
-													id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-													aria-expanded="false">
-													{{item.productDetail.size.sizeNumber}}
-												</a>
-
-												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<a class="dropdown-item"  style="color: black;"
-														ng-repeat="s in item.sizes| unique:'sizeNumber'"
-														ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
-														ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
-														{{s.sizeNumber}}
-													</a>
-
-												</div>
-											</div>
-											<!--  -->
-											<!-- <div class="container mt-5">
+										<!-- <td> -->
+										<!--  -->
+										<!-- <div class="container mt-5">
 
 												<div class="dropdown">
 
@@ -156,12 +194,12 @@
 													</div>
 												</div>
 											</div> -->
-										</td>
+										<!-- </td> -->
 
-										<td class="price">{{item.product.price}}</td>
+										<td class="price text-left"><span>{{item.product.price}}</span></td>
 
 										<td class=" ftco-cart quantity">
-											<div class="input-group mb-7">
+											<div class="input-group  d-flex" style="width: 60%;">
 												<button class="btn btn-primary quantity-left-minus"
 													ng-click="updateQuantity($index, 0)"
 													ng-disabled="item.quantity==1"><span>
@@ -183,26 +221,16 @@
 											</div>
 										</td>
 
-										<td class="total">{{item.product.price*item.quantity}}</td>
-										<td class="product-remove"><a href="#">X</a></td>
+										<td class="total text-left">{{item.product.price*item.quantity}}</td>
+										<td class="product-remove "><a href="#">X</a></td>
 									</tr><!-- END TR-->
 								</tbody>
 							</table>
 						</div>
-						
+
 					</div>
-					<div class="col-lg-4 .ftco-cart cart-wrap ftco-animate">
-						<!-- <div class="cart-total mb-3">
-							<h3>Mã Giảm Giá</h3>
-							<p>Nhập mã giảm giá mà bạn đang có để áp dụng giảm giá</p>
-							<form action="#" class="info">
-								<div class="form-group">
-									<label for="">Mã giảm giá</label>
-									<input type="text" class="form-control text-left px-3" placeholder="">
-								</div>
-							</form>
-							<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp dụng</a></p>
-						</div> -->
+					<!-- <div class="col-lg-4 .ftco-cart cart-wrap ftco-animate">
+					
 						<div class="cart-total mb-3">
 							<h3>Vận Chuyển</h3>
 							<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
@@ -213,18 +241,7 @@
 							<div class="collapse" id="collapseExample">
 								<div class="card card-body">
 									<form action="#" class="info">
-										<!-- <div class="form-group">
-											<label for="">Tỉnh/Thành Phố</label>
-											<input type="text" class="form-control text-left px-3" placeholder="">
-										</div>
-										<div class="form-group">
-											<label for="country">Quận/Huyện</label>
-											<input type="text" class="form-control text-left px-3" placeholder="">
-										</div>
-										<div class="form-group">
-											<label for="country">Phường/Xã</label>
-											<input type="text" class="form-control text-left px-3" placeholder="">
-										</div> -->
+									
 
 										<div class="form-group">
 											<label for="">Tỉnh/Thành Phố</label>
@@ -284,44 +301,110 @@
 							<p><a th:href="@{/checkout}" ng-if="checkButton()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
 						</div>
 
-					</div>
+					</div> -->
 
 
 					<!-- <div class=" justify-content-end"> -->
-					<div class="col-lg-8 mt-5 cart-wrap ftco-animate">
 
-					</div>
-					<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-
-					</div>
 				</div>
-				<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				<div class="row mt-3">
+					<!-- <div class="col-lg-6 .ftco-cart cart-wrap ftco-animate">
+					
+						<div class="cart-total mb-3">
+							<h3>Vận Chuyển</h3>
+							<p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button"
+									aria-expanded="false" aria-controls="collapseExample">Nhập vào địa chỉ của bạn để
+									ước
+									tính phí ship</a></p>
 
-					<div class="cart-total mb-3">
-						<h3>Estimate shipping and tax</h3>
-						<p>Enter your destination to get a shipping estimate</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Country</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
+							<div class="collapse" id="collapseExample">
+								<div class="card card-body">
+									<form action="#" class="info">
+									
+
+										<div class="form-group">
+											<label for="">Tỉnh/Thành Phố</label>
+											<select class="form-control form-control-lg address" id="province"
+												ng-model="selectedProvince"
+												ng-options="province.ProvinceName for province in provinces"
+												ng-change="loadDistricts()"
+												>
+												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Quận/Huyện</label>
+											<select class="form-control form-control-lg" id="district"
+												ng-model="selectedDistrict"
+												ng-options="district.DistrictName for district in selectedProvince.Districts"
+												ng-change="loadWards()"
+												ng-disabled="selectedProvince.Districts==null">
+												<option value="" disabled selected>Chọn Quận/Huyện</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="">Phường/Xã</label>
+											<select class="form-control form-control-lg" id="ward"
+												ng-model="selectedWard"
+												ng-options="ward.WardName for ward in selectedDistrict.Wards">
+												<option value="" disabled selected>Chọn Phường/Xã</option>
+											</select>
+										</div>
+
+
+									</form>
+									<p><a ng-click="calculateShipping()" class="btn btn-primary py-3 px-4">Áp Dụng</a></p>
+								</div>
 							</div>
-							<div class="form-group">
-								<label for="country">State/Province</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
+
+						</div>
+						
+
+					</div> -->
+
+
+					<!-- <div class=" justify-content-end"> -->
+					<div class="col-lg-12  ftco-animate ">
+
+						<div class="cart-total mb-3 " style="background-color: #fff;">
+							<div class="row">
+
+								<div class="col-md-7">
+
+								</div>
+
+								<div class="col-md-5">
+
+									<h3>Tổng Cộng Giỏ Hàng</h3>
+									<p class="d-flex">
+										<span>Thành Tiền</span>
+										<span class="text-right">$20.60</span>
+									</p>
+									<p class="d-flex">
+										<span>Phí Ship</span>
+										<span class="text-right">{{shippingFee}}</span>
+									</p>
+									<p class="d-flex">
+										<span>Giảm Giá</span>
+										<span class="text-right">$3.00</span>
+									</p>
+									<hr>
+									<p class="d-lg-flex total-price">
+										<span>Tổng Tiền</span>
+										<span class="text-right">{{tongTien}}</span>
+									</p>
+									<p><a ng-click="checkout()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh
+											Toán</a></p>
+								</div>
 							</div>
-							<div class="form-group">
-								<label for="country">Zip/Postal Code</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
+
+						</div>
 					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
-				</div> -->
 
-
-				<!-- </div> -->
+				</div>
 			</div>
-		</section>
+	</div>
+	</section>
 	</div>
 
 	<div ng-show="page==false" style="display: flex; justify-content: center;">
@@ -332,7 +415,7 @@
 	</div>
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
-		<div class="container py-4">
+		<div class="container py-4" style="background-color: #fff;">
 			<div class="row d-flex justify-content-center py-5">
 				<div class="col-md-6">
 					<h2 style="font-size: 22px;" class="mb-0">Subcribe to our Newsletter</h2>
@@ -361,7 +444,6 @@
 
 		</div>
 	</footer>
-
 
 
 	<!-- loader -->

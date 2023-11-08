@@ -3,14 +3,10 @@
 	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-
-<title>STS || TRANG CHỦ</title>
-
+<title>SUS || TRANG CHỦ</title>
 </head>
 
-<body ng-app="app" ng-controller="index-ctrl">
-
-
+<body ng-controller="index-ctrl">
 	<section class="w3l-banner-slider-main">
 		<div class="top-header-content">
 			<header class="tophny-header">
@@ -147,8 +143,8 @@
 						</h4>
 					</div>
 				</div>
-
 			</div>
+		</div>
 	</section>
 
 	<div class="right-sidebar-panel-content animated fadeInRight"
@@ -175,24 +171,22 @@
 					<!---728x90--->
 
 				</div>
-				<div class="welcome-grids row mt-5">
+				<div class="welcome-grids row mt-5" ng-if="brans.length > 0">
 					<div class="col-lg-2 col-md-4 col-6 welcome-image"
-						th:each="brand : ${brands}">
+						ng-repeat="brand in brans">
 						<div class="boxhny13">
-							<a th:value="${brand.brandID}"
-								th:href="@{|/list_products?bid=${brand.brandID}|}"> <img
-								th:src="@{|${brand.brandImage}|}" class="img-fluid" alt="" />
+							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
+								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
 								<div class="boxhny-content">
-									<h3 class="title">Xem
+									<h3 class="title">Xem</h3>
 								</div>
 							</a>
 						</div>
 						<h4>
-							<a th:value="${brand.brandID}"
-								th:href="@{|/list_products?bid=${brand.brandID}|}"
-								th:text="${brand.brandName}"></a>
+							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
 						</h4>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -236,7 +230,8 @@
 							</a>
 							<div id="small-dialog" class="mfp-hide">
 								<div class="search-top notify-popup">
-									<iframe src="https://www.youtube.com/embed/uZnDo6SrAQU?si=sG0xcFj0i_8brP9w1"
+									<iframe
+										src="https://www.youtube.com/embed/uZnDo6SrAQU?si=sG0xcFj0i_8brP9w1"
 										frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 								</div>
 							</div>
@@ -258,63 +253,178 @@
 		</div>
 	</section>
 	<!-- //video-6-->
-	<section class="w3l-ecommerce-main">
+	<section class="w3l-ecommerce-main" ng-show="featureds.length > 0">
 		<!-- /products-->
 		<div class="ecom-contenthny py-5">
-			<div class="container py-lg-5">
-				<div style="margin: 8px auto; display: block; text-align: center;">
-
-					<!---728x90--->
-
-				</div>
+			<div class="container">
 				<h3 class="hny-title mb-0 text-center">
 					SẢN PHẨM <span>NỔI BẬT</span>
 				</h3>
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
-				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div th:each="product : ${featuredProducts}"
+				<div class="ecom-products-grids row ">
+					<div ng-repeat="p in FeaturedPager.featureds"
 						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv">
-							<div class="product-image2">
-								<a
-									th:href="@{/single_product/{productID}(productID=${product.productID})}">
-									<img class="pic-1 img-fluid"
-									th:src="@{${product.productImages[0].imagePath}}"> <img
-									class="pic-2 img-fluid"
-									th:src="@{${product.productImages[0].imagePath}}">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
+							<div class="product-image2" style="position: relative;">
+								<div class="discount-circle"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+									p.discount[0].directDiscount }}%</div>
+								<a ng-click="goToSinglePage(p.productID)"> <img
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li><a href="#" data-tip="Quick View"><span
-											class="fa fa-eye"></span></a></li>
-									<li><a href="list_products.html" data-tip="Favorite"><span
-											class="fa fa-heart"></span></a></li>
+									<li> 
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
 								</ul>
 								<div class="transmitv single-item">
-									<form action="#" method="post">
-										<button type="submit"
-											class="transmitv-cart ptransmitv-cart add-to-cart">Add
-											to Cart</button>
-									</form>
+									<a ng-click="goToSinglePage(p.productID)" type="submit"
+										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+										chi tiết </a>
 								</div>
 							</div>
 							<div class="product-content">
 								<h3 class="title">
-									<a
-										th:href="@{/single_product/{productID}(productID=${product.productID})}"
-										th:text="${product.productName}"></a>
+									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
+										}}</a>
+										
 								</h3>
-								<span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0 , 'POINT')} + ' ₫'"></span>
+								
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 							</div>
 						</div>
 					</div>
-
 				</div>
+				<!--/pagination-->
+				<div class="custom-pagination" style="margin: 0px 10px 20px;">
+					<ul>
+						<li class="custom-prev"><a ng-click="FeaturedPager.first()">
+								<span class="fa fa-angle-double-left"></span>
+						</a></li>
+						<li class="custom-page-item"
+							ng-repeat="page in FeaturedVisiblePages"
+							ng-class="{ 'custom-active': (page.value === FeaturedPager.page + 1) }">
+							<a class="custom-page-link" href=""
+							ng-click="FeaturedPager.FeaturedGoto(page.value)"
+							ng-style="(page.value === (FeaturedPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {})">
+								{{ page.value }} </a>
+						</li>
+						<li class="custom-next"><a ng-click="FeaturedPager.last()">
+								<span class="fa fa-angle-double-right"></span>
+						</a></li>
+					</ul>
+				</div>
+
+
+				<!--//pagination-->
 				<!-- //row-->
 			</div>
 		</div>
 	</section>
 	<!-- //products-->
+
+	<!-- 	sản phẩm sắp giảm giá bắt đầu -->
+	<section class="w3l-ecommerce-main" ng-show="discountedProducts.length > 0">
+		<!-- /products-->
+		<div class="ecom-contenthny pb-5">
+			<div class="container">
+				<h3 class="hny-title mb-0 text-center">
+					SẢN PHẨM <span>SẮP GIẢM GIÁ</span>
+				</h3>
+				<p class="text-center">Lựa chọn khung thời gian phù hợp để săn deal shock nhé!</p>
+				<!-- /row-->
+				<div class="ecom-products-grids row ">
+					<div ng-repeat="p in DiscountPager.discountedProducts"
+						class="col-lg-3 col-6 product-incfhny mt-4">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
+							<div class="product-image2" style="position: relative;">
+								<div class="discount-circle"
+									ng-if="p.discount[0].status === 'Chưa diễn ra' && p.discount[0].priceDiscount">{{
+									p.discount[0].directDiscount }}%</div>
+								<a ng-click="goToSinglePage(p.productID)"> <img
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
+								</a>
+								<ul class="social">
+									<li><span ng-if="isFavorited(p.productID)"
+										ng-click="check(p)" class="fa fa-heart liked"
+										style="font-size: 24px; color: red;"></span> <span
+										ng-if="!isFavorited(p.productID)"
+										ng-click="check(p)" class="fa fa-heart-o liked"
+										style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
+								</ul>
+								<div class="transmitv single-item">
+									<a ng-click="goToSinglePage(p.productID)" type="submit"
+										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+										chi tiết </a>
+								</div>
+							</div>
+							<div class="product-content">
+								<h3 class="title">
+									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
+										}}</a>
+								</h3>
+								
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Chưa diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Chưa diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
+									<h3 class="title">Còn lại: <span class="title" id="countdown_{{$index}}"></span> </h3>
+									
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--/pagination-->
+				<div class="custom-pagination" style="margin: 0px 10px 20px;">
+					<ul>
+						<li class="custom-prev"><a ng-click="DiscountPager.first()">
+								<span class="fa fa-angle-double-left"></span>
+						</a></li>
+						<li class="custom-page-item"
+							ng-repeat="page in DiscountVisiblePages"
+							ng-class="{ 'custom-active': (page.value === DiscountPager.page + 1) }">
+							<a class="custom-page-link" href=""
+							ng-click="DiscountPager.DiscountGoto(page.value)"
+							ng-style="(page.value === (DiscountPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {})">
+								{{ page.value }} </a>
+						</li>
+						<li class="custom-next"><a ng-click="DiscountPager.last()">
+								<span class="fa fa-angle-double-right"></span>
+						</a></li>
+					</ul>
+				</div>
+
+
+				<!--//pagination-->
+				<!-- //row-->
+			</div>
+		</div>
+	</section>
+<!-- 	sản phẩm sắp giảm giá kết thúc -->
 	<section class="w3l-content-5">
 		<!-- /content-6-section -->
 		<div class="content-5-main">
@@ -324,7 +434,8 @@
 						<h3 class="hny-title two">
 							Sản phẩm dành riêng cho phái nữ <span>HOT</span>
 						</h3>
-						<p>Cửa hàng không chỉ phục vụ mỗi nam giới mà nữ giới cũng được </p>
+						<p>Cửa hàng không chỉ phục vụ mỗi nam giới mà nữ giới cũng
+							được</p>
 						<a href="list_products.html" class="read-more-btn2 btn"> Shop
 							Now </a>
 					</div>
@@ -457,54 +568,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c4.jpg" class="img-fluid"
-														alt="">
-													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
 									</div>
 									<!--.row-->
 								</div>
@@ -524,54 +587,6 @@
 													<img src="asset/user/images/c4.jpg" class="img-fluid"
 														alt="">
 													<h5>John Lee</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c3.jpg" class="img-fluid"
-														alt="">
-													<h5>Laura Sten</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c1.jpg" class="img-fluid"
-														alt="">
-													<h5>Smith Roy</h5>
-
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
-												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c2.jpg" class="img-fluid"
-														alt="">
-													<h5>Lora Grill</h5>
 
 												</div>
 											</div>

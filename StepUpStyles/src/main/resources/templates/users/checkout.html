@@ -55,19 +55,22 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 cart-wrap ftco-animate">
+					<!-- Button trigger modal -->
+  
+ 
 					<div style="border-top: 3px tomato solid;" class="cart-total mb-3">
 						<div class="row">
 							<div class="col-lg-9">
-								
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
+								
 								<h3>{{addressDefault.user.fullName}} | 09089765989 <span class="badge badge-danger">Mặc
 										Định</span></h3> <span>{{addressDefault.addressDetails}},
 									{{addressDefault.ward}}, {{addressDefault.district}},
 									{{addressDefault.province}}</span>
 							</div>
 							<div class="col-lg-3">
-								<span><a style="color: white;" type="button" data-toggle="modal" data-target="#myModal"
+								<span><a style="color: white;" type="button" data-toggle="modal" data-target="#ModalAddress1"
 										class="btn btn-primary py-3 px-4"><i class="fas fa-edit"></i> Thay
 										Đổi</a></span>
 							</div>
@@ -75,9 +78,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="container">
+			<!-- ------------------------------------------------------------------------ -->
+			<div class="container " >
 				<!-- The Modal -->
-				<div class="modal fade" id="myModal">
+				<div class="modal fade" id="ModalAddress1" data-keyboard="false" data-backdrop="static">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 
@@ -106,7 +110,7 @@
 
 									<div class="col-lg-3">
 										<span><a style="color: white;" type="button" data-toggle="modal"
-												data-target="#myModal" class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
+												data-target="#ModalAdress"  data-dismiss="modal" class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
 													class="fas fa-edit"></i> Thay Đổi</a></span>
 									</div>
 									<hr>
@@ -129,11 +133,10 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- *************************************Form address************************************* -->
 			<div class="container " >
 				<!-- The Modal -->
-				<div class="modal fade" id="ModalAddress" data-keyboard="false" data-backdrop="static">
+				<div class="modal fade addressform" id="ModalAddress" data-keyboard="false" data-backdrop="static">
 					<div class="modal-dialog modal-md">
 						<div class="modal-content">
 
@@ -209,11 +212,12 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(form.checked,form.name,form.phone,form.addressDetail)"><i class="fa fa-plus"></i> Luu</a>
+									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(form.checked,form.nameReceiver,form.phone,form.addressDetails)"><i class="fa fa-plus"></i> Luu</a>
 								</div>
-								<div style=" justify-content: start">
-									<a type="button" ng-if="check!=false" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#myModal">Close</a>
+								<div style="justify-content: start">
+									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal" data-target="#ModalAddress1" data-dismiss="modal">Close</a>
 								</div>
+								
 							</div>
 
 						</div>
@@ -222,139 +226,52 @@
 			</div>
 
 			<div class="row">
-				<!-- <div class="col-lg-6  cart-wrap ftco-animate">
-
-					<div class="cart-total mb-3">
-						<h3>Vận Chuyển</h3>
-						<p>Nhập vào địa chỉ của bạn để ước tính phí ship</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Tỉnh/Thành Phố</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">Quận/Huyện</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">Phường/Xã</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
-						<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp Dụng</a></p>
-					</div>
-				</div> -->
+				
 				<div class="col-lg-12 ftco-animate">
 					<div class="cart-total mb-3">
-						<table align="left" class="table table-checkout">
-							<thead class="thead-primary">
-								<tr class="text-center">
+						<div class=" row navtable text-center">
+							<div class="col-lg-4">Sản phẩm</div>
+							<div class="col-lg-2">Thuộc tính</div>
+							<div class="col-lg-2">đơn giá</div>
+							<div class="col-lg-2">Số lượng</div>
+							<div class="col-lg-2">Thành tiền</div>
 
-									<th>Sản Phẩm</th>
-									<th></th>
-									<th>Màu</th>
-									<th>Kích thước</th>
-									<th>Thành Tiền</th>
-
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="text-center" ng-repeat="iCart in cartIs">
-									<td class="image-prod">
-										<div class="img" style="background-image:url(/asset/user/img/cartbg1.jpg);">
-										</div>
-									</td>
-									<td><span>
-											<p>Bell Pepper</p>
-										</span></td>
-									<td>Red</td>
-									<td>33</td>
-
-
-									<td class="total">$4.90000</td>
-									<!-- <td class="product-remove"><a href="#">X</a></td> -->
-								</tr><!-- END TR-->
-								<tr class="text-center">
-									<td class="image-prod">
-										<div class="img" style="background-image:url(/asset/user/img/cartbg1.jpg);">
-										</div>
-									</td>
-									<td><span>
-											<p>Bell Pepper</p>
-										</span></td>
-									<td>Red</td>
-									<td>33</td>
-
-
-									<td class="total">$4.90000</td>
-									<!-- <td class="product-remove"><a href="#">X</a></td> -->
-								</tr><!-- END TR-->
-
-								<!-- TR TOTAl -->
-
-								<tr class="ck-left">
-									<td colspan="5">
-										<div class="cart-total mb-3">
-											<h3>Tổng Cộng Giỏ Hàng</h3>
-											<p class="d-flex">
-												<span>Thành Tiền</span>
-												<span>$20.60</span>
-											</p>
-											<p class="d-flex">
-												<span>Phí Ship</span>
-												<span>$0.00</span>
-											</p>
-											<p class="d-flex">
-												<span>Giảm Giá</span>
-												<span>$3.00</span>
-											</p>
-											<hr>
-											<p class="d-lg-flex total-price">
-												<span>Tổng Tiền</span>
-												<span>$17.60</span>
-											</p>
-											<p><a ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh
-													Toán</a></p>
-										</div>
-									</td>
-
-									<!-- <td colspan="2">
-										<h3>Tổng Thành Tiền</h3>
-									</td>
-									<td colspan="2" class="total">$4.90000</td> -->
-
-								</tr>
-
-								<tr class="ck-left">
-									<td></td>
-									<td colspan="2">
-										<h3>Phí Ship</h3>
-									</td>
-									<td colspan="2" class="total">$4.90000</td>
-
-								</tr>
-
-								<tr class="ck-left">
-									<td></td>
-									<td colspan="2">
-										<h3>Giảm Giá</h3>
-									</td>
-									<td colspan="2" class="total">$4.90000</td>
-
-								</tr>
-
-								<tr class="ck-left">
-									<td></td>
-									<td colspan="2">
-										<h3>Tổng Thanh Toán</h3>
-									</td>
-									<td colspan="2" class="total">$4.90000</td>
-
-								</tr>
-
-
-							</tbody>
-						</table>
+						</div>
+						<div class="card">
+							
+							<div class="card-body">
+								
+							  <div class="row mb-2 text-center" style="width:pad;" ng-repeat="iCart in cartIs">
+								<div class="col-lg-4 d-flex align-items-center ">
+									<img src="/asset/user/img/cartbg1.jpg" style="padding-left: 0;" width="100px" alt="">
+										<span style=" overflow: hidden;     display: -webkit-box;
+										-webkit-box-orient: vertical;
+										-webkit-line-clamp: 2;" class="ml-2">{{iCart.product.productName}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione suscipit alias sint saepe facere dolores adipisci cupiditate in eius doloribus, temporibus perspiciatis, modi cum quae obcaecati amet libero! Eos, quaerat.</span>
+								</div>
+								<div class="col-lg-2 align-items-center">
+									
+									<p>Size: {{iCart.productDetail.size.sizeNumber}}, </p>
+									<p>Màu: {{iCart.productDetail.color.colorName}}</p>
+									
+								</div>
+								<div class="col-lg-2  align-items-center">
+									{{iCart.product.price}}
+									</p>
+									
+								</div> 
+								<div class="col-lg-2  align-items-center">
+									x{{iCart.quantity}}
+									
+									
+								</div>
+								<div class="col-lg-2  align-items-center" style="position: relative;">
+									<h3 >{{iCart.product.price * iCart.quantity}}</h3>
+								</div>
+								<hr class="col-lg-11 ">
+							  </div>
+							</div>
+						  </div>
+						
 					</div>
 				</div>
 
@@ -381,7 +298,8 @@
 							<span>Tổng Tiền</span>
 							<span>$17.60</span>
 						</p>
-						<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+						<p><a href="checkout.html"ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+						<p><a ng-click="getDataPayment()" th:href ="@{/submitOrder}" class="btn btn-primary py-3 px-4">vnpayn</a></p>
 					</div>
 				</div>
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
