@@ -1,7 +1,5 @@
 package com.sts.dao;
 
-import com.sts.dto.respone.OneUserForSecurity;
-import com.sts.dto.respone.UserForSecurity;
 import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 import com.sts.model.DTO.OneUserForSecurity;

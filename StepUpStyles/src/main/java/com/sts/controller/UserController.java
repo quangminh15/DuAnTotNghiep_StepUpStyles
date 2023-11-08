@@ -75,4 +75,9 @@ public class UserController {
 		model.addAttribute("messageLoginFail", "Thông tin chưa đúng");
 		return "users/LoginSTS";
 	}
+
+	@RequestMapping("/profile")
+	public String profile(Model model) {
+		return "users/profile";
+	}
 }
