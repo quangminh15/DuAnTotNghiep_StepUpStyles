@@ -40,6 +40,7 @@ Author URL: http://w3layouts.com
    margin-bottom: 0rem;
    font-family: 'Lato', sans-serif;
    padding: 0;
+     font-size: 1.4rem;
  }
  
  .form-control:focus {
@@ -10428,7 +10429,7 @@ Author URL: http://w3layouts.com
    line-height: 1.5;
    color: #212529;
    text-align: left;
-   background-color: #fff;
+   background-color: #F1F2F7;
  }
  
  [tabindex="-1"]:focus:not(:focus-visible) {

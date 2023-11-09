@@ -1,6 +1,7 @@
 package com.sts.service;
 
 import com.sts.model.Brand;
+import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 
@@ -20,4 +21,6 @@ public interface UserService {
 	List<User> searchByName(String keyword);
 
 	Integer getUserIdCurrent();
+
+	DResponseUser getUserByEmail(String email);
 }

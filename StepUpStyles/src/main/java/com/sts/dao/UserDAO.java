@@ -1,5 +1,6 @@
 package com.sts.dao;
 
+import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 import com.sts.model.DTO.OneUserForSecurity;
@@ -28,4 +29,6 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 	@Query(value = "select u from User u")
 	List<LResponseUser> findAllUser();
 
+	@Query(value = "SELECT u FROM User u WHERE u.email = ?1" ,nativeQuery = false)
+	DResponseUser getUserByEnail(String email);
 }

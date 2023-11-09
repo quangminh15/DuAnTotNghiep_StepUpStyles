@@ -1,5 +1,7 @@
 package com.sts.controller;
 
+import com.sts.model.DTO.DResponseUser;
+import com.sts.model.User;
 import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,6 +80,13 @@ public class UserController {
 
 	@RequestMapping("/profile")
 	public String profile(Model model) {
+		Integer id = userService.getUserIdCurrent();
+		if(id == null){
+			return "redirect:/loginSTS";
+		}
+		User user = userService.findById(id);
+		DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
+		model.addAttribute("UserProfile", dResponseUser);
 		return "users/profile";
 	}
 }
