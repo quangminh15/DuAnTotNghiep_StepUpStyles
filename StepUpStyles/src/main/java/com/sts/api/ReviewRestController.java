@@ -1,5 +1,6 @@
 package com.sts.api;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.model.Product;
 import com.sts.model.Review;
+import com.sts.model.User;
 import com.sts.model.DTO.TotalProductRatingDTO;
 import com.sts.service.ProductService;
 import com.sts.service.ReviewService;
@@ -38,29 +41,47 @@ public class ReviewRestController {
     }
 
     @PostMapping("/rest/reviews/create/{productID}")
-    public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID){
-        try {
-            reviewService.createReview(review);
-            return new ResponseEntity<>("Đánh giá đã được tạo thành công.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Lỗi khi tạo đánh giá.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID) {
+    try {
+        User user = uService.findById(3);       
+        Product product = pService.findById(productID);
+        if (product == null) {
+            return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
         }
+        
+        // Lưu đánh giá vào cơ sở dữ liệu
+        review.setUser(user);
+        review.setProduct(product);
+        reviewService.createReview(review);
+        
+        // Lưu đường dẫn đến các hình ảnh liên quan đến đánh giá
+        // for (String imagePath : review.getImagePaths()) {
+        //     // Lưu imagePath vào cơ sở dữ liệu, liên kết nó với đánh giá
+        //     // Lưu trữ logic xử lý hình ảnh trên máy chủ của bạn
+            
+        // }
+        
+        return new ResponseEntity<>("Đánh giá đã được tạo thành công.", HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>("Lỗi khi tạo đánh giá.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
 
     @GetMapping("/rest/reviews/{reviewID}")
     public Review getReviewID(@PathVariable("reviewID") Integer reviewID){
             return reviewService.findById(reviewID);
         }
 
-    @PutMapping("/rest/reviews/{reviewId}/hide")
-    public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId) {
-            boolean success = reviewService.hidReview(reviewId);
-            if (success) {
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        }
+    // @PutMapping("/rest/reviews/{reviewId}/hide")
+    // public ResponseEntity<?> hideReviews(@PathVariable("reviewId") Integer reviewId) {
+    //         boolean success = reviewService.hidReview(reviewId);
+    //         if (success) {
+    //             return ResponseEntity.ok().build();
+    //         } else {
+    //             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    //         }
+    //     }
     @GetMapping("/rest/reviews/loadbyproducts/{productId}")
 	public List<Review> getProductByProduct(@PathVariable Integer productId) {
 		return reviewService.getProductByProductId(productId);
