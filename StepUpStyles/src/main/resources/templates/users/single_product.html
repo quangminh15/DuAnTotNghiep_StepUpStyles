@@ -37,6 +37,7 @@
 									</li>
 								</th:block>
 							</ul>
+
 							<div class="clearfix"></div>
 						</div>
 						<div class="eco-buttons mt-5">
@@ -231,59 +232,50 @@
 
 				</div>
 				<!-- /row-->
-				<div class="splide">
-					<div class="splide__track">
-						<div class="splide__list">
-							<div class="splide__slide ml-3" ng-repeat="p in productDetailss">
-								<div class="ecom-products-grids mt-lg-5 mt-3">
-									<div class="product-incfhny mt-4">
-										<div class="product-grid2 transmitv"
-											ng-click="saveProductID(p.productID)">
-											<div class="product-image2" style="position: relative;">
-												<div class="discount-circle"
-													ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
-													p.discount[0].directDiscount }}%</div>
-												<a ng-click="goToSinglePage(p.productID)"> <img
-													class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
-													<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
-													ng-src="{{p.image[1].imagePath}}"> <img
-													ng-if="p.image.length <= 1" class="pic-2 img-fluid"
-													ng-src="{{p.image[0].imagePath}}">
-												</a>
-												<ul class="social">
-													<li><span ng-if="isFavorited(p.productID)"
-														ng-click="check(p.productID)" class="fa fa-heart liked"
-														style="font-size: 24px; color: red;"></span> <span
-														ng-if="!isFavorited(p.productID)"
-														ng-click="check(p.productID)"
-														class="fa fa-heart-o not-liked"
-														style="font-size: 24px; color: red; font-weight: bold;"></span>
-													</li>
-												</ul>
-												<div class="transmitv single-item">
-													<a ng-click="goToSinglePage(p.productID)" type="submit"
-														class="transmitv-cart ptransmitv-cart add-to-cart">
-														Xem chi tiết </a>
-												</div>
-											</div>
-											<div class="product-content">
-												<h3 class="title">
-													<a ng-click="goToSinglePage(p.productID)">{{
-														p.productName }}</a>
-												</h3>
-												<span class="price"
-													ng-if="p.discount[0].priceDiscount == null"> {{
-													p.price | number:0 }} ₫</span> <span class="price"
-													ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
-													<del>{{ p.price | number:0 }} ₫</del> {{
-													p.discount[0].priceDiscount | number:0 }} ₫
-												</span> <span class="price"
-													ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
-													{{ p.price | number:0 }} ₫ </span>
-											</div>
-										</div>
-									</div>
+				<div class="ecom-products-grids row mt-lg-5 mt-3">
+					<div ng-repeat="p in productDetailss"
+						class="col-lg-3 col-6 product-incfhny mt-4">
+						<div class="product-grid2 transmitv"
+							ng-click="saveProductID(p.productID)">
+							<div class="product-image2" style="position: relative;">
+								<div class="discount-circle"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+									p.discount[0].directDiscount }}%</div>
+								<a ng-click="goToSinglePage(p.productID)"> <img
+									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[1].imagePath}}"> <img
+									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+									ng-src="{{p.image[0].imagePath}}">
+								</a>
+								<ul class="social">
+									<li><span ng-if="isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart liked"
+										style="font-size: 24px; color: red;"></span> <span
+										ng-if="!isFavorited(p.productID)"
+										ng-click="check(p.productID)" class="fa fa-heart-o not-liked"
+										style="font-size: 24px; color: red; font-weight: bold;"></span>
+									</li>
+								</ul>
+								<div class="transmitv single-item">
+									<a ng-click="goToSinglePage(p.productID)" type="submit"
+										class="transmitv-cart ptransmitv-cart add-to-cart"> Xem
+										chi tiết </a>
 								</div>
+							</div>
+							<div class="product-content">
+								<h3 class="title">
+									<a ng-click="goToSinglePage(p.productID)">{{ p.productName
+										}}</a>
+								</h3>
+								<span class="price" ng-if="p.discount[0].priceDiscount == null">
+									{{ p.price | number:0 }} ₫</span> <span class="price"
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									<del>{{ p.price | number:0 }} ₫</del> {{
+									p.discount[0].priceDiscount | number:0 }} ₫
+								</span> <span class="price"
+									ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{ p.price | number:0 }} ₫ </span>
 							</div>
 						</div>
 					</div>
