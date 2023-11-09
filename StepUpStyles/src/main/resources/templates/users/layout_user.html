@@ -46,7 +46,9 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+<!-- splide bắt đầu -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css" />
+<!-- splide kết thúc -->
 <style type="text/css">
 /* nút lọc của trang sản phẩm START */
 .custom-button-container {
@@ -141,6 +143,11 @@ a:hover, button:hover {
 	max-width: 90%;
 	width: 90%;
 }
+
+.splide__slide img {
+	width: 100%;
+	height: auto;
+}
 </style>
 </head>
 
@@ -229,7 +236,7 @@ a:hover, button:hover {
 			});
 		}
 
-updateFavoriteCount();
+		updateFavoriteCount();
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
@@ -302,6 +309,7 @@ updateFavoriteCount();
 	<script src="/asset/user/js/jquery.magnific-popup.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 	<!--//pop-up-box-->
 	<script>
 		$(document).ready(function() {
@@ -346,6 +354,19 @@ updateFavoriteCount();
 		});
 	</script>
 	<!-- navbar scroll -->
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var splide = new Splide('.splide', {
+			perPage : 6,
+			focus : 0,
+			omitEnd : true,
+			rewind : true,
+		});
+
+		splide.mount();
+	});
+	</script>
+
 	<!-- count cartitem -->
 </body>
 

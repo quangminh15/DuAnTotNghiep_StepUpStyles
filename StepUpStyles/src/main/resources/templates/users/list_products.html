@@ -98,59 +98,62 @@
 								<!-- bộ lọc bắt đầu -->
 								<form>
 									<!-- danh mục sản phẩm bắt đầu-->
-									<div class="single-gd mb-5" ng-if="cates.length > 0">
+									<div class="single-gd mb-2">
 										<h4 class="mb-2">
 											Danh mục <span>Sản phẩm</span>
 										</h4>
 										<ul class="list-group single">
 											<li ng-repeat="c in cates"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												<label> <input class="form-check-input"
-													type="checkbox" name="category" value="{{c.categoryID}}">
-													{{c.categoryName}} <span
-													class="badge badge-primary badge-pill" style="top: 70%">1</span>
-											</label>
+												<div class="d-flex align-items-center w-100">
+													<label class="flex-grow-1 mb-0"> <input
+														class="form-check-input" type="checkbox" name="category"
+														value="{{c.categoryID}}"> {{c.categoryName}}
+													</label> <span class="badge badge-primary badge-pill ml-2">{{getProductCountCategory(c.categoryID)}}</span>
+												</div>
 											</li>
 										</ul>
 									</div>
 									<!-- danh mục sản phẩm kết thúc-->
 
 									<!-- Thương hiệu bắt đầu-->
-									<div class="single-gd mb-5">
+									<div class="single-gd mb-2">
 										<h4 class="mb-2">
 											Thương hiệu <span>Sản phẩm</span>
 										</h4>
 										<ul class="list-group single">
 											<li ng-repeat="brand in brans"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												<label> <input class="form-check-input"
-													type="checkbox" name="brand" value="{{brand.brandID}}">
-													{{brand.brandName}} <span
-													class="badge badge-primary badge-pill" style="top: 70%">1</span>
-											</label>
+												<div class="d-flex align-items-center w-100">
+													<label class="flex-grow-1 mb-0"> <input
+														class="form-check-input" type="checkbox" name="brand"
+														value="{{brand.brandID}}"> {{brand.brandName}}
+													</label> <span class="badge badge-primary badge-pill ml-2">{{getProductCountBrand(brand.brandID)}}</span>
+												</div>
 											</li>
 										</ul>
 									</div>
 									<!-- Thương hiệu kết thúc-->
 
 									<!-- Size bắt đầu-->
-									<div class="single-gd mb-5">
+									<div class="single-gd mb-2">
 										<h4 class="mb-2">
 											Size <span>Sản phẩm</span>
 										</h4>
 										<ul class="list-group single">
 											<li ng-repeat="size in sizes"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												<label> <input class="form-check-input"
-													type="checkbox" name="size" value="{{size.sizeID}}">
-													{{size.sizeNumber}} <span
-													class="badge badge-primary badge-pill" style="top: 70%">1</span>
-											</label>
+												<div class="d-flex align-items-center w-100">
+													<label class="flex-grow-1 mb-0"> <input
+														class="form-check-input" type="checkbox" name="size"
+														value="{{size.sizeID}}"> {{size.sizeNumber}}
+													</label> <span class="badge badge-primary badge-pill ml-2">{{getSizeCount(size.sizeID)}}</span>
+												</div>
 											</li>
 										</ul>
 									</div>
 									<!-- Size kết thúc-->
-									
+
 									<!-- Màu sắc bắt đầu-->
 									<div class="single-gd mb-2">
 										<h4 class="mb-2">
@@ -159,11 +162,12 @@
 										<ul class="list-group single">
 											<li ng-repeat="color in colors"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												<label> <input class="form-check-input"
-													type="checkbox" name="color" value="{{color.colorID}}">
-													{{color.colorName}} <span
-													class="badge badge-primary badge-pill" style="top: 70%">1</span>
-											</label>
+												<div class="d-flex align-items-center w-100">
+													<label class="flex-grow-1 mb-0"> <input
+														class="form-check-input" type="checkbox" name="color"
+														value="{{color.colorID}}"> {{color.colorName}}
+													</label> <span class="badge badge-primary badge-pill ml-2">{{getColorCount(color.colorID)}}</span>
+												</div>
 											</li>
 										</ul>
 									</div>
@@ -189,30 +193,6 @@
 									</div>
 								</form>
 								<!-- bộ lọc kết thúc -->
-
-								<div class="single-gd mb-5">
-									<h4>
-										Tìm kiếm theo <span>Giá</span>
-									</h4>
-
-									<ul class="dropdown-vjm-transitu6">
-										<li>
-
-											<div id="slider-range"
-												class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-												<div class="ui-slider-range ui-widget-header"
-													style="left: 0.555556%; width: 18.5556%;"></div>
-												<a class="ui-slider-handle ui-state-default ui-corner-all"
-													href="#" style="left: 0.555556%;"></a><a
-													class="ui-slider-handle ui-state-default ui-corner-all"
-													href="#" style="left: 19.1111%;"></a>
-											</div> <input type="text" id="amount"
-											style="border: 0; color: #ffffff; font-weight: normal;">
-										</li>
-									</ul>
-
-									<!--//Gallery-imgs-->
-								</div>
 
 								<div class="single-gd left-side mb-5">
 									<h4>Đánh giá</h4>

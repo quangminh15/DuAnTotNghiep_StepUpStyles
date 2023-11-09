@@ -1,3 +1,4 @@
+
 app.controller("index-ctrl", function($scope, $http) {
 	//HAI Start
 	localStorage.removeItem('selectedItems');
@@ -26,6 +27,9 @@ app.controller("index-ctrl", function($scope, $http) {
 			}
 		}, 1000);
 	};
+
+
+
 
 	$http.get("/rest/products/loadDiscountedProducts").then(resp => {
 		$scope.discountedProducts = resp.data;
