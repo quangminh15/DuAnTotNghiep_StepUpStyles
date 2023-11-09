@@ -4,11 +4,7 @@
 <head>
 
 	<title>SUS || YÊU THÍCH</title>
-<style>
-	.favorited-heart {
-    color: red; /* Hoặc bất kỳ màu nào bạn muốn */
-}
-</style>
+
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -124,9 +120,12 @@
 						<div ng-show="userItemsFavorite">
 							<!-- Hiển thị danh sách sản phẩm yêu thích -->
 							<div class="ecom-products-grids row">
-								<div ng-repeat="item in userItemsFavorite" class="col-lg-3 col-6 product-incfhny mb-4">
+								<div ng-repeat="item in favoritePager.userItemsFavorite" class="col-lg-3 col-6 product-incfhny mb-4">
 									<div class="product-grid2 transmitv" ng-click="saveProductID(item.product.productID)">
 										<div class="product-image2">
+											<div class="discount-circle"
+											ng-if="item.product.discount[0].status === 'Đang diễn ra' && item.product.discount[0].priceDiscount">{{
+												item.product.discount[0].directDiscount }}%</div>
 											<a ng-click="goToSinglePage(item.product.productID)"> <img
 												ng-if="item.product.image[0].imagePath.length > 0" class="pic-1 img-fluid"
 												ng-src="{{item.product.image[0].imagePath}}" alt="123"> <img
@@ -134,7 +133,7 @@
 												ng-src="{{item.product.image[0].imagePath}}">
 											</a>
 											<ul class="social">
-												<li><a ng-click="deleteFavoriteProduct(item.product.productID)"><span class="fa fa-heart"></span></a></li>
+												<li><a ng-click="deleteFavoriteProduct(item.product)"><span class="fa fa-heart"></span></a></li>
 											</ul>
 											<div class="transmitv single-item">
 												<a ng-click="goToSinglePage(item.product.productID)" type="submit"
@@ -148,7 +147,15 @@
 												<a ng-click="goToSinglePage(item.product.productID)">{{
 													item.product.productName }}</a>
 											</h3>
-											<span class="price">{{ item.product.price | number:0 }} ₫</span>
+											<span class="price"
+												ng-if="item.product.discount[0].priceDiscount == null"> {{
+													item.product.price | number:0 }} ₫</span> <span class="price"
+												ng-if="item.product.discount[0].status === 'Đang diễn ra' && item.product.discount[0].priceDiscount">
+												<del>{{ item.product.price | number:0 }} ₫</del> {{
+													item.product.discount[0].priceDiscount | number:0 }} ₫
+											</span> <span class="price"
+												ng-if="item.product.discount[0].status !== 'Đang diễn ra' && item.product.discount[0].priceDiscount">
+												{{ item.product.price | number:0 }} ₫ </span>
 										</div>
 									</div>
 								</div>
@@ -158,18 +165,19 @@
 				<!--//row1-->
 
 				<!--/pagination-->
-				<!-- <div class="pagination">
+				<div class="pagination" style="margin: 0px 10px 20px;">
 					<ul>
-						<li class="prev"><a href="#page-number"><span class="fa fa-angle-double-left"></span></a>
-						</li>
-						<li><a href="#page-number" class="active">1</a></li>
-						<li><a href="#page-number">2</a></li>
-						<li><a href="#page-number">3</a></li>
-
-						<li class="next"><a href="#page-number"><span class="fa fa-angle-double-right"></span></a>
-						</li>
+						<li class="prev"><a ng-click="favoritePager.first()"><span
+								class="fa fa-angle-double-left"></span></a></li>
+						<li class="page-item" ng-repeat="page in favoriteVisiblePages"
+							ng-class="{ 'active': (page.value === favoritePager.page + 1) }"><a
+							class="page-link" ng-click="favoritePager.gotoFavorite(page.value)"
+							ng-style="page.value === (favoritePager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+								{{ page.value }} </a></li>
+						<li class="next"><a ng-click="favoritePager.last()"><span
+								class="fa fa-angle-double-right"></span></a></li>
 					</ul>
-				</div> -->
+				</div>
 				<!--//pagination-->
 
 			</div>

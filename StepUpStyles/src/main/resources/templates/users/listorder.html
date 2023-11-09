@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
+
+<head>
+
+	<title>SUS || CHI TIẾT</title>
+
+</head>
+
+<body ng-controller="order-ctrl" style="background-color: #F4F4F4;">
+	<style>
+		.menu-item:hover {
+			background-color: #bebebe;
+		}
+
+		p {
+			margin-bottom: 0;
+		}
+
+		.card {
+			border: none;
+		}
+
+		.subcard {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.125)
+		}
+	</style>
+	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
+
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
+		<!--/-->
+		<div class="ecomrhny-content-inf py-1 mt-3">
+			<div class="container py-md-3">
+
+				<div class="d-flex row text-center align-items-center">
+					<a class="col-md-3 menu-item p-1" href="">
+						<img src="/asset/user/img/e.jpg" width="10%">
+						<p>Dang xu ly</p>
+					</a>
+					<a class="col-md-3 menu-item p-1" href="">
+						<img src="/asset/user/img/e.jpg" width="10%">
+						<p>Dang xu ly</p>
+					</a>
+					<a class="col-md-3 menu-item p-1" href="">
+						<img src="/asset/user/img/e.jpg" width="10%">
+						<p>Dang xu ly</p>
+					</a>
+					<a class="col-md-3 menu-item p-1" href="">
+						<img src="/asset/user/img/e.jpg" width="10%">
+						<p>Dang xu ly</p>
+					</a>
+				</div>
+
+			</div>
+		</div>
+
+
+
+	</section>
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
+		<!--/-->
+
+
+		<div class="ecomrhny-content-inf py-1 mt-3">
+			<div class="container py-md-3" ng-repeat="order in orders ">
+				<div class="accordion" id="accordionExample">
+					<div class="card">
+						<div class="card-header bg-white" id="headingOne">
+							<h2 class="mb-0 d-flex justify-content-end ">
+								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
+										data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										Chi Tiet
+									</button></p>
+
+							</h2>
+						</div>
+
+						<div id="collapseOne" class="collapse " aria-labelledby="headingOne"
+							data-parent="#accordionExample">
+							<div class="card-body p-2 align-items-center subcard">
+								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang</p>
+								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
+								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
+								<p class="text-dark">xa {{order.shippingAddress.ward}}, huyen
+									{{order.shippingAddress.district}}, {{orders.shippingAddress.province}}</p>
+							</div>
+
+							<div class="card-body p-2 align-items-center subcard">
+								<p class="text-dark font-weight-bolder">Thanh Toan</p>
+								<div class="d-flex ">
+									<p class="text-dark">Phuong thuc thanh toan: </p>
+									<p class="text-dark ml-2">thanh toan khi nhan hang</p>
+								</div>
+								<div class="d-flex ">
+									<p class="text-dark">Giam gia: </p>
+									<p class="text-dark ml-2">0</p>
+								</div>
+								<div class="d-flex ">
+									<p class="text-dark">phi van chuyen:</p>
+									<p class="text-dark ml-2">739.000</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in orderDetail">
+						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.image[1].imagePath}}" >
+						<div class="col-md-8">
+							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
+										-webkit-box-orient: vertical;
+										-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
+								ut libero! Impedit omnis porro iusto sequi quia!</p>
+							<p class="text-dark mb-3">Mau: {{item.productDetail.color.colorName}} | Size:
+								{{item.productDetail.size.sizeNumber}}</p>
+							<p class="text-dark">X {{item.quantity}}</p>
+
+						</div>
+						<div class="col-md-2">{{item.price}}</div>
+					</div>
+
+					
+					<div class="card-footer bg-white border-0 text-right">
+						<div class="d-flex justify-content-end align-items-center">
+							<p class="m-3">Tong Thanh Toan: </p>
+							<h3 class="text-danger">200.000</h3>
+
+						</div>
+						<button class="btn btn-danger">Huy Don Hang</button>
+						<button class="btn btn-danger">Danh Gia</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+	</section>
+
+	<!-- //content-6-section -->
+
+	<!-- //products-->
+
+	<!--review-->
+	<section class="w3l-ecommerce-main w3l-ecommerce-main-inn">
+		<!-- /content-6-section -->
+		<div class="container content-singlev-ecomm py-5">
+			<h4>ĐÁNH GIÁ SẢN PHẨM</h4>
+			<div class="content-singlev-ecomm py-5 bg-white">
+				<div class="row wrapper-rating">
+					<div class="col-sm-3 text-center">
+						<h2>
+							{{averageRating}}/5<span class="text-warning">★</span>
+						</h2>
+					</div>
+					<div class="col-sm-8">
+						<p class="d-inline-flex gap-1">
+						<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(null)">Tất cả ({{ reviewCounts.total }})</div>
+						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a>
+						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a>
+						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a>
+						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a>
+						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
+							ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
+				<div class="row">
+					<div class="col-sm-2 text-center">
+						<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
+					</div>
+					<div class="col-sm-10">
+						<p class="mb-0">
+							<strong>{{rv.user.fullName}}</strong>
+						</p>
+						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
+						<div class="rating mb-2">
+							<span class="fa fa-star" ng-repeat="star in getStars(rv.rating)"></span>
+						</div>
+						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
+						<span class="fa fa-thumbs-up"></span>
+					</div>
+				</div>
+				<hr>
+			</div>
+			<!--/pagination-->
+			<div class="pagination" style="margin: 0px 10px 20px;">
+				<ul>
+					<li class="prev"><a ng-click="reviewPager.first()"><span class="fa fa-angle-double-left"></span></a>
+					</li>
+					<li class="page-item" ng-repeat="page in reviewVisiblePages"
+						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a class="page-link" href=""
+							ng-click="reviewPager.gotoReview(page.value)"
+							ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+							{{ page.value }} </a></li>
+					<li class="next"><a ng-click="reviewPager.last()"><span class="fa fa-angle-double-right"></span></a>
+					</li>
+				</ul>
+			</div>
+			<!--//pagination-->
+		</div>
+		</div>
+	</section>
+	<!--review-->
+
+	<div style="margin: 8px auto; display: block; text-align: center;">
+
+		<!---728x90--->
+
+	</div>
+
+</body>
+
+</html>

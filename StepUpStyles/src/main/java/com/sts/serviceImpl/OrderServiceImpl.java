@@ -117,6 +117,16 @@ public class OrderServiceImpl implements OrderService {
        return orderDao.findByOrderStatus(status);
     }
 
+    @Override
+    public List<OrderDetail> loadByOrder(Order order) {
+       return orderDetailDao.findByOrder(order);
+    }
+
+    @Override
+    public List<Order> loadAll() {
+       return orderDao.findAll();
+    }
+
    
 
 }

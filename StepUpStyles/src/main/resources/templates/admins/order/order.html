@@ -1,0 +1,115 @@
+<div class="content-wrapper">
+	<div class="card"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+
+		<div class="card-body" style="text-align: center;">
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">Danh sách đơn hàng</h4>
+
+				<div class="d-flex">
+					<!-- Thẻ select box -->
+					<select class="form-control mr-2" ng-model="selectedActivity"
+						data-toggle="tooltip" title="Lọc theo trạng thái sản phẩm"
+						ng-change="filterByActivities()" style="width: 200px;">
+						<option value="all">Tất cả</option>
+						<option value="true">Đang bật</option>
+						<option value="false">Đang tắt</option>
+					</select>
+					<button type="button"
+						class="btn btn-outline-success btn-fw mr-2 export"
+						data-toggle="tooltip" title="Xuất file Excel">
+						<span class="fa ti-file"></span>
+					</button>
+					<button type="button"
+						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
+						data-toggle="tooltip" title="Xuất file PDF">
+						<span class="ti-files"></span>
+					</button>
+					<!-- Nút tìm kiếm -->
+					<button ng-click="searchProductByName()"
+						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
+						title="Tìm kiếm">
+						<span class="ti-search"></span>
+					</button>
+				
+				</div>
+			</div>
+
+			<table class="table table-hover" id="sampleTable">
+				<thead>
+					<tr>
+						<th ng-repeat="column in sortableColumns"
+							ng-click="sortByColumn(column.name)">{{ column.label }} <span
+							ng-if="sortColumn === column.name"> <span
+								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+						</span>
+						</th>
+						<th class="actions">sdgfhds</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="order in allOrders">
+						<td>{{order.orderId}}</td>
+						<td>{{order.deliveryDate | date: 'dd-MM-yyyy'}}</td>
+						<td>{{order.deliveryStatus? "Đã Giao": "Chưa giao"}}</td>
+						<td>{{order.initialPrice | number: 0 }} đ</td>
+						<td>{{order.orderStatus}}</td>
+						<td>{{order.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+						<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
+						<td>{{order.totalAmount | number: 0 }} đ</td>
+						<td>{{order.paymentMenthod.paymentMenthodName }} <button class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip" data-placement="top" title="Thanh Toán Khi Nhận Hàng" ng-if="order.paymentMenthod.paymentMenthodName==='COD'" >!</button></td>
+						<td class="actions">
+							<button ng-click="viewDetail(order.orderId)"
+								class="btn btn-inverse-primary btn-rounded btn-icon"
+								data-toggle="modal" data-target=".bd-example-modal-xl">
+								<i class="ti-eye"></i>
+							</button>
+							<button ng-click="confirmHideTable(productitem)"
+								class="btn btn-inverse-danger btn-rounded btn-icon"
+								data-toggle="tooltip" data-placement="top" title="Xóa">
+								<i class="ti-trash"></i>
+							</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+			<!-- MODAL PROD DETAIL -->
+			
+
+			<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-xl">
+				<div class="modal-content">
+				 <h1 ng-repeat="item in orderDetail track by $index">{{item.order.orderId}}</h1>
+				</div>
+			  </div>
+			</div>
+
+			<div class="d-flex justify-content-end">
+				<div>
+					<ul class="pagination">
+						<li class="page-item">
+							<button ng-click="pager.first()" class="page-link">
+								<span class="ti-angle-double-left"></span>
+							</button>
+						</li>
+
+						<li class="page-item" ng-repeat="page in visiblePages"
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+								page.value }}</a></li>
+
+						<li class="page-item">
+							<button ng-click="pager.last()" class="page-link">
+								<span class="ti-angle-double-right"></span>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,3 +1,4 @@
+
 app.controller("index-ctrl", function($scope, $http) {
 	//HAI Start
 	localStorage.removeItem('selectedItems');
@@ -26,6 +27,9 @@ app.controller("index-ctrl", function($scope, $http) {
 			}
 		}, 1000);
 	};
+
+
+
 
 	$http.get("/rest/products/loadDiscountedProducts").then(resp => {
 		$scope.discountedProducts = resp.data;
@@ -783,4 +787,99 @@ app.controller("index-ctrl", function($scope, $http) {
 	//phân trang trang chủ product discount END
 
 	//quangminh kết thúc
+
+	//Linh 
+	$scope.userItemsFavorite = [];
+	$scope.userRatings = []
+	$scope.allreviews = []
+	$scope.averageRating = []
+	$scope.check = function (product) {
+		$http.get('/rest/favorites/check/' + product.productID)
+			.then(function (response) {
+				$scope.productbyids = response.data;
+				console.log($scope.productbyids.favoriteId);
+				console.log($scope.productbyids);
+				if (!$scope.productbyids) {
+					$http.post('/rest/favorites/' + product.productID)
+						.then(function (response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+									toast.addEventListener('mouseenter', Swal.stopTimer)
+									toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							})
+
+							Toast.fire({
+								icon: 'success',
+								title: 'Đã thêm sản phẩm ' + product.productName + ' vào danh sách yêu thích',
+
+							})
+							$scope.getAllUserFavorite();
+							updateFavoriteCount();
+						})
+						.catch(function (error) {
+							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+						});
+				} else {
+					$http.delete('/rest/favorites/delete/' + product.productID)
+						.then(function (response) {
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top',
+								showConfirmButton: false,
+								timer: 3000,
+								timerProgressBar: true,
+								didOpen: (toast) => {
+									toast.addEventListener('mouseenter', Swal.stopTimer)
+									toast.addEventListener('mouseleave', Swal.resumeTimer)
+								}
+							})
+
+							Toast.fire({
+								icon: 'error',
+								title: 'Đã xóa sản phẩm ' +$scope.productbyids.product.productName+ ' khỏi danh sách yêu thích',
+
+							})
+							$scope.getAllUserFavorite();
+							updateFavoriteCount();
+						})
+						.catch(function (error) {
+							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+						});
+				}
+			})
+			.catch(function (error) {
+				console.error('Error ' + error);
+			});
+
+	}
+
+	$scope.getAllUserFavorite = function() {
+		$http.get("/rest/favorites/getUserFavorite").then(function(response) {
+			$scope.userItemsFavorite = response.data
+			$scope.favoritePager.first()
+			$scope.userItemsFavorite.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.image = resp.data;
+				})
+				$http.get("/rest/discount/loadbyproduct/" + items.product.productID).then(resp => {
+					items.product.discount = resp.data.filter(discount => !discount.deleted);
+				})
+			})
+		})
+	}
+
+	$scope.isFavorited = function(productId) {
+		// Kiểm tra productId có trong danh sách sản phẩm yêu thích
+		return $scope.userItemsFavorite.some(function(item) {
+			return item.product.productID === productId;
+		});
+	};
+	$scope.getAllUserFavorite();
+	//Linh
 })

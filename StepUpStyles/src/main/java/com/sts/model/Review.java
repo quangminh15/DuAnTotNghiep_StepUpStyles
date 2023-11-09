@@ -24,8 +24,6 @@ public class Review implements Serializable {
 	@Column(name="review_id")
 	private Integer reviewId;
 
-	private boolean display;
-
 	private Integer rating;
 
 	@Temporal(TemporalType.DATE)
@@ -33,6 +31,12 @@ public class Review implements Serializable {
 	private Date reviewDate = new Date();
 
 	private String title;
+
+	private String image1;
+
+	private String image2;
+
+	private String image3;
 
 	@ManyToOne
 	@JoinColumn(name="product_id")

@@ -77,6 +77,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/user/user.html",
 			controller: "user-ctrl"
 		})
+		.when("/order", {
+			templateUrl: "/templates/admins/order/order.html",
+			controller: "order-ctrl"
+		})
 		.when("/productOFcategory", {
 			templateUrl: "/templates/admins/statistical/productofcategory.html",
 			controller: "prodofcate-ctrl"

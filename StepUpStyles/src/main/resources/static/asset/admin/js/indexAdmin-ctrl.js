@@ -25,9 +25,9 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 	$scope.dayOfWeek = $scope.days[$scope.currentDate.getDay()];
 
 	function updateTime() {
-		$scope.currentDate = new Date();
-		$scope.timeString = $scope.currentDate.getHours() + 'h:' + $scope.currentDate.getMinutes() + 'm';
-	}
+    $scope.currentDate = new Date();
+    $scope.timeString = $scope.currentDate.getHours() + ':' + $scope.currentDate.getMinutes() + ':' + $scope.currentDate.getSeconds();
+}
 
 	// Cập nhật thời gian mỗi giây
 	$interval(updateTime, 1000);

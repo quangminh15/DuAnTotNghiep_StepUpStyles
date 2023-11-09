@@ -9,11 +9,6 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title th:replace="${title}"></title>
 <!-- Template CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="/asset/user/css/style-liberty.css">
 <!-- Template CSS -->
 <link
@@ -51,7 +46,9 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+<!-- splide bắt đầu -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css" />
+<!-- splide kết thúc -->
 <style type="text/css">
 /* nút lọc của trang sản phẩm START */
 .custom-button-container {
@@ -142,18 +139,19 @@ a:hover, button:hover {
 	font-weight: 700;
 }
 /* hiện phần trăm giảm giá END*/
-.modal-backdrop {
-	display: none !important;
-}
-
 .custom-modal-size {
 	max-width: 90%;
 	width: 90%;
 }
+
+.splide__slide img {
+	width: 100%;
+	height: auto;
+}
 </style>
 </head>
 
-<body ng-app="app" >
+<body ng-app="app">
 
 	<div th:replace="~{/users/layout/_menu_index}"></div>
 
@@ -221,26 +219,23 @@ a:hover, button:hover {
 		updateCartCount();
 	</script>
 	<script>
-        function updateFavoriteCount() {
-    $.ajax({
-        type: 'GET',
-        url: '/rest/favorites/getUserFavorite',
-        contentType: "application/json",
-        success: function(data) {
-            // Update the cart count with the received data
-            var count = data.length;
-            $('#favoriteCount').text(count);
-        },
-        error: function() {
-            // Handle errors here
-            console.log('Error fetching favorite items.');
-        }
-    });
-}
+		function updateFavoriteCount() {
+			$.ajax({
+				type : 'GET',
+				url : '/rest/favorites/getUserFavorite',
+				contentType : "application/json",
+				success : function(data) {
+					// Update the cart count with the received data
+					var count = data.length;
+					$('#favoriteCount').text(count);
+				},
+				error : function() {
+					// Handle errors here
+					console.log('Error fetching favorite items.');
+				}
+			});
+		}
 
-updateFavoriteCount();
-
-		// Gọi hàm lấy số lượng yêu thích ban đầu khi trang web tải
 		updateFavoriteCount();
 	</script>
 	<!-- -------------- -->
@@ -270,7 +265,7 @@ updateFavoriteCount();
 	<!-- cart -->
 	<script src="/asset/user/js/AngularJS/checkout-ctrl.js"></script>
 	<!-- cart -->
-
+	<script src="/asset/user/js/AngularJS/order-ctrl.js"></script>
 	<!--/login-->
 	<script>
 		$(document).ready(function() {
@@ -316,6 +311,7 @@ updateFavoriteCount();
 	<script src="/asset/user/js/jquery.magnific-popup.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 	<!--//pop-up-box-->
 	<script>
 		$(document).ready(function() {
@@ -360,9 +356,20 @@ updateFavoriteCount();
 		});
 	</script>
 	<!-- navbar scroll -->
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var splide = new Splide('.splide', {
+			perPage : 6,
+			focus : 0,
+			omitEnd : true,
+			rewind : true,
+		});
+
+		splide.mount();
+	});
+	</script>
+
 	<!-- count cartitem -->
-
-
 </body>
 
 </html>
