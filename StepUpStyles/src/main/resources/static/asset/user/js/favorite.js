@@ -351,18 +351,50 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		return $scope.selectedRating === rating;
 	};
 
-	$scope.getStarArray = function(averageRating) {
-		var stars = [];
-		var fullStars = Math.floor(averageRating); // Số ngôi sao đầy đủ
-		var hasHalfStar = averageRating % 1 > 0.25; // Kiểm tra có nửa ngôi sao không
-		for (var i = 0; i < fullStars; i++) {
-			stars.push('full');
+	//Hiển thị điếm đánh giá trên sản phẩm
+	$scope.getStarAvgs = function(avgRating) {
+		var numStars = Math.floor(avgRating); // Số sao nguyên
+        var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
+        var stars = [];
+        for (var i = 0; i < 5; i++) {
+			if (i < numStars) {
+				stars.push("fa fa-star");
+			} else if (hasHalfStar) {
+				stars.push("fa fa-star-half-o");
+				hasHalfStar = false; // Đảm bảo chỉ thêm 1 lần nửa sao
+			} else {
+				stars.push("fa fa-star-o");
+			}
 		}
-		if (hasHalfStar) {
-			stars.push('half');
-		}
-		return stars;
+		console.log("Start", stars);
+        return stars;
 	};
+    //Lọc đánh giá theo điểm đánh giá
+	// Add this inside your AngularJS controller
+$scope.filterByAvgs = function(selectedRating) {
+    // Existing filtering code...
+
+    // Lọc dựa trên điểm đánh giá
+    if (selectedRating) {
+        filteredRates = filteredRates.filter(function(item) {
+            // Assuming the star rating is stored in item.rating
+            return item.rating >= selectedRating;
+        });
+    }
+
+    // Continue with the rest of your filtering logic...
+
+    // Update the filtered items in the scope
+    $scope.productitems = filteredRates;
+
+    // Reset or update your pagers as needed
+    $scope.pager.first(); 
+    $scope.DiscountPager.first(); 
+    $scope.FeaturedPager.first();
+};
+
+	
+	
 	
 	//Linh end 
 
