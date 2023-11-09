@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      >
+
+<head>
+    <title>SUS || Trang Cá Nhân</title>
+</head>
+<link href="static/asset/user/css/profile/bootstrap.min.css" rel="stylesheet">
+<link href="static/asset/user/css/profile/profile.css" rel="stylesheet">
+<style>
+</style>
+<link rel="stylesheet" href="/asset/user/css/style-liberty.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<body ng-controller="">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<section class="w3l-banner-slider-main">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid serarc-fluid">
+            <a href="/index"> <img src="/asset/user/img/banner/logo3.png" style="display: block; margin: auto;" width="60%" alt=""></a>
+            <div ng-controller="favorite-ctrl" class="search-right ng-scope">
+                <form method="" class="ng-pristine ng-valid">
+                    <div class="p-1 bg-light rounded rounded-pill shadow-sm">
+                        <div class="input-group" style="width: 350px;">
+                            <input style="border-radius: 50%;" type="search" placeholder="Bạn muốn tìm sản phẩm nào?" ng-model="searchKeyword" aria-describedby="button-addon1" class="form-control border-0 bg-light ng-pristine ng-untouched ng-valid ng-empty">
+                            <div class="input-group-append">
+                                <button id="button-addon1" type="submit" class="btn btn-link text-danger" ng-click="searchProductByName()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- /search popup -->
+
+                <!-- The Modal Start-->
+                <div id="overlay" class="overlay-hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; display: none; align-items: center; justify-content: center;">
+                    <div style="position: relative; background-color: #fff; border-radius: 10px; padding: 20px; width: 65%; max-height: 90vh; overflow-y: auto; top: 50%; left: 50%; transform: translate(-75%, -49%); margin: 0 auto;">
+
+                        <button style="position: absolute; top: 10px; right: 10px;" ng-click="hideOverlay()" type="button" class="btn btn-light">X</button>
+                        <div class="row">
+                            <section class="w3l-ecommerce-main ng-hide" ng-show="searchedProductItems.length > 0">
+                                <!-- /products-->
+                                <div class="ecom-contenthny">
+                                    <h3 class="hny-title mb-0 text-center">
+                                        SẢN PHẨM <span>TÌM KIẾM</span>
+                                    </h3>
+                                    <p class="text-center">Lựa chọn sản phẩm mà bạn muốn tìm</p>
+                                    <div class="container-fluid">
+
+                                        <!-- /row-->
+                                        <div class="ecom-products-grids row ">
+                                            <!-- ngRepeat: p in searchedProductItems -->
+                                        </div>
+                                        <!--/pagination-->
+                                        <!-- 											<div class="custom-pagination" style="margin: 0px 10px 20px;"> -->
+                                        <!-- 												<ul> -->
+                                        <!-- 													<li class="custom-prev"><a -->
+                                        <!-- 														ng-click="DiscountPager.first()"> <span -->
+                                        <!-- 															class="fa fa-angle-double-left"></span> -->
+                                        <!-- 													</a></li> -->
+                                        <!-- 													<li class="custom-page-item" -->
+                                        <!-- 														ng-repeat="page in DiscountVisiblePages" -->
+                                        <!-- 														ng-class="{ 'custom-active': (page.value === DiscountPager.page + 1) }"> -->
+                                        <!-- 														<a class="custom-page-link" href="" -->
+                                        <!-- 														ng-click="DiscountPager.DiscountGoto(page.value)" -->
+                                        <!-- 														ng-style="(page.value === (DiscountPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {})"> -->
+                                        <!-- 															{{ page.value }} </a> -->
+                                        <!-- 													</li> -->
+                                        <!-- 													<li class="custom-next"><a -->
+                                        <!-- 														ng-click="DiscountPager.last()"> <span -->
+                                        <!-- 															class="fa fa-angle-double-right"></span> -->
+                                        <!-- 													</a></li> -->
+                                        <!-- 												</ul> -->
+                                        <!-- 											</div> -->
+
+
+                                        <!--//pagination-->
+                                        <!-- //row-->
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <!-- The Modal End-->
+            </div>
+            <!--//search-right-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa fa-bars"> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a class="nav-link" href="/index">Trang
+                        chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">Giới
+                        thiệu</a></li>
+                    <li class="nav-item "><a class="nav-link" href="/list_products">Sản phẩm</a></li>
+                    <li class="nav-item "><a class="nav-link" href="/blog">Blog</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="transmitvcart galssescart2 cart cart box_1">
+                        <form action="#" method="post" class="last ng-pristine ng-valid">
+
+                            <button class="top_transmitv_cart mr-2" type="submit" name="submit" value="">
+                                <span class="fa fa-user"></span>
+                            </button>
+                        </form>
+                    </li>
+                    <li class="nav-item top-baged"><a class="nav-link" href="/favorite">
+                        <span class="far fa-heart" style="font-size: 24px;"></span>
+                        <span class="count_menu badge badge-pill badge-danger" id="favoriteCount">5</span>
+                    </a>
+                    </li>
+                    <li class="nav-item top-baged ng-scope" ng-controller="cart-ctrl">
+                        <a class="nav-link" href="/cart">
+                            <span class="fa fa-shopping-cart" style="font-size: 24px;"></span>
+                            <span class="count_menu badge badge-pill badge-danger" id="cartCount">1</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <!--//nav-->
+
+</section>
+<div class="container bootstrap snippets bootdey profile-main">
+    <div class="row">
+        <div class="profile-nav col-md-3">
+                <div class="panel">
+                    <div class="user-heading round">
+                        <a href="#">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt>
+                        </a>
+                        <h1 th:text="${UserProfile.fullName}">---</h1>
+                        <!--                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d1c001d1c00390d111c3c14181015571a1614">[email&#160;protected]</a></p>-->
+                    </div>
+                    <ul class="nav nav-pills nav-
+                stacked">
+                        <li class="active"><a href="#"> <i class="fa fa-user"></i>btb@gmail.com</a></li>
+                        <!--                    <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span class="label label-warning pull-right r-activity">9</span></a></li>-->
+                        <li><a href="#"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
+                    </ul>
+                </div>
+        </div>
+        <div class="profile-info col-md-9">
+
+            <div class="panel">
+                <div class="panel-body bio-graph-info">
+                    <h1>Thông tin</h1>
+                    <div class="row">
+                        <div class="bio-row">
+                            <p><span>Họ và tên</span> : <span th:text="${UserProfile.fullName}"></span></p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Ngày sinh </span> : <span th:text="${UserProfile.birthday}"></span></p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Email </span> : <span th:text="${UserProfile.email}"></span></p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Số điện thoại</span>: <span th:text="${UserProfile.phone}"></span></p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Sử dụng từ </span>: <span th:text="${#temporals.format(UserProfile.createdDate, 'dd-MM-yyyy')}"></span></p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Vai trò </span>: <span th:text="${UserProfile.role}"></span></p>
+                        </div>
+<!--                        <div class="bio-row">-->
+<!--                            <p><span>Mobile </span>: (12) 03 4567890</p>-->
+<!--                        </div>-->
+<!--                        <div class="bio-row">-->
+<!--                            <p><span>Phone </span>: 88 (02) 123456</p>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="bio-chart">
+                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="35" data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                                </div>
+                                <div class="bio-desk">
+                                    <h4 class="red">Tổng lượt đã mua</h4>
+                                    <p>Năm này : 15 July</p>
+                                    <p>Tháng này : 15 August</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="bio-chart">
+                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="63" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                                </div>
+                                <div class="bio-desk">
+                                    <h4 class="terques">Sản phẩm đã thích </h4>
+                                    <p>Started : 15 July</p>
+                                    <p>Deadline : 15 August</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div class="col-md-6">-->
+<!--                        <div class="panel">-->
+<!--                            <div class="panel-body">-->
+<!--                                <div class="bio-chart">-->
+<!--                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="75" data-fgcolor="#96be4b" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(150, 190, 75); padding: 0px; -webkit-appearance: none; background: none;"></div>-->
+<!--                                </div>-->
+<!--                                <div class="bio-desk">-->
+<!--                                    <h4 class="green">VectorLab Portfolio</h4>-->
+<!--                                    <p>Started : 15 July</p>-->
+<!--                                    <p>Deadline : 15 August</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <div class="panel">-->
+<!--                            <div class="panel-body">-->
+<!--                                <div class="bio-chart">-->
+<!--                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="50" data-fgcolor="#cba4db" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(203, 164, 219); padding: 0px; -webkit-appearance: none; background: none;"></div>-->
+<!--                                </div>-->
+<!--                                <div class="bio-desk">-->
+<!--                                    <h4 class="purple">Adobe Muse Template</h4>-->
+<!--                                    <p>Started : 15 July</p>-->
+<!--                                    <p>Deadline : 15 August</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="w3l-footer-22">
+    <!-- footer-22 -->
+    <div class="footer-hny py-5">
+        <div class="container py-lg-5">
+            <div class="text-txt row">
+                <div class="left-side col-lg-4">
+                    <h3><a class="logo-footer" href="index.html">
+                        <span class="lohny">SUS</span>Store</a></h3>
+                    <!-- if logo is image enable this
+                    <a class="navbar-brand" href="#index.html">
+                        <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
+                    </a> -->
+                    <p>- Giấy phép thiết lập mạng xã hội trên mạng số 170/GP-BTTTT do Bộ Thông tin và Truyền
+                        thông cấp ngày 04 tháng 04 năm 2023. <br>
+                        - Chịu trách nhiệm nội dung: N*********** <br>
+                        - Liên hệ truyền thông và quảng cáo: <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + Số điện
+                        thoại: 083*******
+                        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + Mail:
+                        contact@gmail.com.vn
+                    </p>
+                    <ul class="social-footerhny mt-lg-5 mt-4">
+
+                        <li><a class="facebook" href="#"><span class="fa fa-facebook"
+                                                               aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="twitter" href="#"><span class="fa fa-twitter"
+                                                              aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="google" href="#"><span class="fa fa-google-plus"
+                                                             aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="instagram" href="#"><span class="fa fa-instagram"
+                                                                aria-hidden="true"></span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="right-side col-lg-8 pl-lg-5">
+                    <h4>Cửa hàng luôn mang đến cho bạn nhiều sự lựa<br> chọn. Hãy ghé thăm cửa hàng ngay hôm nay !</h4>
+                    <div class="sub-columns">
+                        <div class="sub-one-left">
+                            <h6>Liên kết hữu ích</h6>
+                            <div class="footer-hny-ul">
+                                <ul>
+                                    <li><a href="index.html">Trang chủ</a></li>
+                                    <li><a href="about.html">Giới thiệu</a></li>
+                                    <li><a href="blog.html">Blog</a></li>
+                                    <li><a href="contact.html">Liên hệ</a></li>
+                                </ul>
+                                <ul>
+                                    <li><a href="#">Công nghệ</a></li>
+                                    <li><a href="#">Chính sách bảo mật</a></li>
+                                    <li><a href="#">Các điều khoản </a></li>
+                                    <li><a href="contact.html">Hỗ trợ</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="sub-two-right">
+                            <h6>Cửa hàng của chúng tôi</h6>
+                            <p class="mb-5">288 Đ. Nguyễn Văn Linh, Phường An Khánh, Ninh Kiều, Cần Thơ 900000
+                            </p>
+
+                            <h6>Chúng tôi chấp nhận:</h6>
+                            <ul>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-visa"
+                                                                         aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-mastercard"
+                                                                         aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-paypal"
+                                                                         aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-amex"
+                                                                         aria-hidden="true"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="below-section row">
+                <div class="columns col-lg-6">
+                    <ul class="jst-link">
+                        <li><a href="#">Chính sách bảo mật </a> </li>
+                        <li><a href="#">Thời hạn của dịch vụ</a></li>
+                        <li><a href="contact.html">Chăm sóc khách hàng</a> </li>
+                    </ul>
+                </div>
+                <div class="columns col-lg-6 text-lg-right">
+                    <p>© Copyright 2023 SUS Store, Nhóm Step Up Styles
+                        <!-- <a href="https://w3layouts.com/"
+                    target="_blank">
+                    W3Layouts</a> -->
+                    </p>
+                </div>
+                <button onclick="topFunction()" id="movetop" title="Go to top">
+                    <span class="fa fa-angle-double-up"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- //titels-5 -->
+</section>
+<script src="static/asset/user/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+</script>
+
+<!-- //customers-6-->
+<script>
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        const scrollY = window.scrollY;
+
+        // Set a threshold value for when to switch the class
+        const threshold = 100; // You can adjust this value
+
+        if (scrollY > threshold) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+    });
+</script>
+</body>
+
+</html>

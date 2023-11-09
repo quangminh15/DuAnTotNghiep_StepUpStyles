@@ -1,6 +1,8 @@
 package com.sts.service;
 
 import com.sts.model.Brand;
+import com.sts.model.DTO.DResponseUser;
+import com.sts.model.DTO.LResponseUser;
 import com.sts.model.User;
 
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
 public interface UserService {
 	User findById(Integer brandID);
 
-	List<User> findAll();
+	List<LResponseUser> findAll();
 
 	User create(User user);
 
@@ -19,4 +21,6 @@ public interface UserService {
 	List<User> searchByName(String keyword);
 
 	Integer getUserIdCurrent();
+
+	DResponseUser getUserByEmail(String email);
 }

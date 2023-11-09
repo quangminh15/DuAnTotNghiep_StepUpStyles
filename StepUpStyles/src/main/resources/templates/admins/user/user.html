@@ -1,317 +1,341 @@
-<div class="card card-border-color card-border-color-primary m-3">
-<div class="modal fade modal-full-color modal-full-color-danger"
-	id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel"
-	aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close modal-close" type="button" data-dismiss="modal"
-					aria-hidden="true">
-					<span class="mdi mdi-close"></span>
-				</button>
-			</div>
-			<div class="modal-body" style="color: white;">
-				<div class="text-center">
-					<span class="modal-main-icon mdi mdi-close-circle-o mb-3"></span> <b>
-						<h4 style="color: white;">{{ errorMessage }}</h4>
-					</b>
-					<div class="mt-8">
-						<button class="btn btn-secondary btn-space modal-close"
-							type="button" data-dismiss="modal"
-							style="background-color: white; color: red;">Đóng</button>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer"></div>
-		</div>
-	</div>
+<div class="content-wrapper">
+    <div class="card mb-5"
+         style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+        <div class="card-body">
+            <h4 class="card-title">Quản lý người dùng</h4>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputUserName">Mã người dùng</label> <input
+                        class="form-control" id="inputUserName" type="text"
+                        ng-model="form.usersId" readonly="true">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Nguồn</label> <input
+                        class="form-control" id="inputPassword3" type="text"
+                        placeholder="" required="" readonly="true"
+                        ng-model="form.origin">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputUserName">Họ và tên</label> <input
+                        class="form-control" id="" type="text"
+                        ng-model="form.fullName">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Ngày sinh</label> <input
+                        class="form-control" id="" type="date"
+                        placeholder="" required=""
+                        ng-model="form.birthday">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputUserName">Địa chỉ email</label> <input
+                        class="form-control" id="" type="text"
+                        ng-model="form.email">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Số điện thoại</label> <input
+                        class="form-control" id="" type="text"
+                        placeholder="" required=""
+                        ng-model="form.phone">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="col-form-label text-sm-left" style="padding: 0">Quyền</label>
+                    <div class="form-check mt-1">
+<!--                        <label class="custom-control custom-radio custom-control-inline">-->
+<!--                            <input ng-model="form.role" class="custom-control-input"-->
+<!--                                   ng-value="User" type="radio" name="available" checked=""><span-->
+<!--                                class="custom-control-label custom-control-color">User</span>-->
+<!--                        </label> <label class="custom-control custom-radio custom-control-inline">-->
+<!--                        <input ng-model="form.role" class="custom-control-input"-->
+<!--                               ng-value="Employee" type="radio" name="available"><span-->
+<!--                            class="custom-control-label custom-control-color">Employee</span>-->
+<!--                    </label>-->
+<!--                        <label class="custom-control custom-radio custom-control-inline">-->
+<!--                            <input ng-model="form.role" class="custom-control-input"-->
+<!--                                   ng-value="Admin" type="radio" name="available"><span-->
+<!--                                class="custom-control-label custom-control-color">Admin</span>-->
+<!--                        </label>-->
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input ng-model="form.status" class="custom-control-input"
+                                   ng-value="true" type="radio" name="available" checked><span
+                                class="custom-control-label custom-control-color">User</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Hoạt động</label> <input
+                        class="form-control" id="" type="text"
+                        placeholder="" required=""
+                        ng-model="form.activaties">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputPassword3">Hình ảnh</label> <input
+                        class="form-control" id="photo" type="file">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="col-form-label text-sm-left" style="padding: 0">Trạng
+                        thái</label>
+                    <div class="form-check mt-1">
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input ng-model="form.status" class="custom-control-input"
+                                   ng-value="true" type="radio" name="available" checked=""><span
+                                class="custom-control-label custom-control-color">Bật</span>
+                        </label> <label class="custom-control custom-radio custom-control-inline">
+                        <input ng-model="form.status" class="custom-control-input"
+                               ng-value="false" type="radio" name="available"><span
+                            class="custom-control-label custom-control-color">Tắt</span>
+                    </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="inputUserName">Địa chỉ</label> <textarea rows="4" cols="50"
+                                                                         class="form-control" id="" type="text"
+                                                                         ng-model="form.address"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12" ng-if="form.categoryImage">
+                    <img style="height: 60%; width: 20%;" alt=""
+                         src="{{ form.categoryImage }}">
+                </div>
+            </div>
+
+            <div class="template-demo text-right mb-3">
+                <button type="button" ng-click="create()"
+                        class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+                        title="Thêm người dùng">
+                    <span class="ti-agenda"></span>
+                </button>
+                <button type="button" ng-click="update()"
+                        class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+                        title="Cập nhật người dùng">
+                    <span class="ti-support"></span>
+                </button>
+                <button type="button" ng-click="confirmHide()" type="submit"
+                        class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
+                        title="Xóa người dùng">
+                    <span class="ti-trash"></span>
+                </button>
+                <button type="button" ng-click="reset()"
+                        class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+                        title="Làm mới form">
+                    <span class="ti-control-shuffle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card"
+         style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+        <!-- 	thùng rác bắt đầu -->
+        <div class="modal fade" id="recycleBinModal" tabindex="-1"
+             aria-labelledby="searchModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl"
+                 style="width: 1500px; height: 600px;">
+                <div class="modal-content"
+                     style="background-color: #eee; max-width: 1500px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
+                        <button class="close modal-close" type="button"
+                                data-dismiss="modal" aria-hidden="true">
+                            <span class="mdi mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th ng-repeat="column in sortableColumns"
+                                    ng-click="sortByColumn(column.name)">{{ column.label }} <span
+                                        ng-if="sortColumn === column.name"> <span
+                                        ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+                                        ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+									</span>
+                                </th>
+
+                                <th class="actions"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="categoryitem in RestorePager.categoryitemss">
+                                <td>{{categoryitem.categoryID}}</td>
+                                <td>{{categoryitem.categoryName}}</td>
+                                <td>
+                                    <div class="image-container">
+                                        <img class="image-content"
+                                             alt="{{categoryitem.categoryName}}"
+                                             src="{{categoryitem.categoryImage}}">
+                                    </div>
+                                </td>
+                                <td>{{categoryitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
+                                <td>{{categoryitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
+                                <td class="actions">
+                                    <button class="btn btn-space btn btn-primary "
+                                            ng-click="restore(categoryitem)">
+                                        <i class="ti-back-right"></i>
+                                    </button>
+                                    <button class="btn btn-space btn btn-danger "
+                                            ng-click="confirmDelete(categoryitem)">
+                                        <i class="ti-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <button ng-click="RestorePager.first()" class="page-link">
+                                            <span class="ti-angle-double-left"></span>
+                                        </button>
+                                    </li>
+
+                                    <li class="page-item"
+                                        ng-repeat="RestorePage in RestoreVisiblePages"
+                                        ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+                                        <a
+                                                class="page-link" href=""
+                                                ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+                                            RestorePage.value }}</a></li>
+
+                                    <li class="page-item">
+                                        <button ng-click="RestorePager.last()" class="page-link">
+                                            <span class="ti-angle-double-right"></span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- thùng rác kết thúc -->
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Danh sách người dùng</h4>
+                <div class="d-flex">
+                    <!-- Thẻ select box -->
+                    <select class="form-control mr-2" ng-model="selectedActivity"
+                            data-toggle="tooltip" title="Lọc theo trạng thái thương hiệu"
+                            ng-change="filterByActivities()" style="width: 200px;">
+                        <option value="all">Tất cả</option>
+                        <option value="true">Đang bật</option>
+                        <option value="false">Đang tắt</option>
+                    </select>
+                    <button type="button"
+                            class="btn btn-outline-success btn-fw mr-2 export"
+                            data-toggle="tooltip" title="Xuất file Excel">
+                        <span class="fa ti-file"></span>
+                    </button>
+                    <button type="button"
+                            class="btn btn-outline-danger btn-fw mr-2 pdf-file"
+                            data-toggle="tooltip" title="Xuất file PDF">
+                        <span class="ti-files"></span>
+                    </button>
+                    <!-- Nút tìm kiếm -->
+                    <button ng-click="searchProductCateByName()"
+                            class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
+                            title="Tìm kiếm">
+                        <span class="ti-search"></span>
+                    </button>
+                    <!-- Nút thùng rác -->
+                    <button ng-click="openRecycleBinForm()"
+                            class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+                            title="Thùng rác">
+                        <span class="ti-trash"></span>
+                    </button>
+                </div>
+
+            </div>
+            <table class="table table-hover" id="sampleTable">
+                <thead>
+                <tr>
+                    <th ng-repeat="column in sortableColumns"
+                        ng-click="sortByColumn(column.name)">{{ column.label }} <span
+                            ng-if="sortColumn === column.name"> <span
+                            ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
+                            ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+						</span>
+                    </th>
+                    <th class="actions"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="user in pager.uList">
+                    <td>{{user.usersId}}</td>
+                    <td>{{user.fullName}}</td>
+                    <td>
+                        <div class="image-container">
+                            <img class="image-content" alt="Giày thể thao"
+                                 src="https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid4.jpg?alt=media&amp;token=127d7bd7-808d-407a-8fbc-11a1f697f21c">
+                        </div>
+                    </td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.role}}</td>
+                    <td class="actions">
+                        <button ng-click="edit(user)" class="btn btn-inverse-primary btn-rounded btn-icon"
+                                data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+                            <i class="ti-pencil"></i>
+                        </button>
+                        <button ng-click="confirmHideTable(productitem)"
+                                class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+                                data-placement="top" title="Xóa">
+                            <i class="ti-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <div>
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <button ng-click="pager.first()" class="page-link">
+                                <span class="ti-angle-double-left"></span>
+                            </button>
+                        </li>
+
+                        <li class="page-item" ng-repeat="page in visiblePages"
+                            ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+                                class="page-link" href="" ng-click="pager.goto(page.value)">{{
+                            page.value }}</a></li>
+
+                        <li class="page-item">
+                            <button ng-click="pager.last()" class="page-link">
+                                <span class="ti-angle-double-right"></span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-<!-- Modal for displaying error messages -->
-<div class="modal fade modal-full-color modal-full-color-success"
-	id="errorModal1" tabindex="-1" aria-labelledby="errorModalLabel"
-	aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close modal-close" type="button" data-dismiss="modal"
-					aria-hidden="true">
-					<span class="mdi mdi-close"></span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="text-center">
-					<span class="modal-main-icon mdi mdi-check mb-3"></span><b>
-					<h4 style="color: white;">{{ messageSuccess }}</h4>
-					</b>
-					<div class="mt-8">
-						<button class="btn btn-secondary btn-space modal-close"
-							type="button" data-dismiss="modal"
-							style="background-color: white; color: green;">Đóng</button>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer"></div>
-		</div>
-	</div>
-</div>
-<!-- modal xác nhận -->
-	<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
-		role="dialog" aria-labelledby="confirmDeleteModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận
-						xóa</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">Bạn có chắc chắn muốn xóa người dùng "{{
-					form.fullName }}" này không?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Hủy</button>
-					<button type="button" class="btn btn-danger"
-						ng-click="delete()">Xóa</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-<div class="card-header card-header-divider">Người dùng</div>
-<div class="card-body">
-	<div class="row">
-		<div class="form-group col-md-4">
-			<label for="inputUserName">Mã người dùng:</label> <input
-				class="form-control" id="inputUserName" type="number"
-				ng-model="form.userID" readonly="true">
-		</div>
-
-		<div class="form-group col-md-4">
-			<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
-			<div ng-model="form.registrationDate" class="form-control" id="ngaytao"
-				readonly="true">{{ form.registrationDate | date:'dd-MM-yyyy' }}</div>
-		</div>
-		
-		<div class="form-group col-md-4">
-			<label for="inputPassword1">Email</label> <input class="form-control"
-				id="inputPassword1" type="email" required="" ng-model="form.email" readonly="true">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-4">
-			<label for="inputPassword">Tên người dùng</label> <input
-				class="form-control" id="inputPassword" type="text" placeholder=""
-				required="" ng-model="form.username">
-		</div>
-		
-		<div class="form-group col-md-4">
-			<label for="inputPassword">Tên đầy đủ</label> <input
-				class="form-control" id="inputPassword" type="text" placeholder=""
-				required="" ng-model="form.fullName">
-		</div>
-		
-		<div class="form-group col-md-4">
-			<label for="inputPassword">Số điện thoại</label> <input class="form-control" id="inputPhoneNumber" type="text" placeholder=""
-       required="" ng-model="form.phoneNumber" oninput="this.value=this.value.replace(/[^\d]/g,'')">
-
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-4">
-    <label for="ngaytao" class="form-label fs-17">Ngày sinh</label>
-    <input type="date" ng-model="form.dateOfBirth" class="form-control" id="ngaysinh">
-</div>
-
-
-		
-		<div class="form-group col-md-4">
-		    <label class="col-form-label text-sm-left">Vai trò</label>
-		    <div class="form-check mt-1">
-		        <label class="custom-control custom-radio custom-control-inline">
-		            <input ng-model="form.role" class="custom-control-input"
-		                ng-value="'ADMIN'" type="radio"  
-		                ng-checked="form.role === 'ADMIN'">
-		            <span class="custom-control-label custom-control-color">Admin</span>
-		        </label>
-		        <label class="custom-control custom-radio custom-control-inline">
-		            <input ng-model="form.role" class="custom-control-input"
-		                ng-value="'USER'" type="radio" 
-		                ng-checked="form.role === 'USER'">
-		            <span class="custom-control-label custom-control-color">User</span>
-		        </label>
-		    </div>
-		</div>
-
-
-		<div class="form-group col-md-4">
-			<label class="col-form-label text-sm-left">Tình trạng khoá</label>
-			<div class="form-check mt-1">
-				<label class="custom-control custom-radio custom-control-inline">
-					<input ng-model="form.lockStatus" class="custom-control-input"
-					ng-value="false" type="radio" name="role" checked=""><span
-					class="custom-control-label custom-control-color">Hoạt động</span>
-				</label> <label class="custom-control custom-radio custom-control-inline">
-					<input ng-model="form.lockStatus" class="custom-control-input"
-					ng-value="true" type="radio" name="role"><span
-					class="custom-control-label custom-control-color">Khoá</span>
-				</label>
-			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-12">
-			<label class="col-form-label text-sm-left" for="inputTextarea3">Địa
-				chỉ</label>
-			<div class="">
-				<textarea class="form-control" id="inputTextarea3"
-					ng-model="form.address" rows="5"></textarea>
-			</div>
-		</div>
-	</div>
-
-	
-
-
-		<div class="row pt-0 pt-sm-5">
-			<div class="col-sm-12 pl-0">
-				<p class="text-right">
-					<button class="btn btn-space btn btn-primary" ng-click="update()">
-						<i class="bi bi-pencil-square"></i> Cập nhật
-					</button>
-					<button class="btn btn-space btn btn-danger"
-						ng-click="confirmDeleteModal()" type="submit">
-						<i class="bi bi-trash3-fill"></i> Xóa
-					</button>
-					<button class="btn btn-space btn btn-dark" ng-click="reset()">
-						<i class="bi bi-arrow-clockwise"></i> Làm mới
-					</button>
-				</p>
-			</div>
-		</div>
-
-</div>
-</div>
-
-<div class="card card-table m-3">
-	<div
-		class="card-header d-flex justify-content-between align-items-center">
-		<h4 class="mb-0">Danh sách người dùng</h4>
-		<!-- tìm kiếm theo tên bắt đầu  -->
-		<div class="d-flex">
-			<!-- Nút tìm kiếm -->
-			<button class="btn btn-space btn-success md-trigger"
-				ng-click="openSearchForm()" style="width: 50px; height: 43px">
-				<span class="mdi mdi-search"></span>
-			</button>
-		</div>
-	</div>
-	<div class="modal fade" id="searchModal" tabindex="-1"
-		aria-labelledby="searchModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content" style="background-color: #eee;">
-				<div class="modal-header">
-					<h5 class="modal-title" id="searchModalLabel">Tìm kiếm</h5>
-					<button class="close modal-close" type="button"
-						data-dismiss="modal" aria-hidden="true">
-						<span class="mdi mdi-close"></span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form method="post">
-						<div class="form-group">
-							<label for="searchKeyword">Tên người dùng</label> <input
-								class="form-control" type="text" id="searchKeyword"
-								ng-model="searchKeyword"
-								placeholder="Nhập tên người dùng mà bạn muốn tìm kiếm">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer" style="background-color: #eee;">
-					<button class="btn btn-secondary modal-close" type="button"
-						data-dismiss="modal">Hủy</button>
-					<button class="btn btn-success modal-close" type="button"
-						ng-click="searchUserByName()">Tìm kiếm</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="card-body">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Mã người dùng</th>
-					<th>Ngày tạo</th>
-					<th>Email</th>
-					<th>Tên người dùng</th>
-					<th>Tên đầy đủ</th>
-					<th>Số điện thoại</th>
-					<th>Ngày sinh</th>
-					<th>Vai trò</th>
-					<th>Tình trạng khoá</th>
-					<th class="actions"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="user in pager.uList">
-					<td>{{user.userID}}</td>
-					<td>{{user.registrationDate | date: 'dd-MM-yyyy'}}</td>
-					<td>{{user.email}}</td>
-					<td>{{user.username}}</td>
-					<td>{{user.fullName}}</td>
-					<td>{{user.phoneNumber}}</td>
-					<td>{{user.dateOfBirth | date: 'dd-MM-yyyy'}}</td>
-	
-					<td>{{user.role}}</td>
-					<td>{{!user.lockStatus ? 'Hoạt động' : 'Khoá' }}</td>
-				
-					<td class="actions">
-						<button class="btn btn-space btn btn-primary "
-							ng-click="edit(user)">
-							<i class="bi bi-pencil-square"></i>
-						</button>
-						<button class="btn btn-space btn btn-danger "
-							ng-click="confirmDeleteModal1(user)">
-							<i class="bi bi-trash3-fill"></i>
-						</button>
-					</td> 
-				</tr>
-
-			</tbody>
-		</table>
-		<div class="card-header d-flex justify-content-end">
-			<div>
-				<ul class="pagination">
-					<li class="page-item">
-						<button style="font-size: 25px" ng-click="pager.first()"
-							class="page-link">
-							<span class="mdi mdi-skip-previous"></span>
-						</button>
-					</li>
-
-					<li class="page-item" ng-repeat="page in visiblePages"
-						ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-						class="page-link" href="" ng-click="pager.goto(page.value)">{{
-							page.value }}</a></li>
-
-					<li class="page-item">
-						<button style="font-size: 25px" ng-click="pager.last()"
-							class="page-link">
-							<span class="mdi mdi-skip-next"></span>
-						</button>
-					</li>
-				</ul>
-
-			</div>
-		</div>
-	</div>
-
-</div>
-<div style="color: #eee;">123</div>

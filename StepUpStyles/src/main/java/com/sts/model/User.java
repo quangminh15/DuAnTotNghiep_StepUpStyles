@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -42,10 +43,10 @@ public class User implements Serializable {
 
 	private String address;
 
-	private Date birthday;
+	private LocalDate birthday;
 
 	@Column(name="created_date")
-	private Date createdDate;
+	private LocalDate createdDate;
 
 	private Boolean deleted;
 
