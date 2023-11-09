@@ -1,6 +1,5 @@
 package com.sts.model.DTO;
 
-import com.sts.model.CartDetail;
 import com.sts.model.Product;
 
 import lombok.AllArgsConstructor;

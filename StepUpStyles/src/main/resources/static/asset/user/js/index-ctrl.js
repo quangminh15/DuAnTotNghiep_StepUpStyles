@@ -793,14 +793,15 @@ app.controller("index-ctrl", function($scope, $http) {
 	$scope.userRatings = []
 	$scope.allreviews = []
 	$scope.averageRating = []
-	$scope.check = function(productID) {
-		$http.get('/rest/favorites/check/' + productID)
-			.then(function(response) {
+	$scope.check = function (product) {
+		$http.get('/rest/favorites/check/' + product.productID)
+			.then(function (response) {
 				$scope.productbyids = response.data;
 				console.log($scope.productbyids.favoriteId);
+				console.log($scope.productbyids);
 				if (!$scope.productbyids) {
-					$http.post('/rest/favorites/' + productID)
-						.then(function(response) {
+					$http.post('/rest/favorites/' + product.productID)
+						.then(function (response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -815,19 +816,18 @@ app.controller("index-ctrl", function($scope, $http) {
 
 							Toast.fire({
 								icon: 'success',
-								title: 'Đã thêm sản phẩm vào danh sách yêu thích',
+								title: 'Đã thêm sản phẩm ' + product.productName + ' vào danh sách yêu thích',
 
 							})
 							$scope.getAllUserFavorite();
 							updateFavoriteCount();
 						})
-						.catch(function(error) {
+						.catch(function (error) {
 							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
 						});
-					console.log(1);
 				} else {
-					$http.delete('/rest/favorites/delete/' + productID)
-						.then(function(response) {
+					$http.delete('/rest/favorites/delete/' + product.productID)
+						.then(function (response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -841,21 +841,22 @@ app.controller("index-ctrl", function($scope, $http) {
 							})
 
 							Toast.fire({
-								icon: 'success',
-								title: 'Đã xóa sản phẩm vào danh sách yêu thích',
+								icon: 'error',
+								title: 'Đã xóa sản phẩm ' +$scope.productbyids.product.productName+ ' khỏi danh sách yêu thích',
 
 							})
 							$scope.getAllUserFavorite();
 							updateFavoriteCount();
 						})
-						.catch(function(error) {
+						.catch(function (error) {
 							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
 						});
 				}
 			})
-			.catch(function(error) {
+			.catch(function (error) {
 				console.error('Error ' + error);
 			});
+
 	}
 
 	$scope.getAllUserFavorite = function() {

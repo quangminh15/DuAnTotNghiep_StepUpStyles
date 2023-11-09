@@ -9,14 +9,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.userItemsFavorite = [];
 	$scope.userRatings = []
 	$scope.allreviews = []
-	$scope.check = function(productID) {
-		$http.get('/rest/favorites/check/' + productID)
-			.then(function(response) {
+	$scope.check = function (product) {
+		$http.get('/rest/favorites/check/' + product.productID)
+			.then(function (response) {
 				$scope.productbyids = response.data;
 				console.log($scope.productbyids.favoriteId);
+				console.log($scope.productbyids);
 				if (!$scope.productbyids) {
-					$http.post('/rest/favorites/' + productID)
-						.then(function(response) {
+					$http.post('/rest/favorites/' + product.productID)
+						.then(function (response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -31,7 +32,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 							Toast.fire({
 								icon: 'success',
-								title: 'Đã thêm sản phẩm vào danh sách yêu thích',
+								title: 'Đã thêm sản phẩm ' + product.productName + ' vào danh sách yêu thích',
 
 							})
 							$scope.getAllUserFavorite();
@@ -40,10 +41,9 @@ app.controller("favorite-ctrl", function($scope, $http) {
 						.catch(function(error) {
 							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
 						});
-					console.log(1);
 				} else {
-					$http.delete('/rest/favorites/delete/' + productID)
-						.then(function(response) {
+					$http.delete('/rest/favorites/delete/' + product.productID)
+						.then(function (response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -57,8 +57,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 							})
 
 							Toast.fire({
-								icon: 'success',
-								title: 'Đã xóa sản phẩm vào danh sách yêu thích',
+								icon: 'error',
+								title: 'Đã xóa sản phẩm ' +$scope.productbyids.product.productName+ ' khỏi danh sách yêu thích',
 
 							})
 							$scope.getAllUserFavorite();
@@ -76,10 +76,10 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	}
 
 
-	$scope.deleteFavoriteProduct = function(productID) {
+	$scope.deleteFavoriteProduct = function (product) {
 		Swal.fire({
 			title: 'Xác nhận xóa sản phẩm yêu thích?',
-			text: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?',
+			text: 'Bạn có chắc chắn muốn xóa sản phẩm '+product.productName+' khỏi danh sách yêu thích?',
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonText: 'Xóa',
@@ -87,8 +87,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		}).then(function(result) {
 			if (result.isConfirmed) {
 				// Nếu người dùng xác nhận xóa, thì gửi yêu cầu xóa sản phẩm yêu thích
-				$http.delete('/rest/favorites/delete/' + productID)
-					.then(function(response) {
+				$http.delete('/rest/favorites/delete/' + product.productID)
+					.then(function (response) {
 						$scope.getAllUserFavorite();
 						updateFavoriteCount();
 					})
@@ -137,7 +137,10 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			});
 			$scope.averageRating = calculateAverageRating($scope.ratings);
 			if ($scope.reviewCounts.total === 0) {
+				$scope.noRating = "Chưa có đánh giá nào";
 				$scope.noReviewsMessage = "Chưa có đánh giá nào";
+			}else{
+				$scope.noRating = "";
 			}
 		}).catch(error => {
 			console.log("Error", error);
@@ -1069,6 +1072,18 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
 					items.image = resp.data;
 				})
+				//Linh hàm gọi điểm sao đánh giá
+			$http.get("/rest/reviews/loadbyproducts/" + items.productID).then(resp => {
+				$scope.all = resp.data;
+				$scope.ratings = $scope.all.map(function (review) {
+					return review.rating;
+				});
+				$scope.average = calculateAverageRating($scope.ratings);
+				items.avgrev=$scope.average
+			}).catch(error => {
+				console.log("Error", error);
+			});
+			//Linh end
 			})
 			$scope.productitems.forEach(item => {
 				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
