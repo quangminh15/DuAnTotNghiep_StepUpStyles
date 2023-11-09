@@ -83,6 +83,8 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy="order")
 	private List<OrderDetail> orderDetails;
 
-	
+	@ManyToOne
+	@JoinColumn(name="voucher_use_id")
+	private VoucherUse voucherUse;
 
 }

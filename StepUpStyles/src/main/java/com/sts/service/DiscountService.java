@@ -26,4 +26,7 @@ public interface DiscountService {
 
 	// Lọc danh sách giảm giá theo sản phẩm
 	List<DirectDiscount> getdiscountsByProduct(Integer productId);
+
+    List<DirectDiscount> getDiscountsByStatusAndDeleted(String status, boolean deleted);
+
 }

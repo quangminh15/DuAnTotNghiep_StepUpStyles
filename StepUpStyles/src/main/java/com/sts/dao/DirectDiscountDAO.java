@@ -13,6 +13,8 @@ public interface DirectDiscountDAO extends JpaRepository<DirectDiscount, Long> {
 
 	List<DirectDiscount> findByDeletedTrue();
 
+	List<DirectDiscount> findByStatusAndDeleted(String status, boolean deleted);
+
 	@Query("SELECT d FROM DirectDiscount d WHERE d.product.productName LIKE %:keyword%")
 	List<DirectDiscount> findByDiscountProduct(@Param("keyword") String keyword);
 

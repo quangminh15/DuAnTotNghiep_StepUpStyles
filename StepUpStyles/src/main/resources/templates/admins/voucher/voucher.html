@@ -2,32 +2,32 @@
     <div class="card mb-5"
         style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
         <div class="card-body">
-            <h4 class="card-title">Form giảm giá</h4>
+            <h4 class="card-title">Form voucher</h4>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label>Sản phẩm</label>
-                    <div>
-                        <select class="select2 form-control" ng-model="form.product.productID">
-                            <option value="" disabled selected>Vui lòng chọn sản phẩm</option>
-                            <option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
-                        </select>
-                    </div>
+                    <label>Đơn hàng tối thiểu</label>
+                        <input class="form-control" id="inputPassword3" type="text" placeholder="Đơn hàng tối thiểu"
+                         required="" ng-model="form.total">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputPassword3">Giảm giá (%)</label>
                     <input class="form-control" id="inputPassword3" type="number" placeholder="% giảm giá" min="0"
-                        max="100" required="" ng-model="form.directDiscount" ng-change="validateDiscount()">
+                        max="100" required="" ng-model="form.discountAmount" ng-change="validateDiscount()">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="inputPassword3">Thời gian bắt đầu</label>
-                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.startDate">
+                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.dateStart">
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="inputPassword4">Thời gian kết thúc</label>
-                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.endDate">
+                    <input class="form-control" id="" type="datetime-local" required="" ng-model="form.dateEnd">
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="control-label">Mô tả</label>
+                    <textarea class="form-control" id="inputTextarea3" ng-model="form.description" rows="5"></textarea>
                 </div>
             </div>
             <div class="template-demo text-right mb-3">
@@ -70,21 +70,21 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Mức giảm %</th>
+                                    <th>Đơn hàng tối thiểu</th>
+                                    <th>Mức giảm (%)</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th>Trạng thái</th>
+                                    <th>Mô tả</th>
                                     <th class="actions"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="ddI in directDiscountDelItem">
-
-                                    <td>{{ddI.product.productName}}</td>
-                                    <td>{{ddI.directDiscount|number}}%</td>
+                                <tr ng-repeat="ddI in RestorePager.voucherDelItem">
+                                    <td>{{ formatToVND(ddI.total) }}</td>
+                                    <td>{{ddI.discountAmount|number}}%</td>
                                     <td>{{ddI.formattedStartDate }}</td>
                                     <td>{{ddI.formattedEndDate}}</td>
+                                    <td>{{ddI.description}}</td>
                                     <td
                                         ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                         {{ddI.status}}</td>
@@ -134,7 +134,7 @@
         <!-- thùng rác kết thúc -->
         <div class="card-body">
             <div class="card card-table m-3">
-                <h4 class="mb-0">Danh sách sản phẩm giảm giá</h4>
+                <h4 class="mb-0">Danh sách voucher</h4>
                 <div class="d-flex align-items-center">
                     <div style="width: 75%;">
                         <form method="post" style="margin-left: 20px;">
@@ -147,12 +147,13 @@
                     </div>
 
                     <!-- Thẻ select box -->
-                        <select class="form-control mr-2" style="width: 15%; margin-left: 10px;" ng-model="selectedStatus" ng-change="filterDiscounts()">
-                            <option>Tất cả trạng thái</option>
-                            <option>Đang diễn ra</option>
-                            <option>Chưa diễn ra</option>
-                            <option>Kết thúc</option>
-                        </select>                                  
+                    <select class="form-control mr-2" style="width: 15%; margin-left: 10px;" ng-model="selectedStatus"
+                        ng-change="filterDiscounts()">
+                        <option>Tất cả trạng thái</option>
+                        <option>Đang diễn ra</option>
+                        <option>Chưa diễn ra</option>
+                        <option>Kết thúc</option>
+                    </select>
 
                     <!-- Nút thùng rác -->
                     <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
@@ -174,12 +175,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="ddI in pager.directDiscountNoDelItem">
-                                <td>{{ddI.product.productName}}</td>
-                                <td>{{ddI.directDiscount|number}}%</td>
+                            <tr ng-repeat="ddI in pager.voucherNoDelItem">
+                                <td>{{ formatToVND(ddI.total) }}</td>
+                                <td>{{ddI.discountAmount|number}}%</td>
                                 <td>{{ddI.formattedStartDate }}</td>
                                 <td>{{ddI.formattedEndDate}}</td>
-                                <td>{{ formatToVND(ddI.priceDiscount) }}</td>
+                                <td>{{ddI.description}}</td>
                                 <td
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>

@@ -52,8 +52,7 @@ public class DiscountServiceImpl implements DiscountService {
 	public void saveStatus(DirectDiscount directDis) {
 		Date currentDate = new Date();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Điều chỉnh định dạng ngày tháng tương ứng
-                                                                          // với định dạng của thuộc tính startDate
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Điều chỉnh định dạng ngày tháng tương ứng với định dạng của thuộc tính startDate
         try {
             Date startDate = dateFormat.parse(directDis.getStartDate());
 
@@ -103,4 +102,10 @@ public class DiscountServiceImpl implements DiscountService {
 	public List<DirectDiscount> getdiscountsByProduct(Integer productId) {
 		return discountDAO.findByProduct_ProductID(productId);
 	}
+
+	@Override
+	public List<DirectDiscount> getDiscountsByStatusAndDeleted(String status, boolean deleted) {
+		return discountDAO.findByStatusAndDeleted(status, deleted);
+	}
+
 }

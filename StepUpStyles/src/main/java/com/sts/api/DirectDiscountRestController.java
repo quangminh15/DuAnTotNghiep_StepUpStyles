@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.sts.model.DirectDiscount;
 import com.sts.model.Product;
-import com.sts.model.ProductImage;
 import com.sts.service.DiscountService;
 import com.sts.service.ProductService;
 
@@ -90,10 +89,17 @@ public class DirectDiscountRestController {
     public List<DirectDiscount> searchDiscount(@RequestParam("keyword") String keyword) {
         return discountService.findByDiscountProduct(keyword);
     }
-    
-	// Lọc danh sách giảm giá theo sản phẩm
-  	@GetMapping("/loadbyproduct/{productId}")
-  	public List<DirectDiscount> getdiscountsByProduct(@PathVariable Integer productId) {
-  		return discountService.getdiscountsByProduct(productId);
-  	}
+
+    // Lọc danh sách giảm giá theo sản phẩm
+    @GetMapping("/loadbyproduct/{productId}")
+    public List<DirectDiscount> getdiscountsByProduct(@PathVariable Integer productId) {
+        return discountService.getdiscountsByProduct(productId);
+    }
+
+    @GetMapping("/filter")
+    public List<DirectDiscount> filterDiscounts(
+            @RequestParam("status") String status,
+            @RequestParam("deleted") boolean deleted) {
+        return discountService.getDiscountsByStatusAndDeleted(status, deleted);
+    }
 }

@@ -105,5 +105,8 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Product> product;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	private List<VoucherUse> voucherUse;
 
 }

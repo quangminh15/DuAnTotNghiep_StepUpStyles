@@ -143,6 +143,82 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		}	
 	}
 
+	//loc trang thai
+	$scope.selectedStatus = "Tất cả trạng thái";
+
+	$scope.filterDiscounts = function () {
+        // Chuyển đổi tên trạng thái sang giá trị tương ứng
+        var statusMapping = {
+            "Tất cả trạng thái": "",
+            "Đang diễn ra": "Đang diễn ra",
+            "Chưa diễn ra": "Chưa diễn ra",
+            "Kết thúc": "Đã kết thúc"
+        };
+
+        var status = statusMapping[$scope.selectedStatus];
+
+		if (status === "") {
+			// Hiển thị toàn bộ dữ liệu
+			$http.get("/rest/discount/noDeletedDiscount")
+				.then(function (resp) {
+					$scope.directDiscountNoDelItem = resp.data;
+					$scope.directDiscountNoDelItem.sort(function (a, b) {
+						var statusDiscount = {
+							'Đang diễn ra': 1,
+							'Chưa diễn ra': 2,
+							'Đã kết thúc': 3
+						};
+					
+						var statusA = a.status;
+						var statusB = b.status;
+					
+						return statusDiscount[statusA] - statusDiscount[statusB];
+					});
+					$scope.directDiscountNoDelItem.forEach(function(ddI) {
+						ddI.formattedStartDate = formatDate(ddI.startDate);
+						ddI.formattedEndDate = formatDate(ddI.endDate);
+					});
+				});
+		}else{
+			// Gọi API bằng $http
+			$http.get("/rest/discount/filter", {
+				params: {
+					status: status,
+					deleted: false // Nếu bạn không cần sử dụng biến deleted, bạn có thể loại bỏ nó hoặc thay đổi giá trị mặc định tùy theo yêu cầu của bạn.
+				}
+			}).then(function (resp) {
+				$scope.directDiscountNoDelItem = resp.data;
+				$scope.directDiscountNoDelItem.forEach(function(ddI) {
+					ddI.formattedStartDate = formatDate(ddI.startDate);
+					ddI.formattedEndDate = formatDate(ddI.endDate);
+				});
+				console.log(resp.data);
+			});
+		}
+
+		function formatDate(startDate) {
+			// Parse the input date string
+			const inputDate = new Date(startDate);
+		
+			// format gio VN
+			const options = {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+				hour12: false, // 24-hour format
+				timeZone: 'Asia/Ho_Chi_Minh', //  time zone
+			};
+		
+			// Format the date using Intl.DateTimeFormat
+			const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+		
+			return formattedDate;
+		}
+    };
+
 	//tìm kiếm tên sản phẩm
 	$scope.searchByProduct = function(){
 		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
@@ -450,52 +526,6 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		// Reset searchKeyword
 		searchValue = '';
 		$('#recycleBinModal').modal('show');
-	};
-
-	//loc trang thai
-	$scope.filterStatus = ''; // Khởi tạo giá trị ban đầu
-
-	$scope.filterByStatus = function() {
-		if ($scope.selectedStatus === "") {
-			$http.get("/rest/discount/noDeletedDiscount").then(resp => {
-				$scope.itemss = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách sản phẩm!',
-				});
-
-				console.log("Error", error);
-				$scope.pager.first();
-			});
-		} else {
-			$http.get("/rest/discount/noDeletedDiscount").then(resp => {
-				const selectedStatus = $scope.filterStatus;
-				if ($scope.filterStatus === '') {
-					return true; // Hiển thị tất cả khi bộ lọc chưa được chọn
-				} else if ($scope.filterStatus === 'dang' && itemss.status === 'Đang diễn ra') {
-					return true;
-				} else if ($scope.filterStatus === 'chuadr' && itemss.status === 'Chưa diễn ra') {
-					return true;
-				} else if ($scope.filterStatus === 'ket' && itemss.status === 'Đã kết thúc') {
-					return true;
-				}
-				const filteredSizes = resp.data.filter(itemss => itemss.status === selectedStatus);
-				$scope.itemss = filteredSizes;
-				$scope.pager.first();
-			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Lỗi khi tải danh sách sản phẩm theo trạng thái!',
-				});
-
-				console.log("Error", error);
-				$scope.pager.first();
-			});
-		}
 	};
 	
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở Table)
