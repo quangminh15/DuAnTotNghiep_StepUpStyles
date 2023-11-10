@@ -371,37 +371,34 @@ app.controller("product-ctrl", function($scope, $http) {
 
 	// Thêm sản phẩm mới
 	$scope.create = function() {
-		// Không chọn danh mục
+		// Kiểm tra lỗi và thông báo
 		if (!$scope.form.category || !$scope.form.category.categoryID) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
 				text: 'Vui lòng chọn danh mục!',
-			})
+			});
 			return;
 		}
 
-		// Không chọn thương hiệu
 		if (!$scope.form.brand || !$scope.form.brand.brandID) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
 				text: 'Vui lòng chọn thương hiệu!',
-			})
+			});
 			return;
 		}
 
-		// Lỗi bỏ trống tên sản phẩm
 		if (!$scope.form.productName) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập tên sản phẩm!!',
-			})
+				text: 'Vui lòng nhập tên sản phẩm!',
+			});
 			return;
 		}
-		
-		//Lỗi trùng tên sản phẩm
+
 		let existingProductName = $scope.productitems.find(productitem => productitem.productName === $scope.form.productName);
 		if (existingProductName) {
 			Swal.fire({
@@ -412,90 +409,90 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Lỗi bỏ trống giá sản phẩm
 		if (!$scope.form.price) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm!!";
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập giá sản phẩm!!',
-			})
+				text: 'Vui lòng nhập giá sản phẩm!',
+			});
 			return;
 		}
 
-		// Lỗi giá sản phẩm < 0
 		if ($scope.form.price < 0) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm lớn hơn 0!!";
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập giá sản phẩm lớn hơn 0!!',
-			})
+				text: 'Vui lòng nhập giá sản phẩm lớn hơn 0!',
+			});
 			return;
 		}
-		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
+
 		var descriptionEditor = CKEDITOR.instances.description;
 		$scope.form.description = descriptionEditor.getData();
 
-		// Lỗi giá sản phẩm > 100.000.000
 		if ($scope.form.price > 100000000) {
-			$scope.errorMessage = "Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!!";
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
 				text: 'Vui lòng nhập giá sản phẩm nhỏ hơn 100.000.000đ!',
-			})
+			});
 			return;
 		}
 
-
-
-		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
 		if (checkImage == true) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!!',
-			})
+				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+			});
 			return;
 		}
 
-		// Lấy thông tin người dùng từ API /rest/users/Idprofile
-		$http.get("/rest/users/Idprofile").then(resp => {
+		// Gọi API để lấy thông tin người dùng từ userID vừa nhận được
+		$http.get("/user/Idprofile").then(resp => {
 			var userID = resp.data;
-			$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
 
-			$scope.form.modifyDate = new Date();
+			// Gọi API để lấy đầy đủ thông tin người dùng
+			$http.get("/user/" + userID).then(userResp => {
+				var fullUserData = userResp.data;
+				$scope.form.user = fullUserData;
 
-			var productitem = angular.copy($scope.form);
-			productitem.user.userID = userID;
-			$http.post('/rest/products/create', productitem).then(resp => {
-				resp.data.modifyDate = new Date(resp.data.modifyDate);
-				$scope.productitems.push(resp.data);
-				$scope.reset();
-				$scope.initialize();
-				Swal.fire({
-					icon: 'success',
-					title: 'Thành công',
-					text: 'Thêm mới thành công!',
-				})
-			}).catch(error => {
-				if (error.status === 400) {
-					$scope.errorMessage = error.data;
-				} else {
+				$scope.form.modifyDate = new Date();
+
+				// Tiếp tục với quá trình cập nhật dữ liệu vào cơ sở dữ liệu
+				var productitem = angular.copy($scope.form);
+				productitem.user = fullUserData;
+
+				// Gọi API POST để tạo sản phẩm mới với thông tin sản phẩm đã chỉnh sửa
+				$http.post('/rest/products/create', productitem).then(resp => {
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.productitems.push(resp.data);
+					$scope.reset();
 					$scope.initialize();
+
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Thêm mới thành công!',
+					});
+					console.log("productitem:: ", productitem);
+				}).catch(error => {
+					// Xử lý lỗi khi không thể tạo mới sản phẩm
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
 						text: 'Thêm mới thất bại!',
-					})
+					});
+					$scope.initialize();
 					console.log("Error", error);
-				}
+				});
+			}).catch(error => {
+				// Xử lý lỗi khi không thể lấy đầy đủ thông tin người dùng
+				console.log("Error fetching full user data", error);
 			});
 		}).catch(error => {
-			console.log("Lỗi không tìm thấy người dùng có ID", error);
-			$scope.initialize();
-			// Xử lý lỗi khi không lấy được thông tin người dùng từ ID
+			console.log("Error fetching userID from email", error);
+			// Xử lý lỗi khi không lấy được userID từ email
 		});
 	}
 
@@ -572,57 +569,65 @@ app.controller("product-ctrl", function($scope, $http) {
 		}
 
 		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
-//		if (checkImage == true) {
-//			Swal.fire({
-//				icon: 'error',
-//				title: 'Thất bại',
-//				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
-//			})
-//			return;
-//		}
+		//		if (checkImage == true) {
+		//			Swal.fire({
+		//				icon: 'error',
+		//				title: 'Thất bại',
+		//				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+		//			})
+		//			return;
+		//		}
 
 
 		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
 		var descriptionEditor = CKEDITOR.instances.description;
 		$scope.form.description = descriptionEditor.getData();
 
-		// Lấy thông tin người dùng từ API /rest/users/Idprofile
-		$http.get("/rest/users/Idprofile").then(resp => {
+		// Lấy thông tin người dùng từ API /user/Idprofile
+		$http.get("/user/Idprofile").then(resp => {
 			var userID = resp.data;
 			$scope.form.user = { userID: userID }; // Gán userID cho sản phẩm
 
 			$scope.form.modifyDate = new Date();
 
-			var productitem = angular.copy($scope.form);
-			productitem.user.userID = userID;
-			// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
-			if (checkImage == true && $scope.form.activities == true) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
-				})
-				return;
-			}
-			$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
-				var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
-				resp.data.modifyDate = new Date(resp.data.modifyDate);
-				$scope.productitems[index] = productitem;
-				$scope.initialize();
-				Swal.fire({
-					icon: 'success',
-					title: 'Thành công',
-					text: 'Cập nhật thành công!',
-				})
+			// Gọi API để lấy thông tin người dùng từ userID vừa nhận được
+			$http.get("/user/" + userID).then(response => {
+				var user = response.data; // Lấy thông tin người dùng từ phản hồi
+
+				// Gán thông tin người dùng vào form
+				$scope.form.fullName = user.fullName;
+
+				// Tiếp tục với quá trình cập nhật dữ liệu vào cơ sở dữ liệu
+				var productitem = angular.copy($scope.form);
+				productitem.user = user;
+
+				// Gọi API PUT để cập nhật thông tin người dùng vào cơ sở dữ liệu
+				$http.put('/rest/products/update/' + productitem.productID, productitem).then(resp => {
+					// Xử lý phản hồi thành công
+					var index = $scope.productitems.findIndex(p => p.productID == productitem.productID);
+					resp.data.modifyDate = new Date(resp.data.modifyDate);
+					$scope.productitems[index] = productitem;
+					$scope.initialize();
+					Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Cập nhật thành công!',
+					});
+					console.log("productitem:: ", productitem);
+				}).catch(error => {
+					// Xử lý lỗi khi không thể cập nhật
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Cập nhật thất bại!',
+					});
+					$scope.initialize();
+					console.log("Error", error);
+				});
 			}).catch(error => {
-				Swal.fire({
-					icon: 'error',
-					title: 'Thất bại',
-					text: 'Cập nhật thất bại!',
-				})
-				$scope.initialize();
-				console.log("Error", error);
-			})
+				// Xử lý lỗi khi không thể lấy thông tin người dùng từ userID
+				console.log("Error fetching user with ID", userID, error);
+			});
 		}).catch(error => {
 			console.log("Error fetching userID from email", error);
 			// Xử lý lỗi khi không lấy được userID từ email
