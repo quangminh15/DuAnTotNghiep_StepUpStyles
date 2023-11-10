@@ -228,6 +228,10 @@ app.controller("productimage-ctrl", function($scope, $http) {
 	$scope.reset = function() {
 		$scope.form = {
 		};
+		var fileInput = document.getElementById('photo');
+		if (fileInput) {
+			fileInput.value = '';
+		}
 	}
 	//	Khởi đầu
 	$scope.initialize();

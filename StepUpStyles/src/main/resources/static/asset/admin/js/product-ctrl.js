@@ -313,12 +313,19 @@ app.controller("product-ctrl", function($scope, $http) {
 
 	//	Xóa form
 	$scope.reset = function() {
+		// Đặt lại nội dung của CKEditor
+		var ckeditor = CKEDITOR.instances.description;
+
+		if (ckeditor) {
+			ckeditor.setData('');
+		}
+
+		// Đặt lại các trường khác trong form
 		$scope.form = {
 			createDate: new Date(),
 			activities: false,
 			deleted: false,
 			featured: false,
-			description: '',
 		};
 	}
 
