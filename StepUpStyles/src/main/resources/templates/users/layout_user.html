@@ -8,6 +8,9 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title th:replace="${title}"></title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 <!-- Template CSS -->
 <link rel="stylesheet" href="/asset/user/css/style-liberty.css">
 <!-- Template CSS -->
@@ -237,6 +240,28 @@ a:hover, button:hover {
 		}
 
 		updateFavoriteCount();
+
+		function displayImage(input, imageId) {
+        var imageElement = document.getElementById(imageId);
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imageElement.src = e.target.result;
+                imageElement.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+	</script>
+	<script>
+		$(document).ready(function() {
+        // $(".fancybox").fancybox();
+		$("[data-fancybox^='review-']").fancybox();
+        });
+
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
@@ -289,6 +314,7 @@ a:hover, button:hover {
 		$('#customerhnyCarousel').carousel({
 			interval : 5000
 		});
+		
 	</script>
 	<!-- cart-js -->
 	<!-- <script src="/asset/user/js/minicart.js"></script> -->

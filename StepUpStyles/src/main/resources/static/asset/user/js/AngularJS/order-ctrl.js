@@ -38,5 +38,10 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			
 			
 	}
+
+		$scope.showModalReview = function(){
+			$('#reviewModal').modal('show');
+		}
+
 	$scope.initialize()
 }])

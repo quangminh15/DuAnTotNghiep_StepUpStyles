@@ -24,8 +24,83 @@
 		.subcard {
 			border-bottom: 1px solid rgba(0, 0, 0, 0.125)
 		}
+
+		.custom-file-upload {
+			border: 1px solid #ccc;
+			display: inline-block;
+			padding: 6px 12px;
+			cursor: pointer;
+		}
+
+		.custom-file-upload:hover {
+			background-color: #f8f8f8;
+		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+		aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex">
+						<img src="/asset/user/img/e.jpg" width="10%" class="mr-2">
+						<div>
+							<p>Giày converse</p>
+							<p>Màu sắc: đen, Size: 40</p>
+						</div>
+					</div>
+					<div class="row col-sm-12" style="justify-content: center; font-size: 60px;">
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+					</div>
+					<form>
+						<div class="form-group">
+							<textarea class="form-control" id="reviewText" rows="3"
+								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="imageUpload1" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 1
+							</label>
+							<label for="imageUpload2" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 2
+							</label>
+							<label for="imageUpload3" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 3
+							</label>
+							<div class="d-flex">
+								<input type="file" id="imageUpload1" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage1');">
+								<img id="selectedImage1" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="imageUpload2" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage2');">
+								<img id="selectedImage2" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="imageUpload3" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage3');">
+								<img id="selectedImage3" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
+					<button class="btn btn-danger">Hoàn thành</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
 		<!--/-->
@@ -117,7 +192,7 @@
 						<div class="col-md-2">{{item.price}}</div>
 					</div>
 
-					
+
 					<div class="card-footer bg-white border-0 text-right">
 						<div class="d-flex justify-content-end align-items-center">
 							<p class="m-3">Tong Thanh Toan: </p>
@@ -125,7 +200,7 @@
 
 						</div>
 						<button class="btn btn-danger">Huy Don Hang</button>
-						<button class="btn btn-danger">Danh Gia</button>
+						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button>
 					</div>
 
 				</div>

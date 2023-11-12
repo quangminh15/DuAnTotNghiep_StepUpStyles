@@ -341,22 +341,30 @@
 					<strong>{{ noReviewsMessage }}</strong>
 				</p>
 			</div>
-			<div class="content-singlev-ecomm py-3" ng-repeat="rv in reviewPager.allreviews">
+			<div class="content-singlev-ecomm"
+				ng-repeat="rv in reviewPager.allreviews">
 				<div class="row">
 					<div class="col-sm-2 text-center">
 						<img src="" alt="Hình" class="img-fluid rounded-circle">
 					</div>
 					<div class="col-sm-10">
 						<p class="mb-0">
-							<strong>{{rv.user.fullName}}</strong>
+							<strong style="color: black;">{{rv.user.fullName}}</strong>
 						</p>
-						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
+						<p class="mb-0" style="font-size: 12px;">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
 						<div class="rating mb-2 text-warning">
 							<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
 								ng-class="{'fa-star': star <= rv.rating, 'fa-star-o': star > rv.rating}"></span>
 						</div>
-						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
-						<span class="fa fa-thumbs-up"></span>
+						<p class="mb-2" style="word-wrap: break-word; color: black;">{{rv.title}}</p>
+						<div>
+							<!-- <img src="{{rv.image1}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="{{rv.image2}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="{{rv.image3}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;"> -->
+							<img src="/asset/user/images/banner1.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="/asset/user/images/banner2.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="/asset/user/images/banner4.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+						</div>
 					</div>
 				</div>
 				<hr>
@@ -388,5 +396,4 @@
 
 	</div>
 </body>
-
 </html>
