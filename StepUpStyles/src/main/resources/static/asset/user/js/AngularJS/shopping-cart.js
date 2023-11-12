@@ -133,7 +133,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	
 	$scope.showQuantityStock = function (id, size, color) {
 		
-		
+			$scope.qty=1
 			$scope.checkColor = color;
 			
 			console.log("color đã chọn: ", $scope.checkColor);
@@ -153,7 +153,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.checkQuantity = function ( qty) {
 		
 		if ($scope.singleProd.quantity<qty) {
-			$scope.qty=$scope.singleProd.quantity
+		
 			console.log("qty",$scope.qty,$scope.singleProd.quantity);
 			const Toast = Swal.mixin({
 				toast: true,
@@ -173,8 +173,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 			})
 			
+			$scope.qty=$scope.singleProd.quantity
 		}
-		$scope.qty=$scope.singleProd.quantity
 	}
 
 
@@ -409,19 +409,39 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.addToCart = function (id, size, color, qty) {
 		console.log("test",id, size, color, qty);
 
-		// $http.post(`/rest/cart?id=${id}&size=${size}&color=${color}&qty=${qty}`)
+		$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
 			
-		// 	.then(function (response) {
-		// 		console.log('Added to cart: ');
+			.then(function (response) {
+				console.log('Added to cart: ');
+				const Toast = Swal.mixin({
+					toast: true,
+					position: 'top-right',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					},
+					customClass: {
+						// Add your custom CSS class here
+						popup: 'custom-toast-class',
+					  }
+				})
+				Toast.fire({
+					icon: 'success',
+					title: 'Đã Thêm Sản Phẩm Vào Giỏ Hàng',
+	
+				})
+				$scope.countcartItems()
+				updateCartCount()
+				$scope.initialize()
 				
-		// 		$scope.initialize()
-		// 		$scope.countcartItems()
-				
-		// 	})
+			})
 
-		// 	.catch(function (error) {
-		// 		console.error('Failed to add to cart:', error);
-		// 	});
+			.catch(function (error) {
+				console.error('Failed to add to cart:', error);
+			});
 		
 
 	};

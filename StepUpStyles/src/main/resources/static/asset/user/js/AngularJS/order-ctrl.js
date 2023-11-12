@@ -18,16 +18,13 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					
 					$http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
 					.then(respone=>{
-						$scope.orderDetail = respone.data
+						item.orderDetail = respone.data
 						console.log("order",$scope.orderDetail);
-
-						$scope.orderDetail.forEach(orderdetails => {
-							console.log("s1",orderdetails.productDetail.product.productID);
-								$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-									 orderdetails.image = resp.data;
-									 console.log("s2",orderdetails.image);
-									
-							})
+						item.orderDetail.forEach(orderdetails => {
+							$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
+								orderdetails.productDetail.product.productImages = resp.data;
+								console.log("s2",orderdetails.productDetail.product.productImages);
+						})
 				
 						})
 					})

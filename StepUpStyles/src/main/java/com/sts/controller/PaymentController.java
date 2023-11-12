@@ -31,9 +31,9 @@ public class PaymentController {
     @ResponseBody
     @PostMapping("/payment/getdata")
     public void getData(@RequestBody List<OrderDetailDTO> cartDataList,
-            @RequestParam("initialPrice") double initial,
-            @RequestParam("fee") double fee,
-            @RequestParam("addressId") int addressId) {
+            @RequestParam("initialPrice") Double initial,
+            @RequestParam("fee") Double fee,
+            @RequestParam("addressId") Integer addressId) {
 
         ordertemp = OrderDTO.builder()
         .initialPrice(initial)
@@ -56,7 +56,7 @@ public class PaymentController {
     @GetMapping("/purchase")
     public String createOrderVNPay(){
         Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(), ordertemp.getShippingFee(), ordertemp.getAddressID(), true);
-        return "redirect:/index";
+        return "redirect:/paysuccess";
     }
     @ResponseBody
     @GetMapping("/payment/removedata")
@@ -70,7 +70,7 @@ public class PaymentController {
 
     @RequestMapping("/submitOrder")
     public String submidOrder(HttpServletRequest request) {
-        System.out.println(1);
+       
         total = ordertemp.getInitialPrice()+ordertemp.getShippingFee();
         int orderTotal = 10000;
         String orderInfo = "Thanh Toán Đơn Hàng";
