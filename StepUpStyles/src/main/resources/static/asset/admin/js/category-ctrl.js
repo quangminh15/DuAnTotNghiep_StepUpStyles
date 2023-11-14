@@ -304,6 +304,11 @@ app.controller("category-ctrl", function($scope, $http) {
 			activities: false,
 			deleted: false,
 		};
+		
+		var fileInput = document.getElementById('photo');
+		if (fileInput) {
+			fileInput.value = '';
+		}
 	}
 	//	Khởi đầu
 	$scope.initialize();

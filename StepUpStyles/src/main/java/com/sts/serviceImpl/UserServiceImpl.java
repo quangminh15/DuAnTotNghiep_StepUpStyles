@@ -1,20 +1,19 @@
 package com.sts.serviceImpl;
 
-import com.sts.dao.UserDAO;
-import com.sts.model.Brand;
-import com.sts.model.DTO.DResponseUser;
-import com.sts.model.DTO.LResponseUser;
-import com.sts.model.User;
-import com.sts.model.DTO.OneUserForSecurity;
-import com.sts.model.DTO.UserForSecurity;
-import com.sts.service.UserService;
-import com.sts.service.UserService;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.sts.dao.UserDAO;
+import com.sts.model.User;
+import com.sts.model.DTO.DResponseUser;
+import com.sts.model.DTO.LResponseUser;
+import com.sts.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
