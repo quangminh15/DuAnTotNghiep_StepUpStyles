@@ -73,4 +73,11 @@ public class UserRestController {
 		System.out.println(id);
 		return ResponseEntity.ok().body(id);
 	}
+
+	@GetMapping("/EmailProfile")
+	public ResponseEntity<String> getEmailProfile() {
+		String email = userService.getUserEmailCurrent();
+		System.out.println(email);
+		return ResponseEntity.ok().body(email);
+	}
 }

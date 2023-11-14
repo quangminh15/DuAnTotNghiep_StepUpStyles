@@ -93,6 +93,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/voucher/voucher.html",
 			controller: "voucher-ctrl"
 		})
+		.when("/profile", {
+			templateUrl: "/templates/admins/user/profile.html",
+			controller: "profile-ctrl"
+		})
 		.otherwise({
 			templateUrl: "/templates/admins/index.html",
 			controller: "indexAdmin-ctrl"

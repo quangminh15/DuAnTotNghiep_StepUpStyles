@@ -22,5 +22,7 @@ public interface UserService {
 
 	Integer getUserIdCurrent();
 
+	String getUserEmailCurrent();
+
 	DResponseUser getUserByEmail(String email);
 }
