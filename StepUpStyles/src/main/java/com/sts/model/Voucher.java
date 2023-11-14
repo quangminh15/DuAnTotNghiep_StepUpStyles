@@ -38,6 +38,8 @@ public class Voucher implements Serializable {
 
     private Boolean deleted;
 
+    private Boolean saved;
+
     @JsonIgnore
     @OneToMany(mappedBy = "voucher")
     private List<VoucherUse> voucherUse;

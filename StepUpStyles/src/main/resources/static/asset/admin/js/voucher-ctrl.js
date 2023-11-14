@@ -12,6 +12,34 @@ app.controller("voucher-ctrl", function($scope, $http){
 		{ name: 'description', label: 'Mô tả' },
 	];
 
+	$scope.sortByColumn = function (columnName) {
+		if ($scope.sortColumn === columnName) {
+		  $scope.sortReverse = !$scope.sortReverse;
+		} else {
+		  $scope.sortColumn = columnName;
+		  $scope.sortReverse = false;
+		}
+	
+		$scope.voucherNoDelItem.sort(function (a, b) {
+		  var aValue = a[columnName];
+		  var bValue = b[columnName];
+	
+		  if (typeof aValue === "string") {
+			aValue = aValue.toLowerCase();
+		  }
+		  if (typeof bValue === "string") {
+			bValue = bValue.toLowerCase();
+		  }
+	
+		  if (aValue < bValue) {
+			return $scope.sortReverse ? 1 : -1;
+		  } else if (aValue > bValue) {
+			return $scope.sortReverse ? -1 : 1;
+		  }
+		  return 0;
+		});
+	};
+
     $scope.initialize = function (){
         //load voucher all
 		$http.get("/rest/voucher").then(resp => {
@@ -452,7 +480,19 @@ app.controller("voucher-ctrl", function($scope, $http){
 				});
 			}
 		})
-	}
+	};
+
+	$scope.formatDescription = function (description) {
+		// Đặt một giới hạn độ dài cho địa chỉ
+		var maxLength = 20;
+	
+		// Kiểm tra độ dài địa chỉ và trả về địa chỉ được cắt hoặc không đổi
+		if (description.length > maxLength) {
+			return description.substring(0, maxLength) + '...';
+		} else {
+			return description;
+		}
+	};
 
 	//	Phân trang
 	$scope.pager = {

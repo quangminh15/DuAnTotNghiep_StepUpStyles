@@ -3,37 +3,35 @@ app.controller("voucher-ctrl", function ($scope, $http) {
   $scope.getVoucher = [];
 
   $scope.getAllVoucher = function () {
-    $http.get("/rest/voucher/noDeletedVoucher").then((resp) => {
+    $http.get("/rest/voucher/valid").then((resp) => {
       $scope.voucher = resp.data;
       $scope.voucher.forEach(function (ddI) {
         ddI.formattedStartDate = formatDate(ddI.dateStart);
         ddI.formattedEndDate = formatDate(ddI.dateEnd);
       });
-    });
-
-    function formatDate(startDate) {
-      // Parse the input date string
-      const inputDate = new Date(startDate);
-
-      // format gio VN
-      const options = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false, // 24-hour format
-        timeZone: "Asia/Ho_Chi_Minh", //  time zone
-      };
-
-      // Format the date using Intl.DateTimeFormat
-      const formattedDate = new Intl.DateTimeFormat("vi-VN", options).format(
-        inputDate
-      );
-
-      return formattedDate;
+      function formatDate(startDate) {
+        // Parse the input date string
+        const inputDate = new Date(startDate);
+    
+        // Format options
+        const options = {
+            weekday: 'long', // 'long' for the full weekday name
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            // hour: '2-digit',
+            // minute: '2-digit',
+            // second: '2-digit',
+            hour12: false, // 24-hour format
+            timeZone: 'Asia/Ho_Chi_Minh', // Time zone
+        };
+    
+        // Format the date using Intl.DateTimeFormat
+        const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+    
+        return formattedDate;
     }
+    });
   };
 
   $scope.getAllVoucher();
@@ -96,4 +94,34 @@ app.controller("voucher-ctrl", function ($scope, $http) {
         console.error("Error:", error);
       });
   };
+
+  $scope.saveVoucher = function(item) {
+        item.saved = true;
+				$http.put('/rest/voucher/updateVoucher/' + item.voucherId, item).then(resp => {
+					var index = $scope.voucher.findIndex(p => p.voucherId == item.voucherId);
+					$scope.voucher[index] = item;
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          Toast.fire({
+            icon: 'success',
+            title: 'Đã thêm thành công voucher',
+
+          })
+				}).catch(error => {
+          console.log("Error", error);
+        })
+    
+    // Sau khi lưu thành công, cập nhật trạng thái đã lưu cho item
+    item.saved = true;
+  };
+
 });
