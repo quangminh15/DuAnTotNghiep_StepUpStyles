@@ -72,7 +72,7 @@ public class UserController {
 		return "users/LoginSTS";
 	}
 
-	@RequestMapping("/login/error")
+	@RequestMapping("/loginSTS-error")
 	public String ad2(Model model) {
 		model.addAttribute("messageLoginFail", "Thông tin chưa đúng");
 		return "users/LoginSTS";
@@ -82,11 +82,17 @@ public class UserController {
 	public String profile(Model model) {
 		Integer id = userService.getUserIdCurrent();
 		if(id == null){
-			return "redirect:/loginSTS";
+			return "/LoginSTS";
 		}
 		User user = userService.findById(id);
 		DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
 		model.addAttribute("UserProfile", dResponseUser);
 		return "users/profile";
+	}
+
+	@RequestMapping("/forgot-pass")
+	public String forgotpass(Model model) {
+		model.addAttribute("messageLoginFail", "Thông tin chưa đúng");
+		return "users/forgot-pass";
 	}
 }

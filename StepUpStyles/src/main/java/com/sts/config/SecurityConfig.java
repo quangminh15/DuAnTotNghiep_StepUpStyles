@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/carttt/**").hasRole("USER")
                 .antMatchers("/admi2n/**").hasAnyRole("ADMIN","EMPLOYEE")
                 .antMatchers("/admin/thongke").hasRole("ADMIN")
-                .antMatchers("/static/**").permitAll()
+                .antMatchers("/static/**","/login/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     String targetUrl = determineTargetUrl(authentication);
                     response.sendRedirect(targetUrl);
                 })
-                .failureUrl("/login/error")
+                .failureUrl("/loginSTS-error")
                 .usernameParameter("email")
                 .passwordParameter("pass");
 
