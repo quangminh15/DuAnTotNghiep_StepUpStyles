@@ -27,6 +27,7 @@ public class PaymentController {
     
     List<OrderDetailDTO> listOrderDetails = new ArrayList<>();
     OrderDTO ordertemp = new OrderDTO();
+    Order order = new Order();
 
     @ResponseBody
     @PostMapping("/payment/getdata")
@@ -53,7 +54,7 @@ public class PaymentController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping("/purchase")
+    @GetMapping("/purchase") 
     public String createOrderVNPay(){
         Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(), ordertemp.getShippingFee(), ordertemp.getAddressID(), true);
         return "redirect:/paysuccess";
