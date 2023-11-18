@@ -19,4 +19,6 @@ public interface OrderService {
     List<OrderDetail> loadByOrder(Order order);
 
     List<Order> loadAll();
+
+
 }

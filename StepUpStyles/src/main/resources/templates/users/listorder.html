@@ -109,27 +109,27 @@
 
 				<div class="d-flex row text-center align-items-center">
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Tất Cả</p>
 					</a>
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Đang Xử Lý</p>
 					</a>
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Vận Chuyển</p>
 					</a>
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Đang Giao</p>
 					</a>
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Đã Giao</p>
 					</a>
 					<a class="col-md-2 menu-item p-1" href="">
-						
+
 						<p>Đã Hủy</p>
 					</a>
 				</div>
@@ -144,21 +144,22 @@
 		<!--/-->
 
 
-		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" >
-			<div class="container py-md-3"  >
+		<div class="ecomrhny-content-inf py-1 mt-3 mb-5">
+			<div class="container py-md-3">
 				<div class="accordion" id="accordionExample">
 					<div class="card">
-						<div class="card-header bg-white" id="headingOne" >
-							<h2 class="mb-0 d-flex justify-content-end " >
+						<div class="card-header bg-white" id="headingOne">
+							<h2 class="mb-0 d-flex justify-content-end ">
 								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
-										data-target="#collapse{{ $index + 1 }}" aria-expanded="true" aria-controls="collapseOne">
+										data-target="#collapse{{ $index + 1 }}" aria-expanded="true"
+										aria-controls="collapseOne">
 										Chi Tiet
 									</button></p>
 
 							</h2>
 						</div>
 
-						<div  id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
+						<div id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
 								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang {{order.orderId}}</p>
@@ -186,8 +187,9 @@
 						</div>
 					</div>
 					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in order.orderDetail">
-						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.productDetail.product.productImages[1].imagePath}}" >
-						<div class="col-md-8">
+						<img class=" col-md-2 pic-2 img-fluid"
+							ng-src="{{item.productDetail.product.productImages[1].imagePath}}">
+						<div class="col-md-6">
 							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 										-webkit-box-orient: vertical;
 										-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
@@ -197,18 +199,22 @@
 							<p class="text-dark">X {{item.quantity}}</p>
 
 						</div>
-						<div class="col-md-2">{{item.price}}</div>
+						<div class="col-md-4 d-flex justify-content-end">
+							<div>{{item.price|number:0 }} ₫</div><button class="btn btn-danger ml-3"
+								ng-click="showModalReview()">Đánh giá</button>
+						</div>
+
+
 					</div>
 
 
 					<div class="card-footer bg-white border-0 text-right">
 						<div class="d-flex justify-content-end align-items-center">
-							<p class="m-3">Tong Thanh Toan: </p>
-							<h3 class="text-danger">200.000</h3>
+							<p class="m-3">Tổng thanh toán: </p>
+							<h3 class="text-danger">200.000 ₫</h3>
 
 						</div>
-						<button class="btn btn-danger">Huy Don Hang</button>
-						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button>
+						<button class="btn btn-danger">Hủy đơn hàng</button>
 					</div>
 
 				</div>
@@ -226,73 +232,7 @@
 	<!-- //products-->
 
 	<!--review-->
-	<section class="w3l-ecommerce-main w3l-ecommerce-main-inn">
-		<!-- /content-6-section -->
-		<div class="container content-singlev-ecomm py-5">
-			<h4>ĐÁNH GIÁ SẢN PHẨM</h4>
-			<div class="content-singlev-ecomm py-5 bg-white">
-				<div class="row wrapper-rating">
-					<div class="col-sm-3 text-center">
-						<h2>
-							{{averageRating}}/5<span class="text-warning">★</span>
-						</h2>
-					</div>
-					<div class="col-sm-8">
-						<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(null)">Tất cả ({{ reviewCounts.total }})</div>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
-				<div class="row">
-					<div class="col-sm-2 text-center">
-						<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
-					</div>
-					<div class="col-sm-10">
-						<p class="mb-0">
-							<strong>{{rv.user.fullName}}</strong>
-						</p>
-						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
-						<div class="rating mb-2">
-							<span class="fa fa-star" ng-repeat="star in getStars(rv.rating)"></span>
-						</div>
-						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
-						<span class="fa fa-thumbs-up"></span>
-					</div>
-				</div>
-				<hr>
-			</div>
-			<!--/pagination-->
-			<div class="pagination" style="margin: 0px 10px 20px;">
-				<ul>
-					<li class="prev"><a ng-click="reviewPager.first()"><span class="fa fa-angle-double-left"></span></a>
-					</li>
-					<li class="page-item" ng-repeat="page in reviewVisiblePages"
-						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a class="page-link" href=""
-							ng-click="reviewPager.gotoReview(page.value)"
-							ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
-							{{ page.value }} </a></li>
-					<li class="next"><a ng-click="reviewPager.last()"><span class="fa fa-angle-double-right"></span></a>
-					</li>
-				</ul>
-			</div>
-			<!--//pagination-->
-		</div>
-		</div>
-	</section>
-	<!--review-->
+	
 
 	<div style="margin: 8px auto; display: block; text-align: center;">
 

@@ -7,7 +7,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
-
+	// localStorage.removeItem('selectedItems');
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
 	}
@@ -49,7 +49,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/sizes?prodID=${productId}&colorID=${colorId}`)
 						.then(sizeResp => {
 							cartItem.sizes = sizeResp.data;
-							
+
 
 							if (!$scope.disabledSizes[productId]) {
 								$scope.disabledSizes[productId] = {};
@@ -68,7 +68,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					$http.get(`/rest/cart/colors?prodID=${productId}&sizeID=${sizeId}`)
 						.then(colorResp => {
 							cartItem.colors = colorResp.data;
-							
+
 
 							// Set disabled colors for the product
 							if (!$scope.disabledColors[productId]) {
@@ -96,14 +96,21 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				$scope.items.forEach(item => {
 					$http.get("/rest/discount/loadbyproduct/" + item.product.productID).then(resp => {
 						item.product.discount = resp.data;
-						
+
 						if (item.product.discount) {
 							item.product.price = item.product.price - (item.product.price * item.product.discount[0].directDiscount / 100)
-							
+
 						}
 					})
 
 				})
+				$scope.items.forEach(cartDetail => {
+					$http.get("/rest/productimages/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+						cartDetail.product.productImages = resp.data;
+						console.log("images", cartDetail.product.productImages);
+					})
+				})
+
 				if ($scope.items.length > 0) {
 					$scope.page = true
 				} else
@@ -129,32 +136,41 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 
 	}
-	$scope.singleProd=[]
-	
+	$scope.singleProd = []
+
 	$scope.showQuantityStock = function (id, size, color) {
-		
-			$scope.qty=1
-			$scope.checkColor = color;
-			
-			console.log("color đã chọn: ", $scope.checkColor);
-	
+
+		$scope.qty = 1
+		$scope.checkColor = color;
+
+		console.log("color đã chọn: ", $scope.checkColor);
+
 		$http.get(`/rest/productdetails/find?id=${id}&size=${size}&color=${color}`)
 			.then(function (response) {
-				$scope.singleProd=response.data
+				$scope.singleProd = response.data
 				console.log("prod", $scope.singleProd);
-				
+
 			})
 
 			.catch(function (error) {
 				console.error('Failed to add to cart:', error);
 			});
-			
+
 	}
-	$scope.checkQuantity = function ( qty) {
-		
-		if ($scope.singleProd.quantity<qty) {
-		
-			console.log("qty",$scope.qty,$scope.singleProd.quantity);
+	$scope.delete = function (id) {
+		$http.delete(`/rest/cart/delete?cartId=${id}`).then(function (respone) {
+			
+			$scope.initialize()
+		})
+		.catch(function (error) {
+			console.error('Failed to delete:', error);
+		});
+	}
+	$scope.checkQuantity = function (qty) {
+
+		if ($scope.singleProd.quantity < qty) {
+
+			console.log("qty", $scope.qty, $scope.singleProd.quantity);
 			const Toast = Swal.mixin({
 				toast: true,
 				position: 'top',
@@ -172,8 +188,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				title: 'Số lượng không đủ',
 
 			})
-			
-			$scope.qty=$scope.singleProd.quantity
+
+			$scope.qty = $scope.singleProd.quantity
 		}
 	}
 
@@ -207,7 +223,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				$scope.province = response.data.data;
 				// console.log($scope.province);
 				$scope.current_province = $scope.province[$scope.index_of_province(p)]
-				
+
 				$http({
 					method: 'GET',
 					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
@@ -227,7 +243,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 						}
 					}).then(function successCallback(response) {
 						$scope.ward = response.data.data
-						
+
 						$scope.dataAddress.to_ward_code = $scope.ward[$scope.index_of_ward(w)].WardID
 						$http({
 							method: 'POST',
@@ -407,8 +423,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	};
 	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
-		
-		if (!size||!color) {
+
+		if (!size || !color) {
 			const Toast = Swal.mixin({
 				toast: true,
 				position: 'top-right',
@@ -422,100 +438,100 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				customClass: {
 					// Add your custom CSS class here
 					popup: 'custom-toast-class',
-				  }
+				}
 			})
 			Toast.fire({
 				icon: 'error',
 				title: 'Vui lòng chọn size và màu sắc',
 
 			})
-		}else{
+		} else {
 
-		
-		if ($scope.singleProd.quantity<=0) {
-			Swal.fire({
-				title: "Thêm Vào Giỏ Hàng?",
-				text: "Sản phẩm hiện tại đang hết hàng, bạn vẫn có thêm vào giỏ hàng nhưng chưa thể mua ngay được!",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#3085d6",
-				cancelButtonColor: "#d33",
-				confirmButtonText: "Thêm Vào Giỏ Hàng!"
-			  }).then((result) => {
-				if (result.isConfirmed) {
-					$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
-						
-						.then(function (response) {
-							console.log('Added to cart: ');
-							const Toast = Swal.mixin({
-								toast: true,
-								position: 'top-right',
-								showConfirmButton: false,
-								timer: 3000,
-								timerProgressBar: true,
-								didOpen: (toast) => {
-									toast.addEventListener('mouseenter', Swal.stopTimer)
-									toast.addEventListener('mouseleave', Swal.resumeTimer)
-								},
-								customClass: {
-									// Add your custom CSS class here
-									popup: 'custom-toast-class',
-								  }
+
+			if ($scope.singleProd.quantity <= 0) {
+				Swal.fire({
+					title: "Thêm Vào Giỏ Hàng?",
+					text: "Sản phẩm hiện tại đang hết hàng, bạn vẫn có thêm vào giỏ hàng nhưng chưa thể mua ngay được!",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Thêm Vào Giỏ Hàng!"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
+
+							.then(function (response) {
+								console.log('Added to cart: ');
+								const Toast = Swal.mixin({
+									toast: true,
+									position: 'top-right',
+									showConfirmButton: false,
+									timer: 3000,
+									timerProgressBar: true,
+									didOpen: (toast) => {
+										toast.addEventListener('mouseenter', Swal.stopTimer)
+										toast.addEventListener('mouseleave', Swal.resumeTimer)
+									},
+									customClass: {
+										// Add your custom CSS class here
+										popup: 'custom-toast-class',
+									}
+								})
+								Toast.fire({
+									icon: 'success',
+									title: 'Đã Thêm Sản Phẩm Vào Giỏ Hàng',
+
+								})
+								$scope.countcartItems()
+								updateCartCount()
+								$scope.initialize()
+
 							})
-							Toast.fire({
-								icon: 'success',
-								title: 'Đã Thêm Sản Phẩm Vào Giỏ Hàng',
-				
-							})
-							$scope.countcartItems()
-							updateCartCount()
-							$scope.initialize()
-							
+
+							.catch(function (error) {
+								console.error('Failed to add to cart:', error);
+							});
+
+					}
+				});
+			} else {
+				$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
+
+					.then(function (response) {
+						console.log('Added to cart: ');
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-right',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer)
+								toast.addEventListener('mouseleave', Swal.resumeTimer)
+							},
+							customClass: {
+								// Add your custom CSS class here
+								popup: 'custom-toast-class',
+							}
 						})
-			
-						.catch(function (error) {
-							console.error('Failed to add to cart:', error);
-						});
-				  
-				}
-			  });
-		}else{
-			$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
-						
-						.then(function (response) {
-							console.log('Added to cart: ');
-							const Toast = Swal.mixin({
-								toast: true,
-								position: 'top-right',
-								showConfirmButton: false,
-								timer: 3000,
-								timerProgressBar: true,
-								didOpen: (toast) => {
-									toast.addEventListener('mouseenter', Swal.stopTimer)
-									toast.addEventListener('mouseleave', Swal.resumeTimer)
-								},
-								customClass: {
-									// Add your custom CSS class here
-									popup: 'custom-toast-class',
-								  }
-							})
-							Toast.fire({
-								icon: 'success',
-								title: 'Đã Thêm Sản Phẩm Vào Giỏ Hàng',
-				
-							})
-							$scope.countcartItems()
-							updateCartCount()
-							$scope.initialize()
-							
+						Toast.fire({
+							icon: 'success',
+							title: 'Đã Thêm Sản Phẩm Vào Giỏ Hàng',
+
 						})
-			
-						.catch(function (error) {
-							console.error('Failed to add to cart:', error);
-						});
+						$scope.countcartItems()
+						updateCartCount()
+						$scope.initialize()
+
+					})
+
+					.catch(function (error) {
+						console.error('Failed to add to cart:', error);
+					});
+			}
+
 		}
-		
-	}
 	};
 
 	$scope.updateCartItemByColor = function (colorID, cartDetailID, index) {
