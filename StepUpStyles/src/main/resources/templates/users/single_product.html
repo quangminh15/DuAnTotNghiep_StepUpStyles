@@ -1,18 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
 
-<title>SUS || CHI TIẾT</title>
+	<title>SUS || CHI TIẾT</title>
 
 </head>
 
 <body ng-controller="favorite-ctrl">
 
-	<div class="right-sidebar-panel-content animated fadeInRight"
-		tabindex="5003" style="overflow: hidden; outline: none;"></div>
-		
+	<style>
+		.custom-toast-class {
+			/* Add your custom styles here */
+			/* For example: */
+			top: 15%;
+			
+		}
+	</style>
+
+	<div class="right-sidebar-panel-content animated fadeInRight" tabindex="5003"
+		style="overflow: hidden; outline: none;"></div>
+
 	<section class="w3l-ecommerce-main-inn">
 		<!--/ecommerce-single-->
 		<div class="ecomrhny-content-inf py-5">
@@ -24,11 +32,10 @@
 						<div class="flexslider1">
 							<ul class="slides">
 								<th:block th:each="image, iterStat : ${productImageList}">
-									<li th:attr="data-thumb=${image.imagePath}"
-										th:if="${iterStat.count} &lt;= 4">
+									<li th:attr="data-thumb=${image.imagePath}" th:if="${iterStat.count} &lt;= 4">
 										<div class="thumb-image">
-											<img th:src="@{${image.imagePath}}" data-imagezoom="true"
-												class="img-fluid" alt=" ">
+											<img th:src="@{${image.imagePath}}" data-imagezoom="true" class="img-fluid"
+												alt=" ">
 										</div>
 									</li>
 								</th:block>
@@ -40,8 +47,7 @@
 
 							<div class="transmitv single-item">
 
-								<button type="submit"
-									ng-click="addToCart(productDetails.productID, size, color, qty)"
+								<button type="submit" ng-click="addToCart(productDetails.productID, size, color, qty)"
 									class="transmitv-cart ptransmitv-cart add-to-cart read-2">
 									Thêm vào giỏ</button>
 
@@ -59,10 +65,10 @@
 											<button type="button" class="close" data-dismiss="modal">&times;</button>
 											<!-- Nav tabs -->
 											<ul class="nav nav-tabs">
-												<li class="nav-item"><a class="nav-link active"
-													data-toggle="tab" href="#home">Mô tả</a></li>
-												<li class="nav-item"><a class="nav-link"
-													data-toggle="tab" href="#menu1">Chọn size</a></li>
+												<li class="nav-item"><a class="nav-link active" data-toggle="tab"
+														href="#home">Mô tả</a></li>
+												<li class="nav-item"><a class="nav-link" data-toggle="tab"
+														href="#menu1">Chọn size</a></li>
 											</ul>
 
 											<!-- Tab panes -->
@@ -71,8 +77,8 @@
 													<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4>
 												</div>
 												<div id="menu1" class="container tab-pane fade">
-													<br> <img alt="" src="/asset/user/img/BangDoSize.jpg"
-														height="100%" width="100%" align="Hướng dẫn chọn size">
+													<br> <img alt="" src="/asset/user/img/BangDoSize.jpg" height="100%"
+														width="100%" align="Hướng dẫn chọn size">
 												</div>
 											</div>
 										</div>
@@ -94,22 +100,24 @@
 							<div ng-if="!noRating">
 								<ul class="rating-single">
 									<li class="text-warning font-weight-bold">{{ averageRating }}/5<span
-										class="fa fa-star" aria-hidden="true"></span>
+											class="fa fa-star" aria-hidden="true"></span>
 									</li>
-									<li><div class="vertical-line" style="width: 1px; height: 16px; background-color: gray; margin: 0 10px;"></div></li>
+									<li>
+										<div class="vertical-line"
+											style="width: 1px; height: 16px; background-color: gray; margin: 0 10px;">
+										</div>
+									</li>
 									<li>
 										<p>{{ reviewCounts.total }} đánh giá</p>
-									</li>							
+									</li>
 								</ul>
 							</div>
-							<h6 style="white-space: nowrap;"
-								ng-if="productDetails.discount[0].priceDiscount == null">
+							<h6 style="white-space: nowrap;" ng-if="productDetails.discount[0].priceDiscount == null">
 								<span class="item_price">{{ productDetails.price |
 									number:0 }} ₫</span>
 							</h6>
 
-							<h6
-								style="display: flex; align-items: center; width: 100%; white-space: nowrap;"
+							<h6 style="display: flex; align-items: center; width: 100%; white-space: nowrap;"
 								ng-if="productDetails.discount[0].status === 'Đang diễn ra' && productDetails.discount[0].priceDiscount">
 								<del style="margin-right: 10px;">{{ productDetails.price |
 									number:0 }} ₫</del>
@@ -126,8 +134,7 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Size</span>
 							<div class="col-md-9">
-								<select ng-model="size"
-									ng-change="setSelectedSize(size.sizeNumber)"
+								<select ng-model="size" ng-change="setSelectedSize(size.sizeNumber)"
 									class="form-control">
 									<option value="" disabled selected>-- Chọn size --</option>
 									<option ng-repeat="s in sizess" ng-value="{{s}}">{{s.sizeNumber}}</option>
@@ -151,7 +158,7 @@
 						<div class="desc_single my-4">
 							<span class="col-md-3 size1">Số lượng</span>
 							<div class="col-md-9">
-								<input ng-value="1" ng-change="checkQuantity(qty)"
+								<input ng-disabled="!singleProd.quantity" ng-value="1" ng-change="checkQuantity(qty)"
 									ng-model="qty" type="number" class="form-control">
 							</div>
 							<p class="col-md-12 size1">Số lượng Trong Kho:
@@ -237,25 +244,25 @@
 				</div>
 				<!-- /row-->
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div ng-repeat="p in productDetailss"
-						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv"
-							ng-click="saveProductID(p.productID)">
+					<div ng-repeat="p in productDetailss" class="col-lg-3 col-6 product-incfhny mt-4">
+						<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
 							<div class="product-image2" style="position: relative;">
 								<div class="discount-circle"
 									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
 									p.discount[0].directDiscount }}%</div>
-								<a ng-click="goToSinglePage(p.productID)"> <img
-									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+								<a ng-click="goToSinglePage(p.productID)"> <img class="pic-1 img-fluid"
+										ng-src="{{p.image[0].imagePath}}">
 									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
-									ng-src="{{p.image[1].imagePath}}"> <img
-									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
-									ng-src="{{p.image[0].imagePath}}">
+										ng-src="{{p.image[1].imagePath}}"> <img ng-if="p.image.length <= 1"
+										class="pic-2 img-fluid" ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li> 
-										<span ng-if="isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
-										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									<li>
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p)"
+											class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)"
+											class="fa fa-heart-o not-liked"
+											style="font-size: 24px; color: red; font-weight: bold;"></span>
 									</li>
 								</ul>
 								<div class="transmitv single-item">
@@ -334,42 +341,47 @@
 					<strong>{{ noReviewsMessage }}</strong>
 				</p>
 			</div>
-			<div class="content-singlev-ecomm py-3"
+			<div class="content-singlev-ecomm"
 				ng-repeat="rv in reviewPager.allreviews">
 				<div class="row">
 					<div class="col-sm-2 text-center">
-						<img src="" alt="Hình"
-							class="img-fluid rounded-circle">
+						<img src="" alt="Hình" class="img-fluid rounded-circle">
 					</div>
 					<div class="col-sm-10">
 						<p class="mb-0">
-							<strong>{{rv.user.fullName}}</strong>
+							<strong style="color: black;">{{rv.user.fullName}}</strong>
 						</p>
-						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
+						<p class="mb-0" style="font-size: 12px;">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
 						<div class="rating mb-2 text-warning">
 							<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
 								ng-class="{'fa-star': star <= rv.rating, 'fa-star-o': star > rv.rating}"></span>
 						</div>
-						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
-						<span class="fa fa-thumbs-up"></span>
+						<p class="mb-2" style="word-wrap: break-word; color: black;">{{rv.title}}</p>
+						<div>
+							<!-- <img src="{{rv.image1}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="{{rv.image2}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="{{rv.image3}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;"> -->
+							<img src="/asset/user/images/banner1.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="/asset/user/images/banner2.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<img src="/asset/user/images/banner4.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+						</div>
 					</div>
 				</div>
 				<hr>
 			</div>
 
 			<!--/pagination-->
-			<div class="pagination" ng-if="!noReviewsMessage"
-				style="margin: 0px 10px 20px;">
+			<div class="pagination" ng-if="!noReviewsMessage" style="margin: 0px 10px 20px;">
 				<ul>
-					<li class="prev"><a ng-click="reviewPager.first()"><span
-							class="fa fa-angle-double-left"></span></a></li>
+					<li class="prev"><a ng-click="reviewPager.first()"><span class="fa fa-angle-double-left"></span></a>
+					</li>
 					<li class="page-item" ng-repeat="page in reviewVisiblePages"
-						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a
-						class="page-link" ng-click="reviewPager.gotoReview(page.value)"
-						ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a class="page-link"
+							ng-click="reviewPager.gotoReview(page.value)"
+							ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
 							{{ page.value }} </a></li>
-					<li class="next"><a ng-click="reviewPager.last()"><span
-							class="fa fa-angle-double-right"></span></a></li>
+					<li class="next"><a ng-click="reviewPager.last()"><span class="fa fa-angle-double-right"></span></a>
+					</li>
 				</ul>
 			</div>
 			<!--//pagination-->
@@ -384,5 +396,4 @@
 
 	</div>
 </body>
-
 </html>

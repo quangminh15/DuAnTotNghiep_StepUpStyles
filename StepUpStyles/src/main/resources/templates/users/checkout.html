@@ -227,7 +227,7 @@
 
 			<div class="row">
 				
-				<div class="col-lg-12 ftco-animate">
+				<div class="col-lg-12 ftco-animate" >
 					<div class="cart-total mb-3">
 						<div class=" row navtable text-center">
 							<div class="col-lg-4">Sản phẩm</div>
@@ -237,12 +237,12 @@
 							<div class="col-lg-2">Thành tiền</div>
 
 						</div>
-						<div class="card">
+						<div class="card ">
 							
-							<div class="card-body">
+							<div class="card-body" >
 								
-							  <div class="row mb-2 text-center" style="width:pad;" ng-repeat="iCart in cartIs">
-								<div class="col-lg-4 d-flex align-items-center ">
+							  <div class="row mb-2 text-center" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125)"  ng-repeat="iCart in cartIs" >
+								<div class="col-lg-4 d-flex align-items-center " >
 									<img src="/asset/user/img/cartbg1.jpg" style="padding-left: 0;" width="100px" alt="">
 										<span style=" overflow: hidden;     display: -webkit-box;
 										-webkit-box-orient: vertical;
@@ -267,7 +267,7 @@
 								<div class="col-lg-2  align-items-center" style="position: relative;">
 									<h3 >{{iCart.product.price * iCart.quantity}}</h3>
 								</div>
-								<hr class="col-lg-11 ">
+								
 							  </div>
 							</div>
 						  </div>
@@ -298,7 +298,7 @@
 							<span>Tổng Tiền</span>
 							<span>$17.60</span>
 						</p>
-						<p><a href="checkout.html"ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
+						<p><a ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4">Tiến Hành Thanh Toán</a></p>
 						<p><a ng-click="getDataPayment()" th:href ="@{/submitOrder}" class="btn btn-primary py-3 px-4">vnpayn</a></p>
 					</div>
 				</div>

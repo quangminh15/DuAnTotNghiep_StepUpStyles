@@ -21,6 +21,6 @@ public class OrderDTO {
     boolean paymentStatus;
     double shippingFee;
     double totalAmount;
-    int addressID;
+    Integer addressID;
     List<OrderDetailDTO> orderDetails;
 }

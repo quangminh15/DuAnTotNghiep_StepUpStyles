@@ -353,6 +353,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	//Hiển thị điếm đánh giá trên sản phẩm
 	$scope.getStarAvgs = function(avgRating) {
+		console.log("rate", avgRating);
 		var numStars = Math.floor(avgRating); // Số sao nguyên
 		var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
 		var stars = [];
@@ -578,6 +579,18 @@ app.controller("favorite-ctrl", function($scope, $http) {
 					});
 				})
 				.then(() => {
+					//Linh hển thị sao trên sản phẩm
+					$scope.productitems.forEach(item => {
+						$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+							$scope.all = resp.data;
+							$scope.ratings = $scope.all.map(review => review.rating);
+							$scope.average = calculateAverageRating($scope.ratings);
+							item.avgrev = $scope.average;
+						}).catch(error => {
+							console.log("Error", error);
+						});
+					});
+					//Linh end
 					$scope.chuyenTrang();
 					$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
 					console.log("$scope.allProductitems: 0", $scope.allProductitems);
