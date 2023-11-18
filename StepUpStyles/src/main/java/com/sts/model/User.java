@@ -103,7 +103,7 @@ public class User implements Serializable {
 
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="user", cascade = CascadeType.MERGE	)
+	@OneToMany(mappedBy="user")
 	private List<Product> product;
 	
 	@JsonIgnore
