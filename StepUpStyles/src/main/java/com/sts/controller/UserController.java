@@ -80,19 +80,38 @@ public class UserController {
 
 	@RequestMapping("/profile")
 	public String profile(Model model) {
-		Integer id = userService.getUserIdCurrent();
-		if(id == null){
-			return "/LoginSTS";
+		Integer id = 0;
+		try {
+			id = userService.getUserIdCurrent();
+			if(id == null){
+				return "users/LoginSTS";
+			}
+			User user = userService.findById(id);
+			DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
+			model.addAttribute("UserProfile", dResponseUser);
+		}catch (Exception exception){
+			return "users/LoginSTS";
 		}
-		User user = userService.findById(id);
-		DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
-		model.addAttribute("UserProfile", dResponseUser);
 		return "users/profile";
 	}
 
 	@RequestMapping("/forgot-pass")
 	public String forgotpass(Model model) {
-		model.addAttribute("messageLoginFail", "Thông tin chưa đúng");
 		return "users/forgot-pass";
+	}
+
+	@RequestMapping("/otp")
+	public String otp(Model model) {
+		return "users/otp";
+	}
+
+	@RequestMapping("/reset-pass")
+	public String resetpass(Model model) {
+		return "users/reset-pass";
+	}
+
+	@RequestMapping("/change-pass")
+	public String changepass(Model model) {
+		return "users/change-pass";
 	}
 }

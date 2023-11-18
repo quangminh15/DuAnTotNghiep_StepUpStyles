@@ -23,7 +23,7 @@
                 <form method="" class="ng-pristine ng-valid">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm">
                         <div class="input-group" style="width: 350px;">
-                            <input style="border-radius: 50%;" type="search" placeholder="Bạn muốn tìm sản phẩm nào?" ng-model="searchKeyword" aria-describedby="button-addon1" class="form-control border-0 bg-light ng-pristine ng-untouched ng-valid ng-empty">
+                            <input style="border-radius: 50%; font-size: 1.5rem" type="search" placeholder="Bạn muốn tìm sản phẩm nào?" ng-model="searchKeyword" aria-describedby="button-addon1" class="form-control border-0 bg-light ng-pristine ng-untouched ng-valid ng-empty">
                             <div class="input-group-append">
                                 <button id="button-addon1" type="submit" class="btn btn-link text-danger" ng-click="searchProductByName()">
                                     <i class="fa fa-search"></i>
@@ -140,10 +140,12 @@
                         <!--                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d1c001d1c00390d111c3c14181015571a1614">[email&#160;protected]</a></p>-->
                     </div>
                     <ul class="nav nav-pills nav-
-                stacked">
+                stacked" style="font-size: 1.4rem">
                         <li class="active"><a href="#"> <i class="fa fa-user"></i>btb@gmail.com</a></li>
                         <!--                    <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span class="label label-warning pull-right r-activity">9</span></a></li>-->
                         <li><a href="#"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
+                        <li><a href="#"> <i class="fa fa-heart"></i>Sản phẩm yêu thích</a></li>
+                        <li><a href="#"> <i class="fa fa-cart-arrow-down"></i>Đơn hàng</a></li>
                     </ul>
                 </div>
         </div>
@@ -157,7 +159,7 @@
                             <p><span>Họ và tên</span> : <span th:text="${UserProfile.fullName}"></span></p>
                         </div>
                         <div class="bio-row">
-                            <p><span>Ngày sinh </span> : <span th:text="${UserProfile.birthday}"></span></p>
+                            <p><span>Ngày sinh </span> : <span th:text="${#temporals.format(UserProfile.birthday, 'dd-MM-yyyy')}"></span></p>
                         </div>
                         <div class="bio-row">
                             <p><span>Email </span> : <span th:text="${UserProfile.email}"></span></p>
@@ -190,8 +192,8 @@
                                 </div>
                                 <div class="bio-desk">
                                     <h4 class="red">Tổng lượt đã mua</h4>
-                                    <p>Năm này : 15 July</p>
-                                    <p>Tháng này : 15 August</p>
+                                    <p>Năm này : 15 </p>
+                                    <p>Tháng này : 15 </p>
                                 </div>
                             </div>
                         </div>
@@ -204,8 +206,8 @@
                                 </div>
                                 <div class="bio-desk">
                                     <h4 class="terques">Sản phẩm đã thích </h4>
-                                    <p>Started : 15 July</p>
-                                    <p>Deadline : 15 August</p>
+                                    <p>Năm này : 15 </p>
+                                    <p>Tháng này : 15 </p>
                                 </div>
                             </div>
                         </div>
