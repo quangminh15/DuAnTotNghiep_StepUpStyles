@@ -2,6 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
+	<!-- Đoạn mã cấu hình Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+
+<script type="text/javascript">
+	var firebaseConfig = {
+		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+		authDomain : "stepupstyles-97319.firebaseapp.com",
+		projectId : "stepupstyles-97319",
+		storageBucket : "stepupstyles-97319.appspot.com",
+		messagingSenderId : "909443933158",
+		appId : "1:909443933158:web:17bce455b00fb707f12c27",
+		measurementId : "G-82K4Q2H6DF"
+	};
+
+	// Khởi tạo Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+</script>
+<!-- Đoạn mã cấu hình Firebase -->
 <head>
 
 <title>SUS || CHI TIẾT</title>
@@ -352,12 +375,15 @@
 						</div>
 						<p class="mb-2" style="word-wrap: break-word; color: black;">{{rv.title}}</p>
 						<div>
-							<!-- <img src="{{rv.image1}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
-							<img src="{{rv.image2}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
-							<img src="{{rv.image3}}" class="fancybox" data-fancybox="gallery" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;"> -->
-							<img src="/asset/user/images/banner1.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner1.jpg" style="width: 100px; height: 100px; object-fit: cover;">
-							<img src="/asset/user/images/banner2.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner2.jpg" style="width: 100px; height: 100px; object-fit: cover;">
-							<img src="/asset/user/images/banner4.jpg" class="fancybox" data-fancybox="review-{{rv.reviewId}}" data-src="/asset/user/images/banner4.jpg" style="width: 100px; height: 100px; object-fit: cover;">
+							<a ng-if="rv.image1" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image1}}">
+								<img src="{{rv.image1}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+							</a>
+							<a ng-if="rv.image2" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image2}}">
+								<img src="{{rv.image2}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+							</a>
+							<a ng-if="rv.image3" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image3}}">
+								<img src="{{rv.image3}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+							</a>
 						</div>
 					</div>
 				</div>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Favorite;
 import com.sts.model.Product;
+import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.service.FavoriteService;
 import com.sts.service.ProductService;
@@ -71,9 +72,12 @@ public class FavoriteRestController {
             favoriteService.delete(user, product);
         }
 	}
-
-	// @DeleteMapping("/rest/favorites/delete/{favoriteId}")
-	// public void delete(@PathVariable("favoriteId") Integer favoriteId) {
-	// 	favoriteService.deleteById(favoriteId);
-	// }
+	@GetMapping("/rest/favorites/loadbyproducts/{productId}")
+	public List<Favorite> getProductByProduct(@PathVariable Integer productId) {
+		return favoriteService.getProductByProductId(productId);
+	}
+    @GetMapping("/rest/favorites/loadbyusers/{usersId}")
+	public List<Favorite> getUserByUser(@PathVariable Integer usersId) {
+		return favoriteService.getUsersByUsersId(usersId);
+	}
 }

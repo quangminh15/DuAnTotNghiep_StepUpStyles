@@ -1060,6 +1060,18 @@ $scope.filterByAvgs = function(selectedRating) {
 
 					loadProductDetails().then(() => {
 						$scope.productitems = filteredItems;
+						//Linh hiển thị sao trên sản phẩm khi lọc
+						$scope.productitems.forEach(item => {
+							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+								$scope.all = resp.data;
+								$scope.ratings = $scope.all.map(review => review.rating);
+								$scope.average = calculateAverageRating($scope.ratings);
+								item.avgrev = $scope.average;
+							}).catch(error => {
+								console.log("Error", error);
+							});
+						});
+						//Linh end hiển thị sao trên sản phẩm khi lọc
 					});
 					$scope.chuyenTrang();
 				}
@@ -1089,6 +1101,18 @@ $scope.filterByAvgs = function(selectedRating) {
 
 			loadProductDetails().then(() => {
 				$scope.productitems = filteredItems;
+				//Linh hiển thị sao trên sản phẩm khi lọc
+				$scope.productitems.forEach(item => {
+					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+						$scope.all = resp.data;
+						$scope.ratings = $scope.all.map(review => review.rating);
+						$scope.average = calculateAverageRating($scope.ratings);
+						item.avgrev = $scope.average;
+					}).catch(error => {
+						console.log("Error", error);
+					});
+				});
+				//Linh end hiển thị sao trên sản phẩm khi lọc
 			});
 			$scope.chuyenTrang();
 		}

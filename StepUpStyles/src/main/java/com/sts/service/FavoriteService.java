@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sts.model.Favorite;
 import com.sts.model.Product;
+import com.sts.model.Review;
 import com.sts.model.User;
 
 public interface FavoriteService {
@@ -23,5 +24,8 @@ public interface FavoriteService {
     Favorite getUserAndProductFavorite(Integer usersId, Integer productId);
 
     void deleteById(Integer favorateId);
+
+    List<Favorite> getProductByProductId(Integer productId);
+    List<Favorite> getUsersByUsersId(Integer usersId);
 
 }

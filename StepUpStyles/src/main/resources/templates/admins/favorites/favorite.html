@@ -1,0 +1,76 @@
+<div class="content-wrapper">
+	<div class="card"
+		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<div class="card-body">
+			<h4 class="mb-3">Danh sách sản phẩm yêu thích</h4>
+			<div class="d-flex justify-content-between align-items-center">
+			<div class="row">
+				<div class="col-sm-4">
+					<select ng-model="selectedProduct" ng-change="filterByProduct()" class="form-control">
+					<option value="">Chọn sản phẩm</option>
+					<option ng-repeat="item in prods" ng-value="{{item.productID}}">{{item.productName}}</option>
+				</select>
+				</div>		
+				<div class="col-sm-4">
+					<select ng-model="selectedUser" ng-change="filterByUser()" class="form-control">
+					<option value="">Chọn người dùng</option>
+					<option ng-repeat="item in users" value="{{item.usersId}}">{{item.fullName}}</option>
+				</select>	
+				</div>
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+					title="Xuất file Excel">
+					<span class="fa ti-file"></span>
+				</button>
+				<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+					title="Xuất file PDF">
+					<span class="ti-files"></span>
+				</button>
+				</div>																	
+			</div>
+			</div>	
+			<table class="table table-hover" id="sampleTable">
+				<thead>
+					<tr>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
+									class="mdi mdi-long-arrow-up"></span>
+							</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="favoritem in pager.favoriteitems">
+						<td>{{favoritem.favoriteId}}</td>
+						<td>{{favoritem.product.productName}}</td>
+						<td>{{favoritem.user.fullName}}</td>
+						<td>{{favoritem.dateLike | date:'dd-MM-yyyy'}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-end">
+				<div>
+					<ul class="pagination">
+						<li class="page-item">
+							<button ng-click="pager.first()" class="page-link">
+								<span class="ti-angle-double-left"></span>
+							</button>
+						</li>
+
+						<li class="page-item" ng-repeat="page in visiblePages"
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
+								page.value }}</a></li>
+
+						<li class="page-item">
+							<button ng-click="pager.last()" class="page-link">
+								<span class="ti-angle-double-right"></span>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

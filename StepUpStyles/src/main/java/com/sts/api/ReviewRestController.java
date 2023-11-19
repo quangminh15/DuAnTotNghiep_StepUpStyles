@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,16 +42,18 @@ public class ReviewRestController {
     @PostMapping("/rest/reviews/create/{productID}")
     public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID) {
     try {
-        User user = uService.findById(3);       
         Product product = pService.findById(productID);
         if (product == null) {
             return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
-        }    
-        // Lưu đánh giá vào cơ sở dữ liệu
-        review.setUser(user);
+        }
+        User currentUser = uService.findById(3);
+        if (currentUser == null) {
+            return new ResponseEntity<>("Không tìm thấy người dùng.", HttpStatus.NOT_FOUND);
+        }
+        review.setUser(currentUser);
         review.setProduct(product);
         reviewService.createReview(review);
-        
+
         return new ResponseEntity<>("Đánh giá đã được tạo thành công.", HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Lỗi khi tạo đánh giá.", HttpStatus.INTERNAL_SERVER_ERROR);
