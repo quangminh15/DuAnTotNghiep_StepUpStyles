@@ -21,5 +21,7 @@ public interface VoucherService  {
     void deleteById(Long voucherId);
 
     List<Voucher> getValidVouchers();
+
+    List<Voucher> getVoucherSaved();
     
 }
