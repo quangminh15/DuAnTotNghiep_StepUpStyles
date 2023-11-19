@@ -313,7 +313,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 	}
 	$scope.createAddress = function (checked, name, phone, detail) {
-		alert(1)
+		
 		
 			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
 			$scope.dataAddress = {
@@ -323,17 +323,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				ward_name: $scope.form.selectedWard.WardName,
 				// Các thông tin khác cần thiết
 			}
-			alert(2)
+			
 			console.log($scope.dataAddress );
 			$http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
 				.then(resp => {
-					alert(3)
+					
 					console.log("add");
 					$scope.reset()
 					$scope.initialize()
 				}).catch(function (error) {
 					console.error('Error fetching districts:', error);
-					alert(4)
+					
 				});
 
 		

@@ -24,8 +24,83 @@
 		.subcard {
 			border-bottom: 1px solid rgba(0, 0, 0, 0.125)
 		}
+
+		.custom-file-upload {
+			border: 1px solid #ccc;
+			display: inline-block;
+			padding: 6px 12px;
+			cursor: pointer;
+		}
+
+		.custom-file-upload:hover {
+			background-color: #f8f8f8;
+		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+		aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex">
+						<img src="/asset/user/img/e.jpg" width="10%" class="mr-2">
+						<div>
+							<p>Giày converse</p>
+							<p>Màu sắc: đen, Size: 40</p>
+						</div>
+					</div>
+					<div class="row col-sm-12" style="justify-content: center; font-size: 60px;">
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+						<span class="text-warning">★</span>
+					</div>
+					<form>
+						<div class="form-group">
+							<textarea class="form-control" id="reviewText" rows="3"
+								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="imageUpload1" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 1
+							</label>
+							<label for="imageUpload2" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 2
+							</label>
+							<label for="imageUpload3" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 3
+							</label>
+							<div class="d-flex">
+								<input type="file" id="imageUpload1" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage1');">
+								<img id="selectedImage1" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="imageUpload2" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage2');">
+								<img id="selectedImage2" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="imageUpload3" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage3');">
+								<img id="selectedImage3" src="#"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
+					<button class="btn btn-danger">Hoàn thành</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
 		<!--/-->
@@ -33,21 +108,29 @@
 			<div class="container py-md-3">
 
 				<div class="d-flex row text-center align-items-center">
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Tất Cả</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đang Giao</p>
+					</a>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đã Giao</p>
+					</a>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đã Hủy</p>
 					</a>
 				</div>
 
@@ -57,28 +140,28 @@
 
 
 	</section>
-	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in orders">
 		<!--/-->
 
 
-		<div class="ecomrhny-content-inf py-1 mt-3">
-			<div class="container py-md-3" ng-repeat="order in orders ">
+		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" >
+			<div class="container py-md-3"  >
 				<div class="accordion" id="accordionExample">
 					<div class="card">
-						<div class="card-header bg-white" id="headingOne">
-							<h2 class="mb-0 d-flex justify-content-end ">
+						<div class="card-header bg-white" id="headingOne" >
+							<h2 class="mb-0 d-flex justify-content-end " >
 								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
-										data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										data-target="#collapse{{ $index + 1 }}" aria-expanded="true" aria-controls="collapseOne">
 										Chi Tiet
 									</button></p>
 
 							</h2>
 						</div>
 
-						<div id="collapseOne" class="collapse " aria-labelledby="headingOne"
+						<div  id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang</p>
+								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang {{order.orderId}}</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
 								<p class="text-dark">xa {{order.shippingAddress.ward}}, huyen
@@ -89,7 +172,7 @@
 								<p class="text-dark font-weight-bolder">Thanh Toan</p>
 								<div class="d-flex ">
 									<p class="text-dark">Phuong thuc thanh toan: </p>
-									<p class="text-dark ml-2">thanh toan khi nhan hang</p>
+									<p class="text-dark ml-2">{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
 									<p class="text-dark">Giam gia: </p>
@@ -102,8 +185,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in orderDetail">
-						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.image[1].imagePath}}" >
+					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in order.orderDetail">
+						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.productDetail.product.productImages[1].imagePath}}" >
 						<div class="col-md-8">
 							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 										-webkit-box-orient: vertical;
@@ -117,7 +200,7 @@
 						<div class="col-md-2">{{item.price}}</div>
 					</div>
 
-					
+
 					<div class="card-footer bg-white border-0 text-right">
 						<div class="d-flex justify-content-end align-items-center">
 							<p class="m-3">Tong Thanh Toan: </p>
@@ -125,7 +208,7 @@
 
 						</div>
 						<button class="btn btn-danger">Huy Don Hang</button>
-						<button class="btn btn-danger">Danh Gia</button>
+						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button>
 					</div>
 
 				</div>
