@@ -414,7 +414,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.searchedProductItems = [];
 	$scope.discountedProducts = [];
 	$scope.featureds = [];
-	$scope.newProductItems = [];
+	$scope.productitems = [];
 
 	$scope.allProductitems = [];
 
@@ -608,15 +608,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.getProductsByBrand = function(brandID) {
 		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
 			// Lưu trữ các sản phẩm mới vào biến mới
-			$scope.newProductItems = resp.data.filter(item => item.activities && !item.deleted);
+			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
 
-			$scope.newProductItems.forEach(items => {
+			$scope.productitems.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
 					items.image = resp.data;
 				});
 			});
 
-			$scope.newProductItems.forEach(item => {
+			$scope.productitems.forEach(item => {
 				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
 					item.discount = resp.data.filter(discount => !discount.deleted);
 				});
@@ -625,22 +625,22 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			// Cập nhật các biến đếm và dữ liệu liên quan bắt đầu
 			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
 				// Sử dụng biến mới để không đè lên giá trị của $scope.productitems
-				const productImagePromises = $scope.newProductItems.map(item => {
+				const productImagePromises = $scope.productitems.map(item => {
 					return $http.get("/rest/productimages/loadbyproduct/" + item.productID);
 				});
 
-				const discountPromises = $scope.newProductItems.map(item => {
+				const discountPromises = $scope.productitems.map(item => {
 					return $http.get("/rest/discount/loadbyproduct/" + item.productID);
 				});
 
-				const productDetailPromises = $scope.newProductItems.map(item => {
+				const productDetailPromises = $scope.productitems.map(item => {
 					return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
 				});
 
 				Promise.all(productImagePromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].image = resp.data;
+							$scope.productitems[index].image = resp.data;
 						});
 					})
 					.catch(error => {
@@ -650,7 +650,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				Promise.all(discountPromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].discount = resp.data.filter(discount => !discount.deleted);
+							$scope.productitems[index].discount = resp.data.filter(discount => !discount.deleted);
 						});
 						$scope.chuyenTrang();
 					})
@@ -661,8 +661,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				Promise.all(productDetailPromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
-							$scope.newProductItems[index].productDetails.forEach(item => {
+							$scope.productitems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
+							$scope.productitems[index].productDetails.forEach(item => {
 								if (item.size && item.size.activities && !item.size.deleted && !$scope.sizes.some(c => c.sizeID === item.size.sizeID)) {
 									$scope.sizes.push(item.size);
 								}
@@ -675,7 +675,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 					.then(() => {
 						$scope.chuyenTrang();
 						// Gán giá trị của biến mới vào $scope.productitems
-						$scope.allProductitems = JSON.parse(JSON.stringify($scope.newProductItems));
+						$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
 					})
 					.catch(error => {
 						console.error(error);

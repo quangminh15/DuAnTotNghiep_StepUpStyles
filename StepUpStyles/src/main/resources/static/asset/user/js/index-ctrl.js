@@ -1,4 +1,3 @@
-
 app.controller("index-ctrl", function($scope, $http) {
 	//HAI Start
 	localStorage.removeItem('selectedItems');
@@ -70,6 +69,7 @@ app.controller("index-ctrl", function($scope, $http) {
 	$scope.searchedProductItems = [];
 	$scope.discountedProducts = [];
 	$scope.featureds = [];
+	$scope.newProductItems = [];
 
 	$scope.allProductitems = [];
 
@@ -103,26 +103,7 @@ app.controller("index-ctrl", function($scope, $http) {
 		$scope.FeaturedPager.first();
 	};
 
-	$scope.getProductsByBrand = function(brandID) {
-		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
-			$scope.allProductitems = resp.data.filter(item => item.activities && !item.deleted);
 
-			$scope.allProductitems.forEach(items => {
-				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
-					items.image = resp.data;
-				})
-			})
-
-			$scope.allProductitems.forEach(item => {
-				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
-					item.discount = resp.data.filter(discount => !discount.deleted);
-				})
-			})
-			$scope.chuyenTrang();
-		}).catch(function(error) {
-			console.error('Error occurred while fetching products by brand:', error);
-		});
-	};
 
 	// Tìm kiếm START 
 
@@ -253,10 +234,23 @@ app.controller("index-ctrl", function($scope, $http) {
 					});
 				})
 				.then(() => {
+					//Linh hển thị sao trên sản phẩm
+					$scope.productitems.forEach(item => {
+						$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+							$scope.all = resp.data;
+							$scope.ratings = $scope.all.map(review => review.rating);
+							$scope.average = calculateAverageRating($scope.ratings);
+							item.avgrev = $scope.average;
+						}).catch(error => {
+							console.log("Error", error);
+						});
+					});
+					//Linh end
 					$scope.chuyenTrang();
 					$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
 					console.log("$scope.allProductitems: 0", $scope.allProductitems);
 					console.log("$scope.productitems: 0", $scope.productitems);
+					$scope.$apply();
 				})
 				.catch(error => {
 					console.error(error);
@@ -264,6 +258,90 @@ app.controller("index-ctrl", function($scope, $http) {
 		});
 	};
 	//load product trang sản phẩm kết thúc
+
+	//load sản phẩm theo brand bắt đầu
+	$scope.getProductsByBrand = function(brandID) {
+		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
+			// Lưu trữ các sản phẩm mới vào biến mới
+			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
+
+			$scope.productitems.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+					items.image = resp.data;
+				});
+			});
+
+			$scope.productitems.forEach(item => {
+				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
+					item.discount = resp.data.filter(discount => !discount.deleted);
+				});
+			});
+
+			// Cập nhật các biến đếm và dữ liệu liên quan bắt đầu
+			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
+				// Sử dụng biến mới để không đè lên giá trị của $scope.productitems
+				const productImagePromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productimages/loadbyproduct/" + item.productID);
+				});
+
+				const discountPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/discount/loadbyproduct/" + item.productID);
+				});
+
+				const productDetailPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
+				});
+
+				Promise.all(productImagePromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].image = resp.data;
+						});
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(discountPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].discount = resp.data.filter(discount => !discount.deleted);
+						});
+						$scope.chuyenTrang();
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(productDetailPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
+							$scope.productitems[index].productDetails.forEach(item => {
+								if (item.size && item.size.activities && !item.size.deleted && !$scope.sizes.some(c => c.sizeID === item.size.sizeID)) {
+									$scope.sizes.push(item.size);
+								}
+								if (item.color && item.color.activities && !item.color.deleted && !$scope.colors.some(c => c.colorID === item.color.colorID)) {
+									$scope.colors.push(item.color);
+								}
+							});
+						});
+					})
+					.then(() => {
+						$scope.chuyenTrang();
+						// Gán giá trị của biến mới vào $scope.productitems
+						$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			});
+			// Cập nhật các biến đếm và dữ liệu liên quan kết thúc
+		}).catch(function(error) {
+			console.error('Error occurred while fetching products by brand:', error);
+		});
+	};
+	//load sản phẩm theo brand kết thúc
 
 	//Đếm sản phẩm hiển thị trang sản phẩm bắt đầu
 	$scope.getProductCountCategory = function(categoryID) {
@@ -324,13 +402,15 @@ app.controller("index-ctrl", function($scope, $http) {
 		});
 
 		//load brand
-		$http.get("/rest/brands/loadallNoDeletedAndActivitiesTrue").then(resp => {
+		$http.get("/rest/brands/loadall").then(resp => {
 			// Kiểm tra nếu có sản phẩm trong thương hiệu
 			let brandsWithData = resp.data.filter(brand => {
 				return $scope.productitems.some(product => product.brand.brandID === brand.brandID);
 			});
 
 			$scope.brans = brandsWithData;
+
+//			$scope.brans = resp.data; console.log($scope.brans)
 			$scope.chuyenTrang();
 		});
 

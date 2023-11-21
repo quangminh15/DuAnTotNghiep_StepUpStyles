@@ -674,7 +674,6 @@ app.controller("brand-ctrl", function($scope, $http) {
 	})
 
 	$('.export').click(function() {
-
 		let timerInterval
 		Swal.fire({
 			icon: 'info',

@@ -244,7 +244,7 @@
 				</div>
 				<!-- /row-->
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div ng-repeat="p in productDetailss" class="col-lg-3 col-6 product-incfhny mt-4">
+					<div ng-repeat="p in productDetailss |limitTo: 6" class="col-lg-2 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
 							<div class="product-image2" style="position: relative;">
 								<div class="discount-circle"
