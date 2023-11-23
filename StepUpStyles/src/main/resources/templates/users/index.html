@@ -156,7 +156,7 @@
 	<!-- //w3l-banner-slider-main -->
 	<section class="w3l-grids-hny-2">
 		<!-- /content-6-section -->
-		<div class="grids-hny-2-mian py-5">
+		<div class="grids-hny-2-mian">
 			<div class="container py-lg-5">
 				<div style="margin: 8px auto; display: block; text-align: center;">
 					<!---728x90--->
@@ -171,7 +171,8 @@
 
 				</div>
 				<div class="welcome-grids row mt-5">
-					<div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
+					<div ng-repeat="brand in brans"
+						class="col-lg-2 col-md-4 col-6 welcome-image">
 						<!-- col-lg-2 col-md-4 col-6  -->
 						<div class="boxhny13">
 							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
@@ -186,9 +187,44 @@
 						</h4>
 					</div>
 				</div>
+			</div>
+		</div>
+
+
+		<div class="container py-lg-5">
+			<div style="margin: 8px auto; display: block; text-align: center;">
+				<!---728x90--->
+			</div>
+			<h3 class="hny-title mb-0 text-center">
+				Danh mục <span>sản phẩm</span>
+			</h3>
+			<p class="mb-4 text-center">Nhiều sự lựa chọn</p>
+			<div style="margin: 8px auto; display: block; text-align: center;">
+
+				<!---728x90--->
 
 			</div>
+			<div class="welcome-grids row">
+				<div ng-repeat="category in cates"
+					class="col-lg-2 col-md-4 col-6 welcome-image">
+					<!-- col-lg-2 col-md-4 col-6  -->
+					<div class="boxhny13">
+						<a ng-click="getProductsAndNavigateCate(category.categoryID)">
+							<img ng-src="{{category.categoryImage}}" class="img-fluid" alt="" />
+							<div class="boxhny-content">
+								<h3 class="title">Xem
+							</div>
+						</a>
+					</div>
+					<h4>
+						<a ng-click="getProductsAndNavigateCate(category.categoryID)">{{category.categoryName}}</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+
 	</section>
+
 	<!-- //content-6-section -->
 
 	<section class="w3l-content-w-photo-6">
@@ -476,7 +512,8 @@
 								<div class="carousel-item active">
 									<div class="row">
 										<div class="">
-											<div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
+											<div ng-repeat="brand in brans"
+												class="col-lg-2 col-md-4 col-6 welcome-image">
 												<!-- col-lg-2 col-md-4 col-6  -->
 												<div class="boxhny13">
 													<a ng-click="getProductsAndNavigate(brand.brandID)"> <img

@@ -353,7 +353,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	//Hiển thị điếm đánh giá trên sản phẩm
 	$scope.getStarAvgs = function(avgRating) {
-		console.log("rate", avgRating);
+		//		console.log("rate", avgRating);
 		var numStars = Math.floor(avgRating); // Số sao nguyên
 		var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
 		var stars = [];
@@ -441,6 +441,11 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		localStorage.setItem('brandID', brandID);
 		window.location.href = '/list_products';
 	};
+	
+	$scope.getProductsAndNavigateCate = function(categoryID) {
+		localStorage.setItem('categoryID', categoryID);
+		window.location.href = '/list_products';
+	};
 
 	$scope.chuyenTrang = function() {
 		$scope.pager.first();
@@ -487,11 +492,11 @@ app.controller("favorite-ctrl", function($scope, $http) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
-						text: 'Không tìm thấy sản phẩm có tên ' + $scope.searchKeyword,
+						text: 'Không tìm thấy sản phẩm có tên "' + $scope.searchKeyword + '"',
 					});
 
 					// Gọi hàm ẩn lớp phủ
-					hideOverlay();
+					$scope.hideOverlay();
 				} else {
 					// Hiển thị lớp phủ khi có sản phẩm được tìm thấy
 					var overlay = document.getElementById("overlay");
@@ -520,7 +525,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			});
 
 			// Gọi hàm ẩn lớp phủ
-			hideOverlay();
+			$scope.hideOverlay();
 		}
 	};
 
@@ -687,6 +692,90 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		});
 	};
 	//load sản phẩm theo brand kết thúc
+	
+	//load sản phẩm theo category bắt đầu
+	$scope.getProductsByCategoryIndex = function(categoryID) {
+		$http.get("/rest/products/loadByCategoryId/" + categoryID).then(function(resp) {
+			// Lưu trữ các sản phẩm mới vào biến mới
+			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
+
+			$scope.productitems.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+					items.image = resp.data;
+				});
+			});
+
+			$scope.productitems.forEach(item => {
+				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
+					item.discount = resp.data.filter(discount => !discount.deleted);
+				});
+			});
+
+			// Cập nhật các biến đếm và dữ liệu liên quan bắt đầu
+			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
+				// Sử dụng biến mới để không đè lên giá trị của $scope.productitems
+				const productImagePromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productimages/loadbyproduct/" + item.productID);
+				});
+
+				const discountPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/discount/loadbyproduct/" + item.productID);
+				});
+
+				const productDetailPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
+				});
+
+				Promise.all(productImagePromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].image = resp.data;
+						});
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(discountPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].discount = resp.data.filter(discount => !discount.deleted);
+						});
+						$scope.chuyenTrang();
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(productDetailPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
+							$scope.productitems[index].productDetails.forEach(item => {
+								if (item.size && item.size.activities && !item.size.deleted && !$scope.sizes.some(c => c.sizeID === item.size.sizeID)) {
+									$scope.sizes.push(item.size);
+								}
+								if (item.color && item.color.activities && !item.color.deleted && !$scope.colors.some(c => c.colorID === item.color.colorID)) {
+									$scope.colors.push(item.color);
+								}
+							});
+						});
+					})
+					.then(() => {
+						$scope.chuyenTrang();
+						// Gán giá trị của biến mới vào $scope.productitems
+						$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			});
+			// Cập nhật các biến đếm và dữ liệu liên quan kết thúc
+		}).catch(function(error) {
+			console.error('Error occurred while fetching products by category:', error);
+		});
+	};
+	//load sản phẩm theo category kết thúc
 
 	//Đếm sản phẩm hiển thị trang sản phẩm bắt đầu
 	$scope.getProductCountCategory = function(categoryID) {
@@ -754,14 +843,22 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			});
 
 			$scope.brans = brandsWithData;
+			console.log('$scope.brans', $scope.brans)
 			$scope.chuyenTrang();
 		});
 
-		//chuyển sang trang sản phẩm
+		//chuyển sang trang sản phẩm và lưu brandID
 		var storedBrandID = localStorage.getItem('brandID');
 		if (storedBrandID) {
 			$scope.getProductsByBrand(storedBrandID);
 			localStorage.removeItem('brandID');
+		}
+		
+		//chuyển sang trang sản phẩm và lưu categoryID
+		var storedCategoryID = localStorage.getItem('categoryID');
+		if (storedCategoryID) {
+			$scope.getProductsByCategoryIndex(storedCategoryID);
+			localStorage.removeItem('categoryID');
 		}
 	}
 
@@ -988,6 +1085,112 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				}
 				$scope.chuyenTrang();
 				break;
+
+			// Thêm case để lọc sản phẩm đang giảm giá
+			case 'discounted':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá
+				filteredItems = $scope.productitems.filter(function(item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra");
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_0_15':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function(item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 0 && discount.directDiscount <= 15);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 0 --> 15%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_15_40':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function(item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 15 && discount.directDiscount <= 40);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 15 --> 40%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_40_60':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function(item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 40 && discount.directDiscount <= 60);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 40 --> 60%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_60':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function(item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 60 && discount.directDiscount <= 100);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá trên 60%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
 			default:
 				$scope.initialize();
 				$scope.chuyenTrang();

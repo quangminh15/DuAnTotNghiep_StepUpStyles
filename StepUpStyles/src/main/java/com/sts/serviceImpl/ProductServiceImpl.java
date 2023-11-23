@@ -62,11 +62,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable) {
-		return productDAO.loadAllNoDeletedAndActivitiesTrue(pageable);
-	}
-
-	@Override
 	public Product create(Product product) {
 		return productDAO.save(product);
 	}
@@ -134,21 +129,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable) {
-		return productDAO.findByCategoryIDPaged(cid, pageable);
-	}
-
-	@Override
-	public Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable) {
-		return productDAO.findByBrandID(bid, pageable);
-	}
-
-	@Override
-	public Page<Product> searchByNamePaged(String keyword, Pageable pageable) {
-		return productDAO.findByProductNameContaining(keyword, pageable);
-	}
-
-	@Override
 	public List<Product> findFeaturedProducts() {
 		List<Product> allProducts = loadAllNoDeletedAndActivitiesTrue();
 		List<Product> featuredProducts = new ArrayList<>();
@@ -164,11 +144,6 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findSimilarProductsByCategory(Integer categoryID) {
 		// Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
 		return productDAO.findSimilarProductsByCategory(categoryID);
-	}
-
-	@Override
-	public Page<Product> findByProductNameContaining(String keyword, Pageable pageable) {
-		return productDAO.findByProductNameContaining(keyword, pageable);
 	}
 	
 	@Override

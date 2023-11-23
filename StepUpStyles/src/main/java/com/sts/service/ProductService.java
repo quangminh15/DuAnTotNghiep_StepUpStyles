@@ -38,23 +38,12 @@ public interface ProductService {
 	Long countProductsByCategoryWithConditions(Category category, Boolean activities, Boolean deleted);
 
 	List<Product> findByCategory(Category category);
-
-	// phân trang
-	Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable);
-
-	Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable);
-
-	Page<Product> findByBrandIDPaged(Integer bid, Pageable pageable);
-
-	Page<Product> searchByNamePaged(String keyword, Pageable pageable);
-
+	
 	// sản phẩm nỏi bật
 	List<Product> findFeaturedProducts();
 
 	// Sản phẩm tương tự
 	List<Product> findSimilarProductsByCategory(Integer categoryID);
-
-	Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 
 	Product getProductById(Integer productId);
 	// Lọc sản phẩm theo brand

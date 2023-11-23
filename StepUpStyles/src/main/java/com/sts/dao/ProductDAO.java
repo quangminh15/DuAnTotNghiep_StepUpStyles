@@ -12,7 +12,7 @@ import com.sts.model.Category;
 import com.sts.model.Product;
 
 public interface ProductDAO extends JpaRepository<Product, Integer> {
-	@Query("SELECT c FROM Product c WHERE c.productName LIKE %:keyword%")
+	@Query("SELECT c FROM Product c WHERE c.productName LIKE %:keyword% AND c.deleted = false AND c.activities = true AND c.brand.activities = true AND c.category.activities = true")
 	List<Product> findByProductNameContaining(@Param("keyword") String keyword);
 
 	@Query("SELECT c FROM Product c WHERE c.deleted = true")
@@ -22,7 +22,7 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	List<Product> loadAllNoDeleted();
 
 	//Load all sản phẩm hoạt động và không bị xóa
-	@Query("SELECT p FROM Product p WHERE p.deleted = false AND p.activities = true")
+	@Query("SELECT p FROM Product p WHERE p.deleted = false AND p.activities = true AND p.brand.activities = true AND p.category.activities = true")
 	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
 	Long countByCategory(Category category);
@@ -37,20 +37,6 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 	Long countProductsByCategory(@Param("category") Category category);
 
 	List<Product> findByCategory(Category category);
-
-	// Phân trang
-	@Query("SELECT c FROM Product c WHERE c.deleted = false and c.activities = true ")
-	Page<Product> loadAllNoDeletedAndActivitiesTrue(Pageable pageable);
-
-	@Query("select p from Product p where p.category.categoryID=?1 and p.deleted = false and p.activities = true")
-	Page<Product> findByCategoryIDPaged(Integer cid, Pageable pageable);
-
-	@Query("select p from Product p where p.brand.brandID=?1 and p.deleted = false and p.activities = true")
-	Page<Product> findByBrandID(Integer bid, Pageable pageable);
-
-	// tìm kiếm sản phẩm
-	@Query("select p from Product p where p.deleted = false and p.activities = true and lower(p.productName) like lower(concat('%', ?1, '%'))")
-	Page<Product> findByProductNameContaining(String keyword, Pageable pageable);
 
 	// sản phẩm tương tự
 	@Query("select p from Product p where p.category.categoryID=?1 and p.deleted = false and p.activities = true")
