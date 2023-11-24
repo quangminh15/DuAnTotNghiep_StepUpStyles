@@ -25,4 +25,6 @@ public interface UserService {
 	String getUserEmailCurrent();
 
 	DResponseUser getUserByEmail(String email);
+
+	DResponseUser getUserByPhone(String phone);
 }

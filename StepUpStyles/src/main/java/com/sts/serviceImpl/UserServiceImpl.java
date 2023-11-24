@@ -70,4 +70,9 @@ public class UserServiceImpl implements UserService {
     public DResponseUser getUserByEmail(String email) {
         return userDAO.getUserByEnail(email);
     }
+
+    @Override
+    public DResponseUser getUserByPhone(String phone) {
+        return userDAO.getUserByPhone(phone);
+    }
 }

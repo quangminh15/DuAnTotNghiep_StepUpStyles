@@ -1,19 +1,30 @@
 package com.sts.controller;
 
 import com.sts.model.DTO.DResponseUser;
+import com.sts.model.DTO.DataOTP;
 import com.sts.model.User;
+import com.sts.model.VerificationCode;
+import com.sts.service.FormSendMailHTML;
+import com.sts.service.MailerService;
 import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
+import java.util.regex.Pattern;
 
 @Controller
 public class UserController {
 	@Autowired
 	UserService userService;
 
-	
+	@Autowired
+	MailerService mailerService;
+
+	VerificationCode vc;
 
 	@RequestMapping("/about")
 	public String about(Model model) {
@@ -62,7 +73,8 @@ public class UserController {
 
 	@RequestMapping("/loginSTS")
 	public String login(Model model) {
-
+		model.addAttribute("Customer",new User());
+		model.addAttribute("checked","nochecked");
 		return "users/LoginSTS";
 	}
 
@@ -102,6 +114,8 @@ public class UserController {
 
 	@RequestMapping("/otp")
 	public String otp(Model model) {
+
+
 		return "users/otp";
 	}
 
@@ -114,4 +128,174 @@ public class UserController {
 	public String changepass(Model model) {
 		return "users/change-pass";
 	}
+
+
+	@PostMapping("/signup")
+	public String validDangNhap(Model model, @ModelAttribute("Customer") User c) {System.out.println("Thông tin đk: "+c);
+
+
+		if(c != null) {
+//			if(!checkInput(c)) {
+//				model.addAttribute("messageConfirmPassWrong", this.messageCheckInputData);
+//				model.addAttribute("nguoidung", this.user);
+//				return "/nguoidung/dangky";
+//			}
+			if(NameCheck(c.getFullName()) != null) {
+				System.out.println("Tên không hợp lệ");
+				model.addAttribute("nameValidation", NameCheck(c.getFullName()));
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+			if(PhoneCheck(c.getPhone()) != null) {
+				System.out.println("Email định dạng không hợp lệ");
+				model.addAttribute("phoneValidation", PhoneCheck(c.getPhone()));
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+			if(!checkPhoneAlreadyExists(c.getPhone())) {
+				System.out.println("Email đã tồn tại");
+				model.addAttribute("phoneValidation", "Số điẹn thoại đã tồn tại!");
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+			if(EmailCheck(c.getEmail()) != null) {
+				System.out.println("Email định dạng không hợp lệ");
+				model.addAttribute("emailValidation", EmailCheck(c.getEmail()));
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+			if(!checkEmailAlreadyExists(c.getEmail())) {
+				System.out.println("Email đã tồn tại");
+				model.addAttribute("emailValidation", "Email đã tồn tại!");
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+//			if(PassCheck(c.getPassword()) != null) {
+//				System.out.println("Pass không hợp lệ");
+//				model.addAttribute("passValidation", PassCheck(c.getPassword()));
+//				model.addAttribute("checked", "checked");
+//				return "users/LoginSTS";
+//			}
+
+
+//			if(c.getCustomerPassword().equalsIgnoreCase(c.getCustomerImage())) {
+//				c.setCustomerImage("");
+//				// this.customer = new Customer(c);
+//				this.customer.setCustomerEmail(c.getCustomerEmail());
+//				return "redirect:/xacnhan";
+//			}
+			sendCodetoEmail(c.getEmail(),c.getFullName());
+			return "redirect:/otp";
+		}
+		return "users/LoginSTS";
+	}
+
+	public String NameCheck(String name) {
+		// Name check
+		if(name.equals("")) {
+			return "Họ tên phải từ 8-50 ký tự và không chứ ký tự đặc biệt!";
+		}
+		String regexName = "^[A-Za-z0-9\\p{L}\\s]{8,50}$";
+		boolean isValidName = Pattern.matches(regexName, name);
+		if(!isValidName) {
+			return "Họ tên phải từ 8-50 ký tự và không chứ ký tự đặc biệt!";
+		}
+		return null;
+	}
+	public String EmailCheck(String email) {
+		// Email check
+		if(email.equals("")) {
+			return "Không được bỏ trống Email!";
+		}
+		String regexEmail = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.(com|net|org|gov|edu|vn|us|uk|au|ca)$";
+		Pattern EMAIL_PATTERN = Pattern.compile(regexEmail);
+		if(!(EMAIL_PATTERN.matcher(email).matches()) || email.length() > 50) {
+			return "Định dạng Email không hợp lệ!";
+		}
+		return null;
+	}
+
+	public String PhoneCheck(String phone) {
+		// Phone check
+		if(phone.equals("")) {
+			return "Không được bỏ trống số điện thoại!";
+		}
+		String regexEmail = "^(\\\\+?84|0)(3[2-9]|5[2689]|7[06-9]|8[1-689]|9[0-9])[0-9]{7}$";
+		Pattern EMAIL_PATTERN = Pattern.compile(regexEmail);
+		if(!(EMAIL_PATTERN.matcher(phone).matches()) || phone.length() > 15) {
+			return "Số điện thoại không hợp lệ";
+		}
+		return null;
+	}
+	public String PassCheck(String pass) {
+		// Pass check
+		if(pass.equals("")) {
+			return "Mật khẩu phải từ 9-50 ký tự. Có it nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
+		}
+		String regexPass = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=])(?=.*[a-zA-Z]).{9,50}$";
+		boolean isValidPass = Pattern.matches(regexPass, pass);
+		if(!isValidPass) {
+			return "Mật khẩu phải từ 9-50 ký tự. Có it nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
+		}
+		return null;
+	}
+
+	public boolean checkEmailAlreadyExists(String email) {
+		DResponseUser user = userService.getUserByEmail(email);
+		if(user == null) {
+			return true;
+		}
+		return false;
+	}
+	public boolean checkPhoneAlreadyExists(String phone) {
+		DResponseUser user = userService.getUserByPhone(phone);
+		if(user == null) {
+			return true;
+		}
+		return false;
+	}
+
+	public void sendCodetoEmail(String email, String name){
+		this.vc  = new VerificationCode(generateCode(4));
+		System.out.println("Mã code: "+this.vc.getCode());
+		System.out.println("Thời gian tạo: "+this.vc.getCreatedTime());
+		System.out.println("Email sẽ gửi: "+email);
+		mailerService.queue(email, "ĐĂNG KÝ TÀI KHOẢN StepUpStyle", FormSendMailHTML.sendHTMLWhenResignation(vc.getCode(), name));
+	}
+
+	public static String generateCode(int length) {
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+
+		for (int i = 0; i < length; i++) {
+			int digit = random.nextInt(10);
+			sb.append(digit);
+		}
+
+		return sb.toString();
+	}
+
+	@PostMapping("/otpAccess")
+	public String handleLinkData(Model model, @RequestBody DataOTP data, HttpServletResponse response) {
+		// Xử lý dữ liệu ở đây
+		System.out.println("Data received from link: " + data.toString());
+		String codeFromView  =  data.toString();
+
+		try {
+			// Thực hiện xử lý dữ liệu và trả về status 200 OK nếu thành công
+			// Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
+			if (codeFromView.equals("1234")) {
+				response.setStatus(HttpServletResponse.SC_OK); // Status 200 OK
+			} else {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error
+			}
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error nếu có lỗi xảy ra
+		}
+		return "users/otp";
+	}
+
 }
+
+
+

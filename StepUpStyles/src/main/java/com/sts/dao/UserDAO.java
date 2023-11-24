@@ -31,4 +31,7 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 
 	@Query(value = "SELECT u FROM User u WHERE u.email = ?1" ,nativeQuery = false)
 	DResponseUser getUserByEnail(String email);
+
+	@Query(value = "SELECT u FROM User u WHERE u.phone = ?1" ,nativeQuery = false)
+	DResponseUser getUserByPhone(String phone);
 }
