@@ -1,46 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-<title>SUS || THANH TOÁN</title>
+	<title>SUS || THANH TOÁN</title>
 </head>
 
 <body ng-controller="index-ctrl">
 
 
 	<section class="w3l-banner-slider-main">
-		
-	<!--w3l-banner-slider-main-->
 
-	<!-- //w3l-banner-slider-main -->
-	
-	<!-- //content-6-section -->
+		<!--w3l-banner-slider-main-->
 
-	<section class="w3l-content-w-photo-6">
-		<!-- /specification-6-->
-		<div class="content-photo-6-mian py-5">
-			<div class="container py-lg-5">
-				<div class="align-photo-6-inf-cols row">
+		<!-- //w3l-banner-slider-main -->
 
-					<div class="photo-6-inf-right col-lg-6">
-						<h3 class="hny-title text-left">
-							Rất nhiều thương hiệu nổi tiếng đang <span >giảm giá</span>
-						</h3>
-						<p>Ghé thăm cửa hàng của chúng tôi để xem những sản phẩm tuyệt
-							vời.</p>
-						<a href="/list_products" class="read-more btn"> Tiếp Tục Mua Sắm </a>
-					</div>
-					<div class="photo-6-inf-left col-lg-6">
-						<img src="asset/user/images/icon/Shopping bag-amico.svg" class="img-fluid" alt="">
+		<!-- //content-6-section -->
+
+		<section class="w3l-content-w-photo-6">
+			<!-- /specification-6-->
+			<div class="content-photo-6-mian py-5">
+				<div class="container py-lg-5">
+					<div class="align-photo-6-inf-cols row">
+
+						<div class="photo-6-inf-right col-lg-6 text-left">
+							<h3 class="hny-title justify-items-center">
+								<span>Thanh Toán Thành Công</span>
+
+							</h3>
+							<div class="d-flex">
+
+								<h3 class="hny-title text-left text-nowrap">
+									Bạn vừa thanh toán <span class="text-lowercase" >đ100.000 </span> 
+								</h3>
+								
+							</div>
+							<p>Ghé thăm cửa hàng của chúng tôi để xem những sản phẩm tuyệt
+								vời.</p>
+							<a href="/list_products" class="read-more btn"> Tiếp Tục Mua Sắm </a>
+							<a href="/listorder" class="read-more btn"> Đơn Mua </a>
+						</div>
+						<div class="photo-6-inf-left col-lg-6">
+							<img src="asset/user/images/icon/Shopping bag-amico.svg" class="img-fluid" alt="">
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<!-- //specification-6-->
+		</section>
+		<!-- //specification-6-->
 
-	
+
 </body>
 
 </html>

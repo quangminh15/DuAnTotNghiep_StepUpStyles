@@ -81,7 +81,6 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.sortableColumns = [
 		{ name: 'orderId', label: 'Mã đơn hàng' },
 		{ name: 'shippingAddress.nameReceiver', label: 'Người Nhận' },
-		
 		{ name: 'orderStatus', label: 'Trạng thái đơn hàng' },
 		{ name: 'orderorderDate', label: 'Ngày đặt' },
 		{ name: 'paymentStatus', label: 'Tình trạng thanh toán' },

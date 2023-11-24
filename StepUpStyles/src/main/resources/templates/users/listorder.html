@@ -11,6 +11,7 @@
 	<style>
 		.menu-item:hover {
 			background-color: #bebebe;
+			color: white;
 		}
 
 		p {
@@ -22,8 +23,13 @@
 		}
 
 		.subcard {
-			border-bottom: 1px solid rgba(0, 0, 0, 0.125)
+			border-bottom: 1px solid rgba(0, 0, 0, 0.110)
 		}
+		.totalorder {
+			border-bottom: 1px dotted rgba(0, 0, 0, 0.125);
+			
+		}
+		
 
 		.custom-file-upload {
 			border: 1px solid #ccc;
@@ -34,6 +40,25 @@
 
 		.custom-file-upload:hover {
 			background-color: #f8f8f8;
+		}
+
+		.menu-item.active {
+			
+			color: orangered !important;
+			border-bottom: 2px orangered solid;
+			
+		}
+		.table-bordered td,.table-bordered td{
+			border: 1px dotted rgba(0, 0, 0, 0.130) !important;
+		}
+		.table-bordered{
+			border-top: none;
+		}
+		.col70{
+			width: 70%;
+		}
+		.col30{
+			width: 30%;
 		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
@@ -104,31 +129,35 @@
 
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
 		<!--/-->
-		<div class="ecomrhny-content-inf py-1 mt-3">
-			<div class="container py-md-3">
+		<div class="ecomrhny-content-inf">
+			<div class="container ">
 
 				<div class="d-flex row text-center align-items-center">
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck(null)" ng-class="{ 'active': isActiveStatus(null) }">
 
 						<p>Tất Cả</p>
 					</a>
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Pending')" ng-class="{ 'active': isActiveStatus('Pending') }">
+
 
 						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Processing')" ng-class="{ 'active': isActiveStatus('Processing') }">
+
 
 						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipped')" ng-class="{ 'active': isActiveStatus('Shipped') }">
+
 
 						<p>Đang Giao</p>
 					</a>
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipped')" ng-class="{ 'active': isActiveStatus('Shipped') }">
+
 
 						<p>Đã Giao</p>
 					</a>
-					<a class="col-md-2 menu-item p-1" href="">
+					<a class="col-md-2 menu-item py-md-4" href="">
 
 						<p>Đã Hủy</p>
 					</a>
@@ -140,19 +169,25 @@
 
 
 	</section>
-	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in orders">
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-if="checkList==true">
+		
+
+		<h1>Null</h1>
+
+	</section>
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in filterStaus">
 		<!--/-->
 
-
-		<div class="ecomrhny-content-inf py-1 mt-3 mb-5">
+		<h1 ng-if="checkList==true">Null</h1>
+		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" ng-if="checkList==false">
 			<div class="container py-md-3">
 				<div class="accordion" id="accordionExample">
 					<div class="card">
 						<div class="card-header bg-white" id="headingOne">
 							<h2 class="mb-0 d-flex justify-content-end ">
-								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
-										data-target="#collapse{{ $index + 1 }}" aria-expanded="true"
-										aria-controls="collapseOne">
+								<p>{{order.orderStatus}} |<button class="btn btn-link" type="button"
+										data-toggle="collapse" data-target="#collapse{{ $index + 1 }}"
+										aria-expanded="true" aria-controls="collapseOne">
 										Chi Tiet
 									</button></p>
 
@@ -208,13 +243,61 @@
 					</div>
 
 
-					<div class="card-footer bg-white border-0 text-right">
-						<div class="d-flex justify-content-end align-items-center">
-							<p class="m-3">Tổng thanh toán: </p>
-							<h3 class="text-danger">200.000 ₫</h3>
+					<div class="bg-white border-0 text-right" >
+						<div  class=" row d-flex justify-content-end align-items-center mb-2  ">
+							<!-- <div class="col-md-7"></div>
+							<div class="totalorder col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Tổng Tiền hàng: </p>
+									<p class="col-md-5 text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p>
+
+								</div>
+
+							</div> -->
+							<table  class="table table-bordered">
+								
+								<tbody>
+								<tr>
+									<td class="col70"><p class="text-secondary">Tổng Tiền hàng: </p></td>
+									<td class="col30"><p class="text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p></td>
+								</tr>
+								<tr>
+									<td class="col70"><p class="text-secondary">Phí ship:</p></td>
+									<td class="col30"><p class="text-end">{{order.shippingFee|number:0}} ₫</p></td>
+								</tr>
+								<tr>
+									<td class="col70"><p class="text-secondary">Tổng thanh toán:</p></td>
+									<td class="col30"><h3 class="text-end text-danger">{{order.totalAmount|number:0}} ₫</h3></td>
+								</tr>
+							</tbody>
+								
+							</table>
+						</div>
+						<!-- <div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 ">
+							<div class="col-md-7"></div>
+							<div class="totalorder col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Phí ship:</p>
+									<p class="col-md-5 text-end">{{order.shippingFee|number:0}} ₫</p>
+
+								</div>
+
+							</div>
 
 						</div>
-						<button class="btn btn-danger">Hủy đơn hàng</button>
+						<div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 totalorder">
+							
+							<div class="col-md-7"></div>
+							<div class=" col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Tổng thanh toán: </p>
+									<h3 class="col-md-5 text-end text-danger text-nowrap">{{order.totalAmount|number:0}} ₫</h3>
+
+								</div>
+
+							</div>
+						</div> -->
+						<button class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn hàng</button>
 					</div>
 
 				</div>
@@ -232,7 +315,7 @@
 	<!-- //products-->
 
 	<!--review-->
-	
+
 
 	<div style="margin: 8px auto; display: block; text-align: center;">
 

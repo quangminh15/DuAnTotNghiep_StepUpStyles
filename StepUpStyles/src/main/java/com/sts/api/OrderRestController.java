@@ -19,6 +19,7 @@ import com.sts.dao.OrderDAO;
 import com.sts.dao.UserDAO;
 import com.sts.model.Order;
 import com.sts.model.OrderDetail;
+import com.sts.model.OrderStatus;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
@@ -31,7 +32,7 @@ public class OrderRestController {
 
     @Autowired
     OrderService orderService;
-     @Autowired
+    @Autowired
     OrderDAO orderdao;
     @Autowired
     UserDAO userdao;
@@ -40,16 +41,15 @@ public class OrderRestController {
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") double initialPrice,
             @RequestParam("fee") double fee,
-            @RequestParam("addressId") int addressId
-             ) {
+            @RequestParam("addressId") int addressId) {
         try {
             // Handle the list of CartData objects
             System.out.println(fee);
             System.out.println(initialPrice);
             System.out.println(addressId);
 
-            Order order =  orderService.createOrder(cartDataList, initialPrice, fee, addressId,false);
-           
+            Order order = orderService.createOrder(cartDataList, initialPrice, fee, addressId, false);
+
             // Create a success response
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");
@@ -65,20 +65,29 @@ public class OrderRestController {
         }
     }
 
+    @RequestMapping("/updateStatus")
+    public void updateStatus(@RequestParam("id") Integer id,
+            @RequestParam("status") OrderStatus status) {
+
+        orderService.updateStatus(id, status);
+    }
+
     @GetMapping("/listOrder")
-    public List<Order> getListOrder(){
+    public List<Order> getListOrder() {
         User user = userdao.findById(1).get();
-        
+
         return orderService.loadByUser(user);
     }
+
     @GetMapping("/listOrder/detail")
-    public List<OrderDetail> getListOrderdetail(@RequestParam ("orderid") Integer orderid){
-        
+    public List<OrderDetail> getListOrderdetail(@RequestParam("orderid") Integer orderid) {
+
         Order order = orderdao.findById(orderid).get();
         return orderService.loadByOrder(order);
     }
+
     @GetMapping("/listOrder/all")
-    public List<Order> findall(){
+    public List<Order> findall() {
         return orderService.loadAll();
     }
 }

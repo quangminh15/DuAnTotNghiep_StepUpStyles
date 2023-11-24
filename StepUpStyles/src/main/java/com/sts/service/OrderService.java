@@ -20,5 +20,6 @@ public interface OrderService {
 
     List<Order> loadAll();
 
+    void updateStatus(Integer id, OrderStatus status);
 
 }

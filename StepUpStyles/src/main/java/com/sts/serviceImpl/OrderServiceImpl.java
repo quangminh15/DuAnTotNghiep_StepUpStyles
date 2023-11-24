@@ -126,6 +126,13 @@ public class OrderServiceImpl implements OrderService {
        return orderDao.findAll();
     }
 
+    @Override
+    public void updateStatus(Integer id, OrderStatus status) {
+        Order order = orderDao.findById(id).get();
+        order.setOrderStatus(status);
+       orderDao.save(order);
+    }
+
    
 
 }
