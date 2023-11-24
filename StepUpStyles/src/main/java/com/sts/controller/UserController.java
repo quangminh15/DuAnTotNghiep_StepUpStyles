@@ -20,11 +20,7 @@ public class UserController {
 
 		return "users/about";
 	}
-	@RequestMapping("/paysuccess")
-	public String success(Model model) {
-
-		return "users/vnpay-success";
-	}
+	
 	@RequestMapping("/listorder")
 	public String listorder(Model model) {
 

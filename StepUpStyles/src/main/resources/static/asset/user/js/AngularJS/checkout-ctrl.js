@@ -64,6 +64,12 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 					return selectedItem.id === item.id; // Adjust the condition as per your data structure
 				});
 			});
+			$scope.cartIs.forEach(cartDetail => {
+				$http.get("/rest/productimages/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+					cartDetail.product.productImages = resp.data;
+					console.log("images", cartDetail.product.productImages);
+				})
+			})
 			setTongTien()
 		}
 	};

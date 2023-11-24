@@ -1,8 +1,7 @@
 package com.sts.serviceImpl;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +43,6 @@ public class OrderServiceImpl implements OrderService {
     ProductDetailDAO prodDetailDao;
 
     @Override
-
     public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
         User user = userDao.findById(1).get();
         System.out.println("x:"+addressId);
@@ -136,5 +134,13 @@ public class OrderServiceImpl implements OrderService {
     public OrderDetail findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
         return orderDetailDao.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
     }
+    @Override
+    public void updateStatus(Integer id, OrderStatus status) {
+        Order order = orderDao.findById(id).get();
+        order.setOrderStatus(status);
+       orderDao.save(order);
+    }
 
+   
+    
 }

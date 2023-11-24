@@ -23,4 +23,6 @@ public interface OrderService {
     List<OrderDetail> findAllByOrderAndUser(Integer orderId, Integer usersId);
 
     OrderDetail findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId);
+    void updateStatus(Integer id, OrderStatus status);
+
 }

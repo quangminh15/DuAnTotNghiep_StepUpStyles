@@ -45,15 +45,13 @@
 								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
 						</span>
 						</th>
-						<th class="actions">sdgfhds</th>
+						<th class="actions"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="order in allOrders">
 						<td>{{order.orderId}}</td>
-						<td>{{order.deliveryDate | date: 'dd-MM-yyyy'}}</td>
-						<td>{{order.deliveryStatus? "Đã Giao": "Chưa giao"}}</td>
-						<td>{{order.initialPrice | number: 0 }} đ</td>
+						<td>{{order.shippingAddress.nameReceiver}} </td>
 						<td>{{order.orderStatus}}</td>
 						<td>{{order.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
 						<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
@@ -68,7 +66,7 @@
 							<button ng-click="confirmHideTable(productitem)"
 								class="btn btn-inverse-danger btn-rounded btn-icon"
 								data-toggle="tooltip" data-placement="top" title="Xóa">
-								<i class="ti-trash"></i>
+								<i class="ti-pencil"></i>
 							</button>
 						</td>
 					</tr>

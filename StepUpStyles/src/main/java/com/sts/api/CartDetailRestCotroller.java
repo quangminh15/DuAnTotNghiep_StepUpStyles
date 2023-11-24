@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class CartDetailRestCotroller {
 	}
 
 	@PutMapping("/updateQuantity")
-	public void updateQuantity( @RequestBody CartDetail cartDetail) {
+	public void updateQuantity(@RequestBody CartDetail cartDetail) {
 		cardetailService.upDateQtyCartItem(cartDetail.getCartDetailId(), cartDetail.getQuantity());
 	}
 
@@ -76,6 +77,11 @@ public class CartDetailRestCotroller {
 			@RequestParam("colorID") Integer coloID) {
 		return cardetailService.getSizeNumbersByProductId(productId, coloID);
 
+	}
+
+	@DeleteMapping("/delete")
+	public void delete(@RequestParam("cartId") Integer cartId) {
+		cardetailService.deletedCartItem(cartId);
 	}
 
 }
