@@ -46,7 +46,7 @@ public class ReviewRestController {
         if (product == null) {
             return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
         }
-        User currentUser = uService.findById(3);
+        User currentUser = uService.findById(1);
         if (currentUser == null) {
             return new ResponseEntity<>("Không tìm thấy người dùng.", HttpStatus.NOT_FOUND);
         }
@@ -54,7 +54,7 @@ public class ReviewRestController {
         review.setProduct(product);
         reviewService.createReview(review);
 
-        return new ResponseEntity<>("Đánh giá đã được tạo thành công.", HttpStatus.OK);
+        return new ResponseEntity<>(review, HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Lỗi khi tạo đánh giá.", HttpStatus.INTERNAL_SERVER_ERROR);
     }

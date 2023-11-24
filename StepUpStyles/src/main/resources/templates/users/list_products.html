@@ -202,7 +202,7 @@
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span>Trở lên</span>
+												aria-hidden="true"></span> <span></span>
 										</a></li>
 										<li><a ng-click="filterByAvgs(4)"> <span class="fa fa-star"
 												aria-hidden="true"></span> <span class="fa fa-star"
@@ -222,6 +222,8 @@
 										<li><a ng-click="filterByAvgs(1)"> <span class="fa fa-star"
 												aria-hidden="true"></span> <span>Trở lên</span>
 										</a></li>
+										<li><a ng-click="filterByAvgs(0)"><span>Tất cả</span>
+									</a></li>
 									</ul>
 								</div>
 								<div class="single-gd border-0">
@@ -294,7 +296,7 @@
 						</div>
 						<!-- /row-->
 						<div class="ecom-products-grids row">
-							<div ng-repeat="p in pager.productitems"
+							<div ng-repeat="p in pager.productitems" ng-click="addToRecentlyViewed(p)"
 								class="col-lg-4 col-6 product-incfhny mb-4">
 								<div class="product-grid2 transmitv"
 									ng-click="saveProductID(p.productID)">
@@ -338,7 +340,7 @@
 										</span> <span class="price"
 											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
 											{{ p.price | number:0 }} ₫ </span>
-											<div class="d-flex" style="justify-content: center;">
+											<div ng-if="p.avgrev" class="d-flex" style="justify-content: center;">
 												<div class="text-warning" ng-repeat="star in getStarAvgs(p.avgrev) track by $index">
 													<span ng-class="star" aria-hidden="true"></span>						
 											</div>
