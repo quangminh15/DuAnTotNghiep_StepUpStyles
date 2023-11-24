@@ -141,31 +141,26 @@ public class UserController {
 //				return "/nguoidung/dangky";
 //			}
 			if(NameCheck(c.getFullName()) != null) {
-				System.out.println("Tên không hợp lệ");
 				model.addAttribute("nameValidation", NameCheck(c.getFullName()));
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
 			if(PhoneCheck(c.getPhone()) != null) {
-				System.out.println("Email định dạng không hợp lệ");
 				model.addAttribute("phoneValidation", PhoneCheck(c.getPhone()));
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
 			if(!checkPhoneAlreadyExists(c.getPhone())) {
-				System.out.println("Email đã tồn tại");
 				model.addAttribute("phoneValidation", "Số điẹn thoại đã tồn tại!");
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
 			if(EmailCheck(c.getEmail()) != null) {
-				System.out.println("Email định dạng không hợp lệ");
 				model.addAttribute("emailValidation", EmailCheck(c.getEmail()));
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
 			if(!checkEmailAlreadyExists(c.getEmail())) {
-				System.out.println("Email đã tồn tại");
 				model.addAttribute("emailValidation", "Email đã tồn tại!");
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
@@ -278,7 +273,6 @@ public class UserController {
 	@PostMapping("/otpAccess")
 	public String handleLinkData(Model model, @RequestBody DataOTP data, HttpServletResponse response) {
 		// Xử lý dữ liệu ở đây
-		System.out.println("Data received from link: " + data.toString());
 		String codeFromView  =  data.toString();
 
 		try {
