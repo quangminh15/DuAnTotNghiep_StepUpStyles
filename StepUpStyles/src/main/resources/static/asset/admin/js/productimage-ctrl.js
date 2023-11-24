@@ -47,7 +47,7 @@ app.controller("productimage-ctrl", function($scope, $http) {
 	//	Phân trang
 	$scope.pager = {
 		page: 0,
-		size: 5,
+		size: 10,
 		getPageNumbers: function() {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
@@ -228,6 +228,10 @@ app.controller("productimage-ctrl", function($scope, $http) {
 	$scope.reset = function() {
 		$scope.form = {
 		};
+		var fileInput = document.getElementById('photo');
+		if (fileInput) {
+			fileInput.value = '';
+		}
 	}
 	//	Khởi đầu
 	$scope.initialize();

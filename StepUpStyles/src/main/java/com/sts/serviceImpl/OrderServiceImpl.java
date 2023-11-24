@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
         User user = userDao.findById(1).get();
-
+        System.out.println("x:"+addressId);
         ShippingAddress address = addressDao.findById(addressId).get();
 
         PaymentMenthod pay = payDao.findById(1).get();

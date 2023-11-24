@@ -9,15 +9,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.userItemsFavorite = [];
 	$scope.userRatings = []
 	$scope.allreviews = []
-	$scope.check = function (product) {
+	$scope.check = function(product) {
 		$http.get('/rest/favorites/check/' + product.productID)
-			.then(function (response) {
+			.then(function(response) {
 				$scope.productbyids = response.data;
 				console.log($scope.productbyids.favoriteId);
 				console.log($scope.productbyids);
 				if (!$scope.productbyids) {
 					$http.post('/rest/favorites/' + product.productID)
-						.then(function (response) {
+						.then(function(response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -43,7 +43,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 						});
 				} else {
 					$http.delete('/rest/favorites/delete/' + product.productID)
-						.then(function (response) {
+						.then(function(response) {
 							const Toast = Swal.mixin({
 								toast: true,
 								position: 'top',
@@ -58,7 +58,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 							Toast.fire({
 								icon: 'error',
-								title: 'Đã xóa sản phẩm ' +$scope.productbyids.product.productName+ ' khỏi danh sách yêu thích',
+								title: 'Đã xóa sản phẩm ' + $scope.productbyids.product.productName + ' khỏi danh sách yêu thích',
 
 							})
 							$scope.getAllUserFavorite();
@@ -76,10 +76,10 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	}
 
 
-	$scope.deleteFavoriteProduct = function (product) {
+	$scope.deleteFavoriteProduct = function(product) {
 		Swal.fire({
 			title: 'Xác nhận xóa sản phẩm yêu thích?',
-			text: 'Bạn có chắc chắn muốn xóa sản phẩm '+product.productName+' khỏi danh sách yêu thích?',
+			text: 'Bạn có chắc chắn muốn xóa sản phẩm ' + product.productName + ' khỏi danh sách yêu thích?',
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonText: 'Xóa',
@@ -88,7 +88,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			if (result.isConfirmed) {
 				// Nếu người dùng xác nhận xóa, thì gửi yêu cầu xóa sản phẩm yêu thích
 				$http.delete('/rest/favorites/delete/' + product.productID)
-					.then(function (response) {
+					.then(function(response) {
 						$scope.getAllUserFavorite();
 						updateFavoriteCount();
 					})
@@ -139,7 +139,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			if ($scope.reviewCounts.total === 0) {
 				$scope.noRating = "Chưa có đánh giá nào";
 				$scope.noReviewsMessage = "Chưa có đánh giá nào";
-			}else{
+			} else {
 				$scope.noRating = "";
 			}
 		}).catch(error => {
@@ -349,9 +349,9 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	//Hiển thị điếm đánh giá trên sản phẩm
 	$scope.getStarAvgs = function(avgRating) {
 		var numStars = Math.floor(avgRating); // Số sao nguyên
-        var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
-        var stars = [];
-        for (var i = 0; i < 5; i++) {
+		var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
+		var stars = [];
+		for (var i = 0; i < 5; i++) {
 			if (i < numStars) {
 				stars.push("fa fa-star");
 			} else if (hasHalfStar) {
@@ -418,6 +418,7 @@ $scope.addToRecentlyViewed = function(product) {
 	$scope.colorss = [];
 	$scope.colors = [];
 	$scope.sizes = [];
+	$scope.brans = [];
 	$scope.filteredColors = [];
 	$scope.productDetails = [];
 	$scope.size = '';
@@ -426,6 +427,7 @@ $scope.addToRecentlyViewed = function(product) {
 	$scope.searchedProductItems = [];
 	$scope.discountedProducts = [];
 	$scope.featureds = [];
+	$scope.productitems = [];
 
 	$scope.allProductitems = [];
 
@@ -459,30 +461,11 @@ $scope.addToRecentlyViewed = function(product) {
 		$scope.FeaturedPager.first();
 	};
 
-	$scope.getProductsByBrand = function(brandID) {
-		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
-			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
 
-			$scope.productitems.forEach(items => {
-				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
-					items.image = resp.data;
-				})
-			})
-
-			$scope.productitems.forEach(item => {
-				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
-					item.discount = resp.data.filter(discount => !discount.deleted);
-				})
-			})
-			$scope.chuyenTrang();
-		}).catch(function(error) {
-			console.error('Error occurred while fetching products by brand:', error);
-		});
-	};
 
 	// Tìm kiếm START 
 
-	// Hàm ẩn lớp phủ bắ đầu 
+	// Hàm ẩn lớp phủ bắt đầu 
 	$scope.hideOverlay = function() {
 		var overlay = document.getElementById("overlay");
 		if (overlay) {
@@ -625,6 +608,7 @@ $scope.addToRecentlyViewed = function(product) {
 					$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
 					console.log("$scope.allProductitems: 0", $scope.allProductitems);
 					console.log("$scope.productitems: 0", $scope.productitems);
+					$scope.$apply();
 				})
 				.catch(error => {
 					console.error(error);
@@ -632,6 +616,90 @@ $scope.addToRecentlyViewed = function(product) {
 		});
 	};
 	//load product trang sản phẩm kết thúc
+
+	//load sản phẩm theo brand bắt đầu
+	$scope.getProductsByBrand = function(brandID) {
+		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
+			// Lưu trữ các sản phẩm mới vào biến mới
+			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
+
+			$scope.productitems.forEach(items => {
+				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
+					items.image = resp.data;
+				});
+			});
+
+			$scope.productitems.forEach(item => {
+				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
+					item.discount = resp.data.filter(discount => !discount.deleted);
+				});
+			});
+
+			// Cập nhật các biến đếm và dữ liệu liên quan bắt đầu
+			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
+				// Sử dụng biến mới để không đè lên giá trị của $scope.productitems
+				const productImagePromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productimages/loadbyproduct/" + item.productID);
+				});
+
+				const discountPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/discount/loadbyproduct/" + item.productID);
+				});
+
+				const productDetailPromises = $scope.productitems.map(item => {
+					return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
+				});
+
+				Promise.all(productImagePromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].image = resp.data;
+						});
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(discountPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].discount = resp.data.filter(discount => !discount.deleted);
+						});
+						$scope.chuyenTrang();
+					})
+					.catch(error => {
+						console.error(error);
+					});
+
+				Promise.all(productDetailPromises)
+					.then(responses => {
+						responses.forEach((resp, index) => {
+							$scope.productitems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
+							$scope.productitems[index].productDetails.forEach(item => {
+								if (item.size && item.size.activities && !item.size.deleted && !$scope.sizes.some(c => c.sizeID === item.size.sizeID)) {
+									$scope.sizes.push(item.size);
+								}
+								if (item.color && item.color.activities && !item.color.deleted && !$scope.colors.some(c => c.colorID === item.color.colorID)) {
+									$scope.colors.push(item.color);
+								}
+							});
+						});
+					})
+					.then(() => {
+						$scope.chuyenTrang();
+						// Gán giá trị của biến mới vào $scope.productitems
+						$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			});
+			// Cập nhật các biến đếm và dữ liệu liên quan kết thúc
+		}).catch(function(error) {
+			console.error('Error occurred while fetching products by brand:', error);
+		});
+	};
+	//load sản phẩm theo brand kết thúc
 
 	//Đếm sản phẩm hiển thị trang sản phẩm bắt đầu
 	$scope.getProductCountCategory = function(categoryID) {
@@ -1159,6 +1227,18 @@ $scope.addToRecentlyViewed = function(product) {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
 					items.image = resp.data;
 				})
+				//Linh hàm gọi điểm sao đánh giá
+				$http.get("/rest/reviews/loadbyproducts/" + items.productID).then(resp => {
+					$scope.all = resp.data;
+					$scope.ratings = $scope.all.map(function(review) {
+						return review.rating;
+					});
+					$scope.average = calculateAverageRating($scope.ratings);
+					items.avgrev = $scope.average
+				}).catch(error => {
+					console.log("Error", error);
+				});
+				//Linh end
 			})
 			$scope.productitems.forEach(item => {
 				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {

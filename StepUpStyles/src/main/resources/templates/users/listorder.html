@@ -143,21 +143,29 @@
 			<div class="container py-md-3">
 
 				<div class="d-flex row text-center align-items-center">
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Tất Cả</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đang Giao</p>
+					</a>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đã Giao</p>
+					</a>
+					<a class="col-md-2 menu-item p-1" href="">
+						
+						<p>Đã Hủy</p>
 					</a>
 				</div>
 
@@ -167,28 +175,28 @@
 
 
 	</section>
-	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in orders">
 		<!--/-->
 
 
-		<div class="ecomrhny-content-inf py-1 mt-3">
-			<div class="container py-md-3" ng-repeat="order in orders ">
+		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" >
+			<div class="container py-md-3"  >
 				<div class="accordion" id="accordionExample">
 					<div class="card">
-						<div class="card-header bg-white" id="headingOne">
-							<h2 class="mb-0 d-flex justify-content-end ">
+						<div class="card-header bg-white" id="headingOne" >
+							<h2 class="mb-0 d-flex justify-content-end " >
 								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
-										data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										data-target="#collapse{{ $index + 1 }}" aria-expanded="true" aria-controls="collapseOne">
 										Chi Tiet
 									</button></p>
 
 							</h2>
 						</div>
 
-						<div id="collapseOne" class="collapse " aria-labelledby="headingOne"
+						<div  id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang</p>
+								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang {{order.orderId}}</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
 								<p class="text-dark">xa {{order.shippingAddress.ward}}, huyen
@@ -199,7 +207,7 @@
 								<p class="text-dark font-weight-bolder">Thanh Toan</p>
 								<div class="d-flex ">
 									<p class="text-dark">Phuong thuc thanh toan: </p>
-									<p class="text-dark ml-2">thanh toan khi nhan hang</p>
+									<p class="text-dark ml-2">{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
 									<p class="text-dark">Giam gia: </p>
@@ -212,8 +220,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in orderDetail">
-						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.image[1].imagePath}}">
+					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in order.orderDetail">
+						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.productDetail.product.productImages[1].imagePath}}" >
 						<div class="col-md-8">
 							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 										-webkit-box-orient: vertical;
