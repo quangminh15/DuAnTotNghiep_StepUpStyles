@@ -11,6 +11,7 @@
 	<style>
 		.menu-item:hover {
 			background-color: #bebebe;
+			color: white;
 		}
 
 		p {
@@ -22,32 +23,218 @@
 		}
 
 		.subcard {
-			border-bottom: 1px solid rgba(0, 0, 0, 0.125)
+			border-bottom: 1px solid rgba(0, 0, 0, 0.110)
+		}
+		.totalorder {
+			border-bottom: 1px dotted rgba(0, 0, 0, 0.125);
+			
+		}
+		
+
+		.custom-file-upload {
+			border: 1px solid #ccc;
+			display: inline-block;
+			padding: 6px 12px;
+			cursor: pointer;
+		}
+
+		.custom-file-upload:hover {
+			background-color: #f8f8f8;
+		}
+
+		.menu-item.active {
+			
+			color: orangered !important;
+			border-bottom: 2px orangered solid;
+			
+		}
+		.table-bordered td,.table-bordered td{
+			border: 1px dotted rgba(0, 0, 0, 0.130) !important;
+		}
+		.table-bordered{
+			border-top: none;
+		}
+		.col70{
+			width: 85%;
+		}
+		.col30{
+			width: 15%;
+		}
+		.rating-stars ul {
+			list-style-type: none;
+			padding: 0;
+
+			-moz-user-select: none;
+			-webkit-user-select: none;
+		}
+
+		.rating-stars ul>li.star {
+			display: inline-block;
+
+		}
+		.rating-stars ul>li.star>i.fa {
+			font-size: 2.5em;
+			color: #ccc;
+			cursor: pointer;
+		}
+		.rating-stars ul>li.star.hover>i.fa {
+			color: #FFCC36;
+		}
+		.rating-stars ul>li.star.selected>i.fa {
+			color: #FF912C;
+		}
+		.menu-item.active {
+			
+			color: orangered !important;
+			border-bottom: 2px orangered solid;
+			
+		}
+		.table-bordered td,.table-bordered td{
+			border: 1px dotted rgba(0, 0, 0, 0.130) !important;
+		}
+		.table-bordered{
+			border-top: none;
+		}
+		.col70{
+			width: 70%;
+		}
+		.col30{
+			width: 30%;
 		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
-
+	<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+		aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex">
+						<img ng-src="{{prodOrder.image[1].imagePath}}" width="10%" class="mr-2">
+						<div class="mt-4">
+							<p>{{prodOrder.productName}}</p>
+						</div>
+					</div>
+					<div class='rating-stars text-center'>
+						<ul id='stars'>
+							<li class='star' data-value='1' ng-click="selectStar(1)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='2' ng-click="selectStar(2)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='3' ng-click="selectStar(3)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='4' ng-click="selectStar(4)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='5' ng-click="selectStar(5)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+						</ul>
+					</div>
+					<form>
+						<div class="form-group">
+							<textarea class="form-control" id="reviewText" rows="3" ng-model="title"
+								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="image1" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 1
+							</label>
+							<label for="image2" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 2
+							</label>
+							<label for="image3" class="custom-file-upload">
+								<i class="fa fa-camera"></i> Thêm ảnh 3
+							</label>
+							<div class="d-flex">
+								<input type="file" id="image1" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage1');">
+								<img id="selectedImage1"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="image2" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage2');">
+								<img id="selectedImage2"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+								<input type="file" id="image3" accept="image/*" style="display:none;"
+									onchange="displayImage(this, 'selectedImage3');">
+								<img id="selectedImage3"
+									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
+					<button class="btn btn-danger" ng-click="createReview(prodOrder.productID)">Hoàn thành</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Modal xem đánh giá chi tiết-->
+	<div class="modal fade" id="reviewDetail" tabindex="-1" role="dialog" aria-labelledby="reviewModalDetail"
+		aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalDetail">XEM ĐÁNH GIÁ</h5>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex">
+						<img ng-src="{{prods.image[1].imagePath}}" width="10%" class="mr-2">
+						<div class="mt-4">
+							<p>{{dataReview.product.productName}}</p>
+							<p>{{dataReview.rating}}</p>
+						</div>
+					</div>
+					<h1></h1>
+					<hr>
+					<h1></h1>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Kết thúc modal xem đánh giá-->
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
 		<!--/-->
-		<div class="ecomrhny-content-inf py-1 mt-3">
-			<div class="container py-md-3">
+		<div class="ecomrhny-content-inf">
+			<div class="container ">
 
 				<div class="d-flex row text-center align-items-center">
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck(null)" ng-class="{ 'active': isActiveStatus(null) }">
+
+						<p>Tất Cả</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Pending')" ng-class="{ 'active': isActiveStatus('Pending') }">
+
+
+						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Confirmed')" ng-class="{ 'active': isActiveStatus('Confirmed') }">
+
+
+						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-3 menu-item p-1" href="">
-						<img src="/asset/user/img/e.jpg" width="10%">
-						<p>Dang xu ly</p>
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipping')" ng-class="{ 'active': isActiveStatus('Shipping') }">
+
+
+						<p>Đang Giao</p>
+					</a>
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Delivered')" ng-class="{ 'active': isActiveStatus('Delivered') }">
+
+
+						<p>Đã Giao</p>
+					</a>
+					<a class="col-md-2 menu-item py-md-4" href="">
+
+						<p>Đã Hủy</p>
 					</a>
 				</div>
 
@@ -57,75 +244,139 @@
 
 
 	</section>
-	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-if="checkList==true">
+		<div class="container py-md-3 d-flex justify-content-center align-items-center" style="min-height: 25em;">
+			<div class="text-center">
+
+				<img src="/asset/user/img/emptyorder.png"  alt="">
+				<h3>Chưa có đơn hàng nào</h3>
+			</div>
+		</div>
+	</section>
+	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in filterStaus">
 		<!--/-->
 
-
-		<div class="ecomrhny-content-inf py-1 mt-3">
-			<div class="container py-md-3" ng-repeat="order in orders ">
+		
+		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" ng-if="checkList==false">
+			<div class="container py-md-3">
 				<div class="accordion" id="accordionExample">
-					<div class="card">
-						<div class="card-header bg-white" id="headingOne">
+					<div class="card" >
+						<div class=" bg-white" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);" id="headingOne">
 							<h2 class="mb-0 d-flex justify-content-end ">
-								<p>Dang Xu Ly |<button class="btn btn-link" type="button" data-toggle="collapse"
-										data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-										Chi Tiet
+								<p>{{order.orderStatus}} |<button class="btn btn-link" type="button"
+										data-toggle="collapse" data-target="#collapse{{ $index + 1 }}"
+										aria-expanded="true" aria-controls="collapseOne">
+										Chi tiết 
 									</button></p>
 
 							</h2>
 						</div>
 
-						<div id="collapseOne" class="collapse " aria-labelledby="headingOne"
+						<div id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang</p>
+								<p class="text-dark font-weight-bolder">Địa Chỉ Giao Hàng :</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
-								<p class="text-dark">xa {{order.shippingAddress.ward}}, huyen
-									{{order.shippingAddress.district}}, {{orders.shippingAddress.province}}</p>
+								<p class="text-dark">{{order.shippingAddress.ward}},
+									{{order.shippingAddress.district}}, {{order.shippingAddress.province}}</p>
 							</div>
 
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Thanh Toan</p>
+								<p class="text-dark font-weight-bolder">Thanh Toán</p>
 								<div class="d-flex ">
-									<p class="text-dark">Phuong thuc thanh toan: </p>
-									<p class="text-dark ml-2">thanh toan khi nhan hang</p>
+									<p class="text-dark">Phương Thức thanh toán:</p>
+									<p class="text-dark ml-2">{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
-									<p class="text-dark">Giam gia: </p>
-									<p class="text-dark ml-2">0</p>
+									<p class="text-dark">Giảm giá: </p>
+									<p class="text-dark ml-2">0 ₫</p>
 								</div>
 								<div class="d-flex ">
-									<p class="text-dark">phi van chuyen:</p>
-									<p class="text-dark ml-2">739.000</p>
+									<p class="text-dark">Phí vận chuyển:</p>
+									<p class="text-dark ml-2">{{order.shippingFee|number:0}} ₫</p>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in orderDetail">
-						<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.image[1].imagePath}}" >
-						<div class="col-md-8">
+					<div class="d-flex row p-2 align-items-center subcard" ng-repeat="item in order.orderDetail">
+						<img class=" col-md-2 pic-2 img-fluid"
+							ng-src="{{item.productDetail.product.productImages[1].imagePath}}">
+						<div class="col-md-6">
 							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 										-webkit-box-orient: vertical;
 										-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
 								ut libero! Impedit omnis porro iusto sequi quia!</p>
-							<p class="text-dark mb-3">Mau: {{item.productDetail.color.colorName}} | Size:
+							<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} | Size:
 								{{item.productDetail.size.sizeNumber}}</p>
-							<p class="text-dark">X {{item.quantity}}</p>
+							<p class="text-dark">Số lượng: X {{item.quantity}}</p>
 
 						</div>
-						<div class="col-md-2">{{item.price}}</div>
+						<div class="col-md-4 d-flex justify-content-end">
+							<div>{{item.price|number:0}} ₫</div>
+							<button class="btn btn-danger ml-3" ng-click="showModalReview(item.productDetail.product)" ng-if="!item.hasReviewed">Đánh giá</button>
+							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)" ng-if="item.hasReviewed">Xem đánh giá</button>
+						</div>
 					</div>
 
-					
-					<div class="card-footer bg-white border-0 text-right">
-						<div class="d-flex justify-content-end align-items-center">
-							<p class="m-3">Tong Thanh Toan: </p>
-							<h3 class="text-danger">200.000</h3>
+
+					<div class="bg-white border-0 text-right" >
+						<div  class=" row d-flex justify-content-end align-items-center mb-2  " style="border-bottom: 1px solid rgb(226, 226, 226);">
+							<!-- <div class="col-md-7"></div>
+							<div class="totalorder col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Tổng Tiền hàng: </p>
+									<p class="col-md-5 text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p>
+
+								</div>
+
+							</div> -->
+							<table  class="table table-borderless">
+								
+								<tbody>
+								<tr>
+									<td class="col70"><p class="text-secondary">Tổng Tiền hàng: </p></td>
+									<td class="col30"><p class="text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p></td>
+								</tr>
+								<tr>
+									<td class="col70"><p class="text-secondary">Phí ship:</p></td>
+									<td class="col30"><p class="text-end">{{order.shippingFee|number:0}} ₫</p></td>
+								</tr>
+								<tr>
+									<td class="col70"><p class="text-secondary">Tổng thanh toán:</p></td>
+									<td class="col30"><h3 class="text-end text-danger">{{order.totalAmount|number:0}} ₫</h3></td>
+								</tr>
+							</tbody>
+								
+							</table>
+						</div>
+						<!-- <div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 ">
+							<div class="col-md-7"></div>
+							<div class="totalorder col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Phí ship:</p>
+									<p class="col-md-5 text-end">{{order.shippingFee|number:0}} ₫</p>
+
+								</div>
+
+							</div>
 
 						</div>
 						<button class="btn btn-danger">Huy Don Hang</button>
-						<button class="btn btn-danger">Danh Gia</button>
+						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button> -->
+						<div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 totalorder">
+							
+							<div class="col-md-7"></div>
+							<div class=" col-md-5 py-2">
+								<div class="row d-flex ">
+									<p class="col-md-7 text-secondary">Tổng thanh toán: </p>
+									<h3 class="col-md-5 text-end text-danger text-nowrap">{{order.totalAmount|number:0}} ₫</h3>
+
+								</div>
+
+							</div>
+						</div>
+						<button class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn hàng</button>
 					</div>
 
 				</div>
@@ -143,80 +394,48 @@
 	<!-- //products-->
 
 	<!--review-->
-	<section class="w3l-ecommerce-main w3l-ecommerce-main-inn">
-		<!-- /content-6-section -->
-		<div class="container content-singlev-ecomm py-5">
-			<h4>ĐÁNH GIÁ SẢN PHẨM</h4>
-			<div class="content-singlev-ecomm py-5 bg-white">
-				<div class="row wrapper-rating">
-					<div class="col-sm-3 text-center">
-						<h2>
-							{{averageRating}}/5<span class="text-warning">★</span>
-						</h2>
-					</div>
-					<div class="col-sm-8">
-						<p class="d-inline-flex gap-1">
-						<div class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(null)">Tất cả ({{ reviewCounts.total }})</div>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(5)">5 sao ({{ reviewCounts[5] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(4)">4 sao ({{ reviewCounts[4] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(3)">3 sao ({{ reviewCounts[3] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(2)">2 sao ({{ reviewCounts[2] }})</a>
-						<a class="btn mx-2 btn-outline-warning" style="background-color: white; color: #ff7315;"
-							ng-click="filterByRating(1)">1 sao ({{ reviewCounts[1] }})</a>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="content-singlev-ecomm py-3" ng-repeat="rv in allreviews">
-				<div class="row">
-					<div class="col-sm-2 text-center">
-						<img src="link_to_user_image.jpg" alt="Hình" class="img-fluid rounded-circle">
-					</div>
-					<div class="col-sm-10">
-						<p class="mb-0">
-							<strong>{{rv.user.fullName}}</strong>
-						</p>
-						<p class="mb-0">{{rv.reviewDate | date:'dd-MM-yyyy'}}</p>
-						<div class="rating mb-2">
-							<span class="fa fa-star" ng-repeat="star in getStars(rv.rating)"></span>
-						</div>
-						<p class="mb-0" style="word-wrap: break-word;">{{rv.title}}</p>
-						<span class="fa fa-thumbs-up"></span>
-					</div>
-				</div>
-				<hr>
-			</div>
-			<!--/pagination-->
-			<div class="pagination" style="margin: 0px 10px 20px;">
-				<ul>
-					<li class="prev"><a ng-click="reviewPager.first()"><span class="fa fa-angle-double-left"></span></a>
-					</li>
-					<li class="page-item" ng-repeat="page in reviewVisiblePages"
-						ng-class="{ 'active': (page.value === reviewPager.page + 1) }"><a class="page-link" href=""
-							ng-click="reviewPager.gotoReview(page.value)"
-							ng-style="page.value === (reviewPager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
-							{{ page.value }} </a></li>
-					<li class="next"><a ng-click="reviewPager.last()"><span class="fa fa-angle-double-right"></span></a>
-					</li>
-				</ul>
-			</div>
-			<!--//pagination-->
-		</div>
-		</div>
-	</section>
-	<!--review-->
+
 
 	<div style="margin: 8px auto; display: block; text-align: center;">
 
 		<!---728x90--->
 
 	</div>
-
+	<script>
+		$(document).ready(function(){
+	  $('#stars li').on('mouseover', function(){
+		var onStar = parseInt($(this).data('value'), 10);
+		$(this).parent().children('li.star').each(function(e){
+		  if (e < onStar) {
+			$(this).addClass('hover');
+		  }
+		  else {
+			$(this).removeClass('hover');
+		  }
+		});
+		
+	  }).on('mouseout', function(){
+		$(this).parent().children('li.star').each(function(e){
+		  $(this).removeClass('hover');
+		});
+	  });
+	  
+	  $('#stars li').on('click', function(){
+		var onStar = parseInt($(this).data('value'), 10);
+		var stars = $(this).parent().children('li.star');
+		
+		for (i = 0; i < stars.length; i++) {
+		  $(stars[i]).removeClass('selected');
+		}
+		
+		for (i = 0; i < onStar; i++) {
+		  $(stars[i]).addClass('selected');
+		}
+	  });
+	  $('#stars li').addClass('selected');
+	  
+	});
+	</script>
 </body>
 
 </html>

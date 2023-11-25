@@ -93,12 +93,12 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in RestorePager.itemsss">
-                                    <td>{{item.supplierId}}</td>
-                                    <td>{{item.supplierName}}</td>
-                                    <td>{{item.addresss}}</td>
-                                    <td>{{item.phone}}</td>
-                                    <td>{{item.email}}</td>
-                                    <td>{{item.display? 'Bật':'Tắt'}}</td>
+                                    <td data-toggle="tooltip" title="{{item.supplierId}}">{{item.supplierId}}</td>
+                                    <td data-toggle="tooltip" title="{{item.supplierName}}">{{item.supplierName}}</td>
+                                    <td data-toggle="tooltip" title="{{item.addresss}}">{{ formatAddress(item.addresss) }}</td>
+                                    <td data-toggle="tooltip" title="{{formatPhoneNumber(item.phone)}}">{{ formatPhoneNumber(item.phone) }}</td>
+                                    <td data-toggle="tooltip" title="{{item.email}}">{{item.email}}</td>
+                                    <td data-toggle="tooltip" title="{{item.display ? 'Đang bật' : 'Đang tắt'}}">{{item.display ? 'Đang bật' : 'Đang tắt'}}</td>
                                     <td class="actions">
                                         <button class="btn btn-space btn btn-primary " ng-click="restore(item)">
                                             <i class="ti-back-right"></i>
@@ -197,12 +197,12 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="item in pager.itemss">
-                                <td>{{item.supplierId}}</td>
-                                <td>{{item.supplierName}}</td>
-                                <td>{{item.addresss}}</td>
-                                <td>{{item.phone}}</td>
-                                <td>{{item.email}}</td>
-                                <td>{{item.display ? 'Đang bật' : 'Đang tắt'}}</td>
+                                <td data-toggle="tooltip" title="{{item.supplierId}}">{{item.supplierId}}</td>
+                                <td data-toggle="tooltip" title="{{item.supplierName}}">{{item.supplierName}}</td>
+                                <td data-toggle="tooltip" title="{{item.addresss}}">{{ formatAddress(item.addresss) }}</td>
+                                <td data-toggle="tooltip" title="{{formatPhoneNumber(item.phone)}}">{{ formatPhoneNumber(item.phone) }}</td>
+                                <td data-toggle="tooltip" title="{{item.email}}">{{item.email}}</td>
+                                <td data-toggle="tooltip" title="{{item.display ? 'Đang bật' : 'Đang tắt'}}">{{item.display ? 'Đang bật' : 'Đang tắt'}}</td>
                                 <td class="actions">
                                     <button ng-click="edit(item)" class="btn btn-inverse-primary btn-rounded btn-icon"
                                         data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">

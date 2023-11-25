@@ -8,6 +8,22 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title th:replace="${title}"></title>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+	integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+	crossorigin="anonymous" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+	integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+	crossorigin="anonymous" />
+
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 <!-- Template CSS -->
 <link rel="stylesheet" href="/asset/user/css/style-liberty.css">
 <!-- Template CSS -->
@@ -49,6 +65,29 @@
 <!-- splide bắt đầu -->
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css" />
 <!-- splide kết thúc -->
+<!-- Đoạn mã cấu hình Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+
+<script type="text/javascript">
+	var firebaseConfig = {
+		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+		authDomain : "stepupstyles-97319.firebaseapp.com",
+		projectId : "stepupstyles-97319",
+		storageBucket : "stepupstyles-97319.appspot.com",
+		messagingSenderId : "909443933158",
+		appId : "1:909443933158:web:17bce455b00fb707f12c27",
+		measurementId : "G-82K4Q2H6DF"
+	};
+
+	// Khởi tạo Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+</script>
+<!-- Đoạn mã cấu hình Firebase -->
 <style type="text/css">
 /* nút lọc của trang sản phẩm START */
 .custom-button-container {
@@ -143,12 +182,30 @@ a:hover, button:hover {
 	max-width: 90%;
 	width: 90%;
 }
-
-.splide__slide img {
-	width: 100%;
-	height: auto;
-}
 </style>
+<!-- Đoạn mã cấu hình Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+
+<script type="text/javascript">
+	var firebaseConfig = {
+		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+		authDomain : "stepupstyles-97319.firebaseapp.com",
+		projectId : "stepupstyles-97319",
+		storageBucket : "stepupstyles-97319.appspot.com",
+		messagingSenderId : "909443933158",
+		appId : "1:909443933158:web:17bce455b00fb707f12c27",
+		measurementId : "G-82K4Q2H6DF"
+	};
+
+	// Khởi tạo Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+</script>
+<!-- Đoạn mã cấu hình Firebase -->
 </head>
 
 <body ng-app="app">
@@ -237,6 +294,56 @@ a:hover, button:hover {
 		}
 
 		updateFavoriteCount();
+
+		function displayImage(input, imageId) {
+			var imageElement = document.getElementById(imageId);
+
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+
+				reader.onload = function(e) {
+					imageElement.src = e.target.result;
+					imageElement.style.display = 'block';
+				};
+
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+		function removeImage(imageId) {
+    var imageElement = document.getElementById(imageId);
+    imageElement.src = ''; // Gán đường dẫn trống để xóa ảnh
+    imageElement.style.display = 'none'; // Ẩn phần tử
+}
+
+// 		function displayImage(input, imageId) {
+//     var imageElement = document.querySelector('#' + imageId);
+
+//     if (input.files && input.files[0]) {
+//         var reader = new FileReader();
+
+//         reader.onload = function(e) {
+//             imageElement.src = e.target.result;
+//             imageElement.style.display = 'block';
+//             // Cập nhật trạng thái đã chọn ảnh tương ứng (giả sử bạn muốn theo dõi trạng thái này)
+//             if (imageId === 'image1') {
+//                 // Điều chỉnh trạng thái của ảnh 1
+//                 // Ví dụ: có thể sử dụng data attributes hoặc class để theo dõi trạng thái đã chọn ảnh
+//             } else if (imageId === 'image2') {
+//                 // Điều chỉnh trạng thái của ảnh 2
+//             } else if (imageId === 'image3') {
+//                 // Điều chỉnh trạng thái của ảnh 3
+//             }
+//         };
+
+//         reader.readAsDataURL(input.files[0]);
+//     }
+// }
+	</script>
+	<script>
+		$(document).ready(function() {
+			// $(".fancybox").fancybox();
+			$("[data-fancybox^='review-']").fancybox();
+		});
 	</script>
 	<!-- -------------- -->
 	<script src="/asset/user/js/bootstrap.min.js"></script>
@@ -254,7 +361,7 @@ a:hover, button:hover {
 	</script>
 
 
-	
+
 	<!-- cart -->
 	<script src="/asset/user/js/AngularJS/shopping-cart.js"></script>
 	<script src="/asset/user/js/favorite.js"></script>
@@ -311,7 +418,8 @@ a:hover, button:hover {
 	<script src="/asset/user/js/jquery.magnific-popup.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 	<!--//pop-up-box-->
 	<script>
 		$(document).ready(function() {
@@ -346,7 +454,7 @@ a:hover, button:hover {
 			const scrollY = window.scrollY;
 
 			// Set a threshold value for when to switch the class
-			const threshold = 100; // You can adjust this value
+			const threshold = 100;
 
 			if (scrollY > threshold) {
 				navbar.classList.add('navbar-scrolled');
@@ -356,20 +464,29 @@ a:hover, button:hover {
 		});
 	</script>
 	<!-- navbar scroll -->
-	<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
-		var splide = new Splide('.splide', {
-			perPage : 6,
-			focus : 0,
-			omitEnd : true,
-			rewind : true,
-		});
-
-		splide.mount();
-	});
-	</script>
-
 	<!-- count cartitem -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+		integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+		crossorigin="anonymous"></script>
+	<script>
+		$('.owl-carousel').owlCarousel({
+			loop : false,
+			margin : 15,
+			nav : true,
+			responsive : {
+				0 : {
+					items : 1
+				},
+				600 : {
+					items : 2
+				},
+				1000 : {
+					items : 4
+				}
+			}
+		});
+	</script>
 </body>
 
 </html>

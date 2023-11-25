@@ -64,6 +64,12 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 					return selectedItem.id === item.id; // Adjust the condition as per your data structure
 				});
 			});
+			$scope.cartIs.forEach(cartDetail => {
+				$http.get("/rest/productimages/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+					cartDetail.product.productImages = resp.data;
+					console.log("images", cartDetail.product.productImages);
+				})
+			})
 			setTongTien()
 		}
 	};
@@ -313,7 +319,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 	}
 	$scope.createAddress = function (checked, name, phone, detail) {
-		alert(1)
+		
 		
 			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
 			$scope.dataAddress = {
@@ -323,17 +329,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				ward_name: $scope.form.selectedWard.WardName,
 				// Các thông tin khác cần thiết
 			}
-			alert(2)
+			
 			console.log($scope.dataAddress );
 			$http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
 				.then(resp => {
-					alert(3)
+					
 					console.log("add");
 					$scope.reset()
 					$scope.initialize()
 				}).catch(function (error) {
 					console.error('Error fetching districts:', error);
-					alert(4)
+					
 				});
 
 		
@@ -449,4 +455,64 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			alert('Vui lòng chọn địa chỉ đầy đủ để tính tiền ship.');
 		}
 	};
+
+	//tien start
+	$scope.voucherUseTrue = [];
+
+	$scope.getVoucher = function () {
+		var userId = 1;  
+		// Thực hiện HTTP GET request đến API
+		$http.get('/rest/voucherUse/getTrue/' + userId)
+			.then(function (response) {
+				// Xử lý dữ liệu trả về từ API
+				$scope.voucherUseTrue = response.data;
+				console.log($scope.voucherUseTrue);
+				$scope.voucherUseTrue.forEach(function (item) {
+					item.formattedStartDate = formatDate(item.voucher.dateStart);
+					item.formattedEndDate = formatDate(item.voucher.dateEnd);
+				  });
+				  function formatDate(startDate) {
+					// Parse the input date string
+					const inputDate = new Date(startDate);
+				
+					// Format options
+					const options = {
+						weekday: 'long', // 'long' for the full weekday name
+						day: '2-digit',
+						month: '2-digit',
+						year: 'numeric',
+						// hour: '2-digit',
+						// minute: '2-digit',
+						// second: '2-digit',
+						hour12: false, // 24-hour format
+						timeZone: 'Asia/Ho_Chi_Minh', // Time zone
+					};
+				
+					// Format the date using Intl.DateTimeFormat
+					const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+				
+					return formattedDate;
+				}
+			})
+			
+	};
+
+	$scope.formatToVND = function (amount) {
+		// Logic để định dạng số amount sang định dạng VND
+		return amount.toLocaleString("vi-VN", {
+		  style: "currency",
+		  currency: "VND",
+		});
+	  };
+
+	$scope.getVoucher();
+
+	$scope.openRecycleBinForm = function() {
+		// Reset searchKeyword
+		searchValue = '';
+		$('#recycleBinModal').modal('show');
+	};
+
+
+	//tien end
 }])

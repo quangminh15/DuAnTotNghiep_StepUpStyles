@@ -12,6 +12,7 @@ import com.sts.dao.ProductDAO;
 import com.sts.dao.UserDAO;
 import com.sts.model.Favorite;
 import com.sts.model.Product;
+import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.service.FavoriteService;
 
@@ -72,6 +73,16 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public void deleteById(Integer favoriteId) {
         favoriteDAO.deleteById(favoriteId);
+    }
+
+    @Override
+    public List<Favorite> getProductByProductId(Integer productId) {
+        return favoriteDAO.findByProductID(productId);
+    }
+
+    @Override
+    public List<Favorite> getUsersByUsersId(Integer usersId) {
+        return favoriteDAO.findByUserID(usersId);
     }
     
 }

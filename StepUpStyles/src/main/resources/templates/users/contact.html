@@ -24,9 +24,9 @@
                 <div class="modal-body" id="voucherModalBody">
                     <!-- Nội dung chi tiết voucher ở đây -->
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -40,12 +40,19 @@
                 <div class="ecommerce-right-hny">
 
                     <h2>DANH SÁCH VOUCHER</h2>
-                    <div>
+                    <div ng-show="voucher.length == 0"
+                        style="text-align: center; justify-content: center; margin: 10px;">
+                        <i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
+                        <p>Hiện tại chưa có voucher nào</p>
+                        <a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
+                                class="fas fa-shopping-cart" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
+                    </div>
+                    <div ng-show="voucher">
                         <!-- Hiển thị danh sách voucher -->
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-4" ng-repeat="item in voucher" style="margin-bottom: 20px;">
-                                    <div class="card">
+                                    <div class="card boxvou">
                                         <div class="row">
                                             <div class="col-md-4"
                                                 style="background-color: orange; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -54,21 +61,29 @@
                                                 </svg>
                                                 <div style="margin-bottom: 30px;">
                                                     <div class="gg">Giảm giá</div>
-                                                    <div class="sus">SUS</div>
+                                                    <div class="sus">FOURSHOE</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
                                                     <div>Giảm: {{item.discountAmount}}%</div>
                                                     <div>Đơn tối thiểu: {{formatToVND(item.total)}}</div>
-                                                    <div style="font-size: 11px; color: red;">Áp dụng: Thứ năm,
-                                                        {{item.dateStart}} - Thứ hai, {{item.dateEnd}}</div>
+                                                    <div style="font-size: 11px; color: red;">Áp dụng:
+                                                        {{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
                                                     <div class="but">
-                                                        <button class="custom-button">
+                                                        <!-- Nút chưa lưu -->
+                                                        <button class="custom-button"
+                                                            ng-click="saveVoucher(item)" ng-show="!item.saved">
                                                             <span>Lưu mã</span>
                                                         </button>
+
+                                                        <!-- Nút đã lưu -->
+                                                        <button class="custom-button-saved saved-button" ng-show="item.saved">
+                                                            <span>Đã lưu</span>
+                                                        </button>
                                                         <button class="cus-button" data-toggle="modal"
-                                                            data-target="#voucherModal" ng-click="openModal(item.voucherId)">
+                                                            data-target="#voucherModal"
+                                                            ng-click="openModal(item.voucherId)">
                                                             <span>Chi tiết</span>
                                                         </button>
                                                     </div>

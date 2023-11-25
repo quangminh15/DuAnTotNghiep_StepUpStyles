@@ -39,6 +39,11 @@ public class UserController {
     @Autowired
     UserDAO userDAO;
 
+    @RequestMapping("/listorder")
+    public String listorder(Model model) {
+        return "users/listorder";
+    }
+
     @RequestMapping("/about")
     public String about(Model model) {
 

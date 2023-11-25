@@ -35,10 +35,10 @@ public class UserRestController {
 		return userService.findById(userID);
 	}
 
-//	@GetMapping("/rest/users/loadall")
-//	public List<User> getAll() {
-//		return userService.findAll();
-//	}
+	@GetMapping("/loadall")
+	public List<User> getAll() {
+		return userDAO.findAll();
+	}
 
 	@PostMapping("/create")
 	public User create(@RequestBody User user) {

@@ -79,7 +79,7 @@
 								<div class="container">
 									<div class="carousel-caption">
 										<h3>
-											Đặt trước Laptop <br>Ưu đãi sốc
+											Đặt trước sản phẩm yêu thích <br>Ưu đãi sốc
 										</h3>
 										<a href="list_products.html" class="shop-button btn"> Xem
 											ngay </a>
@@ -102,7 +102,7 @@
 								<div class="container">
 									<div class="carousel-caption">
 										<h3>
-											Phụ kiện sale đậm <br>Lên đến 50%
+											Có nhiều chương trình sốc <br>Lên đến 50%
 										</h3>
 										<a href="list_products.html" class="shop-button btn"> Xem
 											ngay </a>
@@ -114,7 +114,7 @@
 								<div class="container">
 									<div class="carousel-caption">
 										<h3>
-											Đồng hồ thông minh <br>Hot sale
+											Mẫu mã mới nhất <br>Hot sale
 										</h3>
 										<a href="list_products.html" class="shop-button btn"> Xem
 											ngay </a>
@@ -141,6 +141,7 @@
 							<!-- Men's
 								Fashion
 								<br>50% Off -->
+
 						</h4>
 					</div>
 				</div>
@@ -169,32 +170,24 @@
 					<!---728x90--->
 
 				</div>
-
-				<div class="splide" ng-if="brans.length > 0">
-					<div class="splide__track">
-						<div class="splide__list">
-							<div class="splide__slide" ng-repeat="brand in brans">
-								<div class="welcome-grids mt-5">
-									<div class=" welcome-image ml-3">
-										<div class="boxhny13">
-											<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
-												ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
-												<div class="boxhny-content">
-													<h3 class="title">Xem</h3>
-												</div>
-											</a>
-										</div>
-										<h4>
-											<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
-										</h4>
-									</div>
+				<div class="welcome-grids row mt-5">
+					<div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
+						<!-- col-lg-2 col-md-4 col-6  -->
+						<div class="boxhny13">
+							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
+								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
+								<div class="boxhny-content">
+									<h3 class="title">Xem
 								</div>
-							</div>
+							</a>
 						</div>
+						<h4>
+							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
+						</h4>
 					</div>
 				</div>
+
 			</div>
-		</div>
 	</section>
 	<!-- //content-6-section -->
 
@@ -284,9 +277,12 @@
 									ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li> 
-										<span ng-if="isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
-										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									<li><span ng-if="isFavorited(p.productID)"
+										ng-click="check(p)" class="fa fa-heart liked"
+										style="font-size: 24px; color: red;"></span> <span
+										ng-if="!isFavorited(p.productID)" ng-click="check(p)"
+										class="fa fa-heart-o not-liked"
+										style="font-size: 24px; color: red; font-weight: bold;"></span>
 									</li>
 								</ul>
 								<div class="transmitv single-item">
@@ -374,8 +370,8 @@
 									<li><span ng-if="isFavorited(p.productID)"
 										ng-click="check(p)" class="fa fa-heart liked"
 										style="font-size: 24px; color: red;"></span> <span
-										ng-if="!isFavorited(p.productID)"
-										ng-click="check(p)" class="fa fa-heart-o liked"
+										ng-if="!isFavorited(p.productID)" ng-click="check(p)"
+										class="fa fa-heart-o liked"
 										style="font-size: 24px; color: red; font-weight: bold;"></span>
 									</li>
 								</ul>
@@ -445,107 +441,25 @@
 						</h3>
 						<p>Cửa hàng không chỉ phục vụ mỗi nam giới mà nữ giới cũng
 							được</p>
-						<a href="list_products.html" class="read-more-btn2 btn"> Shop
-							Now </a>
+						<a href="/list_products" class="read-more-btn2 btn"> Xem ngay
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 	<!-- //content-6-section -->
-	<section class="w3l-post-grids-6">
-		<!-- /post-grids-->
-		<div class="post-6-mian py-5">
-			<div class="container py-lg-5">
-				<h3 class="hny-title text-center mb-0 ">
-					Latest Blog <span>Posts</span>
-				</h3>
-				<p class="mb-5 text-center">Handpicked Favourites just for you</p>
-				<div class="post-hny-grids row mt-5">
-					<div class="col-lg-3 col-md-6 grids5-info column-img" id="zoomIn">
-						<a href="blog-single.html">
-							<figure>
-								<img class="img-fluid" src="asset/user/images/bg1.jpg"
-									alt="blog-image">
-							</figure>
-						</a>
 
-						<div class="blog-thumbhny-caption">
-							<ul class="blog-info-list">
-								<li><a href="#admin">By admin</a></li>
-								<li class="date-post">Aug 10, 2020</li>
-							</ul>
-							<h4>
-								<a href="blog-single.html">Here to bring your life style to
-									the next level.</a>
-							</h4>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6 grids5-info column-img" id="zoomIn">
-						<a href="blog-single.html">
-							<figure>
-								<img class="img-fluid" src="asset/user/images/bg2.jpg"
-									alt="blog-image">
-							</figure>
-						</a>
-						<div class="blog-thumbhny-caption">
-							<ul class="blog-info-list">
-								<li><a href="#admin">By admin</a></li>
-								<li class="date-post">Aug 10, 2020</li>
-							</ul>
-							<h4>
-								<a href="blog-single.html">Here to bring your life style to
-									the next level.</a>
-							</h4>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6 grids5-info column-img" id="zoomIn">
-						<figure>
-							<img class="img-fluid" src="asset/user/images/bg3.jpg"
-								alt="blog-image">
-						</figure>
-						<div class="blog-thumbhny-caption">
-							<ul class="blog-info-list">
-								<li><a href="#admin">By admin</a></li>
-								<li class="date-post">Aug 10, 2020</li>
-							</ul>
-							<h4>
-								<a href="blog-single.html">Here to bring your life style to
-									the next level.</a>
-							</h4>
-						</div>
-					</div>
-
-					<div class="col-lg-3 col-md-6 grids5-info column-img" id="zoomIn">
-						<figure>
-							<img class="img-fluid" src="asset/user/images/bg4.jpg"
-								alt="blog-image">
-						</figure>
-						<div class="blog-thumbhny-caption">
-							<ul class="blog-info-list">
-								<li><a href="#admin">By admin</a></li>
-								<li class="date-post">Aug 10, 2020</li>
-							</ul>
-							<h4>
-								<a href="blog-single.html">Here to bring your life style to
-									the next level.</a>
-							</h4>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section>
 	<!-- //post-grids-->
-	<section class="w3l-customers-sec-6">
+	<section class="w3l-customers-sec-6 w3l-grids-hny-2">
 		<div class="customers-sec-6-cintent py-5">
 			<!-- /customers-->
 			<div class="container py-lg-5">
 				<h3 class="hny-title text-center mb-0 ">
 					Sản phẩm được <span>đánh giá cao</span>
 				</h3>
-				<p class="mb-5 text-center">Những sản phẩm có phản hồi tích cực từ khách hàng</p>
+				<p class="mb-5 text-center">Những sản phẩm có phản hồi tích cực
+					từ khách hàng</p>
 				<div class="row customerhny my-lg-5 my-4">
 					<div class="col-md-12">
 						<div id="customerhnyCarousel" class="carousel slide"
@@ -561,22 +475,23 @@
 
 								<div class="carousel-item active">
 									<div class="row">
-										<div class="col-md-3">
-											<div class="customer-info text-center">
-												<div class="feedback-hny">
-													<span class="fa fa-quote-left"></span>
-													<p class="feedback-para">Lorem, ipsum dolor sit amet
-														consectetur adipisicing elit. Labore rem, dicta assumenda
-														mollitia molestias quas nihil quasis.</p>
+										<div class="">
+											<div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
+												<!-- col-lg-2 col-md-4 col-6  -->
+												<div class="boxhny13">
+													<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
+														ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
+														<div class="boxhny-content">
+															<h3 class="title">Xem
+														</div>
+													</a>
 												</div>
-												<div class="feedback-review mt-4">
-													<img src="asset/user/images/c1.jpg" class="img-fluid"
-														alt="">
-													<h5>Smith Roy</h5>
-
-												</div>
+												<h4>
+													<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
+												</h4>
 											</div>
 										</div>
+
 									</div>
 									<!--.row-->
 								</div>
@@ -616,40 +531,7 @@
 		</div>
 	</section>
 	<!-- //customers-->
-	<section class="w3l-subscription-6">
-		<!--/customers -->
-		<div class="subscription-infhny">
-			<div class="container-fluid">
 
-				<div class="subscription-grids row">
-
-					<div class="subscription-right form-right-inf col-lg-6 p-md-5 p-4">
-						<div class="p-lg-5 py-md-0 py-3">
-							<h3 class="hny-title">
-								Join us for FREE to get instant <span>email updates!</span>
-							</h3>
-							<p>Subscribe and get notified at first on the latest update
-								and offers!</p>
-
-							<form action="#" method="post" class="signin-form mt-lg-5 mt-4">
-								<div class="forms-gds">
-									<div class="form-input">
-										<input type="email" name="" placeholder="Your email here"
-											required="">
-									</div>
-									<div class="form-input">
-										<button class="btn">Join</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-					<div class="subscription-left forms-25-info col-lg-6 "></div>
-				</div>
-
-				<!--//customers -->
-			</div>
-	</section>
 	<!-- //customers-6-->
 	<script>
 		window.addEventListener('scroll', function() {

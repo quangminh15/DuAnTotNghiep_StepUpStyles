@@ -8,7 +8,17 @@
 }
 
 .custom-button:hover {
-    background-color: rgb(240, 212, 160); 
+    background-color: orange;
+    color: white; 
+}
+
+.custom-button-saved{
+    background-color: white;
+    color: wheat;
+    padding: 1px 20px; 
+    border: 2px solid wheat; 
+    border-radius: 5px; 
+    cursor: pointer;
 }
 
 .but{
@@ -22,10 +32,15 @@
     color: blue;
 }
 
+.boxvou{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
 .gg{
     color: white;
     font-size: 13px;
     font-style: italic;
+    text-align: center;
 }
 
 .sus{
@@ -87,4 +102,16 @@ b{
 .ct{
     font-size: 13px;
     color: black;
+}
+
+.saved-button {
+    cursor: pointer; /* Kiểu con trỏ mặc định khi không hover */
+}
+
+.saved-button:hover {
+    cursor: not-allowed; /* Kiểu con trỏ cấm khi hover */
+}
+
+.disabled {
+    pointer-events: none; /* Ngăn chặn sự kiện click khi có class "disabled" */
 }

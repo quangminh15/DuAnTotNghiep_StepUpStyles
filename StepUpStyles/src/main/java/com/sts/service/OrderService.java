@@ -5,6 +5,7 @@ import java.util.List;
 import com.sts.model.Order;
 import com.sts.model.OrderDetail;
 import com.sts.model.OrderStatus;
+import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
 
@@ -19,4 +20,12 @@ public interface OrderService {
     List<OrderDetail> loadByOrder(Order order);
 
     List<Order> loadAll();
+
+    List<OrderDetail> findOrderDetailWithReviewByOrderIdAndUserId(Integer orderId, Integer userId);
+
+    List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId);
+    void updateStatus(Integer id, OrderStatus status);
+
+    Order getSingleProd(Integer id);
+
 }

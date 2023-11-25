@@ -97,6 +97,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/user/profile.html",
 			controller: "profile-ctrl"
 		})
+		.when("/favorite", {
+			templateUrl: "/templates/admins/favorites/favorite.html",
+			controller: "favorite-ctrl"
+		})
 		.otherwise({
 			templateUrl: "/templates/admins/index.html",
 			controller: "indexAdmin-ctrl"

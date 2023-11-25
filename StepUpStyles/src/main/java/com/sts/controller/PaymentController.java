@@ -27,13 +27,14 @@ public class PaymentController {
     
     List<OrderDetailDTO> listOrderDetails = new ArrayList<>();
     OrderDTO ordertemp = new OrderDTO();
+    Order order = new Order();
 
     @ResponseBody
     @PostMapping("/payment/getdata")
     public void getData(@RequestBody List<OrderDetailDTO> cartDataList,
-            @RequestParam("initialPrice") double initial,
-            @RequestParam("fee") double fee,
-            @RequestParam("addressId") int addressId) {
+            @RequestParam("initialPrice") Double initial,
+            @RequestParam("fee") Double fee,
+            @RequestParam("addressId") Integer addressId) {
 
         ordertemp = OrderDTO.builder()
         .initialPrice(initial)
@@ -53,10 +54,10 @@ public class PaymentController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping("/purchase")
+    @GetMapping("/purchase") 
     public String createOrderVNPay(){
         Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(), ordertemp.getShippingFee(), ordertemp.getAddressID(), true);
-        return "redirect:/index";
+        return "redirect:/paysuccess";
     }
     @ResponseBody
     @GetMapping("/payment/removedata")
@@ -70,7 +71,7 @@ public class PaymentController {
 
     @RequestMapping("/submitOrder")
     public String submidOrder(HttpServletRequest request) {
-        System.out.println(1);
+       
         total = ordertemp.getInitialPrice()+ordertemp.getShippingFee();
         int orderTotal = 10000;
         String orderInfo = "Thanh Toán Đơn Hàng";
@@ -96,5 +97,11 @@ public class PaymentController {
 
         return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/paysuccess";
     }
+
+    @RequestMapping("/paysuccess")
+	public String success(Model model) {
+
+		return "users/vnpay-success";
+	}
 
 }
