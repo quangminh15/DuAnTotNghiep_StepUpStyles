@@ -24,4 +24,7 @@ public interface OrderService {
 
     Order getSingleProd(Integer id);
 
+    List<OrderDetail> findAllByOrderAndUser(Integer orderId, Integer usersId);
+
+    OrderDetail findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId);
 }

@@ -139,5 +139,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
    
+    public List<OrderDetail> findAllByOrderAndUser(Integer orderId, Integer usersId) {
+        return orderDetailDao.findAllByOrder_OrderIdAndOrder_User_UsersId(orderId, usersId);
+    }
+
+    @Override
+    public OrderDetail findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
+        return orderDetailDao.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
+    }
 
 }

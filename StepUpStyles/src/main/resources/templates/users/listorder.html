@@ -60,6 +60,29 @@
 		.col30{
 			width: 15%;
 		}
+		.rating-stars ul {
+			list-style-type: none;
+			padding: 0;
+
+			-moz-user-select: none;
+			-webkit-user-select: none;
+		}
+
+		.rating-stars ul>li.star {
+			display: inline-block;
+
+		}
+		.rating-stars ul>li.star>i.fa {
+			font-size: 2.5em;
+			color: #ccc;
+			cursor: pointer;
+		}
+		.rating-stars ul>li.star.hover>i.fa {
+			color: #FFCC36;
+		}
+		.rating-stars ul>li.star.selected>i.fa {
+			color: #FF912C;
+		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
 	<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
@@ -68,52 +91,63 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
-					</button>
+					</button> -->
 				</div>
 				<div class="modal-body">
 					<div class="d-flex">
-						<img src="/asset/user/img/e.jpg" width="10%" class="mr-2">
-						<div>
-							<p>Giày converse</p>
-							<p>Màu sắc: đen, Size: 40</p>
+						<img ng-src="{{prodOrder.image[1].imagePath}}" width="10%" class="mr-2">
+						<div class="mt-4">
+							<p>{{prodOrder.productName}}</p>
 						</div>
 					</div>
-					<div class="row col-sm-12" style="justify-content: center; font-size: 60px;">
-						<span class="text-warning">★</span>
-						<span class="text-warning">★</span>
-						<span class="text-warning">★</span>
-						<span class="text-warning">★</span>
-						<span class="text-warning">★</span>
+					<div class='rating-stars text-center'>
+						<ul id='stars'>
+							<li class='star' data-value='1' ng-click="selectStar(1)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='2' ng-click="selectStar(2)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='3' ng-click="selectStar(3)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='4' ng-click="selectStar(4)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+							<li class='star' data-value='5' ng-click="selectStar(5)">
+								<i class='fa fa-star fa-fw'></i>
+							</li>
+						</ul>
 					</div>
 					<form>
 						<div class="form-group">
-							<textarea class="form-control" id="reviewText" rows="3"
+							<textarea class="form-control" id="reviewText" rows="3" ng-model="title"
 								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
 						</div>
 						<div class="form-group">
-							<label for="imageUpload1" class="custom-file-upload">
+							<label for="image1" class="custom-file-upload">
 								<i class="fa fa-camera"></i> Thêm ảnh 1
 							</label>
-							<label for="imageUpload2" class="custom-file-upload">
+							<label for="image2" class="custom-file-upload">
 								<i class="fa fa-camera"></i> Thêm ảnh 2
 							</label>
-							<label for="imageUpload3" class="custom-file-upload">
+							<label for="image3" class="custom-file-upload">
 								<i class="fa fa-camera"></i> Thêm ảnh 3
 							</label>
 							<div class="d-flex">
-								<input type="file" id="imageUpload1" accept="image/*" style="display:none;"
+								<input type="file" id="image1" accept="image/*" style="display:none;"
 									onchange="displayImage(this, 'selectedImage1');">
-								<img id="selectedImage1" src="#"
+								<img id="selectedImage1"
 									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-								<input type="file" id="imageUpload2" accept="image/*" style="display:none;"
+								<input type="file" id="image2" accept="image/*" style="display:none;"
 									onchange="displayImage(this, 'selectedImage2');">
-								<img id="selectedImage2" src="#"
+								<img id="selectedImage2"
 									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-								<input type="file" id="imageUpload3" accept="image/*" style="display:none;"
+								<input type="file" id="image3" accept="image/*" style="display:none;"
 									onchange="displayImage(this, 'selectedImage3');">
-								<img id="selectedImage3" src="#"
+								<img id="selectedImage3"
 									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
 							</div>
 						</div>
@@ -121,7 +155,7 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
-					<button class="btn btn-danger">Hoàn thành</button>
+					<button class="btn btn-danger" ng-click="createReview(prodOrder.productID)">Hoàn thành</button>
 				</div>
 			</div>
 		</div>
@@ -239,7 +273,7 @@
 						</div>
 						<div class="col-md-4 d-flex justify-content-end">
 							<div>{{item.price|number:0 }} ₫</div><button class="btn btn-danger ml-3"
-								ng-click="showModalReview()">Đánh giá</button>
+							ng-click="showModalReview(item.productDetail.product)" ng-if="showReviewButton">Đánh giá</button>
 						</div>
 
 
@@ -325,7 +359,41 @@
 		<!---728x90--->
 
 	</div>
-
+	<script>
+		$(document).ready(function(){
+	  $('#stars li').on('mouseover', function(){
+		var onStar = parseInt($(this).data('value'), 10);
+		$(this).parent().children('li.star').each(function(e){
+		  if (e < onStar) {
+			$(this).addClass('hover');
+		  }
+		  else {
+			$(this).removeClass('hover');
+		  }
+		});
+		
+	  }).on('mouseout', function(){
+		$(this).parent().children('li.star').each(function(e){
+		  $(this).removeClass('hover');
+		});
+	  });
+	  
+	  $('#stars li').on('click', function(){
+		var onStar = parseInt($(this).data('value'), 10);
+		var stars = $(this).parent().children('li.star');
+		
+		for (i = 0; i < stars.length; i++) {
+		  $(stars[i]).removeClass('selected');
+		}
+		
+		for (i = 0; i < onStar; i++) {
+		  $(stars[i]).addClass('selected');
+		}
+	  });
+	  $('#stars li').addClass('selected');
+	  
+	});
+	</script>
 </body>
 
 </html>
