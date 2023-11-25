@@ -64,6 +64,7 @@
 		}
 		.rating-stars ul>li.star.selected>i.fa {
 			color: #FF912C;
+		}
 		.menu-item.active {
 			
 			color: orangered !important;
@@ -90,9 +91,6 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
-					<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button> -->
 				</div>
 				<div class="modal-body">
 					<div class="d-flex">
@@ -159,7 +157,33 @@
 			</div>
 		</div>
 	</div>
-
+	<!--Modal xem đánh giá chi tiết-->
+	<div class="modal fade" id="reviewDetail" tabindex="-1" role="dialog" aria-labelledby="reviewModalDetail"
+		aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalDetail">XEM ĐÁNH GIÁ</h5>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex">
+						<img ng-src="{{prods.image[1].imagePath}}" width="10%" class="mr-2">
+						<div class="mt-4">
+							<p>{{dataReview.product.productName}}</p>
+							<p>{{dataReview.rating}}</p>
+						</div>
+					</div>
+					<h1></h1>
+					<hr>
+					<h1></h1>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Kết thúc modal xem đánh giá-->
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container ">
 		<!--/-->
 		<div class="ecomrhny-content-inf">
@@ -266,14 +290,11 @@
 								{{item.productDetail.size.sizeNumber}}</p>
 							<p class="text-dark">X {{item.quantity}}</p>
 						</div>
-						<div class="col-md-4 d-flex justify-content-end">{{item.price|number:0}} ₫</div>
-						<button class="btn btn-danger ml-13" ng-click="showModalReview(item.productDetail.product)" ng-if="showReviewButton">Đánh giá</button>
 						<div class="col-md-4 d-flex justify-content-end">
-							<div>{{item.price|number:0 }} ₫</div><button class="btn btn-danger ml-3"
-								ng-click="showModalReview()">Đánh giá</button>
+							<div>{{item.price|number:0}} ₫</div>
+							<button class="btn btn-danger ml-3" ng-click="showModalReview(item.productDetail.product)" ng-if="!item.hasReviewed">Đánh giá</button>
+							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)" ng-if="item.hasReviewed">Xem đánh giá</button>
 						</div>
-
-
 					</div>
 
 

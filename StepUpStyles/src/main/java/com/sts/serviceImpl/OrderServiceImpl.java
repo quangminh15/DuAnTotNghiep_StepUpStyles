@@ -20,6 +20,7 @@ import com.sts.model.Order;
 import com.sts.model.OrderDetail;
 import com.sts.model.OrderStatus;
 import com.sts.model.PaymentMenthod;
+import com.sts.model.Review;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
@@ -126,12 +127,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDetail> findAllByOrderAndUser(Integer orderId, Integer usersId) {
-        return orderDetailDao.findAllByOrder_OrderIdAndOrder_User_UsersId(orderId, usersId);
-    }
-
-    @Override
-    public OrderDetail findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
+    public List<OrderDetail> findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
         return orderDetailDao.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
     }
     @Override
@@ -141,6 +137,8 @@ public class OrderServiceImpl implements OrderService {
        orderDao.save(order);
     }
 
-   
-    
+    @Override
+    public List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId) {
+        return orderDetailDao.findReviewsByOrderIdAndUserId(orderId, userId);
+    }
 }

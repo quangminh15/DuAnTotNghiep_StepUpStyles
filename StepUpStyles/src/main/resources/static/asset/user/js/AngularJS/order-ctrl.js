@@ -1,40 +1,14 @@
 app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-	$scope.orders=[]
-	$scope.orderDetail=[]
-	$scope.filterStaus=[]
-	$scope.initialize = function () {
+    $scope.orders = []
+    $scope.orderDetail = []
+    $scope.filterStaus = []
+    $scope.reviewedOrderDetails = []
+    $scope.initialize = function () {
 
-		$http.get(`/rest/order/listOrder`)
-			.then(resp => {
-				
-				$scope.orders = resp.data
-				
-				console.log("orders",$scope.orders);
-				
-				console.log("1",$scope.orders.shippingAddress)
-			
-				
-				$scope.orders.forEach(item => {
-				
-				
-					$http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
-					.then(respone=>{
-						item.orderDetail = respone.data
-						$scope.filterByStatusAndCheck(null)
-						console.log("order",$scope.orderDetail);
-						item.orderDetail.forEach(orderdetails => {
-							$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-								orderdetails.productDetail.product.productImages = resp.data;
-							})
-							
-						})
-						
-					})
-				});
-			})
-			.catch(function (error) {
-				console.error('Error fetching cart items:', error);
-			});
+        $http.get(`/rest/order/listOrder`)
+            .then(resp => {
+
+                $scope.orders = resp.data
 
                 console.log("orders", $scope.orders);
 
@@ -42,23 +16,44 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 
                 $scope.orders.forEach(item => {
+                    // $scope.checkReviewd(item.orderId)
+
+                    //    
+                    $http.get(`/rest/order/find?orderId=${item.orderId}`)
+                        .then(function (response) {
+                            $scope.reviewedOrderDetails = response.data;
+                        }).catch(function (error) {
+                            console.error('Error fetching cart items:', error);
+                        });
+                    //
 
 
                     $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
                         .then(respone => {
-                            $scope.orderDetail = respone.data
+                            item.orderDetail = respone.data
+                            $scope.filterByStatusAndCheck(null)
                             console.log("order", $scope.orderDetail);
-
-                            $scope.orderDetail.forEach(orderdetails => {
-                                console.log("s1", orderdetails.productDetail.product.productID);
+                            item.orderDetail.forEach(orderdetails => {
+                                console.log("id", orderdetails.orderDetailId);
+                                $scope.checkrv = false
+                                // Kiểm tra nếu orderDetail.orderId tồn tại trong reviewedOrderDetails
+                                const isReviewed = $scope.reviewedOrderDetails.some(reviewedItem => reviewedItem.orderDetailId === orderdetails.orderDetailId);
+                                orderdetails.hasReviewed = isReviewed;
+                                if (isReviewed) {
+                                    console.log(`Order ${orderdetails.orderDetailId} đã được đánh giá.`);
+                                    // Gán thuộc tính hasReviewed vào orderDetail
+                                    $scope.checkrv = true;
+                                } else {
+                                    console.log(`Order ${orderdetails.orderDetailId} chưa được đánh giá.`);
+                                    $scope.checkrv = false;
+                                }
+                                console.log($scope.checkrv);
                                 $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-                                    orderdetails.image = resp.data;
-                                    console.log("s2", orderdetails.image);
-
+                                    orderdetails.productDetail.product.productImages = resp.data;
                                 })
 
-                         
-                        
+                            })
+
                         })
                 });
             })
@@ -66,8 +61,35 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                 console.error('Error fetching cart items:', error);
             });
 
+        console.log("orders", $scope.orders);
 
-      
+        console.log("1", $scope.orders.shippingAddress)
+
+
+        $scope.orders.forEach(item => {
+
+
+            $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
+                .then(respone => {
+                    $scope.orderDetail = respone.data
+                    console.log("order", $scope.orderDetail);
+
+                    $scope.orderDetail.forEach(orderdetails => {
+                        console.log("s1", orderdetails.productDetail.product.productID);
+                        $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
+                            orderdetails.image = resp.data;
+                            console.log("s2", orderdetails.image);
+
+                        })
+
+
+
+                    })
+                        .catch(function (error) {
+                            console.error('Error fetching cart items:', error);
+                        });
+                });
+        })
 
     }
     $scope.prodOrder = []
@@ -145,15 +167,30 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
             $scope.rating = 5;
         }
     };
-
-    $scope.reset = function(){
+    $scope.resetReviewForm = function () {
         $scope.title = '';
-        $scope.rating = 5;
-    
-        // Xóa các hình đã chọn
-        $scope.review.image1 = '';
-        $scope.review.image2 = '';
-        $scope.review.image3 = '';
+        // Xác định các phần tử sao và lưu trữ chúng trong một biến
+        var stars = $('#stars li');
+
+        // Xóa lớp 'selected' khỏi tất cả các phần tử sao
+        stars.removeClass('selected');
+
+        // Thêm lớp 'selected' cho 5 phần tử sao ban đầu
+        for (var i = 0; i < 5; i++) {
+            $(stars[i]).addClass('selected');
+        }
+
+        var imageElements = [
+            document.getElementById('selectedImage1'),
+            document.getElementById('selectedImage2'),
+            document.getElementById('selectedImage3')
+        ];
+        imageElements.forEach(function (imageElement) {
+            if (imageElement) {
+                imageElement.src = '';
+                imageElement.style.display = 'none';
+            }
+        });
     };
     // Hàm tạo đánh giá
     $scope.createReview = function (productId) {
@@ -167,14 +204,14 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
             $scope.review.image3 = null;
         }
 
-        const reviewData = {
+        let reviewData = {
             title: $scope.title,
             rating: $scope.rating,
             image1: $scope.review.image1,
             image2: $scope.review.image2,
             image3: $scope.review.image3
         };
-        const dta = JSON.stringify(reviewData);
+        let dta = JSON.stringify(reviewData);
         $http.post("/rest/reviews/create/" + productId, dta)
             .then(function (response) {
                 $('#reviewModal').modal('hide');
@@ -195,72 +232,67 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                     title: 'Đã thêm đánh giá thành công',
 
                 })
-                $scope.reset()
+                $scope.initialize()
+                $scope.resetReviewForm();
             }, function (error) {
                 console.error('Lỗi khi tạo đánh giá:', error);
             });
     };
 
-    $scope.checkReviewd = function(){
-        $http.get("/rest/order/find?orderDetailId="+1)
-            .then(function (response) {
-                if (response.data) {
-                    // Nếu đã đánh giá, ẩn nút đánh giá
-                    $scope.showReviewButton = false;
-                } else {
-                    // Nếu chưa đánh giá, hiển thị nút đánh giá
-                    $scope.showReviewButton = true;
-                }
-            }).catch(function(error){
-                console.log(error);
-            })
+    $scope.showModalReviewDetail = function(od){
+        // alert(od.orderDetailId)
+        // $http.get("/rest/order/reviewDetail/"+od.orderDetailId)
+        // .then((res) => {
+        //     $scope.dataReview = res.data
+        //     console.log("Có dữ liệu hông",$scope.dataReview);
+        // }).catch((err) => {
+            
+        // });
+        $('#reviewDetail').modal('show');
     }
 
-    $scope.checkReviewd();
-
     $scope.initialize()
-	$scope.initialize()
 
-	$scope.updateStatus=function (id,status) {
-		$http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
-		.then(respone=>{
-			alert("status update")
-			$scope.initialize()
-		}).catch(function (error) {
-			console.error('Error update:', error);
-		});
-	}
+    $scope.updateStatus = function (id, status) {
+        $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
+            .then(respone => {
+                alert("status update")
+                $scope.initialize()
+            }).catch(function (error) {
+                console.error('Error update:', error);
+            });
+    }
 
-	// Hàm lọc đánh giá theo số sao
-	$scope.filterByStatus = function(status) {
-		
-		if (status == null) {
-			$scope.filterStaus = $scope.orders;
-			
-		} else {
-			$scope.filterStaus = $scope.orders.filter(function(order) {
-				
-				return order.orderStatus == status;
-			})
-			
-		}
-	}
-	$scope.activeStatus=null
-	$scope.filterByStatusAndCheck = function(status) {
-		
-		$scope.filterByStatus(status)
-		$scope.activeStatus = status;
-		if ($scope.filterStaus.length <1) {
-			$scope.checkList = true;
-		} else {
-			
-			$scope.checkList = false;
-		}
-		
-	}
-	
+    // Hàm lọc đánh giá theo số sao
+    $scope.filterByStatus = function (status) {
 
-	$scope.isActiveStatus = function(status) {
-		return $scope.activeStatus === status;
-	};
+        if (status == null) {
+            $scope.filterStaus = $scope.orders;
+
+        } else {
+            $scope.filterStaus = $scope.orders.filter(function (order) {
+
+                return order.orderStatus == status;
+            })
+
+        }
+    }
+    $scope.activeStatus = null
+    $scope.filterByStatusAndCheck = function (status) {
+
+        $scope.filterByStatus(status)
+        $scope.activeStatus = status;
+        if ($scope.filterStaus.length < 1) {
+            $scope.checkList = true;
+        } else {
+
+            $scope.checkList = false;
+        }
+
+    }
+
+
+    $scope.isActiveStatus = function (status) {
+        return $scope.activeStatus === status;
+    };
 }])
