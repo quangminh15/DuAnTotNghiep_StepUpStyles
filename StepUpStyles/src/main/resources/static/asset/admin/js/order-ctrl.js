@@ -48,8 +48,11 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				console.log("orders", $scope.allOrders);
 
 
-
-
+				$scope.allOrders.sort((a, b) => {
+					
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				  });
+				  $scope.pager.first()
 				$scope.orders.forEach(item => {
 
 
@@ -78,14 +81,73 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 	}
 	$scope.initialize()
 
+	$scope.pager = {
+		page: 0,
+		size: 10,
+		getPageNumbers: function() {
+			var pageCount = this.count;
+			var currentPage = this.page + 1;
+			var visiblePages = [];
+
+			if (pageCount <= 3) {
+				for (var i = 1; i <= pageCount; i++) {
+					visiblePages.push({ value: i });
+				}
+			} else {
+				if (currentPage <= 2) {
+					visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (currentPage >= pageCount - 1) {
+					visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+				} else {
+					visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+				}
+			}
+			return visiblePages;
+		},
+		get allOrders() {
+			var start = this.page * this.size;
+			return $scope.allOrders.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.allOrders.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.visiblePages = this.getPageNumbers();
+		},
+		goto(pageNumber) {
+			if (pageNumber >= 1 && pageNumber <= this.count) {
+				this.page = pageNumber - 1;
+				$scope.visiblePages = this.getPageNumbers();
+			}
+		},
+	};
 	$scope.sortableColumns = [
-		{ name: 'orderId', label: 'Mã đơn hàng' },
+		{ name: 'orderId', label: 'STT' },
 		{ name: 'shippingAddress.nameReceiver', label: 'Người Nhận' },
-		{ name: 'orderStatus', label: 'Trạng thái đơn hàng' },
 		{ name: 'orderorderDate', label: 'Ngày đặt' },
 		{ name: 'paymentStatus', label: 'Tình trạng thanh toán' },
 		{ name: 'totalAmount', label: 'Tổng thanh toán' },
-		{ name: 'paymentMenthod.paymentMethodName', label: 'Thanh toán' }
+		{ name: 'paymentMenthod.paymentMethodName', label: 'Thanh toán' },
+		{ name: 'orderStatus', label: 'Trạng thái đơn hàng' },
 
 	];
 
@@ -117,8 +179,40 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			return 0;
 		});
 	};
+	
+	$scope.updateStatus=function (id,status) {
+		Swal.fire({
+			title: "Cập nhật đơn hàng",
+			text: "Xác nhận cập nhật thái của đơn hàng thành "+status,
+			icon: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Cập Nhật",
+			cancelButtonText: "Hủy"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
+		.then(respone=>{
+			alert("status update")
+			$scope.initialize()
+		}).catch(function (error) {
+			console.error('Error update:', error);
+		});
 
+			}
+		});
+		
+	}
+	
+	
 	$scope.viewDetail = function (id) {
+		$http.get(`/rest/order/single?orderid=${id}`)
+			.then(resp => {
+				$scope.singleOrder = resp.data
+			}).catch(function (error) {
+				console.error('Error update:', error);
+			});
 		$http.get(`/rest/order/listOrder/detail?orderid=${id}`)
 			.then(respone => {
 				$scope.orderDetail = respone.data

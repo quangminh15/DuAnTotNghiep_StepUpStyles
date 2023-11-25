@@ -55,10 +55,10 @@
 			border-top: none;
 		}
 		.col70{
-			width: 70%;
+			width: 85%;
 		}
 		.col30{
-			width: 30%;
+			width: 15%;
 		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
@@ -142,17 +142,17 @@
 
 						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Processing')" ng-class="{ 'active': isActiveStatus('Processing') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Confirmed')" ng-class="{ 'active': isActiveStatus('Confirmed') }">
 
 
 						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipped')" ng-class="{ 'active': isActiveStatus('Shipped') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipping')" ng-class="{ 'active': isActiveStatus('Shipping') }">
 
 
 						<p>Đang Giao</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipped')" ng-class="{ 'active': isActiveStatus('Shipped') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Delivered')" ng-class="{ 'active': isActiveStatus('Delivered') }">
 
 
 						<p>Đã Giao</p>
@@ -170,25 +170,28 @@
 
 	</section>
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-if="checkList==true">
-		
+		<div class="container py-md-3 d-flex justify-content-center align-items-center" style="min-height: 25em;">
+			<div class="text-center">
 
-		<h1>Null</h1>
-
+				<img src="/asset/user/img/emptyorder.png"  alt="">
+				<h3>Chưa có đơn hàng nào</h3>
+			</div>
+		</div>
 	</section>
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in filterStaus">
 		<!--/-->
 
-		<h1 ng-if="checkList==true">Null</h1>
+		
 		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" ng-if="checkList==false">
 			<div class="container py-md-3">
 				<div class="accordion" id="accordionExample">
-					<div class="card">
-						<div class="card-header bg-white" id="headingOne">
+					<div class="card" >
+						<div class=" bg-white" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);" id="headingOne">
 							<h2 class="mb-0 d-flex justify-content-end ">
 								<p>{{order.orderStatus}} |<button class="btn btn-link" type="button"
 										data-toggle="collapse" data-target="#collapse{{ $index + 1 }}"
 										aria-expanded="true" aria-controls="collapseOne">
-										Chi Tiet
+										Chi tiết 
 									</button></p>
 
 							</h2>
@@ -197,26 +200,26 @@
 						<div id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Dia Chi Giao Hang {{order.orderId}}</p>
+								<p class="text-dark font-weight-bolder">Địa Chỉ Giao Hàng :</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
-								<p class="text-dark">xa {{order.shippingAddress.ward}}, huyen
-									{{order.shippingAddress.district}}, {{orders.shippingAddress.province}}</p>
+								<p class="text-dark">{{order.shippingAddress.ward}},
+									{{order.shippingAddress.district}}, {{order.shippingAddress.province}}</p>
 							</div>
 
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Thanh Toan</p>
+								<p class="text-dark font-weight-bolder">Thanh Toán</p>
 								<div class="d-flex ">
-									<p class="text-dark">Phuong thuc thanh toan: </p>
+									<p class="text-dark">Phương Thức thanh toán:</p>
 									<p class="text-dark ml-2">{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
-									<p class="text-dark">Giam gia: </p>
-									<p class="text-dark ml-2">0</p>
+									<p class="text-dark">Giảm giá: </p>
+									<p class="text-dark ml-2">0 ₫</p>
 								</div>
 								<div class="d-flex ">
-									<p class="text-dark">phi van chuyen:</p>
-									<p class="text-dark ml-2">739.000</p>
+									<p class="text-dark">Phí vận chuyển:</p>
+									<p class="text-dark ml-2">{{order.shippingFee|number:0}} ₫</p>
 								</div>
 							</div>
 						</div>
@@ -229,9 +232,9 @@
 										-webkit-box-orient: vertical;
 										-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
 								ut libero! Impedit omnis porro iusto sequi quia!</p>
-							<p class="text-dark mb-3">Mau: {{item.productDetail.color.colorName}} | Size:
+							<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} | Size:
 								{{item.productDetail.size.sizeNumber}}</p>
-							<p class="text-dark">X {{item.quantity}}</p>
+							<p class="text-dark">Số lượng: X {{item.quantity}}</p>
 
 						</div>
 						<div class="col-md-4 d-flex justify-content-end">
@@ -244,7 +247,7 @@
 
 
 					<div class="bg-white border-0 text-right" >
-						<div  class=" row d-flex justify-content-end align-items-center mb-2  ">
+						<div  class=" row d-flex justify-content-end align-items-center mb-2  " style="border-bottom: 1px solid rgb(226, 226, 226);">
 							<!-- <div class="col-md-7"></div>
 							<div class="totalorder col-md-5 py-2">
 								<div class="row d-flex ">
@@ -254,7 +257,7 @@
 								</div>
 
 							</div> -->
-							<table  class="table table-bordered">
+							<table  class="table table-borderless">
 								
 								<tbody>
 								<tr>

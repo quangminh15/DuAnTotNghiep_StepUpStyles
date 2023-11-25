@@ -22,4 +22,6 @@ public interface OrderService {
 
     void updateStatus(Integer id, OrderStatus status);
 
+    Order getSingleProd(Integer id);
+
 }

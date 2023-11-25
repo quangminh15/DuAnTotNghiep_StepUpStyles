@@ -133,6 +133,11 @@ public class OrderServiceImpl implements OrderService {
        orderDao.save(order);
     }
 
+    @Override
+    public Order getSingleProd(Integer id) {
+        return orderDao.findById(id).get();
+    }
+
    
 
 }

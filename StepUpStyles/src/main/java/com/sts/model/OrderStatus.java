@@ -1,8 +1,8 @@
 package com.sts.model;
 
 public enum OrderStatus {
-    Processing,
-    Shipped,
+    Confirmed,
+    Shipping,
     Delivered,
     Pending,
     Cancel

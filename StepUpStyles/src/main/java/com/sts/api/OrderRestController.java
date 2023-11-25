@@ -90,4 +90,9 @@ public class OrderRestController {
     public List<Order> findall() {
         return orderService.loadAll();
     }
+
+    @GetMapping("/single")
+    public Order findOrder(@RequestParam("orderid") Integer orderid) {
+        return orderService.getSingleProd(orderid);
+    }
 }

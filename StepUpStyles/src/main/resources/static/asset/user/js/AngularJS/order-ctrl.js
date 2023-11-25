@@ -48,6 +48,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.initialize()
 
 	$scope.updateStatus=function (id,status) {
+		
 		$http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
 		.then(respone=>{
 			alert("status update")
