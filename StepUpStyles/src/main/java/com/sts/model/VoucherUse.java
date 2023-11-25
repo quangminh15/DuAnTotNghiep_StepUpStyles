@@ -26,6 +26,8 @@ public class VoucherUse implements Serializable {
     @Column(name="use_date")
 	private String UseDate;
 
+    private Boolean saved;
+
     @JsonIgnore
     @OneToMany(mappedBy = "voucherUse")
     private List<Order> order;

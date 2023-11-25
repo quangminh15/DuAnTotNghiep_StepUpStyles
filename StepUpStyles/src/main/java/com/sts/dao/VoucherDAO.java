@@ -10,4 +10,6 @@ public interface VoucherDAO extends JpaRepository<Voucher, Long> {
     List<Voucher> findByDeletedFalse();
 
 	List<Voucher> findByDeletedTrue();
+
+    List<Voucher> findByDeletedFalseAndDateEndGreaterThan(String currentDate);
 }

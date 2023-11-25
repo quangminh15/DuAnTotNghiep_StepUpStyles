@@ -1,5 +1,7 @@
 package com.sts.serviceImpl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +49,15 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public void deleteById(Long voucherId) {
         voucherDao.deleteById(voucherId);
-    }   
+    }
+
+    @Override
+    public List<Voucher> getValidVouchers() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Điều chỉnh định dạng phù hợp với trường dateEnd
+        String currentDate = currentDateTime.format(formatter);
+        return voucherDao.findByDeletedFalseAndDateEndGreaterThan(currentDate);
+    }
+
+     
 }

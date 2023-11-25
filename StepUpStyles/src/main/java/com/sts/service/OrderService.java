@@ -26,4 +26,6 @@ public interface OrderService {
     List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId);
     void updateStatus(Integer id, OrderStatus status);
 
+    Order getSingleProd(Integer id);
+
 }

@@ -19,5 +19,7 @@ public interface VoucherService  {
     Voucher update(Voucher voucher);
 
     void deleteById(Long voucherId);
+
+    List<Voucher> getValidVouchers();
     
 }

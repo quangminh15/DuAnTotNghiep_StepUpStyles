@@ -80,11 +80,11 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="ddI in RestorePager.voucherDelItem">
-                                    <td>{{ formatToVND(ddI.total) }}</td>
-                                    <td>{{ddI.discountAmount|number}}%</td>
-                                    <td>{{ddI.formattedStartDate }}</td>
-                                    <td>{{ddI.formattedEndDate}}</td>
-                                    <td>{{ddI.description}}</td>
+                                    <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{ formatToVND(ddI.total) }}</td>
+                                    <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">{{ddI.discountAmount|number}}%</td>
+                                    <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate }}</td>
+                                    <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}</td>
+                                    <td data-toggle="tooltip" title="{{ddI.description}}">{{formatDescription(ddI.description)}}</td>
                                     <td
                                         ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                         {{ddI.status}}</td>
@@ -176,11 +176,11 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="ddI in pager.voucherNoDelItem">
-                                <td>{{ formatToVND(ddI.total) }}</td>
-                                <td>{{ddI.discountAmount|number}}%</td>
-                                <td>{{ddI.formattedStartDate }}</td>
-                                <td>{{ddI.formattedEndDate}}</td>
-                                <td>{{ddI.description}}</td>
+                                <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{ formatToVND(ddI.total) }}</td>
+                                <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">{{ddI.discountAmount|number}}%</td>
+                                <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate }}</td>
+                                <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}</td>
+                                <td data-toggle="tooltip" title="{{ddI.description}}">{{formatDescription(ddI.description)}}</td>
                                 <td
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>

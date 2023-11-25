@@ -141,4 +141,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId) {
         return orderDetailDao.findReviewsByOrderIdAndUserId(orderId, userId);
     }
+
+    @Override
+    public Order getSingleProd(Integer id) {
+        return orderDao.findById(id).get();
+    }
+
 }

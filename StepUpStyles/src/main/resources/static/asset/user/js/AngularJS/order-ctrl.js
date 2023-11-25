@@ -65,6 +65,51 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
         console.log("1", $scope.orders.shippingAddress)
 
+        $scope.initialize()
+
+        $scope.updateStatus = function (id, status) {
+
+            $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
+                .then(respone => {
+                    alert("status update")
+                    $scope.initialize()
+                }).catch(function (error) {
+                    console.error('Error update:', error);
+                });
+        }
+
+        // Hàm lọc đánh giá theo số sao
+        $scope.filterByStatus = function (status) {
+
+            if (status == null) {
+                $scope.filterStaus = $scope.orders;
+
+            } else {
+                $scope.filterStaus = $scope.orders.filter(function (order) {
+
+                    return order.orderStatus == status;
+                })
+
+            }
+        }
+        $scope.activeStatus = null
+        $scope.filterByStatusAndCheck = function (status) {
+
+            $scope.filterByStatus(status)
+            $scope.activeStatus = status;
+            if ($scope.filterStaus.length < 1) {
+                $scope.checkList = true;
+            } else {
+
+                $scope.checkList = false;
+            }
+
+        }
+
+
+        $scope.isActiveStatus = function (status) {
+            return $scope.activeStatus === status;
+        };
 
         $scope.orders.forEach(item => {
 
@@ -85,11 +130,14 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 
                     })
-                        .catch(function (error) {
-                            console.error('Error fetching cart items:', error);
-                        });
                 });
         })
+            .catch(function (error) {
+                console.error('Error fetching cart items:', error);
+            });
+
+
+
 
     }
     $scope.prodOrder = []
@@ -251,48 +299,6 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
         $('#reviewDetail').modal('show');
     }
 
-    $scope.initialize()
+    
 
-    $scope.updateStatus = function (id, status) {
-        $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
-            .then(respone => {
-                alert("status update")
-                $scope.initialize()
-            }).catch(function (error) {
-                console.error('Error update:', error);
-            });
-    }
-
-    // Hàm lọc đánh giá theo số sao
-    $scope.filterByStatus = function (status) {
-
-        if (status == null) {
-            $scope.filterStaus = $scope.orders;
-
-        } else {
-            $scope.filterStaus = $scope.orders.filter(function (order) {
-
-                return order.orderStatus == status;
-            })
-
-        }
-    }
-    $scope.activeStatus = null
-    $scope.filterByStatusAndCheck = function (status) {
-
-        $scope.filterByStatus(status)
-        $scope.activeStatus = status;
-        if ($scope.filterStaus.length < 1) {
-            $scope.checkList = true;
-        } else {
-
-            $scope.checkList = false;
-        }
-
-    }
-
-
-    $scope.isActiveStatus = function (status) {
-        return $scope.activeStatus === status;
-    };
 }])

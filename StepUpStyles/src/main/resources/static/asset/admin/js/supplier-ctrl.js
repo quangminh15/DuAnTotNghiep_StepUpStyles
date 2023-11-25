@@ -717,6 +717,43 @@ app.controller("supplier-ctrl", function($scope, $http){
 
 	});
 
+	$scope.formatPhoneNumber = function (phoneNumber) {
+		// Loại bỏ tất cả các ký tự không phải là số
+		var numericPhoneNumber = phoneNumber.replace(/\D/g, '');
+	
+		// Kiểm tra xem có đủ số để định dạng không
+		if (numericPhoneNumber.length >= 10) {
+			// Tạo một mảng để lưu trữ các đoạn của số điện thoại
+			var chunks = [];
+	
+			// Lấy 4 số đầu tiên và thêm vào mảng
+			chunks.push(numericPhoneNumber.substr(0, 4));
+	
+			// Lặp qua phần còn lại của số điện thoại và chia thành các đoạn 3 số
+			for (var i = 4; i < numericPhoneNumber.length; i += 3) {
+				chunks.push(numericPhoneNumber.substr(i, 3));
+			}
+	
+			// Kết hợp các đoạn bằng khoảng trắng
+			return chunks.join(' ');
+		} else {
+			// Trả về số điện thoại không thay đổi nếu không đủ số
+			return phoneNumber;
+		}
+	};
+	
+	$scope.formatAddress = function (address) {
+		// Đặt một giới hạn độ dài cho địa chỉ
+		var maxLength = 20;
+	
+		// Kiểm tra độ dài địa chỉ và trả về địa chỉ được cắt hoặc không đổi
+		if (address.length > maxLength) {
+			return address.substring(0, maxLength) + '...';
+		} else {
+			return address;
+		}
+	};	
+
     //Phân trang
 	$scope.pager = {
 		page: 0,
