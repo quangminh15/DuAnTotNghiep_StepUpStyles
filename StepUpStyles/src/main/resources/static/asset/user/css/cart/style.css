@@ -11963,7 +11963,14 @@ h5,
   background: #fff !important;
   color: #000000;
 }
-
+a{
+  text-decoration: none;
+}
+p .btn-primary:hover{
+  
+  text-decoration: none!important;
+  color: #000 !important;
+}
 .hero-wrap.hero-bread {
   padding: 10em 0;
 }
@@ -12345,16 +12352,17 @@ h5,
 }
 
 .btn.btn-primary {
-  background: #177196;
-  border: 1px solid #177196;
+  background: orangered;
+  border: 1px solid orangered;
   color: #fff;
 }
 
 
 .btn.btn-primary:hover {
-  border: 1px solid #177196;
+ 
+  border: 1px solid orangered;
   background: transparent;
-  color: #177196;
+  color: orangered;
 }
 
 .btn.btn-primary.btn-outline-primary {
@@ -13769,6 +13777,7 @@ textarea.form-control {
 .ftco-section {
   padding: 2em 0;
   position: relative;
+   background-color: #F5F5F5; 
 }
 
 .ftco-no-pt {

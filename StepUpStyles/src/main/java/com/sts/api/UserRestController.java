@@ -35,10 +35,10 @@ public class UserRestController {
 		return userService.findById(userID);
 	}
 
-//	@GetMapping("/rest/users/loadall")
-//	public List<User> getAll() {
-//		return userService.findAll();
-//	}
+	@GetMapping("/loadall")
+	public List<User> getAll() {
+		return userDAO.findAll();
+	}
 
 	@PostMapping("/create")
 	public User create(@RequestBody User user) {
@@ -72,5 +72,12 @@ public class UserRestController {
 		Integer id = userService.getUserIdCurrent();
 		System.out.println(id);
 		return ResponseEntity.ok().body(id);
+	}
+
+	@GetMapping("/EmailProfile")
+	public ResponseEntity<String> getEmailProfile() {
+		String email = userService.getUserEmailCurrent();
+		System.out.println(email);
+		return ResponseEntity.ok().body(email);
 	}
 }

@@ -1,8 +1,7 @@
 package com.sts.serviceImpl;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +20,7 @@ import com.sts.model.Order;
 import com.sts.model.OrderDetail;
 import com.sts.model.OrderStatus;
 import com.sts.model.PaymentMenthod;
+import com.sts.model.Review;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
@@ -44,7 +44,6 @@ public class OrderServiceImpl implements OrderService {
     ProductDetailDAO prodDetailDao;
 
     @Override
-
     public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
         User user = userDao.findById(1).get();
         System.out.println("x:"+addressId);
@@ -127,6 +126,25 @@ public class OrderServiceImpl implements OrderService {
        return orderDao.findAll();
     }
 
-   
+    @Override
+    public List<OrderDetail> findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
+        return orderDetailDao.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
+    }
+    @Override
+    public void updateStatus(Integer id, OrderStatus status) {
+        Order order = orderDao.findById(id).get();
+        order.setOrderStatus(status);
+       orderDao.save(order);
+    }
+
+    @Override
+    public List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId) {
+        return orderDetailDao.findReviewsByOrderIdAndUserId(orderId, userId);
+    }
+
+    @Override
+    public Order getSingleProd(Integer id) {
+        return orderDao.findById(id).get();
+    }
 
 }

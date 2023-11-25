@@ -98,4 +98,10 @@ public class PaymentController {
         return paymentStatus == 1 ? "redirect:/purchase" : "redirect:/paysuccess";
     }
 
+    @RequestMapping("/paysuccess")
+	public String success(Model model) {
+
+		return "users/vnpay-success";
+	}
+
 }

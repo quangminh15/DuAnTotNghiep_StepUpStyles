@@ -22,7 +22,7 @@ app.controller("review-ctrl", function($scope, $http){
 		});
 		
 		//load User
-		$http.get("/rest/users/loadall").then(resp => {
+		$http.get("/user/loadall").then(resp => {
 			$scope.users = resp.data;
 		});
 	}
@@ -157,6 +157,7 @@ app.controller("review-ctrl", function($scope, $http){
 						text: 'Không tìm thấy kết quả phù hợp!'
 					})
 				}
+				$scope.pager.first();
 			})
 		}
 	}
@@ -175,6 +176,9 @@ app.controller("review-ctrl", function($scope, $http){
 		{ name: 'title', label: 'Nội dung' },
 		{ name: 'rating', label: 'Sao đánh giá' },
 		{ name: 'reviewDate', label: 'Ngày đánh giá' },
+		{ name: 'image1', label: 'Ảnh 1' },
+		{ name: 'image2', label: 'Ảnh 2' },
+		{ name: 'image3', label: 'Ảnh 3' },
 	];
 
 
@@ -212,5 +216,86 @@ app.controller("review-ctrl", function($scope, $http){
 			return 0;
 		});
 	};
+
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+	$('.export').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+				//code xuất file
+				var table2excel = new Table2Excel();
+				table2excel.export(document.querySelectorAll("table.table"));
+			}
+		})
+	});
+
+	$('.pdf-file').click(function() {
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+				//code xuất file
+				var elment = document.getElementById('sampleTable');
+				var opt = {
+					margin: 0.5,
+					filename: 'myfilepdf.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { scale: 2 },
+					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+				};
+				html2pdf(elment, opt);
+			}
+		})
+	});
+
+	var myApp1 = new function() {
+		this.printTable = function() {
+			var tab = document.getElementById('sampleTable');
+			var win = window.open('', '', 'height=700,width=700');
+			win.document.write(tab.outerHTML);
+			win.document.close();
+			win.print();
+		}
+
+	}
 	
 })

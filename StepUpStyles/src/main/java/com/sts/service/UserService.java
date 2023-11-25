@@ -22,5 +22,11 @@ public interface UserService {
 
 	Integer getUserIdCurrent();
 
+	String getUserEmailCurrent();
+
 	DResponseUser getUserByEmail(String email);
+
+	DResponseUser getUserByPhone(String phone);
+
+	String updatePass(String email, String pass);
 }

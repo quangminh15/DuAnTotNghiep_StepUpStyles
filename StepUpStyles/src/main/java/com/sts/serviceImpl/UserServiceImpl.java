@@ -60,7 +60,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserEmailCurrent() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return username;
+    }
+
+    @Override
     public DResponseUser getUserByEmail(String email) {
         return userDAO.getUserByEnail(email);
+    }
+
+    @Override
+    public DResponseUser getUserByPhone(String phone) {
+        return userDAO.getUserByPhone(phone);
+    }
+
+    @Override
+    public String updatePass(String email, String pass) {
+        return userDAO.updatePass(email, pass);
     }
 }

@@ -57,4 +57,9 @@ public class VoucherRestController {
     public void deleteVoucher(@PathVariable("voucherId") Long voucherId){
         voucherService.deleteById(voucherId);
     }
+
+    @GetMapping("/valid")
+    public List<Voucher> getValidVouchers() {
+        return voucherService.getValidVouchers();
+    }
 }

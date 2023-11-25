@@ -1,7 +1,7 @@
 package com.sts.serviceImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +83,10 @@ public class CartDetailServiceImpl implements CartDetailService{
    public void upDateQtyCartItem(int carDetailId, int qty) {
       cartDetailDao.updateQtyCartItem(carDetailId, qty);
    }
-
+   @Override
+   public void deletedCartItem(Integer id) {
+      cartDetailDao.deleteById(id);
+       
+   }
     
 }

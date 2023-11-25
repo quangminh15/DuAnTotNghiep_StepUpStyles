@@ -2,8 +2,6 @@ package com.sts.config;
 
 import com.sts.dao.UserDAO;
 import com.sts.model.DTO.OneUserForSecurity;
-import com.sts.model.DTO.UserForSecurity;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -69,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/carttt/**").hasRole("USER")
                 .antMatchers("/admi2n/**").hasAnyRole("ADMIN","EMPLOYEE")
                 .antMatchers("/admin/thongke").hasRole("ADMIN")
-                .antMatchers("/staticcc/**").permitAll()
+                .antMatchers("/static/**","/login/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -82,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     String targetUrl = determineTargetUrl(authentication);
                     response.sendRedirect(targetUrl);
                 })
-                .failureUrl("/login/error")
+                .failureUrl("/loginSTS-error")
                 .usernameParameter("email")
                 .passwordParameter("pass");
 

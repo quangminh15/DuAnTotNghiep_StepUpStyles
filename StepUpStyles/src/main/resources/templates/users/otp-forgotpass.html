@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>STS || OTP</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/asset/user/css/login/otp.css">
+</head>
+
+<body>
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
+<div class="login-box">
+    <form class="form">
+        <div class="title">STS OTP</div>
+        <div class="title">Xác Thực mã code</div>
+        <p class="message">Chúng tôi đã gửi mã OTP đến địa chỉ Email của bạn</p>
+        <div class="inputs"><input id="input1" name="i1" type="text" maxlength="1"> <input id="input2" type="text"
+                                                                                           maxlength="1">
+            <input id="input3" type="text" maxlength="1"> <input id="input4" type="text" maxlength="1"></div>
+        <a href="#" id="submitData">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Xác Nhận
+        </a>
+    </form>
+</div>
+</body>
+<script>
+    document.getElementById('submitData').addEventListener('click', function (event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ a
+
+        var input1 = document.getElementById('input1').value;
+        var input2 = document.getElementById('input2').value;
+        var input3 = document.getElementById('input3').value;
+        var input4 = document.getElementById('input4').value;
+
+        var data = {
+            "input1": input1,
+            "input2": input2,
+            "input3": input3,
+            "input4": input4
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/otpAccessForgotPass', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log(xhr.status)
+        xhr.onreadystatechange = function () {
+            if (xhr.status === 200) {
+                window.location.href = '/reset-pass'; // Chuyển hướng đến trang khác
+            }else {
+                document.querySelector('.message').innerText = "Mã OTP chưa đúng!";
+            }
+        };
+        xhr.send(JSON.stringify(data));
+    });
+</script>
+
+
+</html>
