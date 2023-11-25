@@ -3,6 +3,8 @@ package com.sts.controller;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sts.model.User;
+import com.sts.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sts.dao.ProductDAO;
 import com.sts.model.ProductImage;
-import com.sts.service.BrandService;
-import com.sts.service.CategoryService;
-import com.sts.service.ColorService;
-import com.sts.service.FavoriteService;
-import com.sts.service.ProductDetailService;
-import com.sts.service.ProductImageService;
-import com.sts.service.ProductService;
-import com.sts.service.SizeService;
 
 @Controller
 public class ProductController {
@@ -49,8 +43,17 @@ public class ProductController {
 	@Autowired
 	ProductImageService productImageService;
 
+	@Autowired
+	UserService userService;
+
 	@RequestMapping("/index")
 	public String index(Model model) {
+		Integer userIdCurrent = userService.getUserIdCurrent();
+		if(userIdCurrent == null){
+			model.addAttribute("loginStatus","no");
+		}else{
+			model.addAttribute("loginStatus","ok");
+		}
 		return "users/index";
 	}
 

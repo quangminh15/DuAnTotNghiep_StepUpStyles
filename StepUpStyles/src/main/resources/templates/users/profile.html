@@ -134,18 +134,20 @@
                 <div class="panel">
                     <div class="user-heading round">
                         <a href="#">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt>
+                            <img th:src="${UserProfile.image}" alt>
                         </a>
                         <h1 th:text="${UserProfile.fullName}">---</h1>
                         <!--                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d1c001d1c00390d111c3c14181015571a1614">[email&#160;protected]</a></p>-->
                     </div>
                     <ul class="nav nav-pills nav-
                 stacked" style="font-size: 1.4rem">
-                        <li class="active"><a href="#"> <i class="fa fa-user"></i>btb@gmail.com</a></li>
+                        <li class="active"><a href="#" > <i class="fa fa-user"></i>Tổng quan</a></li>
                         <!--                    <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span class="label label-warning pull-right r-activity">9</span></a></li>-->
                         <li><a href="#"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
                         <li><a href="#"> <i class="fa fa-heart"></i>Sản phẩm yêu thích</a></li>
                         <li><a href="#"> <i class="fa fa-cart-arrow-down"></i>Đơn hàng</a></li>
+                        <li><a href="#"> <i class="fa fa-unlock-alt" aria-hidden="true"></i>Đổi mật khẩu</a></li>
+                        <li><a href="#"> <i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất</a></li>
                     </ul>
                 </div>
         </div>
