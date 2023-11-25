@@ -26,8 +26,10 @@
                         <h2 class="text-center">Quên mật khẩu?</h2>
                         <p>Hãy nhập địa chỉ Email của bạn vào đây.</p>
                         <div class="panel-body">
-
-                            <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                            <div th:if="${emailValidation}">
+                                <h5 class="text-center" th:text="${emailValidation}"></h5>
+                            </div>
+                            <form action="/forgot-pass-email-check" id="register-form" role="form" autocomplete="off" class="form" method="post">
 
                                     <div class="form-group">
                                         <div class="input-group">

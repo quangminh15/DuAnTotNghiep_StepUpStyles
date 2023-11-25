@@ -1,5 +1,6 @@
 package com.sts.controller;
 
+import com.sts.dao.UserDAO;
 import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.DataOTP;
 import com.sts.model.User;
@@ -32,6 +33,11 @@ public class UserController {
     User user = new User();
 
     VerificationCode vc;
+
+    String emailResetPass;
+
+    @Autowired
+    UserDAO userDAO;
 
     @RequestMapping("/about")
     public String about(Model model) {
@@ -124,14 +130,56 @@ public class UserController {
         return "users/forgot-pass";
     }
 
+    @PostMapping("/forgot-pass-email-check")
+    public String forgotpass_emailcheck(Model model, @RequestParam("email") String email) {
+        if(email.length() < 1){
+            model.addAttribute("emailValidation", "Không được để trống địa chỉ Email!");
+            return "users/forgot-pass";
+        }
+        if (EmailCheck(email) != null) {
+            model.addAttribute("emailValidation", EmailCheck(email));
+            return "users/forgot-pass";
+        }
+        if( checkEmailAlreadyExists(email)){
+            model.addAttribute("emailValidation", "Email không tồn tại trong hệ thống!");
+            return "users/forgot-pass";
+        }else{
+            this.emailResetPass = email;
+            sendCodetoEmail_VforgotPass(email, userService.getUserByEmail(email).getFullName());
+            return "redirect:/otpforgotpass";
+        }
+    }
+
     @RequestMapping("/otp")
     public String otp(Model model) {
         return "users/otp";
     }
 
+    @RequestMapping("/otpforgotpass")
+    public String forgotpassotp(Model model) {
+        return "users/otp-forgotpass";
+    }
+
     @RequestMapping("/reset-pass")
     public String resetpass(Model model) {
         return "users/reset-pass";
+    }
+
+    @PostMapping("/reset-pass-verification")
+    public String handleLinkData3(Model model, @RequestParam("pass") String pass, @RequestParam("passc") String passc) {
+        if(PassCheck(pass) != null){
+            model.addAttribute("passValidation", PassCheck(pass));
+            return "users/reset-pass";
+        }
+        if(!pass.equals(passc)){
+            model.addAttribute("passValidation", "Mật khẩu chưa trùng khớp!");
+            return "users/reset-pass";
+        }
+//        userService.updatePass(this.emailResetPass, bCryptPasswordEncoder.encode(pass));
+        User u = userDAO.findByEmailU(this.emailResetPass);
+        u.setPassword(bCryptPasswordEncoder.encode(pass));
+        userDAO.save(u);
+        return "redirect:/loginSTS";
     }
 
     @RequestMapping("/change-pass")
@@ -280,6 +328,14 @@ public class UserController {
         mailerService.queue(email, "ĐĂNG KÝ TÀI KHOẢN StepUpStyle", FormSendMailHTML.sendHTMLWhenResignation(vc.getCode(), name));
     }
 
+    public void sendCodetoEmail_VforgotPass(String email, String name) {
+        this.vc = new VerificationCode(generateCode(4));
+        System.out.println("Mã code: " + this.vc.getCode());
+        System.out.println("Thời gian tạo: " + this.vc.getCreatedTime());
+        System.out.println("Email sẽ gửi: " + email);
+        mailerService.queue(email, "QUÊN MẬT KHẨU StepUpStyle", FormSendMailHTML.sendHTMLWhenResignation(vc.getCode(), name));
+    }
+
     public static String generateCode(int length) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
@@ -309,6 +365,25 @@ public class UserController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error nếu có lỗi xảy ra
         }
         return "users/otp";
+    }
+
+    @PostMapping("/otpAccessForgotPass")
+    public String handleLinkData2(Model model, @RequestBody DataOTP data, HttpServletResponse response) {
+        String codeFromView = data.toString();
+
+        try {
+            // Thực hiện xử lý dữ liệu và trả về status 200 OK nếu thành công
+            // Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
+            if (codeFromView.equals(this.vc.getCode())) {
+                userService.create(this.user);
+                response.setStatus(HttpServletResponse.SC_OK); // Status 200 OK
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error nếu có lỗi xảy ra
+        }
+        return "users/otp-forgotpass";
     }
 
     public String getUserImageURL() {
@@ -343,6 +418,8 @@ public class UserController {
         }
         return "https://images.hdqwalls.com/download/red-hood-evolution-5k-ne-315x315.jpg";
     }
+
+
 
 }
 

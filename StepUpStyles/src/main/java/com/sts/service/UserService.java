@@ -27,4 +27,6 @@ public interface UserService {
 	DResponseUser getUserByEmail(String email);
 
 	DResponseUser getUserByPhone(String phone);
+
+	String updatePass(String email, String pass);
 }

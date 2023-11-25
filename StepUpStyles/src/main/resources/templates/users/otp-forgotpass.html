@@ -48,12 +48,12 @@
         };
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/otpAccess', true);
+        xhr.open('POST', '/otpAccessForgotPass', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        console.log(xhr);
+        console.log(xhr.status)
         xhr.onreadystatechange = function () {
             if (xhr.status === 200) {
-                window.location.href = '/loginSTS'; // Chuyển hướng đến trang khác
+                window.location.href = '/reset-pass'; // Chuyển hướng đến trang khác
             }else {
                 document.querySelector('.message').innerText = "Mã OTP chưa đúng!";
             }

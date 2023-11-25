@@ -75,4 +75,9 @@ public class UserServiceImpl implements UserService {
     public DResponseUser getUserByPhone(String phone) {
         return userDAO.getUserByPhone(phone);
     }
+
+    @Override
+    public String updatePass(String email, String pass) {
+        return userDAO.updatePass(email, pass);
+    }
 }
