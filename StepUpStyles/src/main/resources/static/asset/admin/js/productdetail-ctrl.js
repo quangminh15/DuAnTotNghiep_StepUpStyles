@@ -352,6 +352,16 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 			});
 			return;
 		}
+		
+		//Không chọn size sản phẩm
+		if (!$scope.form.size || !$scope.form.size.sizeID) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng chọn size cho sản phẩm!!',
+			});
+			return;
+		}
 
 		// Kiểm tra sự trùng lặp
 		var isDuplicate = checkDuplicateProductDetail($scope.form);
