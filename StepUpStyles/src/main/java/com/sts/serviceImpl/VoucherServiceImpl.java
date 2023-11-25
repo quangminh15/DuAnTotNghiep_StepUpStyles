@@ -59,11 +59,5 @@ public class VoucherServiceImpl implements VoucherService {
         return voucherDao.findByDeletedFalseAndDateEndGreaterThan(currentDate);
     }
 
-    @Override
-    public List<Voucher> getVoucherSaved() {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Điều chỉnh định dạng phù hợp với trường dateEnd
-        String currentDate = currentDateTime.format(formatter);
-        return voucherDao.findByDeletedFalseAndDateEndGreaterThanAndSavedTrue(currentDate);
-    } 
+     
 }

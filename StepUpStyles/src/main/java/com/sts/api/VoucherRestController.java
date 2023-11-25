@@ -62,9 +62,4 @@ public class VoucherRestController {
     public List<Voucher> getValidVouchers() {
         return voucherService.getValidVouchers();
     }
-
-    @GetMapping("/voucherSaved")
-    public List<Voucher> getVoucherSaved(){
-        return voucherService.getVoucherSaved();
-    }
 }

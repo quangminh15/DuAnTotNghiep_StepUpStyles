@@ -51,6 +51,65 @@
 		</div>
 	</div>
 
+	<!--Modal voucher start-->
+	<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
+            style="overflow: hidden;">
+            <div class="modal-dialog modal-dialog-centered modal-xl"
+                style="width: 600px; height: 600px; margin: 0 auto;">
+                <div class="modal-content" style="background-color: #eee;">
+                    <div class="modal-header">
+						<h4>Chọn Fourshoe Voucher</h4>
+                        <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+                            <span class="mdi mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+								<p>Chỉ chọn được 1 voucher</p>
+                                <div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;">
+                                    <div class="card boxvou" style="height: 130px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
+                                        <div class="row">
+                                            <div class="col-md-3"
+                                                style="background-color: orange; justify-content: center; align-items: center;">
+                                                <svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+                                                    <text x="45" y="45" font-size="20" fill="white">%</text>
+                                                </svg>
+                                                <div style=" margin-top: 15px; margin-bottom: 20px;">
+                                                    <div class="gg" style="color: white; font-size: 10px; font-style: italic; text-align: center;">Giảm giá</div>
+                                                    <div class="sus" style="color: white; font-size: 15px; font-style: bold; text-align: center;">FOURSHOE</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="card-body">
+                                                    <div>Giảm: {{item.voucher.discountAmount}}%</div>
+                                                    <div>Đơn tối thiểu: {{formatToVND(item.voucher.total)}}</div>
+                                                    <div style="font-size: 11px; color: red;">Áp dụng:
+                                                        {{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
+                                                </div>
+                                            </div>
+											<div class="col-md-2">
+												<input type="radio" name="voucherRadio"/>
+											</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Add more rows as needed -->
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer" style="background-color: #eee;">
+                        <button class="btn modal-close" type="button" data-dismiss="modal">Hủy</button>
+						<button class="btn modal-close" type="button" data-dismiss="modal">Áp dụng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+	<!--Modal voucher end-->
+
 	<section class="ftco-section ftco-cart">
 		<div class="container">
 			<div class="row">
@@ -304,15 +363,7 @@
 				</div>
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
-						<h3>Mã Giảm Giá</h3>
-						<p>Nhập mã giảm giá mà bạn đang có để áp dụng giảm giá</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Mã giảm giá</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
-						<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Áp dụng</a></p>
+						<button style="width: 50%;" ng-click="openRecycleBinForm()">Mã giảm giá voucher</button>
 					</div>
 				</div>
 

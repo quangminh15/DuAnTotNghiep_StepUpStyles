@@ -24,9 +24,9 @@
                 <div class="modal-body" id="voucherModalBody">
                     <!-- Nội dung chi tiết voucher ở đây -->
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
                                                 </svg>
                                                 <div style="margin-bottom: 30px;">
                                                     <div class="gg">Giảm giá</div>
-                                                    <div class="sus">SUS</div>
+                                                    <div class="sus">FOURSHOE</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
@@ -72,13 +72,13 @@
                                                         {{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
                                                     <div class="but">
                                                         <!-- Nút chưa lưu -->
-                                                        <button class="custom-button" ng-if="!item.saved"
-                                                            ng-click="saveVoucher(item)">
+                                                        <button class="custom-button"
+                                                            ng-click="saveVoucher(item)" ng-show="!item.saved">
                                                             <span>Lưu mã</span>
                                                         </button>
 
                                                         <!-- Nút đã lưu -->
-                                                        <button class="custom-button-saved saved-button" ng-if="item.saved">
+                                                        <button class="custom-button-saved saved-button" ng-show="item.saved">
                                                             <span>Đã lưu</span>
                                                         </button>
                                                         <button class="cus-button" data-toggle="modal"
