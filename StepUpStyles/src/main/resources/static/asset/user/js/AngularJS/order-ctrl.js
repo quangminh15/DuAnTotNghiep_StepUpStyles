@@ -64,7 +64,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
         console.log("orders", $scope.orders);
 
         console.log("1", $scope.orders.shippingAddress)
-
+        }
         $scope.initialize()
 
         $scope.updateStatus = function (id, status) {
@@ -111,35 +111,12 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
             return $scope.activeStatus === status;
         };
 
-        $scope.orders.forEach(item => {
-
-
-            $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
-                .then(respone => {
-                    $scope.orderDetail = respone.data
-                    console.log("order", $scope.orderDetail);
-
-                    $scope.orderDetail.forEach(orderdetails => {
-                        console.log("s1", orderdetails.productDetail.product.productID);
-                        $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-                            orderdetails.image = resp.data;
-                            console.log("s2", orderdetails.image);
-
-                        })
-
-
-
-                    })
-                });
-        })
-            .catch(function (error) {
-                console.error('Error fetching cart items:', error);
-            });
+        
 
 
 
 
-    }
+    
     $scope.prodOrder = []
     $scope.showModalReview = function (product) {
         $http.get("/rest/products/" + product.productID)
