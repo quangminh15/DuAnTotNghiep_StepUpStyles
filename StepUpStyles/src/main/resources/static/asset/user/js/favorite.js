@@ -1228,33 +1228,33 @@ $scope.addToRecentlyViewed = function(product) {
 			}
 		};
 		//Linh test code lọc
-		if (selectedRating) {
-			filteredItems = filteredItems.filter(item => {
-				return item.avgrev >= selectedRating;
-			});
-		}
-		var loadProductDetails = function() {
-			var promises = filteredItems.map(item => {
-				return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
-			});
-
-			return Promise.all(promises).then(responses => {
-				responses.forEach((resp, index) => {
-					var data = resp.data.filter(productDetails => !productDetails.deleted);
-					filteredItems[index].productDetails = data;
-					data.forEach(items => {
-						if (items.size && items.size.activities && !items.size.deleted && !$scope.sizes.some(c => c.sizeID === items.size.sizeID)) {
-							$scope.sizes.push(items.size);
-						}
-						if (items.color && items.color.activities && !items.color.deleted && !$scope.colors.some(c => c.colorID === items.color.colorID)) {
-							$scope.colors.push(items.color);
-						}
-					});
-				});
-			}).catch(error => {
-				console.error(error);
-			});
-		};
+//		if (selectedRating) {
+//			filteredItems = filteredItems.filter(item => {
+//				return item.avgrev >= selectedRating;
+//			});
+//		}
+//		var loadProductDetails = function() {
+//			var promises = filteredItems.map(item => {
+//				return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
+//			});
+//
+//			return Promise.all(promises).then(responses => {
+//				responses.forEach((resp, index) => {
+//					var data = resp.data.filter(productDetails => !productDetails.deleted);
+//					filteredItems[index].productDetails = data;
+//					data.forEach(items => {
+//						if (items.size && items.size.activities && !items.size.deleted && !$scope.sizes.some(c => c.sizeID === items.size.sizeID)) {
+//							$scope.sizes.push(items.size);
+//						}
+//						if (items.color && items.color.activities && !items.color.deleted && !$scope.colors.some(c => c.colorID === items.color.colorID)) {
+//							$scope.colors.push(items.color);
+//						}
+//					});
+//				});
+//			}).catch(error => {
+//				console.error(error);
+//			});
+//		};
 
 		filterItemByProperty('brand', Array.from(selectedBrands).map(brand => parseInt(brand.value)));
 		filterItemByProperty('category', Array.from(selectedCategories).map(category => parseInt(category.value)));
@@ -1350,16 +1350,16 @@ $scope.addToRecentlyViewed = function(product) {
 					loadProductDetails().then(() => {
 						$scope.productitems = filteredItems;
 						//Linh hiển thị sao trên sản phẩm khi lọc
-						$scope.productitems.forEach(item => {
-							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
-								$scope.all = resp.data;
-								$scope.ratings = $scope.all.map(review => review.rating);
-								$scope.average = calculateAverageRating($scope.ratings);
-								item.avgrev = $scope.average;
-							}).catch(error => {
-								console.log("Error", error);
-							});
-						});
+//						$scope.productitems.forEach(item => {
+//							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+//								$scope.all = resp.data;
+//								$scope.ratings = $scope.all.map(review => review.rating);
+//								$scope.average = calculateAverageRating($scope.ratings);
+//								item.avgrev = $scope.average;
+//							}).catch(error => {
+//								console.log("Error", error);
+//							});
+//						});
 						//Linh end hiển thị sao trên sản phẩm khi lọc
 					});
 					$scope.chuyenTrang();
@@ -1391,16 +1391,16 @@ $scope.addToRecentlyViewed = function(product) {
 			loadProductDetails().then(() => {
 				$scope.productitems = filteredItems;
 				//Linh hiển thị sao trên sản phẩm khi lọc
-				$scope.productitems.forEach(item => {
-					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
-						$scope.all = resp.data;
-						$scope.ratings = $scope.all.map(review => review.rating);
-						$scope.average = calculateAverageRating($scope.ratings);
-						item.avgrev = $scope.average;
-					}).catch(error => {
-						console.log("Error", error);
-					});
-				});
+//				$scope.productitems.forEach(item => {
+//					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+//						$scope.all = resp.data;
+//						$scope.ratings = $scope.all.map(review => review.rating);
+//						$scope.average = calculateAverageRating($scope.ratings);
+//						item.avgrev = $scope.average;
+//					}).catch(error => {
+//						console.log("Error", error);
+//					});
+//				});
 				//Linh end hiển thị sao trên sản phẩm khi lọc
 			});
 			$scope.chuyenTrang();

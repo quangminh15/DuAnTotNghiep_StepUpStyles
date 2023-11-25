@@ -100,11 +100,6 @@ public class OrderRestController {
     public Order findOrder(@RequestParam("orderid") Integer orderid) {
         return orderService.getSingleProd(orderid);
     }
-    @GetMapping("/by-order-and-user")
-    public ResponseEntity<List<OrderDetail>> getOrderDetailsByOrderAndUser(@RequestParam("orderId") Integer orderId) {
-        List<OrderDetail> orderDetails = orderService.findAllByOrderAndUser(orderId, 1);
-        return ResponseEntity.ok(orderDetails);
-    }
 
     @GetMapping("/find")
     public ResponseEntity<List<OrderDetail>> findOrderDetailWithReview(
