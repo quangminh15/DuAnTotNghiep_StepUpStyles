@@ -1,18 +1,16 @@
-app.controller("review-ctrl", function($scope, $http){
-	$scope.reviewitems = [];
+app.controller("favorite-ctrl", function($scope, $http){
+	$scope.favoriteitems = [];
 	$scope.prods = [];
 	$scope.users = [];
 	$scope.form = {};
-	$scope.reviewdetails = {}
-	$scope.showSelectBoxEmptyWarning = false;
 	$scope.initialize = function() {
-		//load review
-		$http.get("/rest/reviews/loadall").then(resp => {
-			$scope.reviewitems = resp.data;
-			$scope.reviewitems.forEach(reviewitem => {
-				reviewitem.reviewDate = new Date(reviewitem.reviewDate)
+		//load 
+		$http.get("/rest/favorites/loadall").then(resp => {
+			$scope.favoriteitems = resp.data;
+			$scope.favoriteitems.forEach(favoriteitem => {
+				favoriteitem.dateLike = new Date(favoriteitem.dateLike)
 			})
-			$scope.reviewitems.sort((a, b) => b.reviewDate - a.reviewDate);
+			$scope.favoriteitems.sort((a, b) => b.dateLike - a.dateLike);
 			$scope.pager.first();
 		});
 
@@ -29,10 +27,36 @@ app.controller("review-ctrl", function($scope, $http){
 	//	Khởi đầu
 	$scope.initialize();
 
+	$scope.filterByProduct = function() {
+		if ($scope.selectedProduct) {
+			$http.get("/rest/favorites/loadbyproducts/" + $scope.selectedProduct).then(resp => {
+				$scope.favoriteitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
+	};
+
+	$scope.filterByUser = function() {
+		if ($scope.selectedUser) {
+			$http.get("/rest/favorites/loadbyusers/" + $scope.selectedUser).then(resp => {
+				$scope.favoriteitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
+	};
+
 	//	Phân trang
 	$scope.pager = {
 		page: 0,
-		size: 8,
+		size: 10,
 		getPageNumbers: function() {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
@@ -53,12 +77,12 @@ app.controller("review-ctrl", function($scope, $http){
 			}
 			return visiblePages;
 		},
-		get reviewitems() {
+		get favoriteitems() {
 			var start = this.page * this.size;
-			return $scope.reviewitems.slice(start, start + this.size);
+			return $scope.favoriteitems.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.reviewitems.length / this.size);
+			return Math.ceil(1.0 * $scope.favoriteitems.length / this.size);
 		},
 		first() {
 			this.page = 0;
@@ -90,95 +114,11 @@ app.controller("review-ctrl", function($scope, $http){
 		},
 	};
 
-	$scope.showReview = function(reviewId){
-		$http.get("/rest/reviews/" + reviewId).then(resp => {
-			$scope.reviewdetails =  resp.data;
-			$('#orderModal').modal('show');
-			console.log($scope.reviewdetails);
-			console.log("Success", resp);
-		}).catch(error => {
-			console.log("ẻroorrr", error);
-		});
-	}
-
-	$scope.hideReview = function (reviewId) {
-		$http.put('/rest/reviews/' + reviewId + '/hide')
-			.then(function (response) {
-				if (response.status === 200) {
-				}
-				$scope.initialize();
-			})
-			.catch(function (error) {
-				console.log('Error hiding review:', error);
-			});
-	};
-
-	$scope.filterByProduct = function() {
-		if ($scope.selectedProduct) {
-			$http.get("/rest/reviews/loadbyproducts/" + $scope.selectedProduct).then(resp => {
-				$scope.reviewitems = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				$scope.pager.first();
-			});
-		} else {
-			$scope.initialize();
-		}
-	};
-
-	$scope.filterByUser = function() {
-		if ($scope.selectedUser) {
-			$http.get("/rest/reviews/loadbyusers/" + $scope.selectedUser).then(resp => {
-				$scope.reviewitems = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				$scope.pager.first();
-			});
-		} else {
-			$scope.initialize();
-		}
-	};
-
-	$scope.searchReviews = function() {
-		if(!$scope.productId || !$scope.usersId || !$scope.rating){
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn đầy đủ các trường để thực hiện chức năng tìm kiếm!'
-			})
-		}else{
-			$http.get(`/rest/reviews/search?productId=${$scope.productId}&usersId=${$scope.usersId}&rating=${$scope.rating}`)
-            .then(function(response) {
-                $scope.reviewitems = response.data;
-				if($scope.reviewitems.length == 0){
-					Swal.fire({
-						icon: 'error',
-						title: 'Thất bại',
-						text: 'Không tìm thấy kết quả phù hợp!'
-					})
-				}
-				$scope.pager.first();
-			})
-		}
-	}
-
-	$scope.reset = function(){
-		$scope.initialize();
-		$scope.productId = "";
-        $scope.usersId = "";
-  		$scope.rating = "";
-	}
-
 	$scope.sortableColumns = [
-		{ name: 'reviewId', label: 'Mã đánh giá' },
+		{ name: 'favoriteId', label: 'Mã yêu thích' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'user.fullName', label: 'Tên người dùng' },
-		{ name: 'title', label: 'Nội dung' },
-		{ name: 'rating', label: 'Sao đánh giá' },
-		{ name: 'reviewDate', label: 'Ngày đánh giá' },
-		{ name: 'image1', label: 'Ảnh 1' },
-		{ name: 'image2', label: 'Ảnh 2' },
-		{ name: 'image3', label: 'Ảnh 3' },
+		{ name: 'dateLike', label: 'Ngày thích sản phẩm' },
 	];
 
 
@@ -190,7 +130,7 @@ app.controller("review-ctrl", function($scope, $http){
 			$scope.sortReverse = false;
 		}
 
-		$scope.reviewitems.sort(function(a, b) {
+		$scope.favoriteitems.sort(function(a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
 			if (columnName === 'product.productName') {

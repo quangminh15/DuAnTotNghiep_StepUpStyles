@@ -81,4 +81,21 @@ public class OrderRestController {
     public List<Order> findall(){
         return orderService.loadAll();
     }
+
+    @GetMapping("/by-order-and-user")
+    public ResponseEntity<List<OrderDetail>> getOrderDetailsByOrderAndUser(@RequestParam("orderId") Integer orderId) {
+        List<OrderDetail> orderDetails = orderService.findAllByOrderAndUser(orderId, 1);
+        return ResponseEntity.ok(orderDetails);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<OrderDetail> findOrderDetailWithReview(
+            @RequestParam("orderDetailId") Integer orderDetailId) {
+        OrderDetail orderDetail = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, 1);
+        if (orderDetail != null) {
+            return ResponseEntity.ok(orderDetail);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -148,11 +148,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	};
 
-	//Đếm số lượng đánh giá
-	$scope.countRating = function() {
-
-	}
-
 	//Lưu mã sp trên local storage
 	$scope.saveProductID = function(productID) {
 		localStorage.setItem('productID', productID);
@@ -353,7 +348,6 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 	//Hiển thị điếm đánh giá trên sản phẩm
 	$scope.getStarAvgs = function(avgRating) {
-		console.log("rate", avgRating);
 		var numStars = Math.floor(avgRating); // Số sao nguyên
 		var hasHalfStar = avgRating % 1 !== 0; // Có nửa sao hay không
 		var stars = [];
@@ -367,34 +361,53 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				stars.push("fa fa-star-o");
 			}
 		}
-		//		console.log("Start", stars);
-		return stars;
-	};
-	//Lọc đánh giá theo điểm đánh giá
-	// Add this inside your AngularJS controller
-	$scope.filterByAvgs = function(selectedRating) {
-		// Existing filtering code...
-
-		// Lọc dựa trên điểm đánh giá
-		if (selectedRating) {
-			filteredRates = filteredRates.filter(function(item) {
-				// Assuming the star rating is stored in item.rating
-				return item.rating >= selectedRating;
-			});
-		}
-
-		// Continue with the rest of your filtering logic...
-
-		// Update the filtered items in the scope
-		$scope.productitems = filteredRates;
-
-		// Reset or update your pagers as needed
-		$scope.pager.first();
-		$scope.DiscountPager.first();
-		$scope.FeaturedPager.first();
+        return stars;
 	};
 
+    //Lọc sản phẩm theo điểm đánh giá
+	$scope.tempItems = [];
+    $scope.filterByAvgs = function(selectedRating) {
+    if (selectedRating !== null && selectedRating !== undefined) {
+        if ($scope.tempItems.length === 0) {
+            $scope.tempItems = angular.copy($scope.productitems);
+        }
+        $scope.productitems = $scope.tempItems.filter(function(item) {
+            return item.avgrev >= selectedRating;
+        });
 
+        $scope.pager.first(); 
+    } else {
+        // Nếu không có sao nào được chọn, hiển thị toàn bộ sản phẩm
+        $scope.productitems = angular.copy($scope.tempItems);
+        $scope.pager.first(); 
+        $scope.tempItems = []; // Xóa mảng tạm
+    }
+   };
+
+   //Sản phẩm vừa xem
+   $scope.recentlyViewedProducts = []
+// Lấy dữ liệu từ localStorage khi trang được tải lần đầu
+$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
+// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
+$scope.addToRecentlyViewed = function(product) {
+    var index = $scope.recentlyViewedProducts.indexOf(product);
+    var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
+
+    if (index === -1) {
+        // Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
+        $scope.recentlyViewedProducts.unshift(product);
+    } else {
+        // Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
+        var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
+        $scope.recentlyViewedProducts.unshift(viewedProduct);
+    }
+	var maxItems = 8;
+    if ($scope.recentlyViewedProducts.length > maxItems) {
+        $scope.recentlyViewedProducts.splice(maxItems);
+    }
+    // Lưu danh sách sản phẩm vừa xem vào localStorage
+    localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
+};
 
 
 	//Linh end 
@@ -414,7 +427,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.searchedProductItems = [];
 	$scope.discountedProducts = [];
 	$scope.featureds = [];
-	$scope.newProductItems = [];
+	$scope.productitems = [];
 
 	$scope.allProductitems = [];
 
@@ -608,15 +621,15 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	$scope.getProductsByBrand = function(brandID) {
 		$http.get("/rest/products/loadByBrandId/" + brandID).then(function(resp) {
 			// Lưu trữ các sản phẩm mới vào biến mới
-			$scope.newProductItems = resp.data.filter(item => item.activities && !item.deleted);
+			$scope.productitems = resp.data.filter(item => item.activities && !item.deleted);
 
-			$scope.newProductItems.forEach(items => {
+			$scope.productitems.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
 					items.image = resp.data;
 				});
 			});
 
-			$scope.newProductItems.forEach(item => {
+			$scope.productitems.forEach(item => {
 				$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
 					item.discount = resp.data.filter(discount => !discount.deleted);
 				});
@@ -625,22 +638,22 @@ app.controller("favorite-ctrl", function($scope, $http) {
 			// Cập nhật các biến đếm và dữ liệu liên quan bắt đầu
 			$http.get("/rest/products/loadallNoDeletedAndActivitiesTrue").then(resp => {
 				// Sử dụng biến mới để không đè lên giá trị của $scope.productitems
-				const productImagePromises = $scope.newProductItems.map(item => {
+				const productImagePromises = $scope.productitems.map(item => {
 					return $http.get("/rest/productimages/loadbyproduct/" + item.productID);
 				});
 
-				const discountPromises = $scope.newProductItems.map(item => {
+				const discountPromises = $scope.productitems.map(item => {
 					return $http.get("/rest/discount/loadbyproduct/" + item.productID);
 				});
 
-				const productDetailPromises = $scope.newProductItems.map(item => {
+				const productDetailPromises = $scope.productitems.map(item => {
 					return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
 				});
 
 				Promise.all(productImagePromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].image = resp.data;
+							$scope.productitems[index].image = resp.data;
 						});
 					})
 					.catch(error => {
@@ -650,7 +663,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				Promise.all(discountPromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].discount = resp.data.filter(discount => !discount.deleted);
+							$scope.productitems[index].discount = resp.data.filter(discount => !discount.deleted);
 						});
 						$scope.chuyenTrang();
 					})
@@ -661,8 +674,8 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				Promise.all(productDetailPromises)
 					.then(responses => {
 						responses.forEach((resp, index) => {
-							$scope.newProductItems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
-							$scope.newProductItems[index].productDetails.forEach(item => {
+							$scope.productitems[index].productDetails = resp.data.filter(productDetails => !productDetails.deleted);
+							$scope.productitems[index].productDetails.forEach(item => {
 								if (item.size && item.size.activities && !item.size.deleted && !$scope.sizes.some(c => c.sizeID === item.size.sizeID)) {
 									$scope.sizes.push(item.size);
 								}
@@ -675,7 +688,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 					.then(() => {
 						$scope.chuyenTrang();
 						// Gán giá trị của biến mới vào $scope.productitems
-						$scope.allProductitems = JSON.parse(JSON.stringify($scope.newProductItems));
+						$scope.allProductitems = JSON.parse(JSON.stringify($scope.productitems));
 					})
 					.catch(error => {
 						console.error(error);
@@ -1011,7 +1024,12 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				});
 			}
 		};
-
+		//Linh test code lọc
+		if (selectedRating) {
+			filteredItems = filteredItems.filter(item => {
+				return item.avgrev >= selectedRating;
+			});
+		}
 		var loadProductDetails = function() {
 			var promises = filteredItems.map(item => {
 				return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
@@ -1128,6 +1146,18 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 					loadProductDetails().then(() => {
 						$scope.productitems = filteredItems;
+						//Linh hiển thị sao trên sản phẩm khi lọc
+						$scope.productitems.forEach(item => {
+							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+								$scope.all = resp.data;
+								$scope.ratings = $scope.all.map(review => review.rating);
+								$scope.average = calculateAverageRating($scope.ratings);
+								item.avgrev = $scope.average;
+							}).catch(error => {
+								console.log("Error", error);
+							});
+						});
+						//Linh end hiển thị sao trên sản phẩm khi lọc
 					});
 					$scope.chuyenTrang();
 				}
@@ -1157,6 +1187,18 @@ app.controller("favorite-ctrl", function($scope, $http) {
 
 			loadProductDetails().then(() => {
 				$scope.productitems = filteredItems;
+				//Linh hiển thị sao trên sản phẩm khi lọc
+				$scope.productitems.forEach(item => {
+					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
+						$scope.all = resp.data;
+						$scope.ratings = $scope.all.map(review => review.rating);
+						$scope.average = calculateAverageRating($scope.ratings);
+						item.avgrev = $scope.average;
+					}).catch(error => {
+						console.log("Error", error);
+					});
+				});
+				//Linh end hiển thị sao trên sản phẩm khi lọc
 			});
 			$scope.chuyenTrang();
 		}
