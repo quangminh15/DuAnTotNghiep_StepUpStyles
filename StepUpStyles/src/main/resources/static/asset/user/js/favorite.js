@@ -361,53 +361,53 @@ app.controller("favorite-ctrl", function($scope, $http) {
 				stars.push("fa fa-star-o");
 			}
 		}
-        return stars;
+		return stars;
 	};
 
-    //Lọc sản phẩm theo điểm đánh giá
+	//Lọc sản phẩm theo điểm đánh giá
 	$scope.tempItems = [];
-    $scope.filterByAvgs = function(selectedRating) {
-    if (selectedRating !== null && selectedRating !== undefined) {
-        if ($scope.tempItems.length === 0) {
-            $scope.tempItems = angular.copy($scope.productitems);
-        }
-        $scope.productitems = $scope.tempItems.filter(function(item) {
-            return item.avgrev >= selectedRating;
-        });
+	$scope.filterByAvgs = function(selectedRating) {
+		if (selectedRating !== null && selectedRating !== undefined) {
+			if ($scope.tempItems.length === 0) {
+				$scope.tempItems = angular.copy($scope.productitems);
+			}
+			$scope.productitems = $scope.tempItems.filter(function(item) {
+				return item.avgrev >= selectedRating;
+			});
 
-        $scope.pager.first(); 
-    } else {
-        // Nếu không có sao nào được chọn, hiển thị toàn bộ sản phẩm
-        $scope.productitems = angular.copy($scope.tempItems);
-        $scope.pager.first(); 
-        $scope.tempItems = []; // Xóa mảng tạm
-    }
-   };
+			$scope.pager.first();
+		} else {
+			// Nếu không có sao nào được chọn, hiển thị toàn bộ sản phẩm
+			$scope.productitems = angular.copy($scope.tempItems);
+			$scope.pager.first();
+			$scope.tempItems = []; // Xóa mảng tạm
+		}
+	};
 
-   //Sản phẩm vừa xem
-   $scope.recentlyViewedProducts = []
-// Lấy dữ liệu từ localStorage khi trang được tải lần đầu
-$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
-// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
-$scope.addToRecentlyViewed = function(product) {
-    var index = $scope.recentlyViewedProducts.indexOf(product);
-    var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
+	//Sản phẩm vừa xem
+	$scope.recentlyViewedProducts = []
+	// Lấy dữ liệu từ localStorage khi trang được tải lần đầu
+	$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
+	// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
+	$scope.addToRecentlyViewed = function(product) {
+		var index = $scope.recentlyViewedProducts.indexOf(product);
+		var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
 
-    if (index === -1) {
-        // Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
-        $scope.recentlyViewedProducts.unshift(product);
-    } else {
-        // Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
-        var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
-        $scope.recentlyViewedProducts.unshift(viewedProduct);
-    }
-	var maxItems = 8;
-    if ($scope.recentlyViewedProducts.length > maxItems) {
-        $scope.recentlyViewedProducts.splice(maxItems);
-    }
-    // Lưu danh sách sản phẩm vừa xem vào localStorage
-    localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
-};
+		if (index === -1) {
+			// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
+			$scope.recentlyViewedProducts.unshift(product);
+		} else {
+			// Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
+			var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
+			$scope.recentlyViewedProducts.unshift(viewedProduct);
+		}
+		var maxItems = 8;
+		if ($scope.recentlyViewedProducts.length > maxItems) {
+			$scope.recentlyViewedProducts.splice(maxItems);
+		}
+		// Lưu danh sách sản phẩm vừa xem vào localStorage
+		localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
+	};
 
 
 	//Linh end 
@@ -454,7 +454,7 @@ $scope.addToRecentlyViewed = function(product) {
 		localStorage.setItem('brandID', brandID);
 		window.location.href = '/list_products';
 	};
-	
+
 	$scope.getProductsAndNavigateCate = function(categoryID) {
 		localStorage.setItem('categoryID', categoryID);
 		window.location.href = '/list_products';
@@ -705,7 +705,7 @@ $scope.addToRecentlyViewed = function(product) {
 		});
 	};
 	//load sản phẩm theo brand kết thúc
-	
+
 	//load sản phẩm theo category bắt đầu
 	$scope.getProductsByCategoryIndex = function(categoryID) {
 		$http.get("/rest/products/loadByCategoryId/" + categoryID).then(function(resp) {
@@ -866,7 +866,7 @@ $scope.addToRecentlyViewed = function(product) {
 			$scope.getProductsByBrand(storedBrandID);
 			localStorage.removeItem('brandID');
 		}
-		
+
 		//chuyển sang trang sản phẩm và lưu categoryID
 		var storedCategoryID = localStorage.getItem('categoryID');
 		if (storedCategoryID) {
@@ -1227,12 +1227,7 @@ $scope.addToRecentlyViewed = function(product) {
 				});
 			}
 		};
-		//Linh test code lọc
-//		if (selectedRating) {
-//			filteredItems = filteredItems.filter(item => {
-//				return item.avgrev >= selectedRating;
-//			});
-//		}
+
 		var loadProductDetails = function() {
 			var promises = filteredItems.map(item => {
 				return $http.get("/rest/productdetails/loadbyproduct/" + item.productID);
@@ -1261,7 +1256,6 @@ $scope.addToRecentlyViewed = function(product) {
 
 		if (selectedColors.length > 0) {
 			var selectedColorIds = Array.from(selectedColors).map(color => parseInt(color.value));
-			console.log("selectedColorIds", selectedColorIds);
 
 			loadProductDetails().then(() => {
 				filteredItems = filteredItems.filter(item => {
@@ -1275,8 +1269,6 @@ $scope.addToRecentlyViewed = function(product) {
 					}
 					return false;
 				});
-
-				console.log("filteredItems:", filteredItems);
 
 				if (filteredItems.length === 0) {
 					Swal.fire({
@@ -1302,14 +1294,12 @@ $scope.addToRecentlyViewed = function(product) {
 						$scope.productitems = filteredItems;
 						$scope.chuyenTrang();
 					});
-					$scope.chuyenTrang();
 				}
 			});
 		}
 
 		if (selectedSizes.length > 0) {
 			var selectedSizeIds = Array.from(selectedSizes).map(size => parseInt(size.value));
-			console.log("selectedSizeIds", selectedSizeIds);
 
 			loadProductDetails().then(() => {
 				filteredItems = filteredItems.filter(item => {
@@ -1324,15 +1314,12 @@ $scope.addToRecentlyViewed = function(product) {
 					return false;
 				});
 
-				console.log("filteredItems:", filteredItems);
-
 				if (filteredItems.length === 0) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
 						text: 'Không có sản phẩm nào cả. Hãy thử các lựa chọn khác nhé',
 					});
-					$scope.chuyenTrang();
 					$scope.clearFilters();
 				} else {
 					filteredItems.forEach(items => {
@@ -1349,7 +1336,7 @@ $scope.addToRecentlyViewed = function(product) {
 
 					loadProductDetails().then(() => {
 						$scope.productitems = filteredItems;
-						//Linh hiển thị sao trên sản phẩm khi lọc
+						// Hiển thị sao trên sản phẩm khi lọc
 						$scope.productitems.forEach(item => {
 							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
 								$scope.all = resp.data;
@@ -1360,9 +1347,9 @@ $scope.addToRecentlyViewed = function(product) {
 								console.log("Error", error);
 							});
 						});
-						//Linh end hiển thị sao trên sản phẩm khi lọc
+						// Kết thúc hiển thị sao trên sản phẩm khi lọc
+						$scope.chuyenTrang();
 					});
-					$scope.chuyenTrang();
 				}
 			});
 		}
@@ -1374,7 +1361,6 @@ $scope.addToRecentlyViewed = function(product) {
 				text: 'Không có sản phẩm nào cả. Hãy thử các lựa chọn khác nhé',
 			});
 			$scope.clearFilters();
-			$scope.chuyenTrang();
 		} else {
 			filteredItems.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
@@ -1390,7 +1376,7 @@ $scope.addToRecentlyViewed = function(product) {
 
 			loadProductDetails().then(() => {
 				$scope.productitems = filteredItems;
-				//Linh hiển thị sao trên sản phẩm khi lọc
+				// Hiển thị sao trên sản phẩm khi lọc
 				$scope.productitems.forEach(item => {
 					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
 						$scope.all = resp.data;
@@ -1401,12 +1387,10 @@ $scope.addToRecentlyViewed = function(product) {
 						console.log("Error", error);
 					});
 				});
-				//Linh end hiển thị sao trên sản phẩm khi lọc
+				// Kết thúc hiển thị sao trên sản phẩm khi lọc
+				$scope.chuyenTrang();
 			});
-			$scope.chuyenTrang();
 		}
-
-		$scope.chuyenTrang();
 	};
 
 	//Hủy trạng thái đã chọn của check box
