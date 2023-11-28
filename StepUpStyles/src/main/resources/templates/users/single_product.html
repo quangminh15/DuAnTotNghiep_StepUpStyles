@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
-	<!-- Đoạn mã cấu hình Firebase -->
+<!-- Đoạn mã cấu hình Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
 
 <script type="text/javascript">
 	var firebaseConfig = {
-		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
-		authDomain : "stepupstyles-97319.firebaseapp.com",
-		projectId : "stepupstyles-97319",
-		storageBucket : "stepupstyles-97319.appspot.com",
-		messagingSenderId : "909443933158",
-		appId : "1:909443933158:web:17bce455b00fb707f12c27",
-		measurementId : "G-82K4Q2H6DF"
+		apiKey: "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+		authDomain: "stepupstyles-97319.firebaseapp.com",
+		projectId: "stepupstyles-97319",
+		storageBucket: "stepupstyles-97319.appspot.com",
+		messagingSenderId: "909443933158",
+		appId: "1:909443933158:web:17bce455b00fb707f12c27",
+		measurementId: "G-82K4Q2H6DF"
 	};
 
 	// Khởi tạo Firebase
@@ -24,6 +22,7 @@
 	firebase.analytics();
 </script>
 <!-- Đoạn mã cấu hình Firebase -->
+
 <head>
 
 	<title>SUS || CHI TIẾT</title>
@@ -37,7 +36,7 @@
 			/* Add your custom styles here */
 			/* For example: */
 			top: 15%;
-			
+
 		}
 	</style>
 
@@ -122,8 +121,18 @@
 							</div>
 							<div ng-if="!noRating">
 								<ul class="rating-single">
-									<li class="text-warning font-weight-bold">{{ averageRating }}/5<span
-											class="fa fa-star" aria-hidden="true"></span>
+									<li>
+										<div>
+											<h6 class="text-warning font-weight-bold">{{ averageRating }}</h6>
+										</div>
+									</li>
+									<li>
+										<div ng-if="averageRating" class="d-flex" style="justify-content: center;">
+											<div class="text-warning"
+												ng-repeat="star in getStarAvgs(averageRating) track by $index">
+												<span ng-class="star" aria-hidden="true"></span>
+											</div>
+										</div>
 									</li>
 									<li>
 										<div class="vertical-line"
@@ -312,29 +321,30 @@
 					</div>
 				</div>
 				<!--Linh hiển thị sản phẩm vừa xem-->
-				<h3 class="hny-title mb-0 text-center" >
+				<h3 class="hny-title mb-0 text-center" ng-if="recentlyViewedProducts">
 					SẢN PHẨM <span>BẠN VỪA XEM</span>
 				</h3>
 				<div class="ecom-products-grids row mt-lg-5 mt-3">
-					<div ng-repeat="p in recentlyViewedProducts"
-						class="col-lg-3 col-6 product-incfhny mt-4">
-						<div class="product-grid2 transmitv"
-							ng-click="saveProductID(p.productID)">
+					<div ng-repeat="p in recentlyViewedProducts" class="col-lg-3 col-6 product-incfhny mt-4">
+						<div class="product-grid2 transmitv" ng-click="saveProductID(p.productID)">
 							<div class="product-image2" style="position: relative;">
 								<div class="discount-circle"
-									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">{{
+									ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+									{{
 									p.discount[0].directDiscount }}%</div>
-								<a ng-click="goToSinglePage(p.productID)"> <img
-									class="pic-1 img-fluid" ng-src="{{p.image[0].imagePath}}">
+								<a ng-click="goToSinglePage(p.productID)"> <img class="pic-1 img-fluid"
+										ng-src="{{p.image[0].imagePath}}">
 									<img ng-if="p.image.length > 1" class="pic-2 img-fluid"
-									ng-src="{{p.image[1].imagePath}}"> <img
-									ng-if="p.image.length <= 1" class="pic-2 img-fluid"
-									ng-src="{{p.image[0].imagePath}}">
+										ng-src="{{p.image[1].imagePath}}"> <img ng-if="p.image.length <= 1"
+										class="pic-2 img-fluid" ng-src="{{p.image[0].imagePath}}">
 								</a>
 								<ul class="social">
-									<li> 
-										<span ng-if="isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
-										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)" class="fa fa-heart-o not-liked" style="font-size: 24px; color: red; font-weight: bold;"></span>
+									<li>
+										<span ng-if="isFavorited(p.productID)" ng-click="check(p)"
+											class="fa fa-heart liked" style="font-size: 24px; color: red;"></span>
+										<span ng-if="!isFavorited(p.productID)" ng-click="check(p)"
+											class="fa fa-heart-o not-liked"
+											style="font-size: 24px; color: red; font-weight: bold;"></span>
 									</li>
 								</ul>
 								<div class="transmitv single-item">
@@ -361,7 +371,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</section>
 	<!-- //products-->
 
@@ -411,8 +420,7 @@
 					<strong>{{ noReviewsMessage }}</strong>
 				</p>
 			</div>
-			<div class="content-singlev-ecomm"
-				ng-repeat="rv in reviewPager.allreviews">
+			<div class="content-singlev-ecomm" ng-repeat="rv in reviewPager.allreviews">
 				<div class="row">
 					<div class="col-sm-2 text-center">
 						<img src="" alt="Hình" class="img-fluid rounded-circle">
@@ -429,13 +437,16 @@
 						<p class="mb-2" style="word-wrap: break-word; color: black;">{{rv.title}}</p>
 						<div>
 							<a ng-if="rv.image1" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image1}}">
-								<img src="{{rv.image1}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+								<img src="{{rv.image1}}" class="fancybox"
+									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 							<a ng-if="rv.image2" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image2}}">
-								<img src="{{rv.image2}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+								<img src="{{rv.image2}}" class="fancybox"
+									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 							<a ng-if="rv.image3" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image3}}">
-								<img src="{{rv.image3}}" class="fancybox" style="width: 100px; height: 100px; object-fit: cover;">
+								<img src="{{rv.image3}}" class="fancybox"
+									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 						</div>
 					</div>
@@ -469,4 +480,5 @@
 
 	</div>
 </body>
+
 </html>
