@@ -47,10 +47,10 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                                     console.log(`Order ${orderdetails.orderDetailId} chưa được đánh giá.`);
                                     $scope.checkrv = false;
                                 }
-                                console.log($scope.checkrv);
                                 $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
                                     orderdetails.productDetail.product.productImages = resp.data;
                                 })
+                                console.log($scope.checkrv);
 
                             })
 
@@ -78,7 +78,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                 });
         }
 
-        // Hàm lọc đánh giá theo số sao
+        // 
         $scope.filterByStatus = function (status) {
 
             if (status == null) {
@@ -106,15 +106,9 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
         }
 
-
         $scope.isActiveStatus = function (status) {
             return $scope.activeStatus === status;
         };
-
-        
-
-
-
 
     
     $scope.prodOrder = []

@@ -101,6 +101,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/favorites/favorite.html",
 			controller: "favorite-ctrl"
 		})
+		.when("/revenue", {
+			templateUrl: "/templates/admins/statistical/revenues.html",
+			controller: "revenues-ctrl"
+		})
 		.otherwise({
 			templateUrl: "/templates/admins/index.html",
 			controller: "indexAdmin-ctrl"

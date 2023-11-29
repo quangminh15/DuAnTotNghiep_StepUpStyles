@@ -1,156 +1,113 @@
+<style>
+/* CSS cho table */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* CSS cho các hàng chẵn */
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+/* CSS cho header của bảng */
+.table th {
+	background-color: #4CAF50;
+	color: white;
+	text-align: left;
+}
+
+/* CSS cho các ô trong bảng */
+.table td, .table th {
+	padding: 12px 15px;
+	border-bottom: 1px solid #ddd;
+}
+</style>
 <div class="content-wrapper">
-	<div class="card"
-		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+	<div class="row">
 
-		<div class="card-body" style="text-align: center;">
-			<div class="d-flex justify-content-between align-items-center">
-				
-				<h4 class="mb-0">Danh sách đơn hàng</h4>
-
-				<div class="d-flex">
-					<!-- Thẻ select box -->
-					<select class="form-control mr-2" ng-model="selectedActivity" data-toggle="tooltip"
-						title="Lọc theo trạng thái sản phẩm" ng-change="filterByStatus()" style="width: 200px;">
-						<option selected value="all">Tất cả</option>
-						<option value="newest">Mới Nhất</option>
-						<option value="oldest">Cũ Nhất</option>
-						<option value="pending">Chờ xác nhận</option>
-						<option value="confirmed">Đã Xác nhận</option>
-						<option value="shipping">Đang giao</option>
-						<option value="shipped">Đã giao</option>
-						<option value="cancel">Đã hủy</option>
-					</select>
-					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
-						title="Xuất file Excel">
-						<span class="fa ti-file"></span>
-					</button>
-					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
-						title="Xuất file PDF">
-						<span class="ti-files"></span>
-					</button>
-					<!-- Nút tìm kiếm -->
-					<button ng-click="searchProductByName()" class="btn btn-outline-info btn-fw mr-2"
-						data-toggle="tooltip" title="Tìm kiếm">
-						<span class="ti-search"></span>
-					</button>
-
+		<div class="col-lg-6">
+			<div class="card mb-5"
+				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+				<div class="rounded-top bg-primary card-header card-header-divider">
+					<span class="title text-white">Thống kê doanh thu theo năm</span>
+				</div>
+				<div class="card-body">
+					<canvas id="yearlyChart" width="400" height="200"></canvas>
 				</div>
 			</div>
+		</div>
 
-			<table class="table table-hover" id="sampleTable">
-				<thead>
-					<tr>
-						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
-							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
-									class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
-									class="mdi mdi-long-arrow-up"></span>
-							</span>
-						</th>
-						<th class="actions"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="order in filteredOrders">
-						<td>{{$index +1}}</td>
-						<td>{{order.shippingAddress.nameReceiver}} </td>
-						<td>{{ order.orderDate | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
-						<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
-						<td>{{order.totalAmount | number: 0 }} đ</td>
-						<td>{{order.paymentMenthod.paymentMenthodName }} <button
-								class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
-								data-placement="top" title="Thanh Toán Khi Nhận Hàng"
-								ng-if="order.paymentMenthod.paymentMenthodName==='COD'">!</button></td>
-						<td>
-
-							<div class="dropdown">
-								<button class="btn btn-danger" ng-if=" order.orderStatus === 'Cancel'">
-									Đã Hủy</button>
-								<button class="btn btn-success" ng-if=" order.orderStatus === 'Delivered'">
-									Đã Giao</button>
-								<button ng-if=" order.orderStatus !== 'Cancel' && order.orderStatus !== 'Delivered'"
-									class="btn dropdown-toggle" type="button" id="dropdownMenuLink"
-									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-class="{
-									'bg-primary': order.orderStatus === 'Pending',
-									'bg-info': order.orderStatus === 'Confirmed',
-									'bg-secondary': order.orderStatus === 'Shipping',
-								  }" style="color: white;">
-									<span ng-if="order.orderStatus === 'Pending'">Chờ xác nhận</span>
-									<span ng-if="order.orderStatus === 'Confirmed'">Đã xác nhận</span>
-									<span ng-if="order.orderStatus === 'Shipping'">Đang giao</span>
-									<span ng-if="order.orderStatus === 'Delivered'">Đã giao</span>
-									<span ng-if="order.orderStatus === 'Cacel'">Đã Hủy</span>
-								</button>
-
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"
-									style="padding: 0 !important; ;">
-
-									<button class="dropdown-item" style="color: black; padding:1rem !important; "
-										ng-if="order.orderStatus === 'Pending'"
-										ng-click="updateStatus(order.orderId,'Cancel')">
-										Hủy Đơn
-									</button>
-									<button class="dropdown-item"
-										style="color: black;width:100% ;padding:1rem !important; "
-										ng-if="order.orderStatus === 'Pending'"
-										ng-click="updateStatus(order.orderId,'Confirmed')">
-										Xác Nhận Đơn hàng
-									</button>
-									<button class="dropdown-item" style="color: black;padding:1rem !important;"
-										ng-if="order.orderStatus === 'Confirmed'"
-										ng-click="updateStatus(order.orderId,'Shipping')">
-										Vận Chuyển 
-									</button>
-									<button class="dropdown-item" style="color: black;padding:1rem !important;"
-										ng-if="order.orderStatus === 'Shipping'"
-										ng-click="updateStatus(order.orderId,'Delivered')">
-										Đã Giao
-									</button>
-
-									<!-- Add other status items here -->
-								</div>
-							</div>
-
-
-						</td>
-						<td class="actions">
-							<button ng-click="viewDetail(order.orderId)"
-								class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="modal"
-								data-target=".bd-example-modal-xl">
-								<i class="ti-eye"></i>
-							</button>
-							
-						</td>
-					</tr>
-
-				</tbody>
-			</table>
-
-			<div class="d-flex justify-content-end">
-				<div>
-					<ul class="pagination">
-						<li class="page-item">
-							<button ng-click="pager.first()" class="page-link">
-								<span class="ti-angle-double-left"></span>
-							</button>
-						</li>
-
-						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
-								page.value }}</a></li>
-
-						<li class="page-item">
-							<button ng-click="pager.last()" class="page-link">
-								<span class="ti-angle-double-right"></span>
-							</button>
-						</li>
-					</ul>
+		<div class="col-md-6">
+			<div class="card mb-5" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+				<div class="rounded-top bg-primary card-header card-header-divider d-flex justify-content-between align-items-center">
+					<span class="title text-white">Thống kê doanh thu năm <span class="font-weight-bolder">{{presentYear}}</span></span> 
+					
+				</div>
+				<div class="card-body">
+					<canvas id="monthlyChart" width="400" height="200"></canvas>
 				</div>
 			</div>
-			<!-- MODAL PROD DETAIL -->
+		</div>
+		
+			</div>
+			<div class="row d-flex justify-content-center">
+				<div class="card"
+				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; width: 97%;">
+				<div class="rounded-top bg-primary card-header card-header-divider">
+					<span class="title text-white">Danh sách đơn hàng trong năm <span class="font-weight-bolder">{{presentYear}}</span></span>
+				</div>
+				<div class="card-body ">
+					<table class="table table-hover" id="sampleTable">
+						<thead>
+							<tr>
+								<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+									}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+											class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
+											class="mdi mdi-long-arrow-up"></span>
+									</span>
+								</th>
+								<th class="actions"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="order in filteredOrders">
+								<td>{{$index +1}}</td>
+								<td>{{order.shippingAddress.nameReceiver}} </td>
+								<td>{{order.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+								<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
+								<td>{{order.totalAmount | number: 0 }} đ</td>
+								<td>{{order.paymentMenthod.paymentMenthodName }} <button
+										class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
+										data-placement="top" title="Thanh Toán Khi Nhận Hàng"
+										ng-if="order.paymentMenthod.paymentMenthodName==='COD'">!</button></td>
+								<td>
+								<div class="badge badge-primary " ng-if="order.orderStatus === 'Pending'">Chờ xác nhận</div>
+								<div class="badge badge-info " ng-if="order.orderStatus === 'Confirmed'">Đã xác nhận</div>
+								<div class="badge badge-warning " ng-if="order.orderStatus === 'Shipping'">Đang giao</div>
+								<div class="badge badge-success " ng-if="order.orderStatus === 'Delivered'">Đã giao</div>
+								<div class="badge badge-danger " ng-if="order.orderStatus === 'Cancel'">Đã Hủy</div>
+									
+		
+		
+								</td>
+								<td class="actions">
+									<button ng-click="viewDetail(order.orderId)"
+										class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="modal"
+										data-target=".bd-example-modal-xl">
+										<i class="ti-eye"></i>
+									</button>
+									
+								</td>
+							</tr>
+		
+						</tbody>
+					</table>
 
 
-			<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+					<!-- modal chi tiêt đơn hàng -->
+					<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
 				aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content">
@@ -303,4 +260,12 @@
 				
 			</div>
 		</div>
+
+
+				</div>
+			</div>
+				
+			</div>
+		</div>
 	</div>
+</div>
