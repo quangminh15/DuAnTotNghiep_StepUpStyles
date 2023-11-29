@@ -99,11 +99,12 @@
 								<!-- bộ lọc bắt đầu -->
 								<form>
 									<!-- danh mục sản phẩm bắt đầu-->
-									<div class="single-gd mb-2">
-										<h4 class="mb-2">
+									<div class="single-gd mb-3">
+										<h4 class="mb-2" data-toggle="collapse"
+											data-target="#demoCategory" style="cursor: pointer;">
 											Danh mục <span>Sản phẩm</span>
 										</h4>
-										<ul class="list-group single">
+										<ul id="demoCategory" class="list-group single collapse show">
 											<li ng-repeat="c in cates"
 												class="list-group-item d-flex justify-content-between align-items-center">
 												<div class="d-flex align-items-center w-100">
@@ -118,11 +119,12 @@
 									<!-- danh mục sản phẩm kết thúc-->
 
 									<!-- Thương hiệu bắt đầu-->
-									<div class="single-gd mb-2">
-										<h4 class="mb-2">
+									<div class="single-gd mb-3">
+										<h4 class="mb-2" data-toggle="collapse"
+										data-target="#demoBrand" style="cursor: pointer;">
 											Thương hiệu <span>Sản phẩm</span>
 										</h4>
-										<ul class="list-group single">
+										<ul id="demoBrand" class="list-group single collapse show">
 											<li ng-repeat="brand in brans"
 												class="list-group-item d-flex justify-content-between align-items-center">
 												<div class="d-flex align-items-center w-100">
@@ -137,11 +139,12 @@
 									<!-- Thương hiệu kết thúc-->
 
 									<!-- Size bắt đầu-->
-									<div class="single-gd mb-2">
-										<h4 class="mb-2">
+									<div class="single-gd mb-3">
+										<h4 class="mb-2" data-toggle="collapse"
+										data-target="#demoSize" style="cursor: pointer;">
 											Size <span>Sản phẩm</span>
 										</h4>
-										<ul class="list-group single">
+										<ul id="demoSize" class="list-group single collapse">
 											<li ng-repeat="size in sizes"
 												class="list-group-item d-flex justify-content-between align-items-center">
 												<div class="d-flex align-items-center w-100">
@@ -156,11 +159,14 @@
 									<!-- Size kết thúc-->
 
 									<!-- Màu sắc bắt đầu-->
-									<div class="single-gd mb-2">
-										<h4 class="mb-2">
-											Màu <span>Sản phẩm</span>
-										</h4>
-										<ul class="list-group single">
+									<div class="single-gd mb-3">
+										<div>
+											<h4 class="mb-2" data-toggle="collapse"
+										data-target="#demoColor" style="cursor: pointer;">
+												Màu <span>Sản phẩm</span>
+											</h4>
+										</div>
+										<ul id="demoColor" class="list-group single collapse">
 											<li ng-repeat="color in colors"
 												class="list-group-item d-flex justify-content-between align-items-center">
 												<div class="d-flex align-items-center w-100">
@@ -198,12 +204,12 @@
 								<div class="single-gd left-side mb-5">
 									<h4>Đánh giá</h4>
 									<ul class="ratingshyny">
-										<li><a ng-click="filterByAvgs(5)"> <span class="fa fa-star"
-												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span class="fa fa-star"
-												aria-hidden="true"></span> <span></span>
+										<li><a ng-click="filterByAvgs(5)"> <span
+												class="fa fa-star" aria-hidden="true"></span> <span
+												class="fa fa-star" aria-hidden="true"></span> <span
+												class="fa fa-star" aria-hidden="true"></span> <span
+												class="fa fa-star" aria-hidden="true"></span> <span
+												class="fa fa-star" aria-hidden="true"></span> <span></span>
 										</a></li>
 										<li><a ng-click="filterByAvgs(4)"> <span
 												class="fa fa-star" aria-hidden="true"></span> <span
@@ -228,43 +234,43 @@
 													lên</span>
 										</a></li>
 										<li><a ng-click="filterByAvgs(0)"><span>Tất cả</span>
-									</a></li>
+										</a></li>
 									</ul>
 								</div>
 
-<!-- 								<div class="single-gd border-0"> -->
-<!-- 									<h4> -->
-<!-- 										Sản phẩm <span>nổi bật</span> -->
-<!-- 									</h4> -->
-<!-- 									<div class="row special-sec1 mt-4"> -->
-<!-- 										<div class="row mb-3" ng-repeat="product in featureds" -->
-<!-- 											ng-if="$index < 4" -->
-<!-- 											ng-click="saveProductID(product.productID)"> -->
-<!-- 											<div class="col-4 img-deals"> -->
-<!-- 												<a ng-click="goToSinglePage(product.productID)"> <img -->
-<!-- 													class="pic-1 img-fluid" -->
-<!-- 													ng-src="{{product.image[0].imagePath}}"> -->
-<!-- 												</a> -->
-<!-- 											</div> -->
-<!-- 											<div class="col-8 img-deal1"> -->
-<!-- 												<h5 class="post-title title"> -->
-<!-- 													<a ng-click="goToSinglePage(product.productID)"> -->
-<!-- 														{{product.productName}} </a> -->
-<!-- 												</h5> -->
-<!-- 												<a ng-click="goToSinglePage(product.productID)"> <span -->
-<!-- 													class="price-right" -->
-<!-- 													ng-if="product.discount[0].priceDiscount == null">{{product.price -->
-<!-- 														| number:0}} ₫</span> <span class="price-right" -->
-<!-- 													ng-if="product.discount[0].status === 'Đang diễn ra' && product.discount[0].priceDiscount">{{ -->
-<!-- 														product.discount[0].priceDiscount | number:0 }} đ</span> <span -->
-<!-- 													class="price-right" -->
-<!-- 													ng-if="product.discount[0].status !== 'Đang diễn ra' && product.discount[0].priceDiscount">{{ -->
-<!-- 														product.price | number:0 }} đ</span> -->
-<!-- 												</a> -->
-<!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
+								<!-- 								<div class="single-gd border-0"> -->
+								<!-- 									<h4> -->
+								<!-- 										Sản phẩm <span>nổi bật</span> -->
+								<!-- 									</h4> -->
+								<!-- 									<div class="row special-sec1 mt-4"> -->
+								<!-- 										<div class="row mb-3" ng-repeat="product in featureds" -->
+								<!-- 											ng-if="$index < 4" -->
+								<!-- 											ng-click="saveProductID(product.productID)"> -->
+								<!-- 											<div class="col-4 img-deals"> -->
+								<!-- 												<a ng-click="goToSinglePage(product.productID)"> <img -->
+								<!-- 													class="pic-1 img-fluid" -->
+								<!-- 													ng-src="{{product.image[0].imagePath}}"> -->
+								<!-- 												</a> -->
+								<!-- 											</div> -->
+								<!-- 											<div class="col-8 img-deal1"> -->
+								<!-- 												<h5 class="post-title title"> -->
+								<!-- 													<a ng-click="goToSinglePage(product.productID)"> -->
+								<!-- 														{{product.productName}} </a> -->
+								<!-- 												</h5> -->
+								<!-- 												<a ng-click="goToSinglePage(product.productID)"> <span -->
+								<!-- 													class="price-right" -->
+								<!-- 													ng-if="product.discount[0].priceDiscount == null">{{product.price -->
+								<!-- 														| number:0}} ₫</span> <span class="price-right" -->
+								<!-- 													ng-if="product.discount[0].status === 'Đang diễn ra' && product.discount[0].priceDiscount">{{ -->
+								<!-- 														product.discount[0].priceDiscount | number:0 }} đ</span> <span -->
+								<!-- 													class="price-right" -->
+								<!-- 													ng-if="product.discount[0].status !== 'Đang diễn ra' && product.discount[0].priceDiscount">{{ -->
+								<!-- 														product.price | number:0 }} đ</span> -->
+								<!-- 												</a> -->
+								<!-- 											</div> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 								</div> -->
 
 							</div>
 						</aside>
@@ -305,7 +311,8 @@
 						</div>
 						<!-- /row-->
 						<div class="ecom-products-grids row">
-							<div ng-repeat="p in pager.productitems" ng-click="addToRecentlyViewed(p)"
+							<div ng-repeat="p in pager.productitems"
+								ng-click="addToRecentlyViewed(p)"
 								class="col-lg-4 col-6 product-incfhny mb-4">
 								<div class="product-grid2 transmitv"
 									ng-click="saveProductID(p.productID)">
@@ -349,9 +356,11 @@
 										</span> <span class="price"
 											ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
 											{{ p.price | number:0 }} ₫ </span>
-											<div ng-if="p.avgrev" class="d-flex" style="justify-content: center;">
-												<div class="text-warning" ng-repeat="star in getStarAvgs(p.avgrev) track by $index">
-													<span ng-class="star" aria-hidden="true"></span>						
+										<div ng-if="p.avgrev" class="d-flex"
+											style="justify-content: center;">
+											<div class="text-warning"
+												ng-repeat="star in getStarAvgs(p.avgrev) track by $index">
+												<span ng-class="star" aria-hidden="true"></span>
 											</div>
 										</div>
 									</div>
