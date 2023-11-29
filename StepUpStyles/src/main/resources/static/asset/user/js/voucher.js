@@ -11,6 +11,36 @@ app.controller("voucher-ctrl", function ($scope, $http) {
         ddI.formattedStartDate = formatDate(ddI.dateStart);
         ddI.formattedEndDate = formatDate(ddI.dateEnd);
       });
+      // $scope.userId = 2;
+
+      $http.get("/user/Idprofile").then((resp) =>{
+        var userId = resp.data;
+        $http.get("/user/" + userId).then(userResp =>{
+          console.log(userId);
+          var fullUserData = userResp.data;
+          $http.get("/rest/voucherUse").then((resp) => {
+            $scope.voucherUse = resp.data;
+            console.log($scope.voucherUse);
+            $scope.voucher.forEach(function (voucherItem) {
+              voucherItem.saved = isVoucherSaved(voucherItem.voucherId, userId);
+              console.log(userId);
+          });
+          });
+        })
+      })
+
+      
+
+      function isVoucherSaved(voucherId, userId) {
+        // Duyệt qua mỗi voucherUse
+        for (let i = 0; i < $scope.voucherUse.length; i++) {
+            const voucherUseItem = $scope.voucherUse[i];
+            if (voucherUseItem.voucher.voucherId === voucherId && voucherUseItem.user.usersId === userId) {
+                return true; // Nếu đã lưu, trả về true
+            }
+        }
+        return false; // Nếu chưa lưu, trả về false
+    }
       function formatDate(startDate) {
         // Parse the input date string
         const inputDate = new Date(startDate);
@@ -65,11 +95,11 @@ app.controller("voucher-ctrl", function ($scope, $http) {
         // Example: Display details in the modal
         modalBody.innerHTML = `
                         <div class="voucher-modal-content">
-                        <div class="row" style="margin-left: 0px;">
+                        <div class="row" style="margin-left: 0px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative; margin-bottom: 10px;">
                                             <div class="col-md-3"
                                                 style="background-color: orange; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                                                 <svg width="50" height="70" xmlns="http://www.w3.org/2000/svg">
-                                                    <text x="10" y="70" font-size="40" fill="white">%</text>
+                                                    <text x="15" y="50" font-size="30" fill="white">%</text>
                                                 </svg>
                                                 <div style="margin-bottom: 30px;">
                                                     <div class="gg">Giảm giá</div>
@@ -104,36 +134,39 @@ app.controller("voucher-ctrl", function ($scope, $http) {
   
   $scope.saveVoucher = function(item) {
     var voucherId = item.voucherId;
-    var userId = 1;
-    // Check if the voucher is already saved
+    
+    $http.get("/user/Idprofile").then((resp) =>{
+      var userId = resp.data;
+      $http.get("/user/" + userId).then(userResp =>{
+        console.log(userId);
+        var fullUserData = userResp.data;
         $http.post('/rest/voucherUse/saveVoucherUse?voucherId=' + voucherId + '&userId=' + userId)
-            .then(resp => {
-              
-                // Set isSaved to true upon successful save
-                console.log(voucherId);
-                item.saved = true;
-                
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Đã thêm thành công voucher',
-                });
-            })
-            .catch(error => {
-                // Set isSaved to false if there's an error
-                console.log("Error", error);
+        .then(resp => {
+            // Set isSaved to true upon successful save
+            console.log(voucherId);
+            $scope.getAllVoucher();
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
             });
-            
+            Toast.fire({
+                icon: 'success',
+                title: 'Đã thêm thành công voucher',
+            });
+        })
+        .catch(error => {
+            // Set isSaved to false if there's an error
+            console.log("Error", error);
+        });
+      })
+    })
     };
 
     $scope.getAllVoucher();

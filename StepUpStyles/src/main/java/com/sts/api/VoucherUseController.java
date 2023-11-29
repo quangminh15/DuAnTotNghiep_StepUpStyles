@@ -42,4 +42,9 @@ public class VoucherUseController {
     public List<VoucherUse> getSavedVoucherUsesByUserId(@PathVariable Integer userId) {
         return voucherUseService.getSavedVoucherUsesByUserId(userId);
     }
+
+    @GetMapping("/check-saved/{userId}/{voucherId}")
+    public Boolean checkVoucherSaved(@PathVariable Integer userId, @PathVariable Long voucherId) {
+        return voucherUseService.isVoucherSaved(userId, voucherId);
+    }
 }

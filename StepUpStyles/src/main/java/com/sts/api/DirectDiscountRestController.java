@@ -65,7 +65,9 @@ public class DirectDiscountRestController {
 
     @PutMapping("/updateDiscount/{ddid}")
     public DirectDiscount update(@PathVariable("ddid") Long ddid, @RequestBody DirectDiscount directDis) {
-        return discountService.update(directDis);
+        discountService.saveStatus(directDis);
+        DirectDiscount updateDiscount = discountService.update(directDis);
+        return updateDiscount;
     }
 
     @DeleteMapping("/deleteDiscount/{ddid}")

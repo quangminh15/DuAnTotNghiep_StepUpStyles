@@ -73,6 +73,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/ImportReceipt/ImportReceiptDetail.html",
 			controller: "ImportReceiptDetail-ctrl"
 		})
+		.when("/totalImport", {
+			templateUrl: "/templates/admins/statistical/totalImport.html",
+			controller: "totalImport-ctrl"
+		})
 		.when("/user", {
 			templateUrl: "/templates/admins/user/user.html",
 			controller: "user-ctrl"

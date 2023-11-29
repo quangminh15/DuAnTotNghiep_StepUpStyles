@@ -11,4 +11,7 @@ public interface VoucherUseService {
     void saveVoucherForUser(Long voucherId, Integer userId);
 
     List<VoucherUse> getSavedVoucherUsesByUserId(Integer userId);
+
+    Boolean isVoucherSaved(Integer userId, Long voucherId);
+
 }

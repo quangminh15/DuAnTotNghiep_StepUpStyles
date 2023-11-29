@@ -461,39 +461,47 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 
 	$scope.getVoucher = function () {
 		var userId = 1;  
-		// Thực hiện HTTP GET request đến API
+		$http.get("/user/Idprofile").then((resp) =>{
+			var userId = resp.data;
+			$http.get("/user/" + userId).then(userResp =>{
+			  console.log(userId);
+			  var fullUserData = userResp.data;
+			  // Thực hiện HTTP GET request đến API
 		$http.get('/rest/voucherUse/getTrue/' + userId)
-			.then(function (response) {
-				// Xử lý dữ liệu trả về từ API
-				$scope.voucherUseTrue = response.data;
-				console.log($scope.voucherUseTrue);
-				$scope.voucherUseTrue.forEach(function (item) {
-					item.formattedStartDate = formatDate(item.voucher.dateStart);
-					item.formattedEndDate = formatDate(item.voucher.dateEnd);
-				  });
-				  function formatDate(startDate) {
-					// Parse the input date string
-					const inputDate = new Date(startDate);
-				
-					// Format options
-					const options = {
-						weekday: 'long', // 'long' for the full weekday name
-						day: '2-digit',
-						month: '2-digit',
-						year: 'numeric',
-						// hour: '2-digit',
-						// minute: '2-digit',
-						// second: '2-digit',
-						hour12: false, // 24-hour format
-						timeZone: 'Asia/Ho_Chi_Minh', // Time zone
-					};
-				
-					// Format the date using Intl.DateTimeFormat
-					const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
-				
-					return formattedDate;
-				}
+		.then(function (response) {
+			// Xử lý dữ liệu trả về từ API
+			$scope.voucherUseTrue = response.data;
+			console.log($scope.voucherUseTrue);
+			$scope.voucherUseTrue.forEach(function (item) {
+				item.formattedStartDate = formatDate(item.voucher.dateStart);
+				item.formattedEndDate = formatDate(item.voucher.dateEnd);
+			  });
+			  function formatDate(startDate) {
+				// Parse the input date string
+				const inputDate = new Date(startDate);
+			
+				// Format options
+				const options = {
+					weekday: 'long', // 'long' for the full weekday name
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric',
+					// hour: '2-digit',
+					// minute: '2-digit',
+					// second: '2-digit',
+					hour12: false, // 24-hour format
+					timeZone: 'Asia/Ho_Chi_Minh', // Time zone
+				};
+			
+				// Format the date using Intl.DateTimeFormat
+				const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+			
+				return formattedDate;
+			}
+		})
 			})
+		  })
+		
 			
 	};
 
