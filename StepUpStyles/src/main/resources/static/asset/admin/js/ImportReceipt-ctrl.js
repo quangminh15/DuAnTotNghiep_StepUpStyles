@@ -225,34 +225,40 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       });
       return;
     }
-    $http.get("/rest/users/Idprofile").then((resp) => {
+    $http.get("/user/Idprofile").then((resp) => {
       var userID = resp.data;
-			$scope.form.user = { userID: userID };
-      $scope.form.importDate = new Date();
-      var newItem = angular.copy($scope.form);
-      newItem.user.userID = userID;
-          $http
-            .post(`/rest/ImportReceipt/createImp`, newItem)
-            .then((resp) => {
-              resp.data.importDate = new Date(resp.data.importDate); // Chuyển đổi ngày giờ từ response
-              resp.data.totalAmount = 0;
-              $scope.items.push(resp.data);
-              $scope.initialize();
-              $scope.reset();
-              $Swal.fire({
-                icon: "success",
-                title: "Thành công",
-                text: "Thêm thành công phiếu nhập!",
-              });
-              $scope.initialize();
-            })
-            .catch((error) => {
-              $scope.initialize();
-              $scope.errorMessage = "Lỗi!!";
-              $("#errorModal").modal("show"); // Show the modal
-              console.log("Error", error);
-            });
+      // Gọi API để lấy đầy đủ thông tin người dùng
+			$http.get("/user/" + userID).then(userResp => {
+        var fullUserData = userResp.data;
+				$scope.form.user = fullUserData;
+
+        var importItem = angular.copy($scope.form);
+				importItem.user = fullUserData;
+        importItem.deleted = false;
+        importItem.importDate = new Date();
+        importItem.totalAmount = 0;
+        $http.post('/rest/importReceipt/createImport', importItem).then((resp) => {
+          resp.data.importDate = new Date(resp.data.importDate);
+          resp.data.totalAmount = 0;
+          $scope.items.push(resp.data);
+          $scope.initialize();
+          $scope.reset();
+          Swal.fire({
+						icon: 'success',
+						title: 'Thành công',
+						text: 'Thêm mới thành công!',
+					});
+          $scope.initialize();
+        })
+        .catch((error) => {
+          $scope.initialize();
+          $scope.errorMessage = "Lỗi!!";
+          $("#errorModal").modal("show"); // Show the modal
+          console.log("Error", error);
         });
+    });
+      })
+          
   };
 
   // Thêm chi tiết phiếu nhập

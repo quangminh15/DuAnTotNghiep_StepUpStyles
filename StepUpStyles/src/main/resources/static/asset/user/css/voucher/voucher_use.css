@@ -1,0 +1,24 @@
+.cancel{
+    background-color: rgb(134, 116, 116);
+    color: white;
+    border: none;
+}
+
+.cancel:hover{
+    background-color: rgb(204, 190, 190);
+    color: rgb(134, 116, 116);
+}
+
+.add{
+    background-color: orange;
+    color: white;
+}
+
+.add:hover{
+    background-color: rgb(182, 128, 27);
+    color: white;
+}
+
+h4 {
+    color: white;
+}

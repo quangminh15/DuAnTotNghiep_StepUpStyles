@@ -28,11 +28,6 @@ public class ImportReceiptRestController {
         return importService.findAll();
     }
 
-    @PostMapping("/createImport")
-    public ImportReceipt createImport(@RequestBody ImportReceipt importReceipt){
-        return importService.create(importReceipt);
-    }
-
      @PutMapping("/updateImp/{importReceiptID}")
     public ImportReceipt updateImp(@PathVariable("importReceiptId") Long importReceiptId, @RequestBody ImportReceipt importReceipt) {
         return importService.update(importReceipt);
@@ -57,5 +52,10 @@ public class ImportReceiptRestController {
     public ImportReceipt findImportReceiptById(@PathVariable Long importReceiptID) {
         ImportReceipt importReceipt = importService.findImportReceiptById(importReceiptID);
         return importReceipt;
+    }
+
+    @PostMapping("/createImport")
+    public ImportReceipt createImport(@RequestBody ImportReceipt importReceipt){
+        return importService.create(importReceipt);
     }
 }

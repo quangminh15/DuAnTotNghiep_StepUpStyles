@@ -59,5 +59,19 @@ public class VoucherUseServiceImpl implements VoucherUseService {
         return voucherUseDao.findByUser_UsersIdAndSaved(userId, true);
     }
 
-    
+    @Override
+    public Boolean isVoucherSaved(Integer userId, Long voucherId) {
+        // Tìm User và Voucher dựa trên userId và voucherId
+        User user = new User();
+        user.setUsersId(userId); // Điều này giả sử bạn có một phương thức để tìm User theo userId
+
+        Voucher voucher = new Voucher();
+        voucher.setVoucherId(voucherId);; // Điều này giả sử bạn có một phương thức để tìm Voucher theo voucherId
+
+        // Tìm VoucherUse dựa trên User và Voucher
+        VoucherUse voucherUse = voucherUseDao.findByUserAndVoucher(user, voucher);
+
+        // Nếu VoucherUse tồn tại và saved là true, trả về true, ngược lại trả về false
+        return voucherUse != null && voucherUse.getSaved();
+    }
 }

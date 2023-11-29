@@ -11,7 +11,6 @@ import lombok.Data;
 @NamedQuery(name="ImportReceiptDetail.findAll", query="SELECT i FROM ImportReceiptDetail i")
 public class ImportReceiptDetail implements Serializable {
     private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="import_receipt_detail_id")

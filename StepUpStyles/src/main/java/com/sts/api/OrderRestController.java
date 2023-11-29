@@ -112,14 +112,14 @@ public class OrderRestController {
         }
     }
 
-    @GetMapping("/reviewDetail")
-    public ResponseEntity<List<Review>> findReview(
-            @RequestParam("orderId") Integer orderId) {
-       List<Review> rvDetail = orderService.findByReviewWithOrderAndUser(orderId, 1);
-        if (rvDetail != null) {
-            return ResponseEntity.ok(rvDetail);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // @GetMapping("/reviewDetail")
+    // public ResponseEntity<List<Review>> findReview(
+    //         @RequestParam("orderId") Integer orderId) {
+    //    List<Review> rvDetail = orderService.findByReviewWithOrderAndUser(orderId, 1);
+    //     if (rvDetail != null) {
+    //         return ResponseEntity.ok(rvDetail);
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 }
