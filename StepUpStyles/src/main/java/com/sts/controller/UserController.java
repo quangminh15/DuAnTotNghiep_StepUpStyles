@@ -56,6 +56,13 @@ public class UserController {
 		return "users/blog";
 	}
 
+	@RequestMapping("/registration")
+	public String registration(Model model) {
+		model.addAttribute("Customer", new User());
+		model.addAttribute("checked", "checked");
+		return "users/LoginSTS";
+	}
+
 	@RequestMapping("/blog-single")
 	public String blogsingle(Model model) {
 

@@ -18,14 +18,20 @@
 <section class="w3l-banner-slider-main">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid serarc-fluid">
-            <a href="/index"> <img src="/asset/user/img/banner/logo3.png" style="display: block; margin: auto;" width="60%" alt=""></a>
-            <div ng-controller="favorite-ctrl" class="search-right ng-scope">
-                <form method="" class="ng-pristine ng-valid">
+            <a href="/index"> <img src="/asset/user/img/banner/logo.png"
+                                   style="display: block; margin: auto;" width="40%" alt=""></a>
+            <div ng-controller="favorite-ctrl" class="search-right">
+                <form method="">
                     <div class="p-1 bg-light rounded rounded-pill shadow-sm">
                         <div class="input-group" style="width: 350px;">
-                            <input style="border-radius: 50%; font-size: 1.5rem" type="search" placeholder="Bạn muốn tìm sản phẩm nào?" ng-model="searchKeyword" aria-describedby="button-addon1" class="form-control border-0 bg-light ng-pristine ng-untouched ng-valid ng-empty">
+                            <input style="border-radius: 50%; font-size: 1.5em;" type="search"
+                                   placeholder="Bạn muốn tìm sản phẩm nào?"
+                                   ng-model="searchKeyword" aria-describedby="button-addon1"
+                                   class="form-control border-0 bg-light">
                             <div class="input-group-append">
-                                <button id="button-addon1" type="submit" class="btn btn-link text-danger" ng-click="searchProductByName()">
+                                <button id="button-addon1" type="submit"
+                                        class="btn btn-link text-danger"
+                                        ng-click="searchProductByName()">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -35,12 +41,17 @@
                 <!-- /search popup -->
 
                 <!-- The Modal Start-->
-                <div id="overlay" class="overlay-hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; display: none; align-items: center; justify-content: center;">
-                    <div style="position: relative; background-color: #fff; border-radius: 10px; padding: 20px; width: 65%; max-height: 90vh; overflow-y: auto; top: 50%; left: 50%; transform: translate(-75%, -49%); margin: 0 auto;">
+                <div id="overlay" class="overlay-hidden"
+                     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; display: none; align-items: center; justify-content: center;">
+                    <div
+                            style="position: relative; background-color: #fff; border-radius: 10px; padding: 20px; width: 65%; max-height: 90vh; overflow-y: auto; top: 50%; left: 50%; transform: translate(-75%, -49%); margin: 0 auto;">
 
-                        <button style="position: absolute; top: 10px; right: 10px;" ng-click="hideOverlay()" type="button" class="btn btn-light">X</button>
+                        <button style="position: absolute; top: 10px; right: 10px;"
+                                ng-click="hideOverlay()" type="button" class="btn btn-light">X
+                        </button>
                         <div class="row">
-                            <section class="w3l-ecommerce-main ng-hide" ng-show="searchedProductItems.length > 0">
+                            <section class="w3l-ecommerce-main"
+                                     ng-show="searchedProductItems.length > 0">
                                 <!-- /products-->
                                 <div class="ecom-contenthny">
                                     <h3 class="hny-title mb-0 text-center">
@@ -51,7 +62,60 @@
 
                                         <!-- /row-->
                                         <div class="ecom-products-grids row ">
-                                            <!-- ngRepeat: p in searchedProductItems -->
+                                            <div ng-repeat="p in searchedProductItems"
+                                                 class="col-lg-3 col-6 product-incfhny mt-4">
+                                                <div class="product-grid2 transmitv"
+                                                     ng-click="saveProductID(p.productID)">
+                                                    <div class="product-image2" style="position: relative;">
+                                                        <div class="discount-circle"
+                                                             ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+                                                            {{
+                                                            p.discount[0].directDiscount }}%
+                                                        </div>
+                                                        <a ng-click="goToSinglePage(p.productID)"> <img
+                                                                class="pic-1 img-fluid"
+                                                                ng-src="{{p.image[0].imagePath}}">
+                                                            <img ng-if="p.image.length > 1" class="pic-2 img-fluid"
+                                                                 ng-src="{{p.image[1].imagePath}}"> <img
+                                                                    ng-if="p.image.length <= 1" class="pic-2 img-fluid"
+                                                                    ng-src="{{p.image[0].imagePath}}">
+                                                        </a>
+                                                        <ul class="social">
+                                                            <li><span ng-if="isFavorited(p.productID)"
+                                                                      ng-click="check(p.productID)"
+                                                                      class="fa fa-heart liked"
+                                                                      style="font-size: 24px; color: red;"></span> <span
+                                                                    ng-if="!isFavorited(p.productID)"
+                                                                    ng-click="check(p.productID)"
+                                                                    class="fa fa-heart-o not-liked"
+                                                                    style="font-size: 24px; color: red; font-weight: bold;"></span>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="transmitv single-item">
+                                                            <a ng-click="goToSinglePage(p.productID)" type="submit"
+                                                               class="transmitv-cart ptransmitv-cart add-to-cart">
+                                                                Xem chi tiết </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <h3 class="title">
+                                                            <a ng-click="goToSinglePage(p.productID)">{{
+                                                                p.productName }}</a>
+
+                                                        </h3>
+
+                                                        <span class="price"
+                                                              ng-if="p.discount[0].priceDiscount == null"> {{
+															p.price | number:0 }} ₫</span> <span class="price"
+                                                                                                 ng-if="p.discount[0].status === 'Đang diễn ra' && p.discount[0].priceDiscount">
+															<del>{{ p.price | number:0 }} ₫</del> {{
+															p.discount[0].priceDiscount | number:0 }} ₫
+														</span> <span class="price"
+                                                                      ng-if="p.discount[0].status !== 'Đang diễn ra' && p.discount[0].priceDiscount">
+															{{ p.price | number:0 }} ₫ </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!--/pagination-->
                                         <!-- 											<div class="custom-pagination" style="margin: 0px 10px 20px;"> -->
@@ -87,7 +151,10 @@
                 <!-- The Modal End-->
             </div>
             <!--//search-right-->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"> </span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -96,28 +163,56 @@
                         chủ</a></li>
                     <li class="nav-item"><a class="nav-link" href="/about">Giới
                         thiệu</a></li>
-                    <li class="nav-item "><a class="nav-link" href="/list_products">Sản phẩm</a></li>
-                    <li class="nav-item "><a class="nav-link" href="/blog">Blog</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <li class="transmitvcart galssescart2 cart cart box_1">
-                        <form action="#" method="post" class="last ng-pristine ng-valid">
-
-                            <button class="top_transmitv_cart mr-2" type="submit" name="submit" value="">
+                    <li class="nav-item "><a class="nav-link"
+                                             href="/list_products">Sản phẩm</a></li>
+                    <li class="nav-item "><a class="nav-link"
+                                             href="/contact" ng-controller="voucher-ctrl">Voucher</a></li>
+                    <!--                     <li class="nav-item "><a class="nav-link" href="/blog">Blog</a> -->
+                    <!--                     </li> -->
+                    <!--                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a> -->
+                    <!--                     </li> -->
+                    <div th:if="${loginStatus == 'no'}" th:remove="tag">
+                        <li class="transmitvcart galssescart2 cart cart box_1 nav-item dropdown">
+                            <!--                            <form action="/profile" method="post" class="last">-->
+                            <button class="top_transmitv_cart mr-2" type="reset"
+                                    name="submit" value="">
                                 <span class="fa fa-user"></span>
                             </button>
-                        </form>
-                    </li>
+                            </form>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/loginSTS">Đăng nhập</a></li>
+                                <li><a class="dropdown-item" href="/forgot-pass">Quên mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/registration">Đăng ký</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                    <div th:if="${loginStatus == 'ok'}" th:remove="tag">
+                        <li class="transmitvcart galssescart2 cart cart box_1 nav-item dropdown">
+                            <!--                            <form action="/profile" method="post" class="last">-->
+                            <button class="top_transmitv_cart mr-2" type="reset"
+                                    name="submit" value="">
+                                <span class="fa fa-user"></span>
+                            </button>
+                            </form>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/auth/logoff">Đăng xuất</a></li>
+                                <li><a class="dropdown-item" href="/change-pass">Đổi mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/profile">Thông tin cá nhân</a></li>
+                            </ul>
+                        </li>
+                    </div>
+
                     <li class="nav-item top-baged"><a class="nav-link" href="/favorite">
                         <span class="far fa-heart" style="font-size: 24px;"></span>
-                        <span class="count_menu badge badge-pill badge-danger" id="favoriteCount">5</span>
+                        <span class="count_menu badge badge-pill badge-danger" id="favoriteCount"></span>
                     </a>
                     </li>
-                    <li class="nav-item top-baged ng-scope" ng-controller="cart-ctrl">
+                    <li class="nav-item top-baged" ng-controller="cart-ctrl">
                         <a class="nav-link" href="/cart">
                             <span class="fa fa-shopping-cart" style="font-size: 24px;"></span>
-                            <span class="count_menu badge badge-pill badge-danger" id="cartCount">1</span>
+                            <span class="count_menu badge badge-pill badge-danger" id="cartCount"></span>
                         </a>
                     </li>
                 </ul>
@@ -372,6 +467,21 @@
         } else {
             navbar.classList.remove('navbar-scrolled');
         }
+    });
+</script>
+<script>
+    // Kích hoạt dropdown menu khi hover
+    document.addEventListener("DOMContentLoaded", function () {
+        let dropdownMenuList = document.querySelectorAll('.dropdown');
+        dropdownMenuList.forEach(function (dropdownMenu) {
+            dropdownMenu.addEventListener('mouseenter', function () {
+                dropdownMenu.querySelector('.dropdown-menu').classList.add('show');
+            });
+
+            dropdownMenu.addEventListener('mouseleave', function () {
+                dropdownMenu.querySelector('.dropdown-menu').classList.remove('show');
+            });
+        });
     });
 </script>
 </body>

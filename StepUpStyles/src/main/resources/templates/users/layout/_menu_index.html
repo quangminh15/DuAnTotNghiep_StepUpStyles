@@ -156,17 +156,35 @@
 <!--                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a> -->
 <!--                     </li> -->
                     <div th:if="${loginStatus == 'no'}" th:remove="tag">
-                        <li class="nav-item"><a class="nav-link" href="/loginSTS">Đăng nhập</a>
+                        <li class="transmitvcart galssescart2 cart cart box_1 nav-item dropdown">
+                            <!--                            <form action="/profile" method="post" class="last">-->
+                            <button class="top_transmitv_cart mr-2" type="reset"
+                                    name="submit" value="">
+                                <span class="fa fa-user"></span>
+                            </button>
+                            </form>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/loginSTS">Đăng nhập</a></li>
+                                <li><a class="dropdown-item" href="/forgot-pass">Quên mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/registration">Đăng ký</a></li>
+                            </ul>
                         </li>
                     </div>
                     <div th:if="${loginStatus == 'ok'}" th:remove="tag">
-                        <li class="transmitvcart galssescart2 cart cart box_1">
-                            <form action="/profile" method="post" class="last">
-                                <button class="top_transmitv_cart mr-2" type="submit"
+                        <li class="transmitvcart galssescart2 cart cart box_1 nav-item dropdown">
+<!--                            <form action="/profile" method="post" class="last">-->
+                                <button class="top_transmitv_cart mr-2" type="reset"
                                         name="submit" value="">
                                     <span class="fa fa-user"></span>
                                 </button>
                             </form>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/auth/logoff">Đăng xuất</a></li>
+                                <li><a class="dropdown-item" href="/change-pass">Đổi mật khẩu</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/profile">Thông tin cá nhân</a></li>
+                            </ul>
                         </li>
                     </div>
 
@@ -189,3 +207,18 @@
     <!--//nav-->
 
 </section>
+<script>
+    // Kích hoạt dropdown menu khi hover
+    document.addEventListener("DOMContentLoaded", function () {
+        let dropdownMenuList = document.querySelectorAll('.dropdown');
+        dropdownMenuList.forEach(function (dropdownMenu) {
+            dropdownMenu.addEventListener('mouseenter', function () {
+                dropdownMenu.querySelector('.dropdown-menu').classList.add('show');
+            });
+
+            dropdownMenu.addEventListener('mouseleave', function () {
+                dropdownMenu.querySelector('.dropdown-menu').classList.remove('show');
+            });
+        });
+    });
+</script>
