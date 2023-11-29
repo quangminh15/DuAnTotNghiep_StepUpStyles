@@ -10,7 +10,7 @@
 					<!-- Thẻ select box -->
 					<div class="col-sm-3">
                         <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
-                        <select class="form-control mr-2" ng-model="productId" id="productName"
+                        <select class="form-control mr-1" ng-model="productId" id="productName"
                             style="width: 200px; margin-bottom: 10px">
                             <option value="">Tất cả</option>
                             <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-sm-3">
                         <label for="userId">Người dùng:</label>
-                        <select class="form-control mr-2" ng-model="usersId" id="userId"
+                        <select class="form-control mr-1" ng-model="usersId" id="userId"
                         style="width: 200px; margin-bottom: 10px">
                             <option value="">Tất cả</option>
                             <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-sm-3">
                         <label for="rating">Sao đánh giá:</label>
-                        <select class="form-control mr-2" ng-model="rating" id="rating">
+                        <select class="form-control mr-1" ng-model="rating" id="rating">
                             <option value="">Tất cả</option>
                             <option value="1">1 sao</option>
                             <option value="2">2 sao</option>
@@ -67,9 +67,13 @@
 				<tbody>
 					<tr ng-repeat="reviewitem in pager.reviewitems">
                         <td>{{reviewitem.reviewId}}</td>
-                        <td>{{reviewitem.product.productName}}</td>
+                        <td style="overflow: hidden; max-width: 100px;">
+							{{reviewitem.product.productName}}
+						</td>
                         <td>{{reviewitem.user.fullName}}</td>
-                        <td>{{reviewitem.title}}</td>
+                        <td style="word-wrap: break-word; white-space: normal; max-width: 200px;">
+							{{reviewitem.title}}
+						</td>
                         <td>
                             <div class="star-rating">
                                 <span class="fa fa-star" ng-class="{'checked': i <= reviewitem.rating }"
@@ -79,26 +83,26 @@
                         <td>{{reviewitem.reviewDate | date:'dd-MM-yyyy'}}</td>
 						<td>
 							<div ng-if="reviewitem.image1">
-								<img class="rounded w-100 object-fit-cover" src="{{reviewitem.image1}}" style="height: 100px;">
+								<img src="{{reviewitem.image1}}">
 							</div>	
 							<div ng-if="!reviewitem.image1">
-								<p>Không có ảnh</p>
+								<p>Trống</p>
 							</div>							
 						</td>
 						<td>
 							<div ng-if="reviewitem.image2">
-								<img class="rounded w-100 object-fit-cover" src="{{reviewitem.image2}}" style="height: 100px;">
+								<img src="{{reviewitem.image2}}">
 							</div>
 							<div ng-if="!reviewitem.image2">
-								<p>Không có ảnh</p>
+								<p>Trống</p>
 							</div>
 						</td>
 						<td>
 							<div ng-if="reviewitem.image3">
-								<img class="rounded w-100 object-fit-cover" src="{{reviewitem.image3}}" style="height: 100px;">
+								<img src="{{reviewitem.image3}}">
 							</div>
 							<div ng-if="!reviewitem.image3">
-								<p>Không có ảnh</p>
+								<p>Trống</p>
 							</div>
 						</td>
                     </tr>

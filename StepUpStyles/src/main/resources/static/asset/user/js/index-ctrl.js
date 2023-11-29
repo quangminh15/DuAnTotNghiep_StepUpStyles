@@ -1376,5 +1376,30 @@ app.controller("index-ctrl", function($scope, $http) {
 		});
 	};
 	$scope.getAllUserFavorite();
+
+	//Sản phẩm vừa xem
+	// Lấy dữ liệu từ localStorage khi trang được tải lần đầu
+	$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
+	// localStorage.removeItem('recentlyViewedProducts')
+	// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
+	$scope.addToRecentlyViewed = function (product) {
+		var index = $scope.recentlyViewedProducts.indexOf(product);
+		var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
+
+		if (index === -1) {
+			// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
+			$scope.recentlyViewedProducts.unshift(product);
+		} else {
+			// Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
+			var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
+			$scope.recentlyViewedProducts.unshift(viewedProduct);
+		}
+		var maxItems = 8;
+		if ($scope.recentlyViewedProducts.length > maxItems) {
+			$scope.recentlyViewedProducts.splice(maxItems);
+		}
+		// Lưu danh sách sản phẩm vừa xem vào localStorage
+		localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
+	};
 	//Linh
 })

@@ -15,36 +15,13 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                 console.log("1", $scope.orders.shippingAddress)
 
 
-                $scope.orders.forEach(item => {
-                    // $scope.checkReviewd(item.orderId)
-
-                    //    
-                    $http.get(`/rest/order/find?orderId=${item.orderId}`)
-                        .then(function (response) {
-                            reviewedOrderDetails[item.orderId] = response.data;
-                            console.log("LLL", reviewedOrderDetails);
+                $scope.orders.forEach(item => {  
                             $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
                                 .then(respone => {
                                     item.orderDetail = respone.data
                                     $scope.filterByStatusAndCheck(null)
                                     console.log("order", item.orderDetail);
                                     item.orderDetail.forEach(orderdetails => {
-                                        $scope.checkrv = false
-                                        // Kiểm tra nếu orderDetail.orderId tồn tại trong reviewedOrderDetails
-                                        const isReviewed = Array.isArray(reviewedOrderDetails[item.orderId]) &&
-                                            reviewedOrderDetails[item.orderId].some(reviewedItem =>
-                                                reviewedItem.orderDetailId === orderdetails.orderDetailId                                   
-                                            );
-                                        orderdetails.hasReviewed = isReviewed;
-                                        if (isReviewed) {
-                                            console.log(`Order ${orderdetails.orderDetailId} đã được đánh giá.`);
-                                            // Gán thuộc tính hasReviewed vào orderDetail
-                                            $scope.checkrv = true;
-                                        } else {
-                                            console.log(`Order ${orderdetails.orderDetailId} chưa được đánh giá.`);
-                                            $scope.checkrv = false;
-                                        }
-                                        console.log($scope.checkrv);
                                         $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
                                             orderdetails.productDetail.product.productImages = resp.data;
                                         })
@@ -52,9 +29,6 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                                     })
 
                                 })
-                        }).catch(function (error) {
-                            console.error('Error fetching cart items:', error);
-                        });
                     //
 
 
@@ -305,7 +279,4 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
         // });
         $('#reviewDetail').modal('show');
     }
-
-
-
 }])
