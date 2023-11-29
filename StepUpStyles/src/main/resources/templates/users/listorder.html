@@ -55,10 +55,10 @@
 			border-top: none;
 		}
 		.col70{
-			width: 85%;
+			width: 85% !important;
 		}
 		.col30{
-			width: 15%;
+			width: 15% !important;
 		}
 		.rating-stars ul {
 			list-style-type: none;
@@ -314,8 +314,7 @@
 						</div>
 						<div class="col-md-4 d-flex justify-content-end">
 							<div>{{item.price|number:0}} ₫</div>
-							<button class="btn btn-danger ml-3" ng-click="showModalReview(item.productDetail.product)" ng-if="!item.hasReviewed">Đánh giá</button>
-							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)" ng-if="item.hasReviewed">Xem đánh giá</button>
+							<button class="btn btn-danger ml-3" ng-click="showModalReview(item.productDetail.product)">Đánh giá</button>
 						</div>
 					</div>
 
@@ -364,18 +363,7 @@
 						</div>
 						<button class="btn btn-danger">Huy Don Hang</button>
 						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button> -->
-						<div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 totalorder">
-							
-							<div class="col-md-7"></div>
-							<div class=" col-md-5 py-2">
-								<div class="row d-flex ">
-									<p class="col-md-7 text-secondary">Tổng thanh toán: </p>
-									<h3 class="col-md-5 text-end text-danger text-nowrap">{{order.totalAmount|number:0}} ₫</h3>
-
-								</div>
-
-							</div>
-						</div>
+						
 						<button class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn hàng</button>
 					</div>
 

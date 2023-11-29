@@ -27,11 +27,6 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
     }
 
     @Override
-    public ImportReceipt create(ImportReceipt importReceipt) {
-        return importDao.save(importReceipt);
-    }
-
-    @Override
     public ImportReceipt update(ImportReceipt importReceipt) {
         return importDao.save(importReceipt);
     }
@@ -71,6 +66,11 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
 	        return list;
 	    }
 	    return Collections.emptyList();
+    }
+
+    @Override
+    public ImportReceipt create(ImportReceipt importReceipt) {
+        return importDao.save(importReceipt);
     }
     
 }

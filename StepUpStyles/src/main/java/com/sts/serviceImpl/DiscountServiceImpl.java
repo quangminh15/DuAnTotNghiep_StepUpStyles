@@ -52,18 +52,23 @@ public class DiscountServiceImpl implements DiscountService {
 	public void saveStatus(DirectDiscount directDis) {
 		Date currentDate = new Date();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Điều chỉnh định dạng ngày tháng tương ứng với định dạng của thuộc tính startDate
-        try {
-            Date startDate = dateFormat.parse(directDis.getStartDate());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		try {
+			Date startDate = dateFormat.parse(directDis.getStartDate());
+			Date endDate = dateFormat.parse(directDis.getEndDate());
 
-            if (startDate.after(currentDate)) {
-                directDis.setStatus("Chưa diễn ra");
-            }
-        } catch (ParseException e) {
-            // Xử lý ngoại lệ nếu không thể chuyển đổi startDate thành Date
-            e.printStackTrace();
-        }
-    }
+			if (startDate.after(currentDate)) {
+				directDis.setStatus("Chưa diễn ra");
+			} else if (endDate.before(currentDate)) {
+				directDis.setStatus("Đã kết thúc");
+			} else {
+				directDis.setStatus("Đang diễn ra");
+			}
+		} catch (ParseException e) {
+			// Xử lý ngoại lệ nếu không thể chuyển đổi startDate thành Date
+			e.printStackTrace();
+		}
+	}
 
 	@Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
 	public void updateDiscountStatus() {

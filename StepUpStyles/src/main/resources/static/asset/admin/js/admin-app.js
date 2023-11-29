@@ -73,6 +73,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/ImportReceipt/ImportReceiptDetail.html",
 			controller: "ImportReceiptDetail-ctrl"
 		})
+		.when("/totalImport", {
+			templateUrl: "/templates/admins/statistical/totalImport.html",
+			controller: "totalImport-ctrl"
+		})
 		.when("/user", {
 			templateUrl: "/templates/admins/user/user.html",
 			controller: "user-ctrl"
@@ -100,6 +104,10 @@ app.config(function($routeProvider) {
 		.when("/favorite", {
 			templateUrl: "/templates/admins/favorites/favorite.html",
 			controller: "favorite-ctrl"
+		})
+		.when("/revenue", {
+			templateUrl: "/templates/admins/statistical/revenues.html",
+			controller: "revenues-ctrl"
 		})
 		.otherwise({
 			templateUrl: "/templates/admins/index.html",
