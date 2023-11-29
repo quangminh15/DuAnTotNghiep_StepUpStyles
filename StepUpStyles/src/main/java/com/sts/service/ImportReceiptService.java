@@ -9,8 +9,6 @@ public interface ImportReceiptService {
 
     List<ImportReceipt> findAll();
 
-    ImportReceipt create(ImportReceipt importReceipt);
-
     ImportReceipt update(ImportReceipt importReceipt);
 
     ImportReceipt findById(Long importReceiptId);
@@ -22,5 +20,7 @@ public interface ImportReceiptService {
     ImportReceipt findImportReceiptById(Long importReceiptID);
 
     List<ImportReceiptDetail> getByImport(Long importReceiptId);
+
+    ImportReceipt create(ImportReceipt importReceipt);
     
 }

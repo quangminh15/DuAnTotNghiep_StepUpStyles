@@ -34,7 +34,8 @@
 	<link rel="stylesheet" href="/asset/user/css/cart/flaticon.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/icomoon.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/style.css">
-	
+	<link rel="stylesheet" href="/asset/user/css/voucher/voucher_use.css">
+
 	<!-- END nav -->
 
 	<div class="hero-wrap hero-bread"
@@ -45,7 +46,7 @@
 					<p class="breadcrumbs"><span class="mr-2"><a th:href="@{/index}">Trang Chủ</a></span> > <span>Giỏ
 							Hàng</span>
 					</p>
-					<h1 class="mb-0 bread" >THANH TOÁN</h1>
+					<h1 class="mb-0 bread">THANH TOÁN</h1>
 				</div>
 			</div>
 		</div>
@@ -53,61 +54,72 @@
 
 	<!--Modal voucher start-->
 	<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
-            style="overflow: hidden;">
-            <div class="modal-dialog modal-dialog-centered modal-xl"
-                style="width: 600px; height: 600px; margin: 0 auto;">
-                <div class="modal-content" style="background-color: #eee;">
-                    <div class="modal-header">
-						<h4>Chọn Fourshoe Voucher</h4>
-                        <button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
-                            <span class="mdi mdi-close"></span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row">
-								<p>Chỉ chọn được 1 voucher</p>
-                                <div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;">
-                                    <div class="card boxvou" style="height: 130px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
-                                        <div class="row">
-                                            <div class="col-md-3"
-                                                style="background-color: orange; justify-content: center; align-items: center;">
-                                                <svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
-                                                    <text x="45" y="45" font-size="20" fill="white">%</text>
-                                                </svg>
-                                                <div style=" margin-top: 15px; margin-bottom: 20px;">
-                                                    <div class="gg" style="color: white; font-size: 10px; font-style: italic; text-align: center;">Giảm giá</div>
-                                                    <div class="sus" style="color: white; font-size: 15px; font-style: bold; text-align: center;">FOURSHOE</div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <div class="card-body">
-                                                    <div>Giảm: {{item.voucher.discountAmount}}%</div>
-                                                    <div>Đơn tối thiểu: {{formatToVND(item.voucher.total)}}</div>
-                                                    <div style="font-size: 11px; color: red;">Áp dụng:
-                                                        {{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
-                                                </div>
-                                            </div>
-											<div class="col-md-2">
-												<input type="radio" name="voucherRadio"/>
+		style="overflow: hidden;">
+		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 600px; height: 600px; margin: 0 auto;">
+			<div class="modal-content" style="background-color: #eee;">
+				<div class="modal-header" style="background: orange;">
+					<h4>Chọn Fourshoe Voucher</h4>
+					<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
+						<span class="mdi mdi-close"></span>
+					</button>
+				</div>
+				<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+					<div ng-show="voucherUseTrue.length == 0"
+						style="text-align: center; justify-content: center; margin: 10px;">
+						<i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
+						<p>Hiện tại bạn chưa chọn voucher nào</p>
+						<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
+								class="fas fa-shopping-cart" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
+					</div>
+					<div class="container"ng-show="voucherUseTrue">
+						<div class="row">
+							
+							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;">
+								<div class="card boxvou"
+									style="height: 130px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
+									<div class="row">
+										<div class="col-md-3"
+											style="background-color: orange; justify-content: center; align-items: center;">
+											<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+												<text x="45" y="45" font-size="20" fill="white">%</text>
+											</svg>
+											<div style=" margin-top: 15px; margin-bottom: 20px;">
+												<div class="gg"
+													style="color: white; font-size: 10px; font-style: italic; text-align: center;">
+													Giảm giá</div>
+												<div class="sus"
+													style="color: white; font-size: 15px; font-style: bold; text-align: center;">
+													FOURSHOE</div>
 											</div>
-                                        </div>
-                                    </div>
-                                </div>
+										</div>
+										<div class="col-md-7">
+											<div class="card-body">
+												<div>Giảm: {{item.voucher.discountAmount}}%</div>
+												<div>Đơn tối thiểu: {{formatToVND(item.voucher.total)}}</div>
+												<div style="font-size: 11px; color: red;">Áp dụng:
+													{{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<input type="radio" name="voucherRadio" />
+										</div>
+									</div>
+								</div>
+							</div>
 
-                            </div>
+						</div>
 
-                            <!-- Add more rows as needed -->
-                        </div>
-                        
-                    </div>
-                    <div class="modal-footer" style="background-color: #eee;">
-                        <button class="btn modal-close" type="button" data-dismiss="modal">Hủy</button>
-						<button class="btn modal-close" type="button" data-dismiss="modal">Áp dụng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+						<!-- Add more rows as needed -->
+					</div>
+
+				</div>
+				<div class="modal-footer" style="background-color: #eee;">
+					<button class="btn modal-close cancel" type="button" data-dismiss="modal">Hủy</button>
+					<button class="btn modal-close add" type="button" data-dismiss="modal">Áp dụng</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--Modal voucher end-->
 
 	<section class="ftco-section ftco-cart">
@@ -115,22 +127,23 @@
 			<div class="row ">
 				<div class="col-lg-12 cart-wrap ftco-animate ">
 					<!-- Button trigger modal -->
-  
- 
+
+
 					<div style="border-top: 3px tomato solid;" class="cart-total mb-3 bg-white">
 						<div class="row">
 							<div class="col-lg-9">
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
-								
+
 								<h3>{{addressDefault.user.fullName}} | 09089765989 <span class="badge badge-danger">Mặc
 										Định</span></h3> <span>{{addressDefault.addressDetails}},
 									{{addressDefault.ward}}, {{addressDefault.district}},
 									{{addressDefault.province}}</span>
 							</div>
 							<div class="col-lg-3">
-								<span><a style="color: white;" type="button" data-toggle="modal" data-target="#ModalAddress1"
-										class="btn btn-primary py-3 px-4"><i class="fas fa-edit"></i> Thay
+								<span><a style="color: white;" type="button" data-toggle="modal"
+										data-target="#ModalAddress1" class="btn btn-primary py-3 px-4"><i
+											class="fas fa-edit"></i> Thay
 										Đổi</a></span>
 							</div>
 						</div>
@@ -138,7 +151,7 @@
 				</div>
 			</div>
 			<!-- ------------------------------------------------------------------------ -->
-			<div class="container " >
+			<div class="container ">
 				<!-- The Modal -->
 				<div class="modal fade" id="ModalAddress1" data-keyboard="false" data-backdrop="static">
 					<div class="modal-dialog modal-lg">
@@ -154,8 +167,10 @@
 							<div class="modal-body">
 								<div class="row card-body" ng-repeat="addr in address ">
 									<div class="form-check col-lg-1">
-										<input class="form-check-input mg-2" ng-checked="addr.defaultAddress" type="radio" name="exampleRadios"
-											 ng-value="addressDefault.defaultAddress" ng-model="addr.defaultAddress" ng-change="updateDefault(addr.shippingAddressId)">
+										<input class="form-check-input mg-2" ng-checked="addr.defaultAddress"
+											type="radio" name="exampleRadios" ng-value="addressDefault.defaultAddress"
+											ng-model="addr.defaultAddress"
+											ng-change="updateDefault(addr.shippingAddressId)">
 									</div>
 									<div class="col-lg-8">
 
@@ -169,7 +184,8 @@
 
 									<div class="col-lg-3">
 										<span><a style="color: white;" type="button" data-toggle="modal"
-												data-target="#ModalAdress"  data-dismiss="modal" class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
+												data-target="#ModalAdress" data-dismiss="modal"
+												class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
 													class="fas fa-edit"></i> Thay Đổi</a></span>
 									</div>
 									<hr>
@@ -181,10 +197,12 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-toggle="modal" data-target="#ModalAddress" ng-click="reset()" data-dismiss="modal"><i class="fa fa-plus"></i> Tạo Mới</a>
+									<a type="button" class="btn btn-success" data-toggle="modal"
+										data-target="#ModalAddress" ng-click="reset()" data-dismiss="modal"><i
+											class="fa fa-plus"></i> Tạo Mới</a>
 								</div>
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-danger"  data-dismiss="modal">Close</a>
+									<a type="button" class="btn btn-danger" data-dismiss="modal">Close</a>
 								</div>
 							</div>
 
@@ -193,7 +211,7 @@
 				</div>
 			</div>
 			<!-- *************************************Form address************************************* -->
-			<div class="container " >
+			<div class="container ">
 				<!-- The Modal -->
 				<div class="modal fade addressform" id="ModalAddress" data-keyboard="false" data-backdrop="static">
 					<div class="modal-dialog modal-md">
@@ -201,25 +219,30 @@
 
 							<!-- Modal Header -->
 							<div class="modal-header">
-								<h4 class="modal-title">Địa chỉ mới <br><p>Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</p></h4>
-								
-								<button type="button" ng-if="check!=false" class="close" data-dismiss="modal">&times;</button>
-								
+								<h4 class="modal-title">Địa chỉ mới <br>
+									<p>Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</p>
+								</h4>
+
+								<button type="button" ng-if="check!=false" class="close"
+									data-dismiss="modal">&times;</button>
+
 							</div>
 
 							<!-- Modal body -->
-							<div class="modal-body " >
-								<div class=" card-body cart-wrap  ftco-animate" >
+							<div class="modal-body ">
+								<div class=" card-body cart-wrap  ftco-animate">
 									<form action="#" class="info .ftco-cart">
 										<div class="row">
 
 											<div class="form-group col-lg-6 col-md-6 col-sm-12">
 												<label for="">Họ Tên</label>
-												<input ng-model="form.nameReceiver" type="text" class="form-control text-left px-3" placeholder="">
+												<input ng-model="form.nameReceiver" type="text"
+													class="form-control text-left px-3" placeholder="">
 											</div>
 											<div class="form-group col-lg-6 col-md-6 col-sm-12">
 												<label for="">Số Điện Thoại</label>
-												<input ng-model="form.phone" type="text" class="form-control text-left px-3" placeholder="">
+												<input ng-model="form.phone" type="text"
+													class="form-control text-left px-3" placeholder="">
 											</div>
 
 										</div>
@@ -228,11 +251,9 @@
 											<select class="form-control form-control-lg address" id="province"
 												ng-model="form.selectedProvince"
 												ng-options="province.ProvinceName for province in provinces"
-												ng-change="loadDistricts()"
-												ng-selected="current_province"
-												>
+												ng-change="loadDistricts()" ng-selected="current_province">
 												<!-- <option value="" ng-show="" disabled ng-selected="selected">{{current_province.ProvinceName}}</option> -->
-												<option value=""  disabled selected>Chọn Tỉnh/Thành Phố</option>
+												<option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
 											</select>
 										</div>
 										<div class="form-group">
@@ -257,11 +278,15 @@
 
 										<div class="form-group">
 											<label for="comment">Địa chỉ cụ thể:</label>
-											<textarea ng-model="form.addressDetails" class="form-control text-left px-3"  rows="5" id="comment"></textarea>
-										  </div>
-										
-										<input ng-model="form.checked" ng-disabled="check!=true" class="check" type="checkbox" ng-checked="check==false">
-										<label data-toggle="tooltip" data-placement="top" title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặt định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này" for="check"> Đặt Làm Mặc Định</label>
+											<textarea ng-model="form.addressDetails" class="form-control text-left px-3"
+												rows="5" id="comment"></textarea>
+										</div>
+
+										<input ng-model="form.checked" ng-disabled="check!=true" class="check"
+											type="checkbox" ng-checked="check==false">
+										<label data-toggle="tooltip" data-placement="top"
+											title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặt định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này"
+											for="check"> Đặt Làm Mặc Định</label>
 									</form>
 
 								</div>
@@ -271,12 +296,15 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="createAddress(form.checked,form.nameReceiver,form.phone,form.addressDetails)"><i class="fa fa-plus"></i> Luu</a>
+									<a type="button" class="btn btn-success" data-dismiss="modal"
+										ng-click="createAddress(form.checked,form.nameReceiver,form.phone,form.addressDetails)"><i
+											class="fa fa-plus"></i> Luu</a>
 								</div>
 								<div style="justify-content: start">
-									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal" data-target="#ModalAddress1" data-dismiss="modal">Close</a>
+									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal"
+										data-target="#ModalAddress1" data-dismiss="modal">Close</a>
 								</div>
-								
+
 							</div>
 
 						</div>
@@ -285,8 +313,8 @@
 			</div>
 
 			<div class="row">
-				
-				<div class="col-lg-12 ftco-animate bg-white" >
+
+				<div class="col-lg-12 ftco-animate bg-white">
 					<div class="cart-total mb-3">
 						<div class=" row navtable text-center">
 							<div class="col-lg-4">Sản phẩm</div>
@@ -297,46 +325,48 @@
 
 						</div>
 						<div class="card ">
-							
-							<div class="card-body" >
-								
-							  <div class="row mb-2 text-center" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125)"  ng-repeat="iCart in cartIs" >
-								<div class="col-lg-4 d-flex align-items-center " >
-									<img class="pic-2 img-fluid" width="25%" ng-src="{{iCart.product.productImages[1].imagePath}}" >
+
+							<div class="card-body">
+
+								<div class="row mb-2 text-center" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125)"
+									ng-repeat="iCart in cartIs">
+									<div class="col-lg-4 d-flex align-items-center ">
+										<img class="pic-2 img-fluid" width="25%"
+											ng-src="{{iCart.product.productImages[1].imagePath}}">
 										<span style=" overflow: hidden;     display: -webkit-box;
 										-webkit-box-orient: vertical;
 										-webkit-line-clamp: 2;" class="ml-2">{{iCart.product.productName}} </span>
+									</div>
+									<div class="col-lg-2 align-items-center">
+
+										<p>Size: {{iCart.productDetail.size.sizeNumber}}, </p>
+										<p>Màu: {{iCart.productDetail.color.colorName}}</p>
+
+									</div>
+									<div class="col-lg-2  align-items-center">
+										{{iCart.product.price |number:0 }} ₫
+										</p>
+
+									</div>
+									<div class="col-lg-2  align-items-center">
+										x{{iCart.quantity}}
+
+
+									</div>
+									<div class="col-lg-2  align-items-center" style="position: relative;">
+										<h3>{{iCart.product.price * iCart.quantity|number:0 }} ₫</h3>
+									</div>
+
 								</div>
-								<div class="col-lg-2 align-items-center">
-									
-									<p>Size: {{iCart.productDetail.size.sizeNumber}}, </p>
-									<p>Màu: {{iCart.productDetail.color.colorName}}</p>
-									
-								</div>
-								<div class="col-lg-2  align-items-center">
-									{{iCart.product.price |number:0 }} ₫
-									</p>
-									
-								</div> 
-								<div class="col-lg-2  align-items-center">
-									x{{iCart.quantity}}
-									
-									
-								</div>
-								<div class="col-lg-2  align-items-center" style="position: relative;">
-									<h3 >{{iCart.product.price * iCart.quantity|number:0 }} ₫</h3>
-								</div>
-								
-							  </div>
 							</div>
-						  </div>
-						
+						</div>
+
 					</div>
 				</div>
 
 			</div>
 
-			
+
 			<div class="row justify-content-end">
 				<div class="col-lg-8 mt-5 cart-wrap ftco-animate bg-white">
 					<div class="cart-total mb-3">
@@ -356,14 +386,16 @@
 						<hr>
 						<p class="d-lg-flex total-price justify-content-end">
 							<span class="font-weight-bolder">Tổng Tiền</span>
-							<span>{{tongTien + shippingFee  | number:0 }} ₫</span>
+							<span>{{tongTien + shippingFee | number:0 }} ₫</span>
 						</p>
 						<div class=" d-flex justify-content-center mr-5">
 							<p></p>
 							<p>
 
-								<a ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4 ml-3 mr-2 ">Thanht toán khi nhận hàng</a>
-								<a ng-click="getDataPayment()" th:href ="@{/submitOrder}" class="btn btn-primary py-3 px-4">vnpayn</a>
+								<a ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4 ml-3 mr-2 ">Thanht toán
+									khi nhận hàng</a>
+								<a ng-click="getDataPayment()" th:href="@{/submitOrder}"
+									class="btn btn-primary py-3 px-4">vnpayn</a>
 							</p>
 						</div>
 					</div>
@@ -402,7 +434,7 @@
 		</div>
 	</section>
 
-	
+
 
 
 
