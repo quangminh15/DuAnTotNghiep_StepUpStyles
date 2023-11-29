@@ -1286,7 +1286,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 		if (selectedColors.length > 0) {
 			var selectedColorIds = Array.from(selectedColors).map(color => parseInt(color.value));
-			console.log("selectedColorIds", selectedColorIds);
 
 			loadProductDetails().then(() => {
 				filteredItems = filteredItems.filter(item => {
@@ -1300,8 +1299,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 					}
 					return false;
 				});
-
-				console.log("filteredItems:", filteredItems);
 
 				if (filteredItems.length === 0) {
 					Swal.fire({
@@ -1327,14 +1324,12 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 						$scope.productitems = filteredItems;
 						$scope.chuyenTrang();
 					});
-					$scope.chuyenTrang();
 				}
 			});
 		}
 
 		if (selectedSizes.length > 0) {
 			var selectedSizeIds = Array.from(selectedSizes).map(size => parseInt(size.value));
-			console.log("selectedSizeIds", selectedSizeIds);
 
 			loadProductDetails().then(() => {
 				filteredItems = filteredItems.filter(item => {
@@ -1349,15 +1344,12 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 					return false;
 				});
 
-				console.log("filteredItems:", filteredItems);
-
 				if (filteredItems.length === 0) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
 						text: 'Không có sản phẩm nào cả. Hãy thử các lựa chọn khác nhé',
 					});
-					$scope.chuyenTrang();
 					$scope.clearFilters();
 				} else {
 					filteredItems.forEach(items => {
@@ -1374,7 +1366,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 					loadProductDetails().then(() => {
 						$scope.productitems = filteredItems;
-						//Linh hiển thị sao trên sản phẩm khi lọc
+						// Hiển thị sao trên sản phẩm khi lọc
 						$scope.productitems.forEach(item => {
 							$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
 								$scope.all = resp.data;
@@ -1385,9 +1377,9 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 								console.log("Error", error);
 							});
 						});
-						//Linh end hiển thị sao trên sản phẩm khi lọc
+						// Kết thúc hiển thị sao trên sản phẩm khi lọc
+						$scope.chuyenTrang();
 					});
-					$scope.chuyenTrang();
 				}
 			});
 		}
@@ -1399,7 +1391,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 				text: 'Không có sản phẩm nào cả. Hãy thử các lựa chọn khác nhé',
 			});
 			$scope.clearFilters();
-			$scope.chuyenTrang();
 		} else {
 			filteredItems.forEach(items => {
 				$http.get("/rest/productimages/loadbyproduct/" + items.productID).then(resp => {
@@ -1415,7 +1406,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 			loadProductDetails().then(() => {
 				$scope.productitems = filteredItems;
-				//Linh hiển thị sao trên sản phẩm khi lọc
+				// Hiển thị sao trên sản phẩm khi lọc
 				$scope.productitems.forEach(item => {
 					$http.get("/rest/reviews/loadbyproducts/" + item.productID).then(resp => {
 						$scope.all = resp.data;
@@ -1426,12 +1417,10 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 						console.log("Error", error);
 					});
 				});
-				//Linh end hiển thị sao trên sản phẩm khi lọc
+				// Kết thúc hiển thị sao trên sản phẩm khi lọc
+				$scope.chuyenTrang();
 			});
-			$scope.chuyenTrang();
 		}
-
-		$scope.chuyenTrang();
 	};
 
 	//Hủy trạng thái đã chọn của check box
