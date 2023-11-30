@@ -1394,7 +1394,7 @@ app.controller("index-ctrl", function($scope, $http) {
 			var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
 			$scope.recentlyViewedProducts.unshift(viewedProduct);
 		}
-		var maxItems = 8;
+		var maxItems = 6;
 		if ($scope.recentlyViewedProducts.length > maxItems) {
 			$scope.recentlyViewedProducts.splice(maxItems);
 		}
