@@ -1,11 +1,57 @@
 <div class="content-wrapper">
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+		<div class="card-header bg-primary rounded-top">
+			<h3 class="mb-0 text-white">Danh sách đơn hàng</h3>
 
+		</div>
 		<div class="card-body" style="text-align: center;">
 			<div class="d-flex justify-content-between align-items-center">
-				
-				<h4 class="mb-0">Danh sách đơn hàng</h4>
+				<div class=" card-title d-flex py-3 badge badge-primary text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Tổng số Đơn hàng : {{allOrders.length}}
+
+					</span>
+
+				</div>
+				<div class=" card-title d-flex py-3  badge badge-primary text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Chờ xác nhận : {{allOrders.length}}
+
+					</span>
+
+				</div>
+				<div class=" card-title d-flex py-3  badge badge-info text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Đã xác nhận : {{allOrders.length}}
+
+					</span>
+
+				</div>
+				<div class=" card-title d-flex py-3  badge badge-warning text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Đang  giao : {{allOrders.length}}
+
+					</span>
+
+				</div><div class=" card-title d-flex py-3  badge badge-success text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Đã giao : {{allOrders.length}}
+					</span>
+
+				</div>
+				<div class=" card-title d-flex py-3  badge badge-danger text-white font-weight-bolder">
+					<!-- Thẻ select box -->
+					<span >
+						Đã Hủy : {{allOrders.length}}
+					</span>
+
+				</div>
 
 				<div class="d-flex">
 					<!-- Thẻ select box -->
@@ -20,14 +66,7 @@
 						<option value="shipped">Đã giao</option>
 						<option value="cancel">Đã hủy</option>
 					</select>
-					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
-						title="Xuất file Excel">
-						<span class="fa ti-file"></span>
-					</button>
-					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
-						title="Xuất file PDF">
-						<span class="ti-files"></span>
-					</button>
+					
 					<!-- Nút tìm kiếm -->
 					<button ng-click="searchProductByName()" class="btn btn-outline-info btn-fw mr-2"
 						data-toggle="tooltip" title="Tìm kiếm">
@@ -53,7 +92,7 @@
 					<tr ng-repeat="order in filteredOrders">
 						<td>{{$index +1}}</td>
 						<td>{{order.shippingAddress.nameReceiver}} </td>
-						<td>{{ order.orderDate | date: 'dd-MM-yyyy HH:mm:ss' }}</td>
+						<td>{{order.formattedDate }}</td>
 						<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
 						<td>{{order.totalAmount | number: 0 }} đ</td>
 						<td>{{order.paymentMenthod.paymentMenthodName }} <button
