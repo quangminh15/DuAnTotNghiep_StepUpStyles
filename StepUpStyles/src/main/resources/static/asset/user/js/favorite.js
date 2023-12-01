@@ -373,7 +373,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 			}
 			$scope.productitems = $scope.tempItems.filter(function (item) {
 				return item.avgrev >= selectedRating;
-			});
+			}); 
 
 			$scope.pager.first();
 		} else {
@@ -402,7 +402,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 			var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
 			$scope.recentlyViewedProducts.unshift(viewedProduct);
 		}
-		var maxItems = 8;
+		var maxItems = 6;
 		if ($scope.recentlyViewedProducts.length > maxItems) {
 			$scope.recentlyViewedProducts.splice(maxItems);
 		}
@@ -1251,12 +1251,6 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 					return selectedIds.includes(item[property][property + 'ID']);
 				});
 			}
-			//Linh test code lọc
-				// if (selectedRating) {
-				// 	filteredItems = filteredItems.filter(item => {
-				// 		return item.avgrev >= selectedRating;
-				// 	});
-				// }
 		};
 		var loadProductDetails = function () {
 			var promises = filteredItems.map(item => {

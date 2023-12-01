@@ -156,6 +156,7 @@ app.controller("review-ctrl", function($scope, $http){
 						title: 'Thất bại',
 						text: 'Không tìm thấy kết quả phù hợp!'
 					})
+					$scope.initialize();
 				}
 				$scope.pager.first();
 			})

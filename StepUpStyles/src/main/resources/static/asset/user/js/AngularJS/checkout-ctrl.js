@@ -460,7 +460,6 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 	$scope.voucherUseTrue = [];
 
 	$scope.getVoucher = function () {
-		var userId = 1;  
 		$http.get("/user/Idprofile").then((resp) =>{
 			var userId = resp.data;
 			$http.get("/user/" + userId).then(userResp =>{
@@ -475,6 +474,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			$scope.voucherUseTrue.forEach(function (item) {
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
+				item.isExpired = isVoucherExpired(item.voucher.dateEnd);
 			  });
 			  function formatDate(startDate) {
 				// Parse the input date string
@@ -497,6 +497,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
 			
 				return formattedDate;
+			}
+
+			function isVoucherExpired(endDate) {
+				// Phân tích chuỗi ngày kết thúc
+				const voucherEndDate = new Date(endDate);
+
+				// Lấy ngày hiện tại
+				const currentDate = new Date();
+
+				// So sánh ngày kết thúc với ngày hiện tại
+				return voucherEndDate < currentDate;
 			}
 		})
 			})

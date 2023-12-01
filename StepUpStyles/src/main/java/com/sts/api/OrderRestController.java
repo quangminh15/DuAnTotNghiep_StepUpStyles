@@ -102,24 +102,19 @@ public class OrderRestController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<OrderDetail>> findOrderDetailWithReview(
-            @RequestParam("orderId") Integer orderId) {
-       List<OrderDetail> orderDetail = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderId, 1);
-        if (orderDetail != null) {
-            return ResponseEntity.ok(orderDetail);
+    public ResponseEntity<Boolean> checkIfOrderDetailIsReviewed(@RequestParam("orderDetailId") Integer orderDetailId) {
+        Review review = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, 1);
+        boolean isReviewed = review != null;
+        return ResponseEntity.ok(isReviewed);
+    }
+
+    @GetMapping("/reviewDetail/{orderDetailId}")
+    public ResponseEntity<Review> findReview(@PathVariable("orderDetailId") Integer orderDetailId) {
+        Review rvDetail = orderService.findByReviewWithOrderDetail(orderDetailId);
+        if (rvDetail != null) {
+            return ResponseEntity.ok(rvDetail);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
-    // @GetMapping("/reviewDetail")
-    // public ResponseEntity<List<Review>> findReview(
-    //         @RequestParam("orderId") Integer orderId) {
-    //    List<Review> rvDetail = orderService.findByReviewWithOrderAndUser(orderId, 1);
-    //     if (rvDetail != null) {
-    //         return ResponseEntity.ok(rvDetail);
-    //     } else {
-    //         return ResponseEntity.notFound().build();
-    //     }
-    // }
 }

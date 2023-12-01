@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.ImportReceipt;
+import com.sts.model.DTO.ProductQuantityDTO;
 import com.sts.service.ImportReceiptService;
 
 @CrossOrigin("*")
@@ -57,5 +59,18 @@ public class ImportReceiptRestController {
     @PostMapping("/createImport")
     public ImportReceipt createImport(@RequestBody ImportReceipt importReceipt){
         return importService.create(importReceipt);
+    }
+
+    @GetMapping("/productQuantity")
+    public List<ProductQuantityDTO> getProductQuantity(
+        @RequestParam Integer month,
+        @RequestParam Integer year
+    ) {
+        return importService.getProductQuantityByMonthAndYear(month, year);
+    }
+
+    @GetMapping("/searchImport")
+    public List<ImportReceipt> searchImport(@RequestParam("keyword") String keyword) {
+        return importService.findByImportNameContaining(keyword);
     }
 }

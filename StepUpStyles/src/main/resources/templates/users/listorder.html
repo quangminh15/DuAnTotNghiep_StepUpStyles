@@ -107,14 +107,15 @@
 		aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" style="background-color: #FF912C; color: white;">
 					<h5 class="modal-title" id="reviewModalLabel">ĐÁNH GIÁ SẢN PHẨM</h5>
 				</div>
 				<div class="modal-body">
-					<div class="d-flex">
+					<div class="d-flex" style="margin-bottom: 10px;">
 						<img ng-src="{{prodOrder.image[1].imagePath}}" width="10%" class="mr-2">
-						<div class="mt-4">
-							<p>{{prodOrder.productName}}</p>
+						<div class="mt-2">
+							<p style="color: gray;">{{nameProduct}}</p>
+							<p style="color: gray;">Size: {{sizeProduct}}, Màu: {{colorProduct}}</p>
 						</div>
 					</div>
 					<div class='rating-stars text-center'>
@@ -136,7 +137,7 @@
 							</li>
 						</ul>
 					</div>
-					<form>
+					<form style="margin-top: 20px;">
 						<div class="form-group">
 							<textarea class="form-control" id="reviewText" rows="3" ng-model="title"
 								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
@@ -170,7 +171,7 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
-					<button class="btn btn-danger" ng-click="createReview(prodOrder.productID)">Hoàn thành</button>
+					<button class="btn btn-danger" ng-click="createReview()">Hoàn thành</button>
 				</div>
 			</div>
 		</div>
@@ -180,20 +181,48 @@
 		aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" style="background-color: #FF912C; color: white;">
 					<h5 class="modal-title" id="reviewModalDetail">XEM ĐÁNH GIÁ</h5>
 				</div>
 				<div class="modal-body">
 					<div class="d-flex">
-						<img ng-src="{{prods.image[1].imagePath}}" width="10%" class="mr-2">
-						<div class="mt-4">
-							<p>{{dataReview.product.productName}}</p>
-							<p>{{dataReview.rating}}</p>
+						<img ng-src="{{reviewedOrder.product.image[1].imagePath}}" width="10%" class="mr-2">
+						<div class="mt-2">
+							<p style="color: gray;">{{reviewedOrder.product.productName}}</p>
+							<p style="color: gray;">Size: {{reviewedOrder.orderDetail.productDetail.size.sizeNumber}}, Màu: {{reviewedOrder.orderDetail.productDetail.color.colorName}}</p>
 						</div>
 					</div>
-					<h1></h1>
 					<hr>
-					<h1></h1>
+					<div class="row mt-2">
+						<div class="col-sm-1 text-center">
+							<img src="/asset/user/images/N5.jpg" alt="Hình" class="img-fluid rounded-circle" style="width: 50px; object-fit: cover;">
+						</div>
+						<div class="col-sm-10">
+							<p class="mb-0">
+								<strong style="color: black;">{{reviewedOrder.user.fullName}}</strong>
+							</p>
+							<p class="mb-0" style="font-size: 12px;">{{reviewedOrder.reviewDate | date:'dd-MM-yyyy'}}</p>
+							<div class="rating mb-2 text-warning">
+								<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
+									ng-class="{'fa-star': star <= reviewedOrder.rating, 'fa-star-o': star > reviewedOrder.rating}"></span>
+							</div>
+							<p class="mb-2" style="word-wrap: break-word; color: black;">{{reviewedOrder.title}}</p>
+							<div>
+								<a ng-if="reviewedOrder.image1" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image1}}">
+									<img src="{{reviewedOrder.image1}}" class="fancybox"
+										style="width: 100px; height: 100px; object-fit: cover;">
+								</a>
+								<a ng-if="reviewedOrder.image2" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image2}}">
+									<img src="{{reviewedOrder.image2}}" class="fancybox"
+										style="width: 100px; height: 100px; object-fit: cover;">
+								</a>
+								<a ng-if="reviewedOrder.image3" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image3}}">
+									<img src="{{reviewedOrder.image3}}" class="fancybox"
+										style="width: 100px; height: 100px; object-fit: cover;">
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" data-dismiss="modal">Thoát</button>
@@ -314,7 +343,8 @@
 						</div>
 						<div class="col-md-4 d-flex justify-content-end">
 							<div>{{item.price|number:0}} ₫</div>
-							<button class="btn btn-danger ml-3" ng-click="showModalReview(item.productDetail.product)">Đánh giá</button>
+							<button class="btn btn-danger ml-3" ng-click="showModalReview(item)" ng-if="!item.hasBeenReviewed">Đánh giá</button>
+							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)" ng-if="item.hasBeenReviewed">Xem đánh giá</button>
 						</div>
 					</div>
 
