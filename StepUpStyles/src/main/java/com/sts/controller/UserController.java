@@ -51,6 +51,7 @@ public class UserController {
 	@RequestMapping("/about")
 	public String about(Model model) {
 
+
 		return "users/about";
 	}
 
@@ -75,7 +76,7 @@ public class UserController {
 
 	@RequestMapping("/contact")
 	public String contact(Model model) {
-
+		loadstatuslogin(model);
 		return "users/contact";
 	}
 
@@ -86,7 +87,7 @@ public class UserController {
 
 	@RequestMapping("/checkout")
 	public String checkout(Model model) {
-
+		loadstatuslogin(model);
 		return "users/checkout";
 	}
 
@@ -114,6 +115,7 @@ public class UserController {
 
 	@RequestMapping("/profile")
 	public String profile(Model model) {
+		loadstatuslogin(model);
 		Integer id = 0;
 		try {
 			id = userService.getUserIdCurrent();
@@ -131,6 +133,7 @@ public class UserController {
 
 	@RequestMapping("/profile-edit")
 	public String profile_edit(Model model) {
+		loadstatuslogin(model);
 		Integer id = 0;
 		try {
 			id = userService.getUserIdCurrent();
@@ -148,6 +151,7 @@ public class UserController {
 
 	@PostMapping("/profile-update-data")
 	public String process(Model model, @ModelAttribute("UserProfile") User user) {
+		loadstatuslogin(model);
 		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), userService.getUserIdCurrent());
 		return "redirect:/profile-edit";
 	}
@@ -481,6 +485,16 @@ public class UserController {
 			userService.create(user);
 		}
 		return "redirect:/index";
+	}
+
+	public void loadstatuslogin(Model model){
+		Integer userIdCurrent = userService.getUserIdCurrent();
+		if(userIdCurrent == null){
+			model.addAttribute("loginStatus","no");
+
+		}else{
+			model.addAttribute("loginStatus","ok");
+		}
 	}
 
 }
