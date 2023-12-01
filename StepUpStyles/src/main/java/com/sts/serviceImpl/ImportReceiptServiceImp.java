@@ -2,6 +2,9 @@ package com.sts.serviceImpl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import com.sts.dao.ImportReceiptDAO;
 import com.sts.dao.ImportReceiptDetailDAO;
 import com.sts.model.ImportReceipt;
 import com.sts.model.ImportReceiptDetail;
+import com.sts.model.DTO.ProductQuantityDTO;
 import com.sts.service.ImportReceiptService;
 
 @Service
@@ -72,5 +76,19 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
     public ImportReceipt create(ImportReceipt importReceipt) {
         return importDao.save(importReceipt);
     }
-    
+
+    @Transactional
+    @Override
+    public List<ProductQuantityDTO> getProductQuantityByMonthAndYear(Integer month, Integer year) {
+        List<Object[]> result = importDao.getProductQuantityByMonthAndYear(month, year);
+
+        return result.stream()
+            .map(arr -> new ProductQuantityDTO((String) arr[0], (Integer) arr[1]))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ImportReceipt> findByImportNameContaining(String keyword) {
+        return importDao.findByImportReceiptContaining(keyword);
+    }
 }

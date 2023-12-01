@@ -1,54 +1,78 @@
 <style>
+    .card {
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    /* Định dạng card-header */
+    .card-header {
+        background-color: #3498db;
+        color: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+
     /* CSS cho table */
     .table {
         width: 100%;
         border-collapse: collapse;
         border-spacing: 0;
     }
-    
+
+    /* Định dạng các input và select */
+    .form-control {
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
     /* CSS cho các hàng chẵn */
     tr:nth-child(even) {
         background-color: #f2f2f2;
     }
-    
+
     /* CSS cho header của bảng */
     .table th {
         background-color: #4CAF50;
         color: white;
         text-align: left;
     }
-    
+
     /* CSS cho các ô trong bảng */
-    .table td, .table th {
+    .table td,
+    .table th {
         padding: 12px 15px;
         border-bottom: 1px solid #ddd;
     }
-    </style>
-    <div class="main-content container-fluid">
-        <!-- <div class="row"> -->
-    
-            <!-- <div class="col-lg-6"> -->
-                <div class="card">
-                    <div class="card-header card-header-divider">
-    
-                        <span class="title">BIỂU ĐỒ</span><span class="card-subtitle">Thống
-                            kê tổng sản phẩm theo sao đánh giá</span>
-                    </div>
-                    <div class="card-body container">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <label for="">Năm</label>
-                                <select class="form-control" ng-model="selectedYear" ng-options="year for year in years" ng-change="updateChartData()">
-                                    <option value="">Chọn năm</option>
-                                </select>
-                            </div>
-                            </div>
-                        <canvas id="column-chart" height="80"></canvas>
-                    </div>
-                 </div>
+</style>
+<div class="main-content container-fluid">
+    <div class="card" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
+        <div class="rounded-top bg-primary card-header card-header-divider">
+            <span class="card-subtitle" style="color: white; font-size: 18px;">Thống kê số lượng sản phẩm đã nhập</span>
+        </div>
+        <div class="card-body container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="">Năm</label>
+                    <select class="form-control" ng-model="selectedYear" ng-options="year for year in years"
+                        ng-change="updateChartData()">
+                        <option value="">Chọn năm</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="">Tháng</label>
+                    <select class="form-control" ng-model="selectedMonth" ng-options="month for month in months"
+                        ng-change="updateChartData()">
+                        <option value="">Chọn tháng</option>
+                    </select>
+                </div>
             </div>
-    
-            <!-- <div class="col-md-6">
+            <canvas id="column-chart" height="80"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="col-md-6">
                 <div class="card card-table"
                     style="box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
                     <div
@@ -116,6 +140,6 @@
                     </div>
                 </div>
             </div> -->
-    
-        <!-- </div> -->
-    <!-- </div> -->
+
+<!-- </div> -->
+<!-- </div> -->
