@@ -2,6 +2,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.orders = []
 	$scope.allOrders = []
 	$scope.orderDetail = []
+	$scope.filteredOrders = [];
 	$scope.initialize = function () {
 
 		// $http.get(`/rest/order/listOrder`)
@@ -49,13 +50,15 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 
 				$scope.allOrders.sort((a, b) => {
-					
+
 					return new Date(b.orderDate) - new Date(a.orderDate);
-				  });
-				  $scope.pager.first()
+				});
+				$scope.filteredOrders = angular.copy($scope.allOrders);
+									console.log("test", $scope.filteredOrders);
+				$scope.pager.first()
 				$scope.orders.forEach(item => {
 
-
+					item.orderDate = new Date(order.orderDate);
 					$http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
 						.then(respone => {
 							$scope.orderDetail = respone.data
@@ -66,6 +69,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 								$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
 									orderdetails.image = resp.data;
 									console.log("s2", orderdetails.image);
+									
 
 								})
 
@@ -77,14 +81,14 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				console.error('Error fetching cart items:', error);
 			});
 
-
+			$scope.selectedActivity = 'all'
 	}
 	$scope.initialize()
 
 	$scope.pager = {
 		page: 0,
 		size: 10,
-		getPageNumbers: function() {
+		getPageNumbers: function () {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
 			var visiblePages = [];
@@ -179,11 +183,34 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			return 0;
 		});
 	};
+	$scope.formatDate = function(dateString) {
+		// Assuming dateString is a string representation of the date received from the server
+		const date = new Date(dateString);
+		// Check if date is valid
+		if (!isNaN(date.getTime())) {
+			return $filter('date')(date, 'dd-MM-yyyy HH:mm:ss');
+		} else {
+			return 'Invalid Date';
+		}
+	};
 	
-	$scope.updateStatus=function (id,status) {
+	$scope.updateStatus = function (id, status) {
+		var vnStatus='';
+		if(status=='Confirmed'){
+			vnStatus="Đã xác nhận"
+		}
+		else if(status=='Shipping'){
+			vnStatus="Đang giao"
+		}
+		else if(status=='Delivered'){
+			vnStatus="Đã giao"
+		}
+		else if(status=='Cancel'){
+			vnStatus="Đã hủy"
+		}
 		Swal.fire({
 			title: "Cập nhật đơn hàng",
-			text: "Xác nhận cập nhật thái của đơn hàng thành "+status,
+			text: "Xác nhận cập nhật thái của đơn hàng thành " + vnStatus,
 			icon: "info",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
@@ -193,19 +220,41 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 		}).then((result) => {
 			if (result.isConfirmed) {
 				$http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
-		.then(respone=>{
-			alert("status update")
-			$scope.initialize()
-		}).catch(function (error) {
-			console.error('Error update:', error);
-		});
+					.then(respone => {
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer)
+								toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+							
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Cập nhật thành công',
+
+						})
+						$scope.initialize()
+					}).catch(function (error) {
+						console.error('Error update:', error);
+					});
 
 			}
 		});
-		
+
 	}
-	
-	
+	$scope.calculateItemTotal = function (item) {
+		let totalQuantity = 0;
+		for (let i = 0; i < $scope.orderDetail.length; i++) {
+			totalQuantity += $scope.orderDetail[i].quantity;
+		}
+		return totalQuantity;
+	};
+
 	$scope.viewDetail = function (id) {
 		$http.get(`/rest/order/single?orderid=${id}`)
 			.then(resp => {
@@ -219,6 +268,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				console.log("orderdetaill", $scope.orderDetail);
 
 				$scope.orderDetail.forEach(orderdetails => {
+					$scope.calculateItemTotal(orderdetails)
 					console.log("s1", orderdetails.productDetail.product.productID);
 					$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
 						orderdetails.image = resp.data;
@@ -228,5 +278,54 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 				})
 			})
+	}
+
+	$scope.filterByStatus = function () {
+		$scope.filteredOrders = angular.copy($scope.allOrders);
+		
+		if ($scope.selectedActivity === "newest" || $scope.selectedActivity === "all") {
+			$scope.filteredOrders.sort((a, b) => {
+
+				return new Date(b.orderDate) - new Date(a.orderDate);
+			});
+
+		} else if ($scope.selectedActivity === "oldest") {
+			$scope.filteredOrders.sort((b, a) => {
+
+				return new Date(b.orderDate) - new Date(a.orderDate);
+			});
+		} else {
+			if ($scope.selectedActivity === "pending") {
+				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+					return order.orderStatus == 'Pending';
+				})
+
+			} else if ($scope.selectedActivity === "confirmed") {
+				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+					return order.orderStatus == 'Confirmed';
+				})
+
+			} else if ($scope.selectedActivity === "shipping") {
+				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+					return order.orderStatus == 'Shipping';
+				})
+
+			} else if ($scope.selectedActivity === "shipped") {
+				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+					return order.orderStatus == 'Delivered';
+				})
+
+			}else if ($scope.selectedActivity === "cancel") {
+				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+					return order.orderStatus == 'Cancel';
+				})
+
+			}
+		}
 	}
 }])

@@ -72,8 +72,12 @@
 					<div class="card card-light-blue">
 						<div class="card-body">
 							<p class="mb-4">Tổng số đơn hàng</p>
-							<p class="fs-30 mb-2">34040</p>
-							<p>2.00% (30 days)</p>
+							<p class="fs-30 mb-2">{{totalOrders}} Đơn Hàng </p>
+							<div class="row">
+								<p class="col-md-4">Đơn hàng trong năm:{{ordersThisMonth}}</p>
+								<p class="col-md-4">Hết hàng: {{ outOfStockCount }}</p>
+								<p class="col-md-4">Gần hết: {{ nearlyOutOfStockCount }}</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -109,64 +113,48 @@
 														class="table table-striped table-borderless table-hover">
 														<thead style="background-color: beige;">
 															<tr>
-																<th>Product</th>
-																<th>Price</th>
+																<th>STT</th>
+																<th>Người nhận</th>
+																<th>Ngày đặt</th>
 																<th>Date</th>
 																<th>Status</th>
 															</tr>
 														</thead>
 														<tbody>
-															<tr>
-																<td>Search Engine Marketing</td>
+															<tr ng-repeat="item in pagerOrder.filteredOrders ">
+																<td>{{$index +1}}</td>
+																<td>{{item.shippingAddress.nameReceiver}}</td>
+																<td>{{item.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
 																<td class="font-weight-bold">$362</td>
 																<td>21 Sep 2018</td>
 																<td class="font-weight-medium"><div
-																		class="badge badge-success">Completed</div></td>
+																		class="badge badge-primary	">Chờ xác nhận</div></td>
 															</tr>
-															<tr>
-																<td>Search Engine Optimization</td>
-																<td class="font-weight-bold">$116</td>
-																<td>13 Jun 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-success">Completed</div></td>
-															</tr>
-															<tr>
-																<td>Display Advertising</td>
-																<td class="font-weight-bold">$551</td>
-																<td>28 Sep 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-warning">Pending</div></td>
-															</tr>
-															<tr>
-																<td>Pay Per Click Advertising</td>
-																<td class="font-weight-bold">$523</td>
-																<td>30 Jun 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-warning">Pending</div></td>
-															</tr>
-															<tr>
-																<td>E-Mail Marketing</td>
-																<td class="font-weight-bold">$781</td>
-																<td>01 Nov 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-danger">Cancelled</div></td>
-															</tr>
-															<tr>
-																<td>Referral Marketing</td>
-																<td class="font-weight-bold">$283</td>
-																<td>20 Mar 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-warning">Pending</div></td>
-															</tr>
-															<tr>
-																<td>Social media marketing</td>
-																<td class="font-weight-bold">$897</td>
-																<td>26 Oct 2018</td>
-																<td class="font-weight-medium"><div
-																		class="badge badge-success">Completed</div></td>
-															</tr>
+															
 														</tbody>
 													</table>
+													<div class="d-flex justify-content-end">
+														<div>
+															<ul class="pagination">
+																<li class="page-item">
+																	<button ng-click="pager.first()" class="page-link">
+																		<span class="ti-angle-double-left"></span>
+																	</button>
+																</li>
+
+																<li class="page-item" ng-repeat="page in visiblePages"
+																	ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+																	class="page-link" href=""
+																	ng-click="pager.goto(page.value)">{{ page.value }}</a></li>
+
+																<li class="page-item">
+																	<button ng-click="pager.last()" class="page-link">
+																		<span class="ti-angle-double-right"></span>
+																	</button>
+																</li>
+															</ul>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>

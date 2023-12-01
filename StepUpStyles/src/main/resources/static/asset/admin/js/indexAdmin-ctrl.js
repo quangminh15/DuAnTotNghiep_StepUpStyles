@@ -1,9 +1,11 @@
-app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
+app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 	//quangminh bắt đầu 
 	$scope.totalQuantity = 0;
 	$scope.productdetailitemss = [];
 	$scope.outOfStockCount = [];
 	$scope.nearlyOutOfStockCount = [];
+	$scope.listorder = []
+	$scope.filteredOrders=[]
 
 	//Tính tổng số lượng sản phẩm sản phẩm
 	function SumQuantity(productdetailitems) {
@@ -75,7 +77,7 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 	];
 
 
-	$scope.sortByColumn = function(columnName) {
+	$scope.sortByColumn = function (columnName) {
 		if ($scope.sortColumn === columnName) {
 			$scope.sortReverse = !$scope.sortReverse;
 		} else {
@@ -83,7 +85,7 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 			$scope.sortReverse = false;
 		}
 
-		$scope.productdetailitemss.sort(function(a, b) {
+		$scope.productdetailitemss.sort(function (a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
 			if (columnName === 'product.productName') {
@@ -115,7 +117,7 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 	$scope.pager = {
 		page: 0,
 		size: 10,
-		getPageNumbers: function() {
+		getPageNumbers: function () {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
 			var visiblePages = [];
@@ -175,7 +177,7 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 		},
 	};
 
-	$scope.initialize = function() {
+	$scope.initialize = function () {
 		//load productdetailitemss 
 		$http.get("/rest/productdetails/loadall").then(resp => {
 			$scope.productdetailitemss = resp.data;
@@ -193,7 +195,7 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 			console.error("Error loading product details:", error);
 		});
 
-		$scope.hasData = function() {
+		$scope.hasData = function () {
 			return $scope.productdetailitemss && $scope.productdetailitemss.length > 0;
 		};
 	}
@@ -202,5 +204,116 @@ app.controller("indexAdmin-ctrl", function($scope, $http, $interval) {
 
 	//quangminh kết thúc
 
+	//Long Hai start
+	//Load danh sách đơn hàng
+	$http.get(`/rest/order/listOrder/all`)
+		.then(resp => {
+			$scope.listorder = resp.data
 
+			//Tổng đơn hàng
+			$scope.totalOrders = $scope.listorder.length
+
+			$scope.totalOrders = $scope.listorder.length;
+
+			// Get current date
+			const currentDate = new Date();
+
+			// Calculate start and end dates for week, month, and year
+			const startOfWeek = new Date(currentDate);
+			startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Go to the start of the current week (Sunday)
+			const endOfWeek = new Date(startOfWeek);
+			endOfWeek.setDate(endOfWeek.getDate() + 6); // Go to the end of the current week (Saturday)
+
+			const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+			const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+			const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+			const endOfYear = new Date(currentDate.getFullYear(), 11, 31);
+
+			// Filter orders for week, month, and year
+			$scope.ordersThisWeek = $scope.listorder.filter(order => {
+				const orderDate = new Date(order.orderDate);
+				return orderDate >= startOfWeek && orderDate <= endOfWeek;
+			}).length;
+
+			$scope.ordersThisMonth = $scope.listorder.filter(order => {
+				const orderDate = new Date(order.orderDate);
+				return orderDate >= startOfMonth && orderDate <= endOfMonth;
+			}).length;
+
+			$scope.ordersThisYear = $scope.listorder.filter(order => {
+				const orderDate = new Date(order.orderDate);
+				return orderDate >= startOfYear && orderDate <= endOfYear;
+			}).length;
+
+
+			$scope.filteredOrders = $scope.listorder.filter(order => {
+				return order.orderStatus === 'Pending';
+			});
+			console.log($scope.filteredOrders);
+		})
+		.catch(error => {
+			console.error('Error fetching orders:', error);
+		});
+
+		$scope.pagerOrder = {
+			page: 0,
+			size: 10,
+			getPageNumbers: function () {
+				var pageCount = this.count;
+				var currentPage = this.page + 1;
+				var visiblePages = [];
+	
+				if (pageCount <= 3) {
+					for (var i = 1; i <= pageCount; i++) {
+						visiblePages.push({ value: i });
+					}
+				} else {
+					if (currentPage <= 2) {
+						visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+					} else if (currentPage >= pageCount - 1) {
+						visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+					} else {
+						visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+					}
+				}
+				return visiblePages;
+			},
+			get filteredOrders() {
+				var start = this.page * this.size;
+				return $scope.filteredOrders.slice(start, start + this.size);
+			},
+			get count() {
+				return Math.ceil(1.0 * $scope.filteredOrders.length / this.size);
+			},
+			first() {
+				this.page = 0;
+				$scope.visiblePages = this.getPageNumbers();
+			},
+			prev() {
+				this.page--;
+				if (this.page < 0) {
+					this.last();
+				}
+				$scope.visiblePages = this.getPageNumbers();
+			},
+			next() {
+				this.page++;
+				if (this.page >= this.count) {
+					this.first();
+				}
+				$scope.visiblePages = this.getPageNumbers();
+			},
+			last() {
+				this.page = this.count - 1;
+				$scope.visiblePages = this.getPageNumbers();
+			},
+			goto(pageNumber) {
+				if (pageNumber >= 1 && pageNumber <= this.count) {
+					this.page = pageNumber - 1;
+					$scope.visiblePages = this.getPageNumbers();
+				}
+			},
+		};
+	//Long Hai end
 });

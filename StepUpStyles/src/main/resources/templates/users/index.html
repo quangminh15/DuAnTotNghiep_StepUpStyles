@@ -278,7 +278,7 @@
 								Sản phẩm tiêu biểu <span>HOT</span>
 							</h3>
 							<p>Xem video để hiểu rõ hơn về sản phẩm.</p>
-							<a href="list_products.html" class="read-more btn"> Xem ngay
+							<a href="/list_products" class="read-more btn"> Xem ngay
 							</a>
 						</div>
 					</div>
@@ -297,7 +297,7 @@
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
 				<div class="ecom-products-grids row ">
-					<div ng-repeat="p in FeaturedPager.featureds"
+					<div ng-repeat="p in FeaturedPager.featureds" ng-click="addToRecentlyViewed(p)"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv"
 							ng-click="saveProductID(p.productID)">
@@ -387,7 +387,7 @@
 					deal shock nhé!</p>
 				<!-- /row-->
 				<div class="ecom-products-grids row ">
-					<div ng-repeat="p in DiscountPager.discountedProducts"
+					<div ng-repeat="p in DiscountPager.discountedProducts" ng-click="addToRecentlyViewed(p)"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv"
 							ng-click="saveProductID(p.productID)">

@@ -2,7 +2,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
     $scope.orders = []
     $scope.orderDetail = []
     $scope.filterStaus = []
-    $scope.reviewedOrderDetails = []
+    const reviewedOrderDetails = {}
     $scope.initialize = function () {
 
         $http.get(`/rest/order/listOrder`)
@@ -15,46 +15,50 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                 console.log("1", $scope.orders.shippingAddress)
 
 
-                $scope.orders.forEach(item => {
-                    // $scope.checkReviewd(item.orderId)
+                $scope.orders.forEach(item => {  
+                            $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
+                                .then(respone => {
+                                    item.orderDetail = respone.data
+                                    $scope.filterByStatusAndCheck(null)
+                                    console.log("order", item.orderDetail);
+                                    item.orderDetail.forEach(orderdetails => {
+                                        $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
+                                            orderdetails.productDetail.product.productImages = resp.data;
+                                        })
 
-                    //    
-                    $http.get(`/rest/order/find?orderId=${item.orderId}`)
-                        .then(function (response) {
-                            $scope.reviewedOrderDetails = response.data;
-                        }).catch(function (error) {
-                            console.error('Error fetching cart items:', error);
-                        });
+                                    })
+
+                                })
                     //
 
 
-                    $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
-                        .then(respone => {
-                            item.orderDetail = respone.data
-                            $scope.filterByStatusAndCheck(null)
-                            console.log("order", $scope.orderDetail);
-                            item.orderDetail.forEach(orderdetails => {
-                                console.log("id", orderdetails.orderDetailId);
-                                $scope.checkrv = false
-                                // Kiểm tra nếu orderDetail.orderId tồn tại trong reviewedOrderDetails
-                                const isReviewed = $scope.reviewedOrderDetails.some(reviewedItem => reviewedItem.orderDetailId === orderdetails.orderDetailId);
-                                orderdetails.hasReviewed = isReviewed;
-                                if (isReviewed) {
-                                    console.log(`Order ${orderdetails.orderDetailId} đã được đánh giá.`);
-                                    // Gán thuộc tính hasReviewed vào orderDetail
-                                    $scope.checkrv = true;
-                                } else {
-                                    console.log(`Order ${orderdetails.orderDetailId} chưa được đánh giá.`);
-                                    $scope.checkrv = false;
-                                }
-                                console.log($scope.checkrv);
-                                $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-                                    orderdetails.productDetail.product.productImages = resp.data;
-                                })
+                    // $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
+                    //     .then(respone => {
+                    //         item.orderDetail = respone.data
+                    //         $scope.filterByStatusAndCheck(null)
+                    //         console.log("order", $scope.orderDetail);
+                    //         item.orderDetail.forEach(orderdetails => {
+                    //             console.log("id", orderdetails.orderDetailId);
+                    //             $scope.checkrv = false
+                    //             // Kiểm tra nếu orderDetail.orderId tồn tại trong reviewedOrderDetails
+                    //             const isReviewed = $scope.reviewedOrderDetails.some(reviewedItem => reviewedItem.orderDetailId === orderdetails.orderDetailId);
+                    //             orderdetails.hasReviewed = isReviewed;
+                    //             if (isReviewed) {
+                    //                 console.log(`Order ${orderdetails.orderDetailId} đã được đánh giá.`);
+                    //                 // Gán thuộc tính hasReviewed vào orderDetail
+                    //                 $scope.checkrv = true;
+                    //             } else {
+                    //                 console.log(`Order ${orderdetails.orderDetailId} chưa được đánh giá.`);
+                    //                 $scope.checkrv = false;
+                    //             }
+                    //             console.log($scope.checkrv);
+                    //             $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
+                    //                 orderdetails.productDetail.product.productImages = resp.data;
+                    //             })
 
-                            })
+                    //         })
 
-                        })
+                    //     })
                 });
             })
             .catch(function (error) {
@@ -64,82 +68,59 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
         console.log("orders", $scope.orders);
 
         console.log("1", $scope.orders.shippingAddress)
+    }
+    $scope.initialize()
 
-        $scope.initialize()
+    $scope.updateStatus = function (id, status) {
 
-        $scope.updateStatus = function (id, status) {
+        $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
+            .then(respone => {
+                alert("status update")
+                $scope.initialize()
+            }).catch(function (error) {
+                console.error('Error update:', error);
+            });
+    }
 
-            $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
-                .then(respone => {
-                    alert("status update")
-                    $scope.initialize()
-                }).catch(function (error) {
-                    console.error('Error update:', error);
-                });
-        }
-
-        // Hàm lọc đánh giá theo số sao
+        // 
         $scope.filterByStatus = function (status) {
 
-            if (status == null) {
-                $scope.filterStaus = $scope.orders;
+        if (status == null) {
+            $scope.filterStaus = $scope.orders;
 
-            } else {
-                $scope.filterStaus = $scope.orders.filter(function (order) {
+        } else {
+            $scope.filterStaus = $scope.orders.filter(function (order) {
 
-                    return order.orderStatus == status;
-                })
-
-            }
-        }
-        $scope.activeStatus = null
-        $scope.filterByStatusAndCheck = function (status) {
-
-            $scope.filterByStatus(status)
-            $scope.activeStatus = status;
-            if ($scope.filterStaus.length < 1) {
-                $scope.checkList = true;
-            } else {
-
-                $scope.checkList = false;
-            }
+                return order.orderStatus == status;
+            })
 
         }
+    }
+    $scope.activeStatus = null
+    $scope.filterByStatusAndCheck = function (status) {
 
+        $scope.filterByStatus(status)
+        $scope.activeStatus = status;
+        if ($scope.filterStaus.length < 1) {
+            $scope.checkList = true;
+        } else {
 
-        $scope.isActiveStatus = function (status) {
-            return $scope.activeStatus === status;
-        };
-
-        $scope.orders.forEach(item => {
-
-
-            $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
-                .then(respone => {
-                    $scope.orderDetail = respone.data
-                    console.log("order", $scope.orderDetail);
-
-                    $scope.orderDetail.forEach(orderdetails => {
-                        console.log("s1", orderdetails.productDetail.product.productID);
-                        $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-                            orderdetails.image = resp.data;
-                            console.log("s2", orderdetails.image);
-
-                        })
-
-
-
-                    })
-                });
-        })
-            .catch(function (error) {
-                console.error('Error fetching cart items:', error);
-            });
-
-
-
+            $scope.checkList = false;
+        }
 
     }
+
+
+    $scope.isActiveStatus = function (status) {
+        return $scope.activeStatus === status;
+    };
+
+
+
+
+
+
+
     $scope.prodOrder = []
     $scope.showModalReview = function (product) {
         $http.get("/rest/products/" + product.productID)
@@ -287,18 +268,15 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
             });
     };
 
-    $scope.showModalReviewDetail = function(od){
+    $scope.showModalReviewDetail = function (od) {
         // alert(od.orderDetailId)
         // $http.get("/rest/order/reviewDetail/"+od.orderDetailId)
         // .then((res) => {
         //     $scope.dataReview = res.data
         //     console.log("Có dữ liệu hông",$scope.dataReview);
         // }).catch((err) => {
-            
+
         // });
         $('#reviewDetail').modal('show');
     }
-
-    
-
 }])
