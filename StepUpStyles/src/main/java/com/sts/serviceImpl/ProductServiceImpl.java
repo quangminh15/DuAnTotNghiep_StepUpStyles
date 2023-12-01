@@ -13,12 +13,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.sts.dao.BrandDAO;
 import com.sts.dao.CategoryDAO;
 import com.sts.dao.DirectDiscountDAO;
 import com.sts.dao.ProductDAO;
+import com.sts.model.Brand;
 import com.sts.model.Category;
 import com.sts.model.DirectDiscount;
 import com.sts.model.Product;
+import com.sts.model.DTO.BrandProductCountDTO;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
 
@@ -29,7 +32,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	CategoryDAO categoryDAO;
-	
+
+	@Autowired
+	BrandDAO brandDAO;
+
 	@Autowired
 	DirectDiscountDAO discountDAO;
 
@@ -109,6 +115,33 @@ public class ProductServiceImpl implements ProductService {
 		return categoryProductCounts;
 	}
 
+	@Override
+	public List<BrandProductCountDTO> getBrandProductCount() {
+		List<BrandProductCountDTO> brandProductCounts = new ArrayList<>();
+
+		// Lấy danh sách danh mục
+		List<Brand> brands = brandDAO.findAll();
+
+		for (Brand brand : brands) {
+			// Sử dụng JPQL để lấy tổng số lượng sản phẩm theo danh mục
+			TypedQuery<Long> query = entityManager.createQuery(
+					"SELECT SUM(pd.quantity) FROM ProductDetail pd WHERE pd.product.brand = :brand", Long.class);
+			query.setParameter("brand", brand);
+
+			// Thực hiện truy vấn và lấy kết quả
+			Long productCount = query.getSingleResult();
+
+			if (productCount == null) {
+				productCount = 0L;
+			}
+
+			// Tạo một đối tượng CategoryProductCountDTO và thêm vào danh sách
+			BrandProductCountDTO countDTO = new BrandProductCountDTO(brand.getBrandName(), productCount);
+			brandProductCounts.add(countDTO);
+		}
+		return brandProductCounts;
+	}
+
 	// Đếm số lượng sản phẩm trong mỗi danh mục dựa trên ProductDetail
 	@Override
 	public Long countProductsByCategory(Category category) {
@@ -145,18 +178,18 @@ public class ProductServiceImpl implements ProductService {
 		// Triển khai logic để tìm sản phẩm tương tự dựa trên categoryID ở đây
 		return productDAO.findSimilarProductsByCategory(categoryID);
 	}
-	
+
 	@Override
 	public List<Product> getProductsByBrandID(Integer brandID) {
-	    return productDAO.getProductsByBrandID(brandID);
+		return productDAO.getProductsByBrandID(brandID);
 	}
 
 	@Override
 	public Product getProductById(Integer productId) {
-        // Sử dụng ProductDao để truy vấn sản phẩm từ cơ sở dữ liệu
-        Optional<Product> product = productDAO.findById(productId);
-        return product.orElse(null); // Hoặc xử lý trường hợp sản phẩm không tồn tại
-    }
+		// Sử dụng ProductDao để truy vấn sản phẩm từ cơ sở dữ liệu
+		Optional<Product> product = productDAO.findById(productId);
+		return product.orElse(null); // Hoặc xử lý trường hợp sản phẩm không tồn tại
+	}
 
 	public List<Product> getProductsByCategoryID(Integer categoryID) {
 		return productDAO.getProductsByCategoryID(categoryID);
@@ -165,15 +198,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> loadDiscountedProducts() {
 		List<Product> discountedProducts = new ArrayList<>();
-	    List<DirectDiscount> directDiscounts = discountDAO.findByStatus("Chưa diễn ra");
+		List<DirectDiscount> directDiscounts = discountDAO.findByStatus("Chưa diễn ra");
 
-	    for (DirectDiscount discount : directDiscounts) {
-	        if (discount.getProduct() != null) {
-	            discountedProducts.add(discount.getProduct());
-	        }
-	    }
+		for (DirectDiscount discount : directDiscounts) {
+			if (discount.getProduct() != null) {
+				discountedProducts.add(discount.getProduct());
+			}
+		}
 
-	    return discountedProducts;
+		return discountedProducts;
 	}
 
 }

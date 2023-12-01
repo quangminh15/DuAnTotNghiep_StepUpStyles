@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.sts.model.Category;
 import com.sts.model.Product;
+import com.sts.model.DTO.BrandProductCountDTO;
 import com.sts.model.DTO.CategoryProductCountDTO;
 
 public interface ProductService {
@@ -29,6 +30,8 @@ public interface ProductService {
 	List<Product> searchByName(String keyword);
 
 	List<CategoryProductCountDTO> getCategoryProductCount();
+	
+	List<BrandProductCountDTO> getBrandProductCount();
 
 //	List<Product> loadAllNoDeletedAndActivitiesTrue();
 
