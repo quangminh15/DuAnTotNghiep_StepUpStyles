@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sts.model.ImportReceipt;
 import com.sts.model.ImportReceiptDetail;
+import com.sts.model.DTO.ProductQuantityDTO;
 
 public interface ImportReceiptService {
 
@@ -22,5 +23,9 @@ public interface ImportReceiptService {
     List<ImportReceiptDetail> getByImport(Long importReceiptId);
 
     ImportReceipt create(ImportReceipt importReceipt);
+
+    List<ProductQuantityDTO> getProductQuantityByMonthAndYear(Integer month, Integer year);
+
+    List<ImportReceipt> findByImportNameContaining(String keyword);
     
 }

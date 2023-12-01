@@ -59,5 +59,10 @@ public class VoucherServiceImpl implements VoucherService {
         return voucherDao.findByDeletedFalseAndDateEndGreaterThan(currentDate);
     }
 
+    @Override
+    public List<Voucher> findByVoucherContaining(String keyword) {
+        return voucherDao.findByVoucherContaining(keyword);
+    }
+
      
 }
