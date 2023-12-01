@@ -54,11 +54,15 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					return new Date(b.orderDate) - new Date(a.orderDate);
 				});
 				$scope.filteredOrders = angular.copy($scope.allOrders);
-									console.log("test", $scope.filteredOrders);
+								
+				$scope.filteredOrders.forEach(item=>{
+
+					item.formattedDate=formatDate(item.orderDate)
+				})
 				$scope.pager.first()
 				$scope.orders.forEach(item => {
-
-					item.orderDate = new Date(order.orderDate);
+					//định dạng
+				
 					$http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
 						.then(respone => {
 							$scope.orderDetail = respone.data
@@ -183,16 +187,29 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			return 0;
 		});
 	};
-	$scope.formatDate = function(dateString) {
-		// Assuming dateString is a string representation of the date received from the server
-		const date = new Date(dateString);
-		// Check if date is valid
-		if (!isNaN(date.getTime())) {
-			return $filter('date')(date, 'dd-MM-yyyy HH:mm:ss');
-		} else {
-			return 'Invalid Date';
-		}
-	};
+	
+
+	function formatDate(date) {
+		// Parse the input date string
+		const inputDate = new Date(date);
+	
+		// format gio VN
+		const options = {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false, // 24-hour format
+			timeZone: 'Asia/Ho_Chi_Minh', //  time zone
+		};
+	
+		// Format the date using Intl.DateTimeFormat
+		const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+	
+		return formattedDate;
+	}
 	
 	$scope.updateStatus = function (id, status) {
 		var vnStatus='';

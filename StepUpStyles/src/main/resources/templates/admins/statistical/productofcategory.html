@@ -30,8 +30,9 @@ tr:nth-child(even) {
 		<div class="col-lg-6">
 			<div class="card mb-5"
 				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
-				<div class="card-header card-header-divider">
-					<span class="title">Thống kê số lượng sản phẩm theo danh mục</span>
+				<div class="rounded-top bg-primary card-header card-header-divider">
+					<span class="title text-white">Thống kê số lượng sản phẩm
+						theo danh mục</span>
 				</div>
 				<div class="card-body">
 					<canvas id="polar-chart" height="200"></canvas>
@@ -43,14 +44,17 @@ tr:nth-child(even) {
 			<div class="card mb-5"
 				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 				<div
-					class="card-header d-flex justify-content-between align-items-center">
-					<h4 class="mb-0"
-						style="font-size: 25px; font-weight: 500; font-style: italic;">Danh
-						sách sản phẩm theo danh mục</h4>
-					<div class="d-flex align-items-center">
+					class="card-header rounded-top  bg-primary d-flex justify-content-between align-items-center">
+					<span class="title mb-0 text-white">Danh sách sản phẩm theo
+						danh mục</span>
+					
+				</div>
+				<div class="card-body">
+				<div class="d-flex align-items-center mb-3">
+				<label style="margin-right: 10px;">Chọn danh mục để lọc </label>
 						<select id="categorySelect" class="form-control"
 							ng-model="selectedCategory" ng-change="loadProductsByCategory()"
-							style="width: 230px; height: 50px;" data-toggle="tooltip"
+							style="width: 230px; height: 35px;" data-toggle="tooltip"
 							title="Chọn danh mục để lọc">
 							<option value="" disabled selected>Vui lòng chọn danh
 								mục</option>
@@ -58,8 +62,6 @@ tr:nth-child(even) {
 								value="{{category.categoryID}}">{{category.categoryName}}</option>
 						</select>
 					</div>
-				</div>
-				<div class="card-body">
 					<table class="table table-hover">
 						<thead style="font-size: 18px; font-style: italic;">
 							<tr>
