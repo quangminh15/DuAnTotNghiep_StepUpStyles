@@ -1,8 +1,12 @@
 package com.sts.api;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,15 +50,20 @@ public class OrderRestController {
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") double initialPrice,
             @RequestParam("fee") double fee,
-            @RequestParam("addressId") int addressId) {
+            @RequestParam("addressId") int addressId,
+            @RequestParam( "discountPrice") Double discountPrice,
+            @RequestParam("voucherUseId")Long voucherUID) {
         try {
             // Handle the list of CartData objects
             System.out.println(fee);
             System.out.println(initialPrice);
             System.out.println(addressId);
 
-            Order order = orderService.createOrder(cartDataList, initialPrice, fee, addressId, false);
-
+            
+           
+    
+            Order order = orderService.createOrder(cartDataList, initialPrice, fee, addressId, false,
+                    discountPrice, voucherUID);
             // Create a success response
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");
@@ -104,7 +113,7 @@ public class OrderRestController {
     @GetMapping("/find")
     public ResponseEntity<List<OrderDetail>> findOrderDetailWithReview(
             @RequestParam("orderId") Integer orderId) {
-       List<OrderDetail> orderDetail = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderId, 1);
+        List<OrderDetail> orderDetail = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderId, 1);
         if (orderDetail != null) {
             return ResponseEntity.ok(orderDetail);
         } else {
@@ -114,12 +123,13 @@ public class OrderRestController {
 
     // @GetMapping("/reviewDetail")
     // public ResponseEntity<List<Review>> findReview(
-    //         @RequestParam("orderId") Integer orderId) {
-    //    List<Review> rvDetail = orderService.findByReviewWithOrderAndUser(orderId, 1);
-    //     if (rvDetail != null) {
-    //         return ResponseEntity.ok(rvDetail);
-    //     } else {
-    //         return ResponseEntity.notFound().build();
-    //     }
+    // @RequestParam("orderId") Integer orderId) {
+    // List<Review> rvDetail = orderService.findByReviewWithOrderAndUser(orderId,
+    // 1);
+    // if (rvDetail != null) {
+    // return ResponseEntity.ok(rvDetail);
+    // } else {
+    // return ResponseEntity.notFound().build();
+    // }
     // }
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.sts.dao.PaymentMethodDAO;
 import com.sts.dao.ProductDetailDAO;
 import com.sts.dao.ShippingAddressDAO;
 import com.sts.dao.UserDAO;
+import com.sts.dao.VoucherUseDAO;
 import com.sts.model.Order;
 import com.sts.model.OrderDetail;
 import com.sts.model.OrderStatus;
@@ -23,6 +25,7 @@ import com.sts.model.PaymentMenthod;
 import com.sts.model.Review;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
+import com.sts.model.VoucherUse;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
 
@@ -42,14 +45,24 @@ public class OrderServiceImpl implements OrderService {
     ShippingAddressDAO addressDao;
     @Autowired
     ProductDetailDAO prodDetailDao;
+    @Autowired
+    VoucherUseDAO voucherUseDao;
 
     @Override
-    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus) {
+    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus, double discountPrice,Long voucherId) {
         User user = userDao.findById(1).get();
-        System.out.println("x:"+addressId);
+       
+        
         ShippingAddress address = addressDao.findById(addressId).get();
+        VoucherUse voucher = new VoucherUse();
+        if (voucherId==0) {
+            voucher=null;
+        }else{
 
+            voucher = voucherUseDao.findById(voucherId).get();
+        }
         PaymentMenthod pay = payDao.findById(1).get();
+
 
         Order order = Order.builder()
                 .deliveryDate(formatDeliveryDate(calculateDeliveryDate()))
@@ -60,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
                 .paymentStatus(false)
                 .shippingFee(fee)
                 .totalAmount(initialPrice + fee)
-                .discountPrice(0)
-
+                .discountPrice(discountPrice)
+                .voucherUse(voucher)
                 // Set the PaymentMethod, ShippingAddress, and User associations
                 .paymentMenthod(pay)
                 .shippingAddress(address)

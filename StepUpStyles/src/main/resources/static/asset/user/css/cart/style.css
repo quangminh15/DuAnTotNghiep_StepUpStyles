@@ -200,7 +200,7 @@ a:not([href]):not([tabindex]) {
 
 a:not([href]):not([tabindex]):hover,
 a:not([href]):not([tabindex]):focus {
-  color: #007bff !important;
+  /* color: #007bff !important; */
   text-decoration: none;
 }
 
