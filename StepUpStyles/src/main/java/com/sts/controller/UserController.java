@@ -129,6 +129,29 @@ public class UserController {
 		return "users/profile";
 	}
 
+	@RequestMapping("/profile-edit")
+	public String profile_edit(Model model) {
+		Integer id = 0;
+		try {
+			id = userService.getUserIdCurrent();
+			if (id == null) {
+				return "redirect:/loginSTS";
+			}
+			User user = userService.findById(id);
+			DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
+			model.addAttribute("UserProfile", dResponseUser);
+		} catch (Exception exception) {
+			return "redirect:/loginSTS";
+		}
+		return "users/profile-edit";
+	}
+
+	@PostMapping("/profile-update-data")
+	public String process(Model model, @ModelAttribute("UserProfile") User user) {
+		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), userService.getUserIdCurrent());
+		return "redirect:/profile-edit";
+	}
+
 	@RequestMapping("/forgot-pass")
 	public String forgotpass(Model model) {
 		return "users/forgot-pass";

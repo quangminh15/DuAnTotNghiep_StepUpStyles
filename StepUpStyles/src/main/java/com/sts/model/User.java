@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +46,7 @@ public class User implements Serializable {
 
 	private String address;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthday;
 
 	@Column(name="created_date")

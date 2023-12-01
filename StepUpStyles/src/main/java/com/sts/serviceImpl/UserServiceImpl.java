@@ -1,5 +1,6 @@
 package com.sts.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -96,5 +97,10 @@ public class UserServiceImpl implements UserService {
         UserDetails u = org.springframework.security.core.userdetails.User.withUsername(email).password(pass).roles("CUSTOMER").build();
         Authentication auth = new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    @Override
+    public void updateProfile(String fullname, LocalDate birthday, String phone, String img, Integer userId) {
+        userDAO.updateProfile(fullname, birthday, phone, img, userId);
     }
 }
