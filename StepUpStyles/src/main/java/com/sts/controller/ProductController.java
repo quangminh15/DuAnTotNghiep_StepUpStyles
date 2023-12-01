@@ -59,13 +59,15 @@ public class ProductController {
 
 	// Trang sản phẩm
 	@RequestMapping("/list_products")
-	public String listproducts() {
+	public String listproducts(Model model) {
+		loadstatuslogin(model);
 		return "users/list_products";
 	}
 
 	// Trang sản phẩm chi tiết
 	@RequestMapping("/single_product/{productID}")
 	public String single_product(Model model, @PathVariable("productID") Integer productID) {
+		loadstatuslogin(model);
 		List<ProductImage> productImageList = productImageService.getImagesByProduct(productID);
 		for (ProductImage productImage : productImageList) {
 			System.out.println(productImage.getImagePath());
@@ -73,6 +75,16 @@ public class ProductController {
 		model.addAttribute("productImageList",productImageList);
 		
 		return "users/single_product";
+	}
+
+	public void loadstatuslogin(Model model){
+		Integer userIdCurrent = userService.getUserIdCurrent();
+		if(userIdCurrent == null){
+			model.addAttribute("loginStatus","no");
+
+		}else{
+			model.addAttribute("loginStatus","ok");
+		}
 	}
 
 }
