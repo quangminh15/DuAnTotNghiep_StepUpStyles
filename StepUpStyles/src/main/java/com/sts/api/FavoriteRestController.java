@@ -37,14 +37,14 @@ public class FavoriteRestController {
 
     @GetMapping("/rest/favorites/getUserFavorite")
 	public List<Favorite> getFavoriteProduct() {
-		// Integer userID = userService.getUserIdCurrent();
-		return favoriteService.findByUserId(3);
+		Integer userID = userService.getUserIdCurrent();
+		return favoriteService.findByUserId(userID);
 	}
 
 	@GetMapping("/rest/favorites/check/{productID}")
 	public Favorite getFavoriteProductAndUser(@PathVariable("productID") Integer productID) {
-		// Integer userID = userService.getUserIdCurrent();
-		return favoriteService.getUserAndProductFavorite(3,productID);
+		Integer userID = userService.getUserIdCurrent();
+		return favoriteService.getUserAndProductFavorite(userID,productID);
 	}
 
 	@GetMapping("/rest/favorites/loadall")
@@ -59,14 +59,15 @@ public class FavoriteRestController {
 
 	@PostMapping("/rest/favorites/{productId}")
 	public void addToFavorite(@PathVariable("productId") Integer productId) {	
-		// Integer userID = userService.getUserIdCurrent();	
-            favoriteService.create(productId, 3);
+		Integer userID = userService.getUserIdCurrent();	
+            favoriteService.create(productId, userID);
 	}
 
 	@DeleteMapping("/rest/favorites/delete/{productId}")
 	public void deleteFavorite(@PathVariable("productId") Integer productId) {
+		Integer userID = userService.getUserIdCurrent();
 		Product product = productService.findById(productId);
-        User user = userService.findById(3);
+        User user = userService.findById(userID);
 
         if (product != null && user != null) {
             favoriteService.delete(user, product);

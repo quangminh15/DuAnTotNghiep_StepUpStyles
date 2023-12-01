@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.model.OrderDetail;
 import com.sts.model.Product;
 import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.model.DTO.TotalProductRatingDTO;
+import com.sts.service.OrderDetailService;
 import com.sts.service.ProductService;
 import com.sts.service.ReviewService;
 import com.sts.service.UserService;
@@ -34,13 +36,17 @@ public class ReviewRestController {
     @Autowired
     UserService uService;
 
+    @Autowired
+    OrderDetailService odService;
+
     @GetMapping("/rest/reviews/loadall")
     public List<Review> getAll(){
         return reviewService.findAll();
     }
 
-    @PostMapping("/rest/reviews/create/{productID}")
-    public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID) {
+    @PostMapping("/rest/reviews/create/{productID}/{orderDetailId}")
+    public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID,
+    @PathVariable("orderDetailId") Integer orderDetailId) {
     try {
         Product product = pService.findById(productID);
         if (product == null) {
@@ -50,8 +56,13 @@ public class ReviewRestController {
         if (currentUser == null) {
             return new ResponseEntity<>("Không tìm thấy người dùng.", HttpStatus.NOT_FOUND);
         }
+        OrderDetail orderDT = odService.findById(orderDetailId);
+        if (orderDT == null) {
+            return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
+        }
         review.setUser(currentUser);
         review.setProduct(product);
+        review.setOrderDetail(orderDT);
         reviewService.createReview(review);
 
         return new ResponseEntity<>(review, HttpStatus.OK);
