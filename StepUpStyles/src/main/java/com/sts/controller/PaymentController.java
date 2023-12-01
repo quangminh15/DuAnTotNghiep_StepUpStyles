@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ import com.sts.service.VNPayService;
 
 @Controller
 public class PaymentController {
+
+    @Autowired
+    UserService userService;
    
     Double total = 0.0;
     
@@ -83,6 +87,7 @@ public class PaymentController {
 
     @GetMapping("/vnpay-payment")
     public String GetMapping(HttpServletRequest request, Model model) {
+        loadstatuslogin(model);
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -100,8 +105,18 @@ public class PaymentController {
 
     @RequestMapping("/paysuccess")
 	public String success(Model model) {
-
+        loadstatuslogin(model);
 		return "users/vnpay-success";
 	}
+
+    public void loadstatuslogin(Model model){
+        Integer userIdCurrent = userService.getUserIdCurrent();
+        if(userIdCurrent == null){
+            model.addAttribute("loginStatus","no");
+
+        }else{
+            model.addAttribute("loginStatus","ok");
+        }
+    }
 
 }
