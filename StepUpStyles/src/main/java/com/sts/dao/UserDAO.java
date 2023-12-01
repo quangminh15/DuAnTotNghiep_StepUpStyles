@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.SqlResultSetMapping;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserDAO extends JpaRepository<User, Integer>{
@@ -43,4 +44,8 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 					"SET password = ?2\n" +
 					"WHERE email =  ?1" ,nativeQuery = true)
 	String updatePass(String email, String pass);
+
+
+	@Query(value = "Update User set fullName = ?1, birthday = ?2, phone = ?3, image = ?4 where  usersId = ?4")
+	void updateProfile(String fullname, LocalDate birthday, String phone, String img, Integer userId);
 }

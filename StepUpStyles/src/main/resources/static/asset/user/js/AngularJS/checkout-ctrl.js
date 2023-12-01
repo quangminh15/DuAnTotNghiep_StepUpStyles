@@ -1,8 +1,10 @@
-app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', function ($scope, $http, $timeout,$location) {
 	$scope.address = []
 	$scope.cartDetails = []
-
-
+	$scope.discouted=0
+	
+	$scope.selectedVoucher={}
 
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
@@ -83,26 +85,39 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		
         $scope.tongTien = tongTien;
     }
+	
 	$scope.sendDataToJava = function () {
-		$http({
-			method: 'POST',
-			url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}`,
-			data: $scope.cartIs, // Assuming $scope.cartIs is an array
-			headers: { 'Content-Type': 'application/json' }
-		})
-		.then(function (response) {
-			console.log('Order created:', response.data);
-			localStorage.removeItem('selectedItems');
-		})
-		.catch(function (error) {
-			console.error('Error:', error);
-		});
+
+		// const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
+		// $http({
+		// 	method: 'POST',
+		// 	url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
+		// 	data: $scope.cartIs, // Assuming $scope.cartIs is an array
+		// 	headers: { 'Content-Type': 'application/json' }
+		// })
+		// .then(function (response) {
+		// 	console.log('Order created:', response.data);
+		// 	localStorage.removeItem('selectedItems');
+
+			
+		// })
+		// .catch(function (error) {
+		// 	console.error('Error:', error);
+		// });
+		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien));
+		
+		window.location.href='/pay-cod-success'
 	};
+	$scope.loadTongTienFromLocal = function () {
+		$scope.total=localStorage.getItem('totalAmount');
+		
+	};
+	$scope.loadTongTienFromLocal()
 
 	$scope.getDataPayment = function () {
 		$http({
 			method: 'POST',
-			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}`,
+			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${$scope.selectedVoucher.voucherUseId}`,
 			data: $scope.cartIs, // Assuming $scope.cartIs is an array
 			headers: { 'Content-Type': 'application/json' }
 		})
@@ -456,11 +471,39 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 		}
 	};
 
+	//select voucher
+	$scope.selectedVoucher = null;
+	$scope.showVoucher = function(item) {
+
+		$http.get(`/rest/voucher/getIdVoucher/`+item).then(function (response) {
+			$scope.vocherSelect= response.data
+			console.log($scope.vocherSelect);
+		}).catch(function (error) {
+			console.error('Error calculating shipping:', error);
+		});
+		 console.log("item",item);
+		$scope.selectedVoucher= item
+		console.log("Voucher selected:", item); // Hoặc thực hiện các thao tác khác với giá trị item được chọn
+		return $scope.selectedVoucher
+	};
+
+	$scope.caculatorDiscount=function(item){
+		var discountRate = 0
+		$scope.selectedVoucher=item
+		if ($scope.selectedVoucher) {
+			discountRate = $scope.selectedVoucher.voucher.discountAmount/100
+		}else{
+			discountRate=0
+		}
+
+		$scope.discouted = $scope.tongTien *discountRate 
+
+	}
+	$scope.caculatorDiscount()
 	//tien start
 	$scope.voucherUseTrue = [];
 
 	$scope.getVoucher = function () {
-		var userId = 1;  
 		$http.get("/user/Idprofile").then((resp) =>{
 			var userId = resp.data;
 			$http.get("/user/" + userId).then(userResp =>{
@@ -475,6 +518,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 			$scope.voucherUseTrue.forEach(function (item) {
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
+				item.isExpired = isVoucherExpired(item.voucher.dateEnd);
 			  });
 			  function formatDate(startDate) {
 				// Parse the input date string
@@ -497,6 +541,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', function ($scope
 				const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
 			
 				return formattedDate;
+			}
+
+			function isVoucherExpired(endDate) {
+				// Phân tích chuỗi ngày kết thúc
+				const voucherEndDate = new Date(endDate);
+
+				// Lấy ngày hiện tại
+				const currentDate = new Date();
+
+				// So sánh ngày kết thúc với ngày hiện tại
+				return voucherEndDate < currentDate;
 			}
 		})
 			})

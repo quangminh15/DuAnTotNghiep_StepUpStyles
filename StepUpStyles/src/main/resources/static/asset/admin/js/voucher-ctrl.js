@@ -494,6 +494,24 @@ app.controller("voucher-ctrl", function($scope, $http){
 		}
 	};
 
+	//search
+	// $scope.searchByName = function(){
+	// 	if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+	// 		$http.get("/rest/voucher/searchVouchers", {
+	// 			params: { keyword: $scope.searchKeyword }
+	// 		}).then(resp => {
+	// 			$scope.voucherNoDelItem = resp.data;
+	// 			$scope.pager.first();
+	// 		}).catch(error => {
+	// 			console.log("Error", error);
+	// 			$scope.pager.first();
+	// 		});
+	// 	}else {
+	// 		// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
+	// 		$scope.initialize();
+	// 	}
+	// }
+
 	//	Phân trang
 	$scope.pager = {
 		page: 0,

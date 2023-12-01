@@ -13,6 +13,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.showPhieuNhapForm = true; // Hiển thị form phiếu nhập mặc định
   $scope.showChiTietForm = false; // Ẩn form chi tiết mặc định
   $scope.showThemChiTietButton = true; // Hiển thị nút "Thêm chi tiết" mặc định
+  $scope.form.totalAmount = 0;
 
   $scope.exportPdf = function () {
     $http({
@@ -463,6 +464,24 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
 		})
 
 	});
+
+  //search
+	$scope.searchByName = function(){
+		if ($scope.searchKeyword && $scope.searchKeyword.trim() !== "") {
+			$http.get("/rest/importReceipt/searchImport", {
+				params: { keyword: $scope.searchKeyword }
+			}).then(resp => {
+				$scope.items = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}else {
+			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
+			$scope.initialize();
+		}
+	}
 
   //	Phân trang
   $scope.pager = {

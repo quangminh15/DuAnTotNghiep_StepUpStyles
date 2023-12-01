@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Phân quyền
         http.authorizeRequests()
-                .antMatchers("/carttt/**").hasRole("USER")
+                .antMatchers("/carttt/**","/favorite").hasRole("USER")
                 .antMatchers("/admi2n/**").hasAnyRole("ADMIN","EMPLOYEE")
                 .antMatchers("/admin/thongke").hasRole("ADMIN")
                 .antMatchers("/static/**","/login/**").permitAll()
@@ -85,6 +85,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout()
                 .logoutUrl("/auth/logoff")
                 .logoutSuccessUrl("/loginSTS");
+
+        http.oauth2Login()
+                .loginPage("/dangnhap")
+                .defaultSuccessUrl("/oauth2/login/success",true)
+                .failureUrl("/loginSTS-error")
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorization");
+
     }
 
 }

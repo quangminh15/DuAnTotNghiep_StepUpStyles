@@ -11,8 +11,11 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="static/asset/user/css/profile/bootstrap.min.css" rel="stylesheet">
 <link href="static/asset/user/css/profile/profile.css" rel="stylesheet">
+<style>
+</style>
 <link rel="stylesheet" href="/asset/user/css/style-liberty.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container bootstrap snippets bootdey profile-main">
     <div class="row">
@@ -27,7 +30,7 @@
                 </div>
                 <ul class="nav nav-pills nav-
                 stacked" style="font-size: 1.4rem">
-                    <li class="active"><a href="#" > <i class="fa fa-user"></i>Tổng quan</a></li>
+                    <li class="active"><a href="#"> <i class="fa fa-user"></i>Tổng quan</a></li>
                     <!--                    <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span class="label label-warning pull-right r-activity">9</span></a></li>-->
                     <li><a href="/profile-edit"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
                     <li><a href="#"> <i class="fa fa-heart"></i>Sản phẩm yêu thích</a></li>
@@ -42,32 +45,55 @@
             <div class="panel">
                 <div class="panel-body bio-graph-info">
                     <h1>Thông tin</h1>
-                    <div class="row">
-                        <div class="bio-row">
-                            <p><span>Họ và tên</span> : <span th:text="${UserProfile.fullName}"></span></p>
+                    <form th:action="@{/profile-update-data}" th:object="${UserProfile}" method="post">
+                        <div class="row">
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Họ và tên</span>
+                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{fullName}">
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Ngày sinh</span>
+                                    <input type="date" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{birthday}" id="birthday">
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Email</span>
+                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{email}" readonly>
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Số điện thoại</span>
+                                    <input type="number" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{phone}">
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Ngày tạo</span>
+                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{createdDate}" readonly>
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Vai trò</span>
+                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{role}" readonly>
+                                </div>
+                            </div>
+
+                            <!--                        <div class="bio-row">-->
+                            <!--                            <p><span>Mobile </span>: (12) 03 4567890</p>-->
+                            <!--                        </div>-->
+                            <!--                        <div class="bio-row">-->
+                            <!--                            <p><span>Phone </span>: 88 (02) 123456</p>-->
+                            <!--                        </div>-->
                         </div>
-                        <div class="bio-row">
-                            <p><span>Ngày sinh </span> : <span th:text="${#temporals.format(UserProfile.birthday, 'dd-MM-yyyy')}"></span></p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Email </span> : <span th:text="${UserProfile.email}"></span></p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Số điện thoại</span>: <span th:text="${UserProfile.phone}"></span></p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Sử dụng từ </span>: <span th:text="${#temporals.format(UserProfile.createdDate, 'dd-MM-yyyy')}"></span></p>
-                        </div>
-                        <div class="bio-row">
-                            <p><span>Vai trò </span>: <span th:text="${UserProfile.role}"></span></p>
-                        </div>
-                        <!--                        <div class="bio-row">-->
-                        <!--                            <p><span>Mobile </span>: (12) 03 4567890</p>-->
-                        <!--                        </div>-->
-                        <!--                        <div class="bio-row">-->
-                        <!--                            <p><span>Phone </span>: 88 (02) 123456</p>-->
-                        <!--                        </div>-->
-                    </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary" style="font-size: 1.5em;">Cập nhật</button>
+                    </form>
                 </div>
             </div>
             <div>
@@ -76,7 +102,13 @@
                         <div class="panel">
                             <div class="panel-body">
                                 <div class="bio-chart">
-                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="35" data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                                    <div style="display:inline;width:100px;height:100px;">
+                                        <canvas width="100" height="100px"></canvas>
+                                        <input class="knob" data-width="100" data-height="100"
+                                               data-displayprevious="true" data-thickness=".2" value="35"
+                                               data-fgcolor="#e06b7d" data-bgcolor="#e8e8e8"
+                                               style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(224, 107, 125); padding: 0px; -webkit-appearance: none; background: none;">
+                                    </div>
                                 </div>
                                 <div class="bio-desk">
                                     <h4 class="red">Tổng lượt đã mua</h4>
@@ -90,7 +122,13 @@
                         <div class="panel">
                             <div class="panel-body">
                                 <div class="bio-chart">
-                                    <div style="display:inline;width:100px;height:100px;"><canvas width="100" height="100px"></canvas><input class="knob" data-width="100" data-height="100" data-displayprevious="true" data-thickness=".2" value="63" data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8" style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;"></div>
+                                    <div style="display:inline;width:100px;height:100px;">
+                                        <canvas width="100" height="100px"></canvas>
+                                        <input class="knob" data-width="100" data-height="100"
+                                               data-displayprevious="true" data-thickness=".2" value="63"
+                                               data-fgcolor="#4CC5CD" data-bgcolor="#e8e8e8"
+                                               style="width: 54px; height: 33px; position: absolute; vertical-align: middle; margin-top: 33px; margin-left: -77px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 20px; line-height: normal; font-family: Arial; text-align: center; color: rgb(76, 197, 205); padding: 0px; -webkit-appearance: none; background: none;">
+                                    </div>
                                 </div>
                                 <div class="bio-desk">
                                     <h4 class="terques">Sản phẩm đã thích </h4>
@@ -133,7 +171,6 @@
         </div>
     </div>
 </div>
-
 <script src="static/asset/user/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
@@ -141,7 +178,7 @@
 
 <!-- //customers-6-->
 <script>
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const navbar = document.querySelector('.navbar');
         const scrollY = window.scrollY;
 
@@ -168,6 +205,34 @@
                 dropdownMenu.querySelector('.dropdown-menu').classList.remove('show');
             });
         });
+    });
+</script>
+<script>
+    // Lấy thẻ input có id là 'birthday'
+    var input = document.getElementById('birthday');
+
+    // Thêm sự kiện focus để thay đổi giá trị tối thiểu
+    input.addEventListener('focus', function() {
+        // Tính ngày 12 năm trước từ ngày hiện tại
+        var currentDate = new Date();
+        currentDate.setFullYear(currentDate.getFullYear() - 12);
+
+        // Định dạng ngày tháng thành chuỗi 'yyyy-MM-dd'
+        var formattedDate = currentDate.toISOString().split('T')[0];
+
+        // Đặt giá trị tối thiểu cho trường input kiểu date
+        input.setAttribute('max', formattedDate);
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var inputGroup = document.querySelector('.input-group'); // Lấy phần tử có class là 'input-group'
+
+        if (inputGroup) { // Kiểm tra xem phần tử đã tồn tại không trước khi thực hiện thay đổi
+            inputGroup.style.width = '350px'; // Thay đổi chiều rộng
+            inputGroup.style.fontSize = '1.5em'; // Thêm thuộc tính font-size
+        }
     });
 </script>
 </body>

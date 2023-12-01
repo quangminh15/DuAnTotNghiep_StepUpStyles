@@ -35,4 +35,7 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
 
     @Query("SELECT r FROM Review r WHERE r.product.productID = :productId and r.user.usersId = :usersId and r.rating = :rating")
     List<Review> search(@Param("productId") Integer productId, @Param("usersId") Integer usersId,@Param("rating") Integer rating);
+
+    @Query("SELECT r FROM Review r WHERE r.orderDetail.orderDetailId = :orderDetailId")
+    Review findByOrderDetailID(@Param("orderDetailId") Integer orderDetailId);
 }

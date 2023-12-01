@@ -15,20 +15,38 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
                 console.log("1", $scope.orders.shippingAddress)
 
 
-                $scope.orders.forEach(item => {  
-                            $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
-                                .then(respone => {
-                                    item.orderDetail = respone.data
-                                    $scope.filterByStatusAndCheck(null)
-                                    console.log("order", item.orderDetail);
-                                    item.orderDetail.forEach(orderdetails => {
-                                        $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
-                                            orderdetails.productDetail.product.productImages = resp.data;
-                                        })
+                $scope.orders.forEach(item => {
 
+                    $http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
+                        .then(respone => {
+                            item.orderDetail = respone.data
+                            $scope.filterByStatusAndCheck(null)
+                            console.log("order", item.orderDetail);
+                            item.orderDetail.forEach(orderdetails => {
+                                $http.get(`/rest/order/find?orderDetailId=${orderdetails.orderDetailId}`)
+                                    .then(response => {
+                                        // Nếu đã được đánh giá
+                                        if (response.data === true) {
+                                $http.get(`/rest/order/find?orderDetailId=${orderdetails.orderDetailId}`)
+                                            console.log(`OrderDetailId ${orderdetails.orderDetailId} đã được đánh giá.`);
+                                            // Thực hiện các hành động khi đã được đánh giá
+                                            orderdetails.hasBeenReviewed = true;
+                                        } else {
+                                            console.log(`OrderDetailId ${orderdetails.orderDetailId} chưa được đánh giá.`);
+                                            // Thực hiện các hành động khi chưa được đánh giá
+                                            orderdetails.hasBeenReviewed = false;
+                                        }
                                     })
-
+                                    .catch(error => {
+                                        console.error('Error checking if orderDetail is reviewed:', error);
+                                    });
+                                $http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
+                                    orderdetails.productDetail.product.productImages = resp.data;
                                 })
+
+                            })
+
+                        })
                     //
 
 
@@ -82,8 +100,8 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
             });
     }
 
-        // 
-        $scope.filterByStatus = function (status) {
+    // 
+    $scope.filterByStatus = function (status) {
 
         if (status == null) {
             $scope.filterStaus = $scope.orders;
@@ -116,24 +134,6 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
     };
 
 
-
-
-
-
-
-    $scope.prodOrder = []
-    $scope.showModalReview = function (product) {
-        $http.get("/rest/products/" + product.productID)
-            .then((res) => {
-                $scope.prodOrder = res.data;
-                $http.get("/rest/productimages/loadbyproduct/" + $scope.prodOrder.productID).then(resp => {
-                    $scope.prodOrder.image = resp.data;
-                })
-            }).catch((err) => {
-                console.log("Error: ", err);
-            });
-        $('#reviewModal').modal('show');
-    }
 
     $scope.review = {
         image1: '',
@@ -222,61 +222,72 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
         });
     };
     // Hàm tạo đánh giá
-    $scope.createReview = function (productId) {
-        if ($scope.review.image1 === '') {
-            $scope.review.image1 = null;
-        }
-        if ($scope.review.image2 === '') {
-            $scope.review.image2 = null;
-        }
-        if ($scope.review.image3 === '') {
-            $scope.review.image3 = null;
-        }
 
-        let reviewData = {
-            title: $scope.title,
-            rating: $scope.rating,
-            image1: $scope.review.image1,
-            image2: $scope.review.image2,
-            image3: $scope.review.image3
-        };
-        let dta = JSON.stringify(reviewData);
-        $http.post("/rest/reviews/create/" + productId, dta)
-            .then(function (response) {
-                $('#reviewModal').modal('hide');
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    $scope.prodOrder = []
+    $scope.showModalReview = function (orderDetail) {
+                $scope.nameProduct = orderDetail.productDetail.product.productName
+                $scope.sizeProduct = orderDetail.productDetail.size.sizeNumber
+                $scope.colorProduct = orderDetail.productDetail.color.colorName
+                $http.get("/rest/productimages/loadbyproduct/" + orderDetail.productDetail.product.productID).then(resp => {
+                    $scope.prodOrder.image = resp.data;
+                })
+                $scope.createReview = function () {
+                    if ($scope.review.image1 === '') {
+                        $scope.review.image1 = null;
                     }
-                })
+                    if ($scope.review.image2 === '') {
+                        $scope.review.image2 = null;
+                    }
+                    if ($scope.review.image3 === '') {
+                        $scope.review.image3 = null;
+                    }
+            
+                    let reviewData = {
+                        title: $scope.title,
+                        rating: $scope.rating,
+                        image1: $scope.review.image1,
+                        image2: $scope.review.image2,
+                        image3: $scope.review.image3,
+                        orderDetailId: orderDetail.orderDetailId
+                    };
+                    let dta = JSON.stringify(reviewData);
+                    $http.post("/rest/reviews/create/"+orderDetail.productDetail.product.productID+"/"+orderDetail.orderDetailId, dta)
+                        .then(function (response) {
+                            $('#reviewModal').modal('hide');
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+            
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Đã thêm đánh giá thành công',
+            
+                            })
+                            $scope.initialize()
+                            $scope.resetReviewForm();
+                        }, function (error) {
+                            console.error('Lỗi khi tạo đánh giá:', error);
+                        });
+                };
+            $('#reviewModal').modal('show');
+    }
 
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Đã thêm đánh giá thành công',
-
-                })
-                $scope.initialize()
-                $scope.resetReviewForm();
-            }, function (error) {
-                console.error('Lỗi khi tạo đánh giá:', error);
-            });
-    };
-
+    $scope.reviewedOrder = []
     $scope.showModalReviewDetail = function (od) {
-        // alert(od.orderDetailId)
-        // $http.get("/rest/order/reviewDetail/"+od.orderDetailId)
-        // .then((res) => {
-        //     $scope.dataReview = res.data
-        //     console.log("Có dữ liệu hông",$scope.dataReview);
-        // }).catch((err) => {
-
-        // });
+        $http.get("/rest/order/reviewDetail/" + od.orderDetailId).then(resp => {
+            $scope.reviewedOrder = resp.data;
+            $http.get("/rest/productimages/loadbyproduct/" + $scope.reviewedOrder.product.productID).then(resp => {
+                $scope.reviewedOrder.product.image = resp.data;
+            })
+        })
         $('#reviewDetail').modal('show');
     }
 }])

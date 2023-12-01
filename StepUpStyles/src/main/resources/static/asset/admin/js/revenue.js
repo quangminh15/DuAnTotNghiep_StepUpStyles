@@ -55,6 +55,13 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                 }
             }
 
+            const years = Object.keys(yearlyRevenue);
+            const newestYear = Math.max(...years);
+
+            // Set the default year for the monthly chart
+            $scope.filterOrdersByYear(newestYear); // This will filter orders for the newest year
+            updateMonthlyChart(newestYear);
+
             // Render chart
             var ctx = document.getElementById('yearlyChart').getContext('2d');
             new Chart(ctx, {
@@ -120,75 +127,77 @@ app.controller("revenues-ctrl", function ($scope, $http) {
     };
 
 
-   function updateMonthlyChart(selectedYear) {
-    if (!selectedYear) {
-        selectedYear = new Date().getFullYear();
+    function updateMonthlyChart(selectedYear) {
+        if (!selectedYear) {
+            selectedYear = new Date().getFullYear();
+            $scope.presentYear = selectedYear;
+        }
         $scope.presentYear = selectedYear;
-    }
-    $scope.presentYear = selectedYear;
 
-    $http.get(`/rest/order/listOrder/all`)
-        .then(resp => {
-            const orders = resp.data;
+        $http.get(`/rest/order/listOrder/all`)
+            .then(resp => {
+                const orders = resp.data;
 
-            // Filter orders for the selected year
-            const ordersInSelectedYear = orders.filter(order => {
-                return new Date(order.orderDate).getFullYear() === parseInt(selectedYear);
-            });
 
-            // Initialize an array to hold monthly revenue data
-            const monthlyRevenue = Array.from({ length: 12 }, () => 0); // 12 months, initialized with 0s
 
-            // Calculate revenue for each month
-            ordersInSelectedYear.forEach(order => {
-                const orderMonth = new Date(order.orderDate).getMonth();
-                monthlyRevenue[orderMonth] += order.totalAmount; // Assuming totalAmount is the revenue
-            });
+                // Filter orders for the selected year
+                const ordersInSelectedYear = orders.filter(order => {
+                    return new Date(order.orderDate).getFullYear() === parseInt(selectedYear);
+                });
 
-            // Update chart data
-            const monthNames = [
-                'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-                'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
-            ];
+                // Initialize an array to hold monthly revenue data
+                const monthlyRevenue = Array.from({ length: 12 }, () => 0); // 12 months, initialized with 0s
 
-            // Update monthlyData with new values
-            $scope.monthlyData.labels = monthNames;
-            $scope.monthlyData.datasets[0].data = monthlyRevenue;
+                // Calculate revenue for each month
+                ordersInSelectedYear.forEach(order => {
+                    const orderMonth = new Date(order.orderDate).getMonth();
+                    monthlyRevenue[orderMonth] += order.totalAmount; // Assuming totalAmount is the revenue
+                });
 
-            // Render chart
-            var ctx = document.getElementById('monthlyChart').getContext('2d');
-            if ($scope.monthlyChart) {
-                $scope.monthlyChart.destroy();
-            }
-            $scope.monthlyChart = new Chart(ctx, {
-                type: 'bar',
-                data: $scope.monthlyData,
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                callback: function (value) {
+                // Update chart data
+                const monthNames = [
+                    'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+                    'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+                ];
+
+                // Update monthlyData with new values
+                $scope.monthlyData.labels = monthNames;
+                $scope.monthlyData.datasets[0].data = monthlyRevenue;
+
+                // Render chart
+                var ctx = document.getElementById('monthlyChart').getContext('2d');
+                if ($scope.monthlyChart) {
+                    $scope.monthlyChart.destroy();
+                }
+                $scope.monthlyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: $scope.monthlyData,
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) {
+                                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                                    }
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem, data) {
+                                    let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                                     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
                                 }
                             }
-                        }]
-                    },
-                    tooltips: {
-                        callbacks: {
-                            label: function (tooltipItem, data) {
-                                let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-                            }
                         }
                     }
-                }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching orders:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching orders:', error);
-        });
-}
+    }
 
     //chạy biểu đồ tháng từ đầu với năm hiện tại
     updateMonthlyChart()

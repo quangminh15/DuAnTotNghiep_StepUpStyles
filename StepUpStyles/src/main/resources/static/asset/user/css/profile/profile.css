@@ -64,14 +64,14 @@ body {
 .profile-nav ul > li > a {
     border-radius: 0;
     -webkit-border-radius: 0;
-    color: #89817f;
+    color: #000000;
     border-left: 5px solid #fff;
 }
 
 .profile-nav ul > li > a:hover, .profile-nav ul > li > a:focus, .profile-nav ul li.active  a {
-    background: #f8f7f5 !important;
+    background: #ffdfb4 !important;
     border-left: 5px solid #fbc02d;
-    color: #89817f !important;
+    color: #000000 !important;
     width: 18em;
 }
 
@@ -83,7 +83,7 @@ body {
 .profile-nav ul > li > a > i{
     font-size: 16px;
     padding-right: 10px;
-    color: #bcb3aa;
+    color: #000000;
 }
 
 .r-activity {
@@ -122,7 +122,7 @@ body {
 }
 
 .bio-graph-info {
-    color: #89817e;
+    color: #000000;
 }
 
 .bio-graph-info h1 {

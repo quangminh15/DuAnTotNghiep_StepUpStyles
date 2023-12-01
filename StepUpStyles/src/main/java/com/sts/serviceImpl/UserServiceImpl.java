@@ -1,12 +1,16 @@
 package com.sts.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.UserDAO;
@@ -24,6 +28,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Integer userID) {
         return userDAO.findById(userID).get();
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userDAO.findByEmailU(email);
     }
 
     @Override
@@ -79,5 +88,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updatePass(String email, String pass) {
         return userDAO.updatePass(email, pass);
+    }
+
+    @Override
+    public void loginFromOAuth2(OAuth2AuthenticationToken oauth2) {
+        String email = oauth2.getPrincipal().getAttribute("email");
+        String pass = Long.toHexString(System.currentTimeMillis());
+        UserDetails u = org.springframework.security.core.userdetails.User.withUsername(email).password(pass).roles("CUSTOMER").build();
+        Authentication auth = new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    @Override
+    public void updateProfile(String fullname, LocalDate birthday, String phone, String img, Integer userId) {
+        userDAO.updateProfile(fullname, birthday, phone, img, userId);
     }
 }

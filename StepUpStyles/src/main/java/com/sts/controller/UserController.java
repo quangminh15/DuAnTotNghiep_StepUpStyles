@@ -3,13 +3,17 @@ package com.sts.controller;
 import com.sts.dao.UserDAO;
 import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.DataOTP;
+import com.sts.model.OgirinAccount;
+import com.sts.model.Role;
 import com.sts.model.User;
 import com.sts.model.VerificationCode;
 import com.sts.service.FormSendMailHTML;
 import com.sts.service.MailerService;
 import com.sts.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +51,7 @@ public class UserController {
 	@RequestMapping("/about")
 	public String about(Model model) {
 
+
 		return "users/about";
 	}
 
@@ -71,7 +76,7 @@ public class UserController {
 
 	@RequestMapping("/contact")
 	public String contact(Model model) {
-
+		loadstatuslogin(model);
 		return "users/contact";
 	}
 
@@ -82,7 +87,7 @@ public class UserController {
 
 	@RequestMapping("/checkout")
 	public String checkout(Model model) {
-
+		loadstatuslogin(model);
 		return "users/checkout";
 	}
 
@@ -110,6 +115,7 @@ public class UserController {
 
 	@RequestMapping("/profile")
 	public String profile(Model model) {
+		loadstatuslogin(model);
 		Integer id = 0;
 		try {
 			id = userService.getUserIdCurrent();
@@ -123,6 +129,31 @@ public class UserController {
 			return "redirect:/loginSTS";
 		}
 		return "users/profile";
+	}
+
+	@RequestMapping("/profile-edit")
+	public String profile_edit(Model model) {
+		loadstatuslogin(model);
+		Integer id = 0;
+		try {
+			id = userService.getUserIdCurrent();
+			if (id == null) {
+				return "redirect:/loginSTS";
+			}
+			User user = userService.findById(id);
+			DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
+			model.addAttribute("UserProfile", dResponseUser);
+		} catch (Exception exception) {
+			return "redirect:/loginSTS";
+		}
+		return "users/profile-edit";
+	}
+
+	@PostMapping("/profile-update-data")
+	public String process(Model model, @ModelAttribute("UserProfile") User user) {
+		loadstatuslogin(model);
+		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), userService.getUserIdCurrent());
+		return "redirect:/profile-edit";
 	}
 
 	@RequestMapping("/forgot-pass")
@@ -237,10 +268,11 @@ public class UserController {
 //			}
 			sendCodetoEmail(c.getEmail(), c.getFullName());
 			this.user = c;
-			this.user.setRole("CUSTOMER");
+			this.user.setRole(Role.CUSTOMER.toString());
 			this.user.setActivaties(true);
 			this.user.setStatus(true);
 			this.user.setDeleted(true);
+			this.user.setOrigin(OgirinAccount.DF.toString());
 			this.user.setPassword(bCryptPasswordEncoder.encode(c.getPassword()));
 			this.user.setImage(getUserImageURL());
 			this.user.setCreatedDate(LocalDate.now());
@@ -418,6 +450,51 @@ public class UserController {
 			return "https://images.hdqwalls.com/download/naruto-kyuubi-mode-a2-315x315.jpg";
 		}
 		return "https://images.hdqwalls.com/download/red-hood-evolution-5k-ne-315x315.jpg";
+	}
+
+	@RequestMapping("/oauth2/login/success")
+	public String oauthLoginSuccess(OAuth2AuthenticationToken oauth2, Authentication auth) {
+		System.out.println("Name: "+oauth2.getPrincipal().getAttribute("name"));
+		System.out.println("Email: "+oauth2.getPrincipal().getAttribute("email"));
+		System.out.println("IMG: "+oauth2.getPrincipal().getAttribute("picture"));
+
+		userService.loginFromOAuth2(oauth2); // save to security context
+
+  //    Call API Save in DB
+		String email = oauth2.getPrincipal().getAttribute("email");
+		User user = userService.findByEmail(email);
+		if(user == null) {
+			String name = oauth2.getPrincipal().getAttribute("name");
+			String img = oauth2.getPrincipal().getAttribute("picture");
+
+			if(img == null){
+				img = getUserImageURL();
+			}
+
+			user = User.builder().email(email)
+								.fullName(name)
+								.image(img)
+								.password(Long.toHexString(System.currentTimeMillis()))
+								.createdDate(LocalDate.now())
+								.origin(OgirinAccount.GG.toString())
+								.role(Role.CUSTOMER.toString())
+								.status(true)
+								.deleted(true)
+								.activaties(true)
+								.build();
+			userService.create(user);
+		}
+		return "redirect:/index";
+	}
+
+	public void loadstatuslogin(Model model){
+		Integer userIdCurrent = userService.getUserIdCurrent();
+		if(userIdCurrent == null){
+			model.addAttribute("loginStatus","no");
+
+		}else{
+			model.addAttribute("loginStatus","ok");
+		}
 	}
 
 }
