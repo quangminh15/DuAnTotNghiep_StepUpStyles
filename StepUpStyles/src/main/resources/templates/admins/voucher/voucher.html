@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Đơn hàng tối thiểu</label>
-                        <input class="form-control" id="inputPassword3" type="text" placeholder="Đơn hàng tối thiểu"
-                         required="" ng-model="form.total">
+                    <input class="form-control" id="inputPassword3" type="text" placeholder="Đơn hàng tối thiểu"
+                        required="" ng-model="form.total">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputPassword3">Giảm giá (%)</label>
@@ -80,11 +80,16 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="ddI in RestorePager.voucherDelItem">
-                                    <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{ formatToVND(ddI.total) }}</td>
-                                    <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">{{ddI.discountAmount|number}}%</td>
-                                    <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate }}</td>
-                                    <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}</td>
-                                    <td data-toggle="tooltip" title="{{ddI.description}}">{{formatDescription(ddI.description)}}</td>
+                                    <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{
+                                        formatToVND(ddI.total) }}</td>
+                                    <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
+                                        {{ddI.discountAmount|number}}%</td>
+                                    <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">
+                                        {{ddI.formattedStartDate }}</td>
+                                    <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
+                                    </td>
+                                    <td data-toggle="tooltip" title="{{ddI.description}}">
+                                        {{formatDescription(ddI.description)}}</td>
                                     <td
                                         ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                         {{ddI.status}}</td>
@@ -136,30 +141,23 @@
             <div class="card card-table m-3">
                 <h4 class="mb-0">Danh sách voucher</h4>
                 <div class="d-flex align-items-center">
-                    <div style="width: 75%;">
-                        <form method="post" style="margin-left: 20px;">
+                    <div style="width: 92%;">
+                        <form method="post" style="margin-right: 20px;">
                             <div class="form-group">
                                 <label for="searchKeyword"></label>
                                 <input class="form-control" type="text" id="searchKeyword" ng-model="searchKeyword"
-                                    placeholder="Tìm kiếm sản phẩm" ng-change="searchByProduct()">
+                                    placeholder="Tìm kiếm voucher" ng-change="searchByName()"
+                                    title="Tìm kiếm voucher">
                             </div>
                         </form>
                     </div>
-
-                    <!-- Thẻ select box -->
-                    <select class="form-control mr-2" style="width: 15%; margin-left: 10px;" ng-model="selectedStatus"
-                        ng-change="filterDiscounts()">
-                        <option>Tất cả trạng thái</option>
-                        <option>Đang diễn ra</option>
-                        <option>Chưa diễn ra</option>
-                        <option>Kết thúc</option>
-                    </select>
-
-                    <!-- Nút thùng rác -->
-                    <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-                        title="Thùng rác">
-                        <span class="ti-trash"></span>
-                    </button>
+                    <div class="d-flex">
+                        <!-- Nút thùng rác -->
+                        <button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw"
+                            data-toggle="tooltip" title="Thùng rác">
+                            <span class="ti-trash"></span>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -176,11 +174,16 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="ddI in pager.voucherNoDelItem">
-                                <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{ formatToVND(ddI.total) }}</td>
-                                <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">{{ddI.discountAmount|number}}%</td>
-                                <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate }}</td>
-                                <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}</td>
-                                <td data-toggle="tooltip" title="{{ddI.description}}">{{formatDescription(ddI.description)}}</td>
+                                <td data-toggle="tooltip" title="{{formatToVND(ddI.total)}}">{{ formatToVND(ddI.total)
+                                    }}</td>
+                                <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
+                                    {{ddI.discountAmount|number}}%</td>
+                                <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate
+                                    }}</td>
+                                <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
+                                </td>
+                                <td data-toggle="tooltip" title="{{ddI.description}}">
+                                    {{formatDescription(ddI.description)}}</td>
                                 <td
                                     ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
                                     {{ddI.status}}</td>

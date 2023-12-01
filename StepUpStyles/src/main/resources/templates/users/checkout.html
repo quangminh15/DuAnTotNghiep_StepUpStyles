@@ -69,7 +69,7 @@
 						<i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
 						<p>Hiện tại bạn chưa chọn voucher nào</p>
 						<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
-								class="fas fa-shopping-cart" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
+								class="fa-plus-square" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
 					</div>
 					<div class="container" ng-show="voucherUseTrue">
 						<div class="row">
@@ -101,7 +101,7 @@
 											</div>
 										</div>
 										<div class="col-md-2">
-											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)"
+											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)"ng-disabled="item.isExpired"
 												ng-value="item" />
 										</div>
 									</div>

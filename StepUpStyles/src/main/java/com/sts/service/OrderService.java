@@ -22,10 +22,11 @@ public interface OrderService {
     List<OrderDetail> loadByOrder(Order order);
 
     List<Order> loadAll();
+    //xài cái này linh
+    Review findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId);
 
-    List<OrderDetail> findOrderDetailWithReviewByOrderIdAndUserId(Integer orderId, Integer userId);
-
-    List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId);
+    Review findByReviewWithOrderDetail(Integer orderDetailId);
+    ///linh
     void updateStatus(Integer id, OrderStatus status);
 
     Order getSingleProd(Integer id);

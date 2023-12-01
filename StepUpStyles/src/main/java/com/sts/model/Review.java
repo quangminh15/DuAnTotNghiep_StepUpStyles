@@ -45,4 +45,8 @@ public class Review implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="users_id")
 	private User user;
+
+	@ManyToOne
+	@JoinColumn(name="order_detail_id")
+	private OrderDetail orderDetail;
 }

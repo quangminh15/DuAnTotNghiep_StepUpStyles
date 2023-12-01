@@ -10,6 +10,21 @@ app.controller("totalproductrating-ctrl", function($scope, $http) {
 
             // Khởi tạo biểu đồ
             var ctx = document.getElementById('area-chart').getContext('2d');
+            // var chart = new Chart(ctx, {
+            //     type: 'line',
+            //     data: {
+            //         labels: [],
+            //         datasets: []
+            //     },
+            //     options: {
+            //         scales: {
+            //             y: {
+            //                 beginAtZero: true,
+            //                 stepSize: 1,
+            //             },
+            //         }
+            //     }
+            // });
             var chart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -20,18 +35,39 @@ app.controller("totalproductrating-ctrl", function($scope, $http) {
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 5,
                             stepSize: 1,
                         },
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y;
+                                    }
+                                    return label;
+                                },
+                                title: function(tooltipItem) {
+                                    var dataIndex = tooltipItem[0].dataIndex;
+                                    return $scope.chartData[dataIndex].productName; // Tên sản phẩm từ dữ liệu của bạn
+                                }
+                            }
+                        }
                     }
                 }
             });
+            
 
             // Hàm cập nhật biểu đồ dựa trên năm được chọn
             $scope.updateChartData = function () {
                 $http.get('/api/total-product-rating?year=' + $scope.selectedYear)
                 .then(function (response) {
                     var data = response.data;
+                    $scope.chartData = response.data;
                     var labels = [];
                     var datasets = [];
 

@@ -117,5 +117,10 @@ public class ReviewServiceImpl implements ReviewService{
     public Review createReview(Review review) {
         return reviewDAO.save(review);
     }
+
+    @Override
+    public Review getByOrderDetailId(Integer orderDetailId) {
+        return reviewDAO.findByOrderDetailID(orderDetailId);
+    }
     }    
     

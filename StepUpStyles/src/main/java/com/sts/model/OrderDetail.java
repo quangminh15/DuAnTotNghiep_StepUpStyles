@@ -1,7 +1,11 @@
 package com.sts.model;
 
 import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +43,8 @@ public class OrderDetail implements Serializable {
 	@JoinColumn(name="product_detail_id")
 	private ProductDetail productDetail;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "orderDetail")
+	private List<Review> review;
 	
-
 }

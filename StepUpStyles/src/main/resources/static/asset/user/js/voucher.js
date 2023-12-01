@@ -137,6 +137,27 @@ app.controller("voucher-ctrl", function ($scope, $http) {
     
     $http.get("/user/Idprofile").then((resp) =>{
       var userId = resp.data;
+      if (!userId) {
+        // User is not logged in, show an error message
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        Toast.fire({
+            icon: 'error',
+            title: 'Bạn cần đăng nhập để sử dụng voucher',
+        });
+
+        // You might want to return or handle the error in some way
+        return;
+    }
       $http.get("/user/" + userId).then(userResp =>{
         console.log(userId);
         var fullUserData = userResp.data;

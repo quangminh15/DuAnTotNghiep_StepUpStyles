@@ -139,20 +139,23 @@ public class OrderServiceImpl implements OrderService {
        return orderDao.findAll();
     }
 
+    //Xài cái này linh
     @Override
-    public List<OrderDetail> findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
-        return orderDetailDao.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
+    public Review findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
+        return orderDetailDao.findReviewByOrderDetailIdAndUserId(orderDetailId, userId);
     }
+
+    @Override
+    public Review findByReviewWithOrderDetail(Integer orderDetailId) {
+        return orderDetailDao.shoReviewDetail(orderDetailId);
+    }
+    //linh
+
     @Override
     public void updateStatus(Integer id, OrderStatus status) {
         Order order = orderDao.findById(id).get();
         order.setOrderStatus(status);
        orderDao.save(order);
-    }
-
-    @Override
-    public List<Review> findByReviewWithOrderAndUser(Integer orderId, Integer userId) {
-        return orderDetailDao.findReviewsByOrderIdAndUserId(orderId, userId);
     }
 
     @Override
