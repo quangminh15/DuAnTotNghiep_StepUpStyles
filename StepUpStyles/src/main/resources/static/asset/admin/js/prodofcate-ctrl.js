@@ -4,11 +4,12 @@ app.controller("prodofcate-ctrl", function($scope, $http) {
 	$scope.categories = [];
 
 	$scope.selectedCategory = '';
+	$scope.filteredProducts = [];
 
 	//	Phân trang
 	$scope.pager = {
 		page: 0,
-		size: 10,
+		size: 7,
 		getPageNumbers: function() {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
@@ -68,17 +69,20 @@ app.controller("prodofcate-ctrl", function($scope, $http) {
 
 	// Hàm khởi đầu
 	function init() {
-		// Gọi API để lấy danh sách tất cả các danh mục
 		$http.get("/rest/categories/loadall").then(function(response) {
 			$scope.categories = response.data;
-			$scope.RestorePager.first();
-			$scope.loadProductsByCategory();
 
+			// Chọn danh mục đầu tiên nếu có ít nhất một danh mục
+			if ($scope.categories.length > 0) {
+				$scope.selectedCategory = $scope.categories[0].categoryID;
+				$scope.loadProductsByCategory(); // Load sản phẩm theo danh mục đầu tiên
+			}
+
+			$scope.pager.first();
 		});
 
 		// Gọi API để lấy dữ liệu cho biểu đồ
 		$http.get("/api/category-product-count").then(function(response) {
-			// Dữ liệu trả về từ API
 			var dataFromApi = response.data;
 			console.log(dataFromApi, "đây là data từ api");
 
@@ -118,9 +122,8 @@ app.controller("prodofcate-ctrl", function($scope, $http) {
 	// Gọi hàm khởi đầu
 	init();
 
-	// Hàm để load sản phẩm dựa trên danh mục đã chọn
 	$scope.loadProductsByCategory = function() {
-		// Gọi API để lấy danh sách sản phẩm dựa trên danh mục đã chọn và trang hiện tại
+		console.log("Calling loadProductsByCategory");
 		$http
 			.get(
 				"/rest/productdetails/byCategory/" +
@@ -131,10 +134,20 @@ app.controller("prodofcate-ctrl", function($scope, $http) {
 				$scope.pager.size
 			)
 			.then(function(response) {
-				$scope.filteredProducts = response.data;
+				// Kiểm tra xem dữ liệu từ API có hợp lệ không
+				if (Array.isArray(response.data) && response.data.length > 0) {
+					$scope.filteredProducts = response.data;
+				} else {
+					$scope.filteredProducts = []; // Gán một mảng rỗng nếu dữ liệu không hợp lệ
+				}
+				$scope.pager.first();
+			})
+			.catch(function(error) {
+				console.error("Error loading products:", error);
 			});
 	};
-	
+
+
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
