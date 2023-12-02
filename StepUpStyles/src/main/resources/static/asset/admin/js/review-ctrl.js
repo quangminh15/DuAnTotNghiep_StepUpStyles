@@ -22,7 +22,7 @@ app.controller("review-ctrl", function($scope, $http){
 		});
 		
 		//load User
-		$http.get("/user/loadall").then(resp => {
+		$http.get("/rest/userbyroleUser").then(resp => {
 			$scope.users = resp.data;
 		});
 	}
@@ -93,8 +93,7 @@ app.controller("review-ctrl", function($scope, $http){
 	$scope.showReview = function(reviewId){
 		$http.get("/rest/reviews/" + reviewId).then(resp => {
 			$scope.reviewdetails =  resp.data;
-			$('#orderModal').modal('show');
-			console.log($scope.reviewdetails);
+			$('#reviewModal').modal('show');
 			console.log("Success", resp);
 		}).catch(error => {
 			console.log("ẻroorrr", error);

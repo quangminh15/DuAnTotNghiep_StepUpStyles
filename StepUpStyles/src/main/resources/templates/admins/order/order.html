@@ -7,51 +7,52 @@
 		</div>
 		<div class="card-body" style="text-align: center;">
 			<div class="d-flex justify-content-between align-items-center">
-				<div class=" card-title d-flex py-3 badge badge-primary text-white font-weight-bolder">
+				<button class="border-0 card-title d-flex py-3 badge badge-secondary text-white font-weight-bolder" ng-click="filterByStatus('all')">
 					<!-- Thẻ select box -->
 					<span >
 						Tổng số Đơn hàng : {{allOrders.length}}
 
 					</span>
 
-				</div>
-				<div class=" card-title d-flex py-3  badge badge-primary text-white font-weight-bolder">
+				</button>
+				<button class="border-0 card-title d-flex py-3  badge badge-primary text-white font-weight-bolder"ng-click="filterByStatus('pending')" >
 					<!-- Thẻ select box -->
 					<span >
-						Chờ xác nhận : {{allOrders.length}}
+						
+						Chờ xác nhận : {{ordersPending}}
 
 					</span>
 
-				</div>
-				<div class=" card-title d-flex py-3  badge badge-info text-white font-weight-bolder">
+				</button>
+				<button class="border-0 card-title d-flex py-3  badge badge-info text-white font-weight-bolder" ng-click="filterByStatus('confirmed')">
 					<!-- Thẻ select box -->
 					<span >
-						Đã xác nhận : {{allOrders.length}}
+						Đã xác nhận : {{ordersConfirmed}}
 
 					</span>
 
-				</div>
-				<div class=" card-title d-flex py-3  badge badge-warning text-white font-weight-bolder">
+				</button>
+				<button class="border-0 card-title d-flex py-3  badge badge-warning text-white font-weight-bolder"ng-click="filterByStatus('shipping')">
 					<!-- Thẻ select box -->
 					<span >
-						Đang  giao : {{allOrders.length}}
+						Đang  giao : {{ordersShipping}}
 
 					</span>
 
-				</div><div class=" card-title d-flex py-3  badge badge-success text-white font-weight-bolder">
+				</button><button class="border-0 card-title d-flex py-3  badge badge-success text-white font-weight-bolder"ng-click="filterByStatus('shipped')">
 					<!-- Thẻ select box -->
 					<span >
-						Đã giao : {{allOrders.length}}
+						Đã giao : {{ordersDelivered}}
 					</span>
 
-				</div>
-				<div class=" card-title d-flex py-3  badge badge-danger text-white font-weight-bolder">
+				</buttonv>
+				<button class="border-0 card-title d-flex py-3  badge badge-danger text-white font-weight-bolder"ng-click="filterByStatus('cancel')">
 					<!-- Thẻ select box -->
 					<span >
-						Đã Hủy : {{allOrders.length}}
+						Đã Hủy : {{ordersCancel}}
 					</span>
 
-				</div>
+				</button>
 
 				<div class="d-flex">
 					<!-- Thẻ select box -->
@@ -90,7 +91,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="order in filteredOrders">
-						<td>{{$index +1}}</td>
+						<td>{{order.orderId}}</td>
 						<td>{{order.shippingAddress.nameReceiver}} </td>
 						<td>{{order.formattedDate }}</td>
 						<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
@@ -98,7 +99,7 @@
 						<td>{{order.paymentMenthod.paymentMenthodName }} <button
 								class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
 								data-placement="top" title="Thanh Toán Khi Nhận Hàng"
-								ng-if="order.paymentMenthod.paymentMenthodName==='COD'">!</button></td>
+								ng-if="order.paymentMenthod.paymentMenthodName ==='COD'">!</button></td>
 						<td>
 
 							<div class="dropdown">
@@ -111,7 +112,7 @@
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-class="{
 									'bg-primary': order.orderStatus === 'Pending',
 									'bg-info': order.orderStatus === 'Confirmed',
-									'bg-secondary': order.orderStatus === 'Shipping',
+									'bg-warning': order.orderStatus === 'Shipping',
 								  }" style="color: white;">
 									<span ng-if="order.orderStatus === 'Pending'">Chờ xác nhận</span>
 									<span ng-if="order.orderStatus === 'Confirmed'">Đã xác nhận</span>
@@ -295,6 +296,7 @@
 											<span class="col-md-5">Tổng số lượng sản phẩm:</span><h5 class="card-title col-md-7">{{calculateItemTotal(item)}} </h5>
 											<span class="col-md-5">Tổng tiền hàng:</span><h5 class="card-title col-md-7 ">{{singleOrder.initialPrice|number :0}} ₫</h5>
 											<span class="col-md-5">Phí vận chuyển:</span><h5 class="card-title col-md-7 ">{{singleOrder.shippingFee|number :0}} ₫</h5>
+											<span class="col-md-5" ng-if="singleOrder.discountPrice>0">Giảm giá:</span><h5 ng-if="singleOrder.discountPrice>0" class="card-title col-md-7 ">- {{singleOrder.discountPrice|number :0}} ₫</h5>
 											<span class="col-md-5">Tổng thanh toán:</span><h3 class="col-md-7 text-danger font-weight-bolder">{{singleOrder.totalAmount|number :0}} ₫</h3>
 										</div>
 										<div class="card-footer border-bottom border-top-0 bg-white"></div>
