@@ -83,7 +83,7 @@ public class ProductDetailRestController {
 		@GetMapping("/rest/productdetails/byBrand/{brandId}")
 		public ResponseEntity<List<ProductDetail>> getProductDetailsByBrand(
 				@PathVariable("brandId") Integer brandId) {
-			List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(brandId);
+			List<ProductDetail> productDetails = productDetailService.getProductDetailsByBrand(brandId);
 			return ResponseEntity.ok(productDetails);
 		}
 

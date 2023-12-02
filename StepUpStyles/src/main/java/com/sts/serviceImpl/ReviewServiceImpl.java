@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.sts.dao.ReviewDAO;
 import com.sts.model.Review;
+import com.sts.model.User;
 import com.sts.model.DTO.TotalProductRatingDTO;
 import com.sts.service.ReviewService;
 
@@ -121,6 +122,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review getByOrderDetailId(Integer orderDetailId) {
         return reviewDAO.findByOrderDetailID(orderDetailId);
+    }
+
+    @Override
+    public List<User> getUserRoleUser() {
+        return reviewDAO.getUserByRoleUser();
     }
     }    
     

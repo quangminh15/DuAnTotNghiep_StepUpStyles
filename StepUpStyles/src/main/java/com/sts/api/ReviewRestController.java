@@ -125,4 +125,9 @@ public class ReviewRestController {
             @RequestParam(name = "rating", required = false) Integer rating) {
         return reviewService.searchs(productId, usersId, rating);
     }
+
+    @GetMapping("/rest/userbyroleUser")
+    public List<User> getUserRoleUsers() {
+        return reviewService.getUserRoleUser();
+    }
 }

@@ -28,4 +28,5 @@ public interface FavoriteService {
     List<Favorite> getProductByProductId(Integer productId);
     List<Favorite> getUsersByUsersId(Integer usersId);
 
+    List<Object[]> getTop1ProductFavorite();
 }

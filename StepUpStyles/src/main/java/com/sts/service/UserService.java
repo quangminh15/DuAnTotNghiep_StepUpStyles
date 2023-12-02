@@ -36,4 +36,6 @@ public interface UserService {
 	void loginFromOAuth2(OAuth2AuthenticationToken oauth2);
 
 	void updateProfile(String fullname, LocalDate birthday, String phone, String img, Integer userId);
+
+	void updateProfile_noBirthday(String fullname, String phone, String img, Integer userId);
 }

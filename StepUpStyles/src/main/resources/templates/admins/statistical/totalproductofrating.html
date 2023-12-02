@@ -69,11 +69,11 @@
                     <tbody>
                         <tr ng-repeat="monthData in chartData"> <!-- Assuming your data is structured accordingly -->
                             <td class="text-center">Tháng {{monthData.month}}</td>
-                            <td class="text-center">{{monthData.ratings['1 sao']}}</td>
-                            <td class="text-center">{{monthData.ratings['2 sao']}}</td>
-                            <td class="text-center">{{monthData.ratings['3 sao']}}</td>
-                            <td class="text-center">{{monthData.ratings['4 sao']}}</td>
-                            <td class="text-center">{{monthData.ratings['5 sao']}}</td>
+                            <td class="text-center">Có {{monthData.ratings['1 sao']}} đánh giá</td>
+                            <td class="text-center">Có {{monthData.ratings['2 sao']}} đánh giá</td>
+                            <td class="text-center">Có {{monthData.ratings['3 sao']}} đánh giá</td>
+                            <td class="text-center">Có {{monthData.ratings['4 sao']}} đánh giá</td>
+                            <td class="text-center">Có {{monthData.ratings['5 sao']}} đánh giá</td>
                         </tr>
                     </tbody>
                 </table>
