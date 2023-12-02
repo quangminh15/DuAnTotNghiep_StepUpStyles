@@ -14,6 +14,10 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
                 console.log("1", $scope.orders.shippingAddress)
 
+                $scope.orders.sort((a, b) => {
+
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				});
 
                 $scope.orders.forEach(item => {
 
@@ -91,13 +95,45 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
     $scope.updateStatus = function (id, status) {
 
-        $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
-            .then(respone => {
-                alert("status update")
-                $scope.initialize()
-            }).catch(function (error) {
-                console.error('Error update:', error);
-            });
+        Swal.fire({
+			title: "Xác nhận hủy đơn hàng",
+			text: "Bạn có chắc muốn hủy đơn hàng này",
+			icon: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Hủy Đơn",
+			cancelButtonText: "Đóng"
+		}).then((result) => {
+            if (result.isConfirmed) {
+                $http.put(`/rest/order/updateStatus?id=${id}&status=${status}`)
+                    .then(respone => {
+                        const Toast = Swal.mixin({
+							toast: true,
+							position: 'top',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer)
+								toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+							
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Đơn hàng của bạn đã được hủy',
+
+						})
+                        $scope.initialize()
+                    }).catch(function (error) {
+                        console.error('Error update:', error);
+                    });
+
+            }
+
+        })
+
     }
 
     // 
