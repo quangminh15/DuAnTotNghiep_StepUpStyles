@@ -58,7 +58,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 600px; height: 600px; margin: 0 auto;">
 			<div class="modal-content" style="background-color: #eee;">
 				<div class="modal-header" style="background: #ff7315;">
-					<h4>Chọn Fourshoe Voucher</h4>
+					<h4 style="color: white;">Chọn Fourshoe Voucher</h4>
 					<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 						<span class="mdi mdi-close"></span>
 					</button>
@@ -66,10 +66,10 @@
 				<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
 					<div ng-show="voucherUseTrue.length == 0"
 						style="text-align: center; justify-content: center; margin: 10px;">
-						<i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
+						<i class="fa fa-ticket" style="font-size: 100px; color: #ff7315;"></i>
 						<p>Hiện tại bạn chưa chọn voucher nào</p>
 						<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
-								class="fa-plus-square" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
+								class="fa fa-refresh fa-spin fa-3x fa-fw" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
 					</div>
 					<div class="container" ng-show="voucherUseTrue">
 						<div class="row">
@@ -115,9 +115,9 @@
 
 				</div>
 				<div class="modal-footer" style="background-color: #eee;">
-					<button class="btn modal-close cancel" type="button" data-dismiss="modal">Hủy</button>
+					<button class="btn modal-close cancel" type="button" data-dismiss="modal" ng-click="huyChonVoucher()">Hủy</button>
 					<button class="btn modal-close add" style="background-color: #ff7315;" type="button"
-						data-dismiss="modal">Áp dụng</button>
+						data-dismiss="modal">OK</button>
 				</div>
 			</div>
 		</div>

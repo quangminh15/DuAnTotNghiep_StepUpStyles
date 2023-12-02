@@ -502,6 +502,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	$scope.caculatorDiscount()
 	//tien start
 	$scope.voucherUseTrue = [];
+	$scope.listOrder = [];
 
 	$scope.getVoucher = function () {
 		$http.get("/user/Idprofile").then((resp) =>{
@@ -512,6 +513,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			  // Thực hiện HTTP GET request đến API
 		$http.get('/rest/voucherUse/getTrue/' + userId)
 		.then(function (response) {
+			$http.get('/rest/order/listOrder').then(function (response) {
+				$scope.listOrder = response.data;
+				console.log($scope.listOrder);
+				$scope.listOrder.forEach(function(item){
+					//kiem tra voucher co duoc su dung chua
+				if (item.listOrder.voucherUse !== null) {
+					item.isExpired = true;
+				}
+				})
+				
+			});
 			// Xử lý dữ liệu trả về từ API
 			$scope.voucherUseTrue = response.data;
 			console.log($scope.voucherUseTrue);
@@ -576,6 +588,15 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 		$('#recycleBinModal').modal('show');
 	};
 
+	//khi an button huy thi se set ve null
+	$scope.huyChonVoucher = function () {
+		// Xóa voucher đã chọn
+		$scope.selectedVoucher = null;
+		$scope.discouted = 0;
+
+		//dong model
+		$('#recycleBinModal').modal('hide');
+	}
 
 	//tien end
 }])
