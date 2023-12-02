@@ -47,12 +47,12 @@ tr:nth-child(even) {
 					class="card-header rounded-top  bg-primary d-flex justify-content-between align-items-center">
 					<span class="title mb-0 text-white">Danh sách sản phẩm theo
 						danh mục</span>
-					
+
 				</div>
 				<div class="card-body">
-				<div class="d-flex align-items-center mb-3">
-				<label style="margin-right: 10px;">Chọn danh mục để lọc </label>
-						<select id="categorySelect" class="form-control"
+					<div class="d-flex align-items-center mb-3">
+						<label style="margin-right: 10px; margin-bottom: 0px;">Chọn danh mục để lọc </label> <select
+							id="categorySelect" class="form-control"
 							ng-model="selectedCategory" ng-change="loadProductsByCategory()"
 							style="width: 230px; height: 35px;" data-toggle="tooltip"
 							title="Chọn danh mục để lọc">
@@ -104,6 +104,88 @@ tr:nth-child(even) {
 							</ul>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+
+		<div class="col-lg-6">
+			<div class="card mb-5"
+				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+				<div class="rounded-top bg-primary card-header card-header-divider">
+					<span class="title text-white">Thống kê số lượng sản phẩm
+						theo thương hiệu</span>
+				</div>
+				<div class="card-body">
+					<canvas id="polar-chart-Brand" height="200"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="card mb-5"
+				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+				<div
+					class="card-header rounded-top  bg-primary d-flex justify-content-between align-items-center">
+					<span class="title mb-0 text-white">Danh sách sản phẩm theo
+						thương hiệu</span>
+				</div>
+				<div class="card-body">
+					<div class="d-flex align-items-center mb-3">
+						<label style="margin-right: 10px; margin-bottom: 0px;">Chọn thương hiệu để lọc
+						</label> <select id="brandSelect" class="form-control"
+							ng-model="selectedBrand" ng-change="loadProductsByBrand()"
+							style="width: 230px; height: 35px;" data-toggle="tooltip"
+							title="Chọn thương hiệu để lọc">
+							<option value="" disabled selected>Vui lòng chọn thương
+								hiệu</option>
+							<option ng-repeat="brand in brands" value="{{brand.brandID}}">{{brand.brandName}}</option>
+						</select>
+					</div>
+					<table class="table table-hover">
+						<thead style="font-size: 18px; font-style: italic;">
+							<tr>
+								<th>STT</th>
+								<th>Tên sản phẩm</th>
+								<th>Tên màu</th>
+								<th>Size</th>
+								<th>Số lượng</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="products in RestorePager.filteredProductsBrand">
+								<td>{{ $index + 1 }}</td>
+								<td>{{ products.product.productName }}</td>
+								<td>{{ products.color.colorName }}</td>
+								<td>{{ products.size.sizeNumber }}</td>
+								<td>{{ products.quantity }}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="d-flex justify-content-end mt-4">
+						<div>
+							<ul class="pagination">
+								<li class="page-item">
+									<button ng-click="RestorePager.first()" class="page-link">
+										<span class="ti-angle-double-left"></span>
+									</button>
+								</li>
+
+								<li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+									ng-class="{ 'active': (RestorePage.value === RestorePager.RestorePage + 1) }"><a
+									class="page-link" href="" ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+										RestorePage.value }}</a></li>
+
+								<li class="page-item">
+									<button ng-click="RestorePager.last()" class="page-link">
+										<span class="ti-angle-double-right"></span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</div>
