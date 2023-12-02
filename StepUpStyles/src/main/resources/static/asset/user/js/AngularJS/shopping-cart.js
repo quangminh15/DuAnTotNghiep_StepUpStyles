@@ -8,6 +8,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.cout = 0
 	//Load data
 	// localStorage.removeItem('selectedItems');
+
+
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
 	}
@@ -21,7 +23,9 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	}
 	$scope.initialize = function () {
 		$scope.tongTien = 0
-		//localStorage.removeItem('selectedItems');
+
+		// localStorage.removeItem('selectedItems');
+		localStorage.removeItem('totalAmount');
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;

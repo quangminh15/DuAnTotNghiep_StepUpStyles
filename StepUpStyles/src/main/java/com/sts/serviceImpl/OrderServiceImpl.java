@@ -1,7 +1,8 @@
 package com.sts.serviceImpl;
 
 import java.text.SimpleDateFormat;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatus(OrderStatus.Pending) // Set the initial order status
                 .paymentStatus(false)
                 .shippingFee(fee)
-                .totalAmount(initialPrice + fee)
+                .totalAmount(initialPrice + fee- discountPrice)
                 .discountPrice(discountPrice)
                 .voucherUse(voucher)
                 // Set the PaymentMethod, ShippingAddress, and User associations
@@ -155,6 +156,12 @@ public class OrderServiceImpl implements OrderService {
     public void updateStatus(Integer id, OrderStatus status) {
         Order order = orderDao.findById(id).get();
         order.setOrderStatus(status);
+        if (status==OrderStatus.Delivered) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Define your desired date format
+            String formattedDate = LocalDate.now().format(formatter);
+            order.setDeliveryDate(formattedDate);
+            order.setPaymentStatus(true);
+        }
        orderDao.save(order);
     }
 

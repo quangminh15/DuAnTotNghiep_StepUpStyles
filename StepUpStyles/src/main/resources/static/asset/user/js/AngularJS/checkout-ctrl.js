@@ -88,22 +88,22 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	
 	$scope.sendDataToJava = function () {
 
-		// const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
-		// $http({
-		// 	method: 'POST',
-		// 	url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
-		// 	data: $scope.cartIs, // Assuming $scope.cartIs is an array
-		// 	headers: { 'Content-Type': 'application/json' }
-		// })
-		// .then(function (response) {
-		// 	console.log('Order created:', response.data);
-		// 	localStorage.removeItem('selectedItems');
+		const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
+		$http({
+			method: 'POST',
+			url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
+			data: $scope.cartIs, // Assuming $scope.cartIs is an array
+			headers: { 'Content-Type': 'application/json' }
+		})
+		.then(function (response) {
+			console.log('Order created:', response.data);
+			localStorage.removeItem('selectedItems');
 
 			
-		// })
-		// .catch(function (error) {
-		// 	console.error('Error:', error);
-		// });
+		})
+		.catch(function (error) {
+			console.error('Error:', error);
+		});
 		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien));
 		
 		window.location.href='/pay-cod-success'
