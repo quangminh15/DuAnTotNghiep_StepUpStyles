@@ -378,12 +378,9 @@
 									</p>
 									<p class="d-flex">
 										<span class="font-weight-bolder">Phí Ship</span>
-										<span class="text-right">{{shippingFee | number:0 }} ₫</span>
+										<span class="text-right">{{!shippingFee?0: shippingFee| number:0 }} ₫</span>
 									</p>
-									<p class="d-flex">
-										<span class="font-weight-bolder">Giảm Giá</span>
-										<span class="text-right">0 ₫</span>
-									</p>
+									
 									<hr>
 									<p class="d-lg-flex total-price">
 										<span class="font-weight-bolder">Tổng Tiền</span>

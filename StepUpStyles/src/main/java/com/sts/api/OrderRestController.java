@@ -55,9 +55,9 @@ public class OrderRestController {
             @RequestParam("voucherUseId")Long voucherUID) {
         try {
             // Handle the list of CartData objects
-            System.out.println(fee);
-            System.out.println(initialPrice);
-            System.out.println(addressId);
+            // System.out.println(fee);
+            // System.out.println(initialPrice);
+            // System.out.println(addressId);
 
             
            
