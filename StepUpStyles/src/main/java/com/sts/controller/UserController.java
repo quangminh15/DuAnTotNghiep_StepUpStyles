@@ -418,6 +418,7 @@ public class UserController {
 			// Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
 			if (codeFromView.equals(this.vc.getCode())) {
 				userService.create(this.user);
+				
 				response.setStatus(HttpServletResponse.SC_OK); // Status 200 OK
 			} else {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error
@@ -492,7 +493,9 @@ public class UserController {
 								.deleted(true)
 								.activaties(true)
 								.build();
-			userService.create(user);
+//			userService.create(user);
+			User us = userService.create(user);
+			System.out.println("123 "+ us.getUsersId());
 		}
 		return "redirect:/index";
 	}
