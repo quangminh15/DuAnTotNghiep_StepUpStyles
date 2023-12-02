@@ -25,11 +25,12 @@
 		.subcard {
 			border-bottom: 1px solid rgba(0, 0, 0, 0.110)
 		}
+
 		.totalorder {
 			border-bottom: 1px dotted rgba(0, 0, 0, 0.125);
-			
+
 		}
-		
+
 
 		.custom-file-upload {
 			border: 1px solid #ccc;
@@ -43,23 +44,29 @@
 		}
 
 		.menu-item.active {
-			
+
 			color: orangered !important;
 			border-bottom: 2px orangered solid;
-			
+
 		}
-		.table-bordered td,.table-bordered td{
+
+		.table-bordered td,
+		.table-bordered td {
 			border: 1px dotted rgba(0, 0, 0, 0.130) !important;
 		}
-		.table-bordered{
+
+		.table-bordered {
 			border-top: none;
 		}
-		.col70{
+
+		.col70 {
 			width: 85% !important;
 		}
-		.col30{
+
+		.col30 {
 			width: 15% !important;
 		}
+
 		.rating-stars ul {
 			list-style-type: none;
 			padding: 0;
@@ -72,33 +79,42 @@
 			display: inline-block;
 
 		}
+
 		.rating-stars ul>li.star>i.fa {
 			font-size: 2.5em;
 			color: #ccc;
 			cursor: pointer;
 		}
+
 		.rating-stars ul>li.star.hover>i.fa {
 			color: #FFCC36;
 		}
+
 		.rating-stars ul>li.star.selected>i.fa {
 			color: #FF912C;
 		}
+
 		.menu-item.active {
-			
+
 			color: orangered !important;
 			border-bottom: 2px orangered solid;
-			
+
 		}
-		.table-bordered td,.table-bordered td{
+
+		.table-bordered td,
+		.table-bordered td {
 			border: 1px dotted rgba(0, 0, 0, 0.130) !important;
 		}
-		.table-bordered{
+
+		.table-bordered {
 			border-top: none;
 		}
-		.col70{
+
+		.col70 {
 			width: 70%;
 		}
-		.col30{
+
+		.col30 {
 			width: 30%;
 		}
 	</style>
@@ -189,34 +205,40 @@
 						<img ng-src="{{reviewedOrder.product.image[1].imagePath}}" width="10%" class="mr-2">
 						<div class="mt-2">
 							<p style="color: gray;">{{reviewedOrder.product.productName}}</p>
-							<p style="color: gray;">Size: {{reviewedOrder.orderDetail.productDetail.size.sizeNumber}}, Màu: {{reviewedOrder.orderDetail.productDetail.color.colorName}}</p>
+							<p style="color: gray;">Size: {{reviewedOrder.orderDetail.productDetail.size.sizeNumber}},
+								Màu: {{reviewedOrder.orderDetail.productDetail.color.colorName}}</p>
 						</div>
 					</div>
 					<hr>
 					<div class="row mt-2">
 						<div class="col-sm-1 text-center">
-							<img src="/asset/user/images/N5.jpg" alt="Hình" class="img-fluid rounded-circle" style="width: 50px; object-fit: cover;">
+							<img src="/asset/user/images/N5.jpg" alt="Hình" class="img-fluid rounded-circle"
+								style="width: 50px; object-fit: cover;">
 						</div>
 						<div class="col-sm-10">
 							<p class="mb-0">
 								<strong style="color: black;">{{reviewedOrder.user.fullName}}</strong>
 							</p>
-							<p class="mb-0" style="font-size: 12px;">{{reviewedOrder.reviewDate | date:'dd-MM-yyyy'}}</p>
+							<p class="mb-0" style="font-size: 12px;">{{reviewedOrder.reviewDate | date:'dd-MM-yyyy'}}
+							</p>
 							<div class="rating mb-2 text-warning">
 								<span class="fa" ng-repeat="star in [1, 2, 3, 4, 5]"
 									ng-class="{'fa-star': star <= reviewedOrder.rating, 'fa-star-o': star > reviewedOrder.rating}"></span>
 							</div>
 							<p class="mb-2" style="word-wrap: break-word; color: black;">{{reviewedOrder.title}}</p>
 							<div>
-								<a ng-if="reviewedOrder.image1" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image1}}">
+								<a ng-if="reviewedOrder.image1" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
+									href="{{reviewedOrder.image1}}">
 									<img src="{{reviewedOrder.image1}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
-								<a ng-if="reviewedOrder.image2" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image2}}">
+								<a ng-if="reviewedOrder.image2" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
+									href="{{reviewedOrder.image2}}">
 									<img src="{{reviewedOrder.image2}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
-								<a ng-if="reviewedOrder.image3" data-fancybox="gallery-{{reviewedOrder.reviewId}}" href="{{reviewedOrder.image3}}">
+								<a ng-if="reviewedOrder.image3" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
+									href="{{reviewedOrder.image3}}">
 									<img src="{{reviewedOrder.image3}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
@@ -237,31 +259,37 @@
 			<div class="container ">
 
 				<div class="d-flex row text-center align-items-center">
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck(null)" ng-class="{ 'active': isActiveStatus(null) }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck(null)"
+						ng-class="{ 'active': isActiveStatus(null) }">
 
 						<p>Tất Cả</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Pending')" ng-class="{ 'active': isActiveStatus('Pending') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Pending')"
+						ng-class="{ 'active': isActiveStatus('Pending') }">
 
 
 						<p>Đang Xử Lý</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Confirmed')" ng-class="{ 'active': isActiveStatus('Confirmed') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Confirmed')"
+						ng-class="{ 'active': isActiveStatus('Confirmed') }">
 
 
 						<p>Vận Chuyển</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipping')" ng-class="{ 'active': isActiveStatus('Shipping') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Shipping')"
+						ng-class="{ 'active': isActiveStatus('Shipping') }">
 
 
 						<p>Đang Giao</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Delivered')" ng-class="{ 'active': isActiveStatus('Delivered') }">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Delivered')"
+						ng-class="{ 'active': isActiveStatus('Delivered') }">
 
 
 						<p>Đã Giao</p>
 					</a>
-					<a class="col-md-2 menu-item py-md-4" href="">
+					<a class="col-md-2 menu-item py-md-4" href="" ng-click="filterByStatusAndCheck('Cancel')"
+						ng-class="{ 'active': isActiveStatus('Cancel') }">
 
 						<p>Đã Hủy</p>
 					</a>
@@ -277,7 +305,7 @@
 		<div class="container py-md-3 d-flex justify-content-center align-items-center" style="min-height: 25em;">
 			<div class="text-center">
 
-				<img src="/asset/user/img/emptyorder.png"  alt="">
+				<img src="/asset/user/img/emptyorder.png" alt="">
 				<h3>Chưa có đơn hàng nào</h3>
 			</div>
 		</div>
@@ -285,18 +313,43 @@
 	<section style="background-color:#fff" class="w3l-ecommerce-main-inn container " ng-repeat="order in filterStaus">
 		<!--/-->
 
-		
+
 		<div class="ecomrhny-content-inf py-1 mt-3 mb-5" ng-if="checkList==false">
 			<div class="container py-md-3">
 				<div class="accordion" id="accordionExample">
-					<div class="card" >
+					<div class="card">
 						<div class=" bg-white" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);" id="headingOne">
-							<h2 class="mb-0 d-flex justify-content-end ">
-								<p>{{order.orderStatus}} |<button class="btn btn-link" type="button"
-										data-toggle="collapse" data-target="#collapse{{ $index + 1 }}"
-										aria-expanded="true" aria-controls="collapseOne">
-										Chi tiết 
-									</button></p>
+							<h2 class="mb-0 d-flex justify-content-between " style="color: #26aa99;">
+								<div >
+
+									<h4 class="font-weight-bolder "><span ng-if="order.orderStatus=='Pending'"> Chờ xác nhận </span>
+										<span ng-if="order.orderStatus=='Confirmed'"> Đã xác nhận</span>
+										<span ng-if="order.orderStatus=='Shipping'"> Đang giao hàng</span>
+										<span ng-if="order.orderStatus=='Delivered'"> Đã giao</span>
+										<span ng-if="order.orderStatus=='Cancel'"> Đã hủy</span>
+										| Mã đơn: #{{order.orderId}}
+
+									</h4>
+									
+								</div>
+								<p><span ng-if="order.orderStatus=='Pending'"><i class="fa fa-spinner fa-spin"></i> Đơn
+										hàng đang được chờ người bán xác nhận và chuẩn bị </span>
+									<span ng-if="order.orderStatus=='Confirmed'"><i class="fa fa-check-square"
+											aria-hidden="true"></i> Đơn hàng đang được bàn giao cho đơn vị vận
+										chuyển</span>
+									<span ng-if="order.orderStatus=='Shipping'"><i class="fa fa-truck"
+											aria-hidden="true"></i> Đơn hàng đang trên đường giao đến bạn</span>
+									<span ng-if="order.orderStatus=='Delivered'"> <span><i class="fa fa-inbox" aria-hidden="true"></i>
+											</span>Đơn hàng đã được giao
+										thành công</span>
+									<span ng-if="order.orderStatus=='Cancel'"> Đơn hàng đã được hủy</span>
+
+									|<button class="btn btn-link" type="button" data-toggle="collapse"
+										data-target="#collapse{{ $index + 1 }}" aria-expanded="true"
+										aria-controls="collapseOne" style="color: #ff7315;">
+										Chi tiết
+									</button>
+								</p>
 
 							</h2>
 						</div>
@@ -304,7 +357,8 @@
 						<div id="collapse{{ $index + 1 }}" class="collapse " aria-labelledby="headingOne"
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
-								<p class="text-dark font-weight-bolder">Địa Chỉ Giao Hàng :</p>
+								<p class="text-dark font-weight-bolder">Thông Tin Giao Hàng :</p>
+								<p class="font-weight-bolder" style="color: #ff7315;"><span>{{order.orderStatus=='Delivered'?'Ngày Nhận Hàng:  ':'Ngày giao dự kiến: '}}</span> {{order.deliveryDate|date:'dd-MM-yyyy'}}</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.ward}},
@@ -315,11 +369,11 @@
 								<p class="text-dark font-weight-bolder">Thanh Toán</p>
 								<div class="d-flex ">
 									<p class="text-dark">Phương Thức thanh toán:</p>
-									<p class="text-dark ml-2">{{order.paymentMenthod.paymentMenthodName}}</p>
+									<p class="text-dark ml-2 font-weight-bolder">{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
 									<p class="text-dark">Giảm giá: </p>
-									<p class="text-dark ml-2">0 ₫</p>
+									<p class="text-dark ml-2">- {{order.discountPrice | number: 0}} ₫</p>
 								</div>
 								<div class="d-flex ">
 									<p class="text-dark">Phí vận chuyển:</p>
@@ -335,22 +389,25 @@
 							<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 										-webkit-box-orient: vertical;
 										-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
-								ut libero! Impedit omnis porro iusto sequi quia!</p>
+							</p>
 							<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} | Size:
 								{{item.productDetail.size.sizeNumber}}</p>
 							<p class="text-dark">Số lượng: X {{item.quantity}}</p>
 
 						</div>
 						<div class="col-md-4 d-flex justify-content-end">
-							<div>{{item.price|number:0}} ₫</div>
-							<button class="btn btn-danger ml-3" ng-click="showModalReview(item)" ng-if="!item.hasBeenReviewed">Đánh giá</button>
-							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)" ng-if="item.hasBeenReviewed">Xem đánh giá</button>
+							<h5 class="text-danger">{{item.price|number:0}} ₫</h5>
+							<button ng-show="order.orderStatus == 'Delivered'" class="btn btn-danger ml-3"
+								ng-click="showModalReview(item)" ng-if="!item.hasBeenReviewed">Đánh giá</button>
+							<button class="btn btn-secondary ml-3" ng-click="showModalReviewDetail(item)"
+								ng-if="item.hasBeenReviewed">Xem đánh giá</button>
 						</div>
 					</div>
 
 
-					<div class="bg-white border-0 text-right" >
-						<div  class=" row d-flex justify-content-end align-items-center mb-2  " style="border-bottom: 1px solid rgb(226, 226, 226);">
+					<div class="bg-white border-0 text-right">
+						<div class=" row d-flex justify-content-end align-items-center mb-2  "
+							style="border-bottom: 1px solid rgb(226, 226, 226);">
 							<!-- <div class="col-md-7"></div>
 							<div class="totalorder col-md-5 py-2">
 								<div class="row d-flex ">
@@ -360,23 +417,43 @@
 								</div>
 
 							</div> -->
-							<table  class="table table-borderless">
-								
+							<table class="table table-borderless">
+
 								<tbody>
-								<tr>
-									<td class="col70"><p class="text-secondary">Tổng Tiền hàng: </p></td>
-									<td class="col30"><p class="text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p></td>
-								</tr>
-								<tr>
-									<td class="col70"><p class="text-secondary">Phí ship:</p></td>
-									<td class="col30"><p class="text-end">{{order.shippingFee|number:0}} ₫</p></td>
-								</tr>
-								<tr>
-									<td class="col70"><p class="text-secondary">Tổng thanh toán:</p></td>
-									<td class="col30"><h3 class="text-end text-danger">{{order.totalAmount|number:0}} ₫</h3></td>
-								</tr>
-							</tbody>
-								
+									<tr>
+										<td class="col70">
+											<p class="text-secondary">Tổng Tiền hàng: </p>
+										</td>
+										<td class="col30">
+											<p class="text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p>
+										</td>
+									</tr>
+									<tr ng-if="order.discountPrice>0">
+										<td class="col70">
+											<p class="text-secondary">Giảm giá:</p>
+										</td>
+										<td class="col30">
+											<p class="text-end">- {{order.discountPrice|number:0}} ₫</p>
+										</td>
+									</tr>
+									<tr>
+										<td class="col70">
+											<p class="text-secondary">Phí ship:</p>
+										</td>
+										<td class="col30">
+											<p class="text-end">{{order.shippingFee|number:0}} ₫</p>
+										</td>
+									</tr>
+									<tr>
+										<td class="col70">
+											<p class="text-secondary">Tổng thanh toán:</p>
+										</td>
+										<td class="col30">
+											<h3 class="text-end text-danger">{{order.totalAmount|number:0}} ₫</h3>
+										</td>
+									</tr>
+								</tbody>
+
 							</table>
 						</div>
 						<!-- <div  class=" row d-flex justify-content-end align-items-center mb-2 mb-2 py-2 ">
@@ -393,8 +470,9 @@
 						</div>
 						<button class="btn btn-danger">Huy Don Hang</button>
 						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button> -->
-						
-						<button class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn hàng</button>
+
+						<button ng-if="order.orderStatus=='Pending'"class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn
+							hàng</button>
 					</div>
 
 				</div>
@@ -420,39 +498,39 @@
 
 	</div>
 	<script>
-		$(document).ready(function(){
-	  $('#stars li').on('mouseover', function(){
-		var onStar = parseInt($(this).data('value'), 10);
-		$(this).parent().children('li.star').each(function(e){
-		  if (e < onStar) {
-			$(this).addClass('hover');
-		  }
-		  else {
-			$(this).removeClass('hover');
-		  }
+		$(document).ready(function () {
+			$('#stars li').on('mouseover', function () {
+				var onStar = parseInt($(this).data('value'), 10);
+				$(this).parent().children('li.star').each(function (e) {
+					if (e < onStar) {
+						$(this).addClass('hover');
+					}
+					else {
+						$(this).removeClass('hover');
+					}
+				});
+
+			}).on('mouseout', function () {
+				$(this).parent().children('li.star').each(function (e) {
+					$(this).removeClass('hover');
+				});
+			});
+
+			$('#stars li').on('click', function () {
+				var onStar = parseInt($(this).data('value'), 10);
+				var stars = $(this).parent().children('li.star');
+
+				for (i = 0; i < stars.length; i++) {
+					$(stars[i]).removeClass('selected');
+				}
+
+				for (i = 0; i < onStar; i++) {
+					$(stars[i]).addClass('selected');
+				}
+			});
+			$('#stars li').addClass('selected');
+
 		});
-		
-	  }).on('mouseout', function(){
-		$(this).parent().children('li.star').each(function(e){
-		  $(this).removeClass('hover');
-		});
-	  });
-	  
-	  $('#stars li').on('click', function(){
-		var onStar = parseInt($(this).data('value'), 10);
-		var stars = $(this).parent().children('li.star');
-		
-		for (i = 0; i < stars.length; i++) {
-		  $(stars[i]).removeClass('selected');
-		}
-		
-		for (i = 0; i < onStar; i++) {
-		  $(stars[i]).addClass('selected');
-		}
-	  });
-	  $('#stars li').addClass('selected');
-	  
-	});
 	</script>
 </body>
 

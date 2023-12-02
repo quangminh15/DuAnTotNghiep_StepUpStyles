@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.dao.ProductImageDAO;
 import com.sts.model.Product;
+import com.sts.model.DTO.BrandProductCountDTO;
 import com.sts.model.DTO.CategoryProductCountDTO;
 import com.sts.service.ProductService;
 import com.sts.serviceImpl.ProductDetailServiceImpl;
@@ -87,6 +88,12 @@ public class ProductRestController {
 	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
 		List<CategoryProductCountDTO> categoryProductCounts = productService.getCategoryProductCount();
 		return ResponseEntity.ok(categoryProductCounts);
+	}
+	
+	@GetMapping("/api/brand-product-count")
+	public ResponseEntity<List<BrandProductCountDTO>> getBrandProductCount() {
+		List<BrandProductCountDTO> brandProductCounts = productService.getBrandProductCount();
+		return ResponseEntity.ok(brandProductCounts);
 	}
 
 	// Load danh sách sản phẩm theo Brand

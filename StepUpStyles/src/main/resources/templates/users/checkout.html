@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-	<title>STS | GIỎ HÀNG</title>
+	<title>STS | THANH TOÁN</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -43,8 +43,8 @@
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a th:href="@{/index}">Trang Chủ</a></span> > <span>Giỏ
-							Hàng</span>
+					<p class="breadcrumbs"><span class="mr-2"><a th:href="@{/index}">Trang Chủ</a></span> > <span>Thanh
+							Toán</span>
 					</p>
 					<h1 class="mb-0 bread">THANH TOÁN</h1>
 				</div>
@@ -57,7 +57,7 @@
 		style="overflow: hidden;">
 		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 600px; height: 600px; margin: 0 auto;">
 			<div class="modal-content" style="background-color: #eee;">
-				<div class="modal-header" style="background: orange;">
+				<div class="modal-header" style="background: #ff7315;">
 					<h4>Chọn Fourshoe Voucher</h4>
 					<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 						<span class="mdi mdi-close"></span>
@@ -71,15 +71,15 @@
 						<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
 								class="fa-plus-square" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
 					</div>
-					<div class="container"ng-show="voucherUseTrue">
+					<div class="container" ng-show="voucherUseTrue">
 						<div class="row">
-							
+
 							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;">
 								<div class="card boxvou"
 									style="height: 130px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
 									<div class="row">
 										<div class="col-md-3"
-											style="background-color: orange; justify-content: center; align-items: center;">
+											style="background-color: #ff7315; justify-content: center; align-items: center;">
 											<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
 												<text x="45" y="45" font-size="20" fill="white">%</text>
 											</svg>
@@ -101,7 +101,8 @@
 											</div>
 										</div>
 										<div class="col-md-2">
-											<input type="radio" name="voucherRadio" ng-disabled="item.isExpired" />
+											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)"ng-disabled="item.isExpired"
+												ng-value="item" />
 										</div>
 									</div>
 								</div>
@@ -115,7 +116,8 @@
 				</div>
 				<div class="modal-footer" style="background-color: #eee;">
 					<button class="btn modal-close cancel" type="button" data-dismiss="modal">Hủy</button>
-					<button class="btn modal-close add" type="button" data-dismiss="modal">Áp dụng</button>
+					<button class="btn modal-close add" style="background-color: #ff7315;" type="button"
+						data-dismiss="modal">Áp dụng</button>
 				</div>
 			</div>
 		</div>
@@ -127,7 +129,11 @@
 			<div class="row ">
 				<div class="col-lg-12 cart-wrap ftco-animate ">
 					<!-- Button trigger modal -->
-
+<style>
+	h4{
+		color: black;
+	}
+</style>
 
 					<div style="border-top: 3px tomato solid;" class="cart-total mb-3 bg-white">
 						<div class="row">
@@ -311,11 +317,12 @@
 					</div>
 				</div>
 			</div>
+			<div class="row ">
+				<div class="col-lg-12 cart-wrap ftco-animate ">
+					<!-- Button trigger modal -->
 
-			<div class="row">
 
-				<div class="col-lg-12 ftco-animate bg-white">
-					<div class="cart-total mb-3">
+					<div style="border-top: 3px tomato solid;" class="cart-total mb-1 bg-white">
 						<div class=" row navtable text-center">
 							<div class="col-lg-4">Sản phẩm</div>
 							<div class="col-lg-2">Thuộc tính</div>
@@ -324,72 +331,130 @@
 							<div class="col-lg-2">Thành tiền</div>
 
 						</div>
-						<div class="card ">
+						<div class="row">
+							<div class="card col-lg-12 border-left-0 border-right-0">
 
-							<div class="card-body">
+								<div class="card-body ">
 
-								<div class="row mb-2 text-center" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125)"
-									ng-repeat="iCart in cartIs">
-									<div class="col-lg-4 d-flex align-items-center ">
-										<img class="pic-2 img-fluid" width="25%"
-											ng-src="{{iCart.product.productImages[1].imagePath}}">
-										<span style=" overflow: hidden;     display: -webkit-box;
-										-webkit-box-orient: vertical;
-										-webkit-line-clamp: 2;" class="ml-2">{{iCart.product.productName}} </span>
+									<div class="row mb-2 text-center d-flex align-items-center"
+										ng-class="{'border-bottom': cartIs.length>1 && $index+1<cartIs.length}"
+										ng-repeat="iCart in cartIs">
+										<div class="col-lg-4 d-flex align-items-center ">
+											<img class="pic-2 img-fluid" width="25%"
+												ng-src="{{iCart.product.productImages[1].imagePath}}">
+											<span style=" overflow: hidden; display: -webkit-box;
+											-webkit-box-orient: vertical;
+											-webkit-line-clamp: 2;" class="ml-2">{{iCart.product.productName}} </span>
+										</div>
+										<div class="col-lg-2 align-items-center">
+											<div class="">
+												<p>Size: {{iCart.productDetail.size.sizeNumber}}, </p>
+												<p>Màu: {{iCart.productDetail.color.colorName}}</p>
+
+											</div>
+
+										</div>
+										<div class="col-lg-2  align-items-center">
+											{{iCart.product.price |number:0 }} ₫
+											</p>
+
+										</div>
+										<div class="col-lg-2  align-items-center">
+											x{{iCart.quantity}}
+
+
+										</div>
+										<div class="col-lg-2  align-items-center" style="position: relative;">
+											<h3>{{iCart.product.price * iCart.quantity|number:0 }} ₫</h3>
+										</div>
+
 									</div>
-									<div class="col-lg-2 align-items-center">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-										<p>Size: {{iCart.productDetail.size.sizeNumber}}, </p>
-										<p>Màu: {{iCart.productDetail.color.colorName}}</p>
+			<div class="row ">
+				<div class="col-lg-12 cart-wrap ftco-animate ">
 
+					<div class="cart-total mb-3 bg-white card ">
+
+						<div class="row">
+
+							<div class="col-lg-6 card d-flex align-items-center justify-content-center border-bottom-0 border-top-0 border-left-0"
+								ng-if="selectedVoucher">
+								<h3 class="font-weight-bolder ">Voucher Đã chọn</h3>
+								<div class="boxvou" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; width: 60%;">
+									<div class="row">
+										<div class="col-md-3"
+											style="background-color: #ff7315; justify-content: center; align-items: center;">
+											<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+												<text x="45" y="45" font-size="20" fill="white">%</text>
+											</svg>
+											<div style=" margin-top: 15px; margin-bottom: 20px;">
+												<div class="gg"
+													style="color: white; font-size: 10px; font-style: italic; text-align: center;">
+													Giảm giá</div>
+												<div class="sus"
+													style="color: white; font-size: 15px; font-style: bold; text-align: center;">
+													FOURSHOE</div>
+											</div>
+										</div>
+										<div class="col-md-7">
+											<div class="card-body">
+												<div>Giảm: {{selectedVoucher.voucher.discountAmount}}%</div>
+												<div>Đơn tối thiểu: {{formatToVND(selectedVoucher.voucher.total)}}</div>
+												<div style="font-size: 11px; color: red;">Áp dụng:
+													{{selectedVoucher.formattedStartDate}} - {{selectedVoucher.formattedEndDate}}
+												</div>
+											</div>
+										</div>
+										
 									</div>
-									<div class="col-lg-2  align-items-center">
-										{{iCart.product.price |number:0 }} ₫
-										</p>
+								</div>
+								<a class="btn mt-3"
+										style="background-color: #ff7315; color: white;"ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
+											style="margin-right: 10px;" ></i>Chọn Voucher</a>
+							</div>
 
-									</div>
-									<div class="col-lg-2  align-items-center">
-										x{{iCart.quantity}}
+							<div class="col-lg-6 card d-flex align-items-center justify-content-center border-bottom-0 border-top-0 border-left-0"
+								ng-if="!selectedVoucher">
+								<h3 class="font-weight-bolder ">Voucher</h3>
+								<div
+									style="text-align: center; justify-content: center; margin: 10px;">
+									<i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
+									<p>Hiện tại bạn chưa chọn voucher nào</p>
+									
+									<a class="btn"
+										style="background-color: #ff7315; color: white;"ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
+											style="margin-right: 10px;" ></i>Chọn Voucher</a>
+								</div>
+							</div>
 
+							<div class="col-lg-6 text-center">
+								<h3 class="font-weight-bolder ">Tổng Thanh Toán</h3>
+								<div class="d-flex cart-total">
+									<p class="text-right ">
+										<span class="font-weight-bolder mb-2" style="font-size: larger;">Thành Tiền:</span>
+										<span class="font-weight-bolder mb-2" style="font-size: larger;">Phí Ship:</span>
+										<span class="font-weight-bolder mb-2" style="font-size: larger;"ng-if="discouted>0">Giảm Giá:</span>
+										<span class="font-weight-bolder mb-1" style="font-size: larger;">Tổng Tiền:</span>
+									</p>
+									<p class="text-right ">
 
-									</div>
-									<div class="col-lg-2  align-items-center" style="position: relative;">
-										<h3>{{iCart.product.price * iCart.quantity|number:0 }} ₫</h3>
-									</div>
+										<span class=" mb-2" style="font-size: larger;">{{tongTien | number:0 }} ₫</span>
+										<span class=" mb-2" style="font-size: larger;">{{shippingFee | number:0 }} ₫</span>
+										<span class=" mb-2" style="font-size: larger;" ng-if="discouted>0">-{{discouted| number:0 }} ₫</span>
+										<span class=" mb-1  text-danger" style="font-size: larger;">{{(tongTien-discouted) + shippingFee | number:0 }} ₫</span>
+									</p>
 
 								</div>
 							</div>
 						</div>
+						<div class="row mt-2 text-right border-top">
 
-					</div>
-				</div>
-
-			</div>
-
-
-			<div class="row justify-content-end">
-				<div class="col-lg-8 mt-5 cart-wrap ftco-animate bg-white">
-					<div class="cart-total mb-3">
-						<h3 class="font-weight-bolder">Tổng Cộng Giỏ Hàng</h3>
-						<p class="d-flex justify-content-end">
-							<span>Thành Tiền</span>
-							<span>{{tongTien | number:0 }} ₫</span>
-						</p>
-						<p class="d-flex justify-content-end">
-							<span class="font-weight-bolder">Phí Ship</span>
-							<span>{{shippingFee | number:0 }} ₫</span>
-						</p>
-						<p class="d-flex justify-content-end">
-							<span class="font-weight-bolder">Giảm Giá</span>
-							<span>0 ₫</span>
-						</p>
-						<hr>
-						<p class="d-lg-flex total-price justify-content-end">
-							<span class="font-weight-bolder">Tổng Tiền</span>
-							<span>{{tongTien + shippingFee | number:0 }} ₫</span>
-						</p>
-						<div class=" d-flex justify-content-center mr-5">
-							<p></p>
 							<p>
 
 								<a ng-click="sendDataToJava()" class="btn btn-primary py-3 px-4 ml-3 mr-2 ">Thanht toán
@@ -400,13 +465,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-					<div class="cart-total mb-3">
-						<button style="width: 50%;" ng-click="openRecycleBinForm()">Mã giảm giá voucher</button>
-					</div>
-				</div>
+			</div>
 
-				<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+
+
+
+			<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 
 					<div class="cart-total mb-3">
 						<h3>Estimate shipping and tax</h3>
@@ -430,7 +494,7 @@
 				</div> -->
 
 
-			</div>
+		</div>
 		</div>
 	</section>
 

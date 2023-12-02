@@ -4,6 +4,20 @@
 		<div class="card-body">
 			<h4 class="mb-3">Danh sách sản phẩm yêu thích</h4>
 			<div class="d-flex justify-content-between align-items-center">
+					<div class="col-sm-3 stretch-card transparent">
+						<div class="card card-tale">
+							<div class="card-body">
+								<h4>Tổng lượt yêu thích : {{countF}}</h4>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-sm-2 stretch-card transparent">
+						<div class="card card-tale">
+							<div class="card-body">
+								<h4>Hihi : {{mostLikedProduct.productName}}</h4>
+							</div>
+						</div>
+					</div> -->
 			<div class="row">
 				<div class="col-sm-4">
 					<select ng-model="selectedProduct" ng-change="filterByProduct()" class="form-control">
@@ -20,7 +34,7 @@
 				<div class="col-sm-4">
 					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
 					title="Xuất file Excel">
-					<span class="fa ti-file"></span>
+					<span class="ti-save"></span>
 				</button>
 				<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
 					title="Xuất file PDF">
@@ -34,8 +48,8 @@
 					<tr>
 						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
 							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
-									class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
-									class="mdi mdi-long-arrow-up"></span>
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
 							</span>
 						</th>
 					</tr>

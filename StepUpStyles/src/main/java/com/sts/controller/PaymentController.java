@@ -2,6 +2,8 @@ package com.sts.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.sts.service.UserService;
@@ -28,7 +30,7 @@ public class PaymentController {
     UserService userService;
    
     Double total = 0.0;
-    
+
     List<OrderDetailDTO> listOrderDetails = new ArrayList<>();
     OrderDTO ordertemp = new OrderDTO();
     Order order = new Order();
@@ -38,14 +40,18 @@ public class PaymentController {
     public void getData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") Double initial,
             @RequestParam("fee") Double fee,
-            @RequestParam("addressId") Integer addressId) {
+            @RequestParam("addressId") Integer addressId,
+            @RequestParam("discountPrice") double discountPrice,
+            @RequestParam("voucherUseId") Long voucherUID) {
 
         ordertemp = OrderDTO.builder()
-        .initialPrice(initial)
-        .shippingFee(fee)
-        .addressID(addressId)
-        .orderDetails(cartDataList)
-        .build();
+                .initialPrice(initial)
+                .shippingFee(fee)
+                .addressID(addressId)
+                .orderDetails(cartDataList)
+                .discountPrice(discountPrice)
+                .voucherUseId(voucherUID)
+                .build();
 
         for (OrderDetailDTO orderDetailDTO : ordertemp.getOrderDetails()) {
             System.out.println(orderDetailDTO.getCartDetailId());
@@ -53,20 +59,22 @@ public class PaymentController {
 
     }
 
-    
-
     @Autowired
     OrderService orderService;
 
-    @GetMapping("/purchase") 
-    public String createOrderVNPay(){
-        Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(), ordertemp.getShippingFee(), ordertemp.getAddressID(), true);
+    @GetMapping("/purchase")
+    public String createOrderVNPay() {
+
+        Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(),
+                ordertemp.getShippingFee(), ordertemp.getAddressID(), true, ordertemp.getDiscountPrice(),
+                ordertemp.getVoucherUseId());
         return "redirect:/paysuccess";
     }
+
     @ResponseBody
     @GetMapping("/payment/removedata")
-    public String reovedata(){
-       
+    public String reovedata() {
+
         return "/index";
     }
 
@@ -75,14 +83,14 @@ public class PaymentController {
 
     @RequestMapping("/submitOrder")
     public String submidOrder(HttpServletRequest request) {
-       
-        total = ordertemp.getInitialPrice()+ordertemp.getShippingFee();
+
+        total = ordertemp.getInitialPrice() + ordertemp.getShippingFee();
         int orderTotal = 10000;
         String orderInfo = "Thanh Toán Đơn Hàng";
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         String vnpayUrl = vnPayService.createOrder(orderTotal, orderInfo, baseUrl);
         return "redirect:" + vnpayUrl;
-        
+
     }
 
     @GetMapping("/vnpay-payment")
@@ -104,10 +112,16 @@ public class PaymentController {
     }
 
     @RequestMapping("/paysuccess")
-	public String success(Model model) {
-        loadstatuslogin(model);
-		return "users/vnpay-success";
-	}
+    public String success(Model model) {
+
+        return "users/vnpay-success";
+    }
+
+    @RequestMapping("/pay-cod-success")
+    public String successCOD(Model model) {
+
+        return "users/pay-success";
+    }
 
     public void loadstatuslogin(Model model){
         Integer userIdCurrent = userService.getUserIdCurrent();

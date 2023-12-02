@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.sts.model.Review;
+import com.sts.model.User;
 import com.sts.model.DTO.TotalProductRatingDTO;
 
 public interface ReviewDAO extends JpaRepository<Review, Integer>{
@@ -38,4 +39,7 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
 
     @Query("SELECT r FROM Review r WHERE r.orderDetail.orderDetailId = :orderDetailId")
     Review findByOrderDetailID(@Param("orderDetailId") Integer orderDetailId);
+
+    @Query("SELECT u FROM User u WHERE u.role = 'USER'")
+    List<User> getUserByRoleUser();
 }

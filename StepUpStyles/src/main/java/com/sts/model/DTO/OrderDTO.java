@@ -22,5 +22,7 @@ public class OrderDTO {
     double shippingFee;
     double totalAmount;
     Integer addressID;
+    double discountPrice;
+    Long voucherUseId;
     List<OrderDetailDTO> orderDetails;
 }

@@ -71,13 +71,21 @@ public class ProductDetailRestController {
 		return productDetailService.getProductDetailByProduct(productId);
 	}
 
-	// test
+	// thống kê sản phẩm theo danh mục
 	@GetMapping("/rest/productdetails/byCategory/{categoryId}")
 	public ResponseEntity<List<ProductDetail>> getProductDetailsByCategory(
 			@PathVariable("categoryId") Integer categoryId) {
 		List<ProductDetail> productDetails = productDetailService.getProductDetailsByCategory(categoryId);
 		return ResponseEntity.ok(productDetails);
 	}
+	
+	// thống kê sản phẩm theo thương hiệu
+		@GetMapping("/rest/productdetails/byBrand/{brandId}")
+		public ResponseEntity<List<ProductDetail>> getProductDetailsByBrand(
+				@PathVariable("brandId") Integer brandId) {
+			List<ProductDetail> productDetails = productDetailService.getProductDetailsByBrand(brandId);
+			return ResponseEntity.ok(productDetails);
+		}
 
 	//Hai
 	@GetMapping("/rest/productdetails/find")
