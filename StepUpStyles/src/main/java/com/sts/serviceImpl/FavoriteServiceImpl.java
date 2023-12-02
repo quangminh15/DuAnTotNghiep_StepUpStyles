@@ -84,5 +84,10 @@ public class FavoriteServiceImpl implements FavoriteService{
     public List<Favorite> getUsersByUsersId(Integer usersId) {
         return favoriteDAO.findByUserID(usersId);
     }
+
+    @Override
+    public List<Object[]> getTop1ProductFavorite() {
+        return favoriteDAO.findMostLikedProduct();
+    }
     
 }

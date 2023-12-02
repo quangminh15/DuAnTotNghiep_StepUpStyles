@@ -7,6 +7,7 @@ app.controller("favorite-ctrl", function($scope, $http){
 		//load 
 		$http.get("/rest/favorites/loadall").then(resp => {
 			$scope.favoriteitems = resp.data;
+			$scope.countF = $scope.favoriteitems.length;
 			$scope.favoriteitems.forEach(favoriteitem => {
 				favoriteitem.dateLike = new Date(favoriteitem.dateLike)
 			})
@@ -20,7 +21,7 @@ app.controller("favorite-ctrl", function($scope, $http){
 		});
 		
 		//load User
-		$http.get("/user/loadall").then(resp => {
+		$http.get("/rest/userbyroleUser").then(resp => {
 			$scope.users = resp.data;
 		});
 	}
@@ -29,9 +30,21 @@ app.controller("favorite-ctrl", function($scope, $http){
 
 	$scope.filterByProduct = function() {
 		if ($scope.selectedProduct) {
+			$scope.selectedUser = ""
 			$http.get("/rest/favorites/loadbyproducts/" + $scope.selectedProduct).then(resp => {
 				$scope.favoriteitems = resp.data;
-				$scope.pager.first();
+				if($scope.favoriteitems.length == 0){
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy sản phẩm phù hợp. Vui lòng chọn lại!',
+					});
+					$scope.initialize();
+					$scope.selectedProduct = ""
+				}else{
+					$scope.pager.first();
+				}
+				
 			}).catch(error => {
 				$scope.pager.first();
 			});
@@ -42,9 +55,20 @@ app.controller("favorite-ctrl", function($scope, $http){
 
 	$scope.filterByUser = function() {
 		if ($scope.selectedUser) {
+			$scope.selectedProduct = ""
 			$http.get("/rest/favorites/loadbyusers/" + $scope.selectedUser).then(resp => {
 				$scope.favoriteitems = resp.data;
-				$scope.pager.first();
+				if($scope.favoriteitems.length == 0){
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy người dùng phù hợp. Vui lòng chọn lại!',
+					});
+					$scope.initialize();
+					$scope.selectedUser = ""
+				}else{
+					$scope.pager.first();
+				}
 			}).catch(error => {
 				$scope.pager.first();
 			});
@@ -237,5 +261,31 @@ app.controller("favorite-ctrl", function($scope, $http){
 		}
 
 	}
-	
+
+	$scope.productTop = [];
+
+$scope.getProductTop = function(){
+    $http.get("/rest/favorites/top1").then(resp => {
+        $scope.productTop = resp.data;
+        console.log("Danh sách sản phẩm theo thứ tự giảm dần lượt thích:", resp.data);
+
+        // Sắp xếp danh sách theo lượt thích giảm dần
+        $scope.productTop.sort((a, b) => {
+            return b.numberOfLikes - a.numberOfLikes;
+        });
+
+        // Lấy sản phẩm có nhiều lượt thích nhất
+        if ($scope.productTop.length > 0) {
+            var mostLikedProduct = $scope.productTop[0];
+            console.log("Sản phẩm có nhiều lượt thích nhất:", mostLikedProduct);
+        } else {
+            console.log("Không có sản phẩm nào được yêu thích.");
+        }
+    }).catch(error => {
+        console.error("Lỗi khi lấy danh sách sản phẩm yêu thích:", error);
+    });
+}
+
+$scope.getProductTop();
+
 })

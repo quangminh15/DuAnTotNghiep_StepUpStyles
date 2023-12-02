@@ -34,6 +34,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
 
     <!-- <link rel="stylesheet" href="/asset/admin/css/style.css" type="text/css"> -->
     <!-- <link rel="stylesheet" href="/asset/user/css/style.css" type="text/css"> -->
@@ -419,6 +420,7 @@
         type="text/javascript"></script>
 <script src="/asset/admin/js/revenue.js"
         type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
     <script src="/asset/admin/js/favorite-ctrl.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
@@ -454,6 +456,12 @@
             xhr.send();
         }
     </script>
+    <script>
+		$(document).ready(function() {
+			// $(".fancybox").fancybox();
+			$("[data-fancybox^='review-']").fancybox();
+		});
+	</script>
 </body>
 
 </html>

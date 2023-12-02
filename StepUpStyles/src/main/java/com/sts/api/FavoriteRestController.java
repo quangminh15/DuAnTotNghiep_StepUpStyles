@@ -81,4 +81,8 @@ public class FavoriteRestController {
 	public List<Favorite> getUserByUser(@PathVariable Integer usersId) {
 		return favoriteService.getUsersByUsersId(usersId);
 	}
+	@GetMapping("/rest/favorites/top1")
+	public List<Object[]> getTop1() {
+		return favoriteService.getTop1ProductFavorite();
+	}
 }
