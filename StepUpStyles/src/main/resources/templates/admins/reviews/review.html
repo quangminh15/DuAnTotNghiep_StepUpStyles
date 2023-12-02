@@ -41,7 +41,7 @@
 						<button type="button"
 						class="btn btn-outline-success btn-fw mr-2 export"
 						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="fa ti-file"></span>
+						<span class="ti-save"></span>
 						</button>
 						<button type="button"
 							class="btn btn-outline-danger btn-fw mr-2 pdf-file"
@@ -58,10 +58,11 @@
 						<th ng-repeat="column in sortableColumns"
 							ng-click="sortByColumn(column.name)">{{ column.label }} <span
 							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+								ng-if="!sortReverse" class="ti-angle-double-up"></span>
 						</span>
 						</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,11 +72,14 @@
 							{{reviewitem.product.productName}}
 						</td>
                         <td>{{reviewitem.user.fullName}}</td>
-                        <td style="word-wrap: break-word; white-space: normal; max-width: 200px;">
-							{{reviewitem.title}}
-						</td>
                         <td>
-                            <div class="star-rating">
+							<span ng-if="reviewitem.title.length > 20" title="{{reviewitem.title}}">
+								{{reviewitem.title | limitTo:20}}{{$last ? '' : '...'}}
+							</span>
+							<span ng-if="reviewitem.title.length <= 20">{{reviewitem.title}}</span>
+						</td>						
+                        <td>
+                            <div class="star-rating col-sm-12">
                                 <span class="fa fa-star" ng-class="{'checked': i <= reviewitem.rating }"
                                     ng-repeat="i in [1, 2, 3, 4, 5]"></span>
                             </div>
@@ -83,15 +87,19 @@
                         <td>{{reviewitem.reviewDate | date:'dd-MM-yyyy'}}</td>
 						<td>
 							<div ng-if="reviewitem.image1">
-								<img src="{{reviewitem.image1}}">
-							</div>	
+								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image1}}">
+									<img src="{{reviewitem.image1}}" class="fancybox" style="width: 50px; height: 50px;">
+								</a>
+							</div>
 							<div ng-if="!reviewitem.image1">
 								<p>Trống</p>
-							</div>							
+							</div>
 						</td>
 						<td>
 							<div ng-if="reviewitem.image2">
-								<img src="{{reviewitem.image2}}">
+								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image2}}">
+									<img src="{{reviewitem.image2}}" class="fancybox" style="width: 50px; height: 50px;">
+								</a>
 							</div>
 							<div ng-if="!reviewitem.image2">
 								<p>Trống</p>
@@ -99,11 +107,20 @@
 						</td>
 						<td>
 							<div ng-if="reviewitem.image3">
-								<img src="{{reviewitem.image3}}">
+								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image3}}">
+									<img src="{{reviewitem.image3}}" class="fancybox" style="width: 50px; height: 50px;">
+								</a>
 							</div>
 							<div ng-if="!reviewitem.image3">
 								<p>Trống</p>
 							</div>
+						</td>
+						<td>
+							<button ng-click="showReview(reviewitem.reviewId)"
+                                        class="btn btn-inverse-dark btn-rounded btn-icon" data-toggle="tooltip"
+                                        data-placement="top" title="Xem chi tiết đánh giá">
+                                        <i class="ti-eye"></i>
+                                    </button>
 						</td>
                     </tr>
 				</tbody>
@@ -132,5 +149,71 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Chi tiết đánh giá</h5>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="row">
+						<div class="col-sm-4">
+							<h4><strong>Người dùng:</strong></h4>
+							<h4>{{reviewdetails.user.fullName}}</h4>
+						</div>
+						<div class="col-sm-4">
+							<h4><strong>Sản phẩm:</strong></h4>
+							<h4>{{reviewdetails.product.productName}}</h4>
+						</div>
+						<div class="col-sm-4">
+							<h4><strong>Sao đánh giá:</strong></h4>
+							<div class="star-rating">
+                                <span class="fa fa-star" ng-class="{'checked': i <= reviewdetails.rating }"
+                                    ng-repeat="i in [1, 2, 3, 4, 5]"></span>
+                            </div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<h4 class="mb-2"><strong>Nội dung đánh giá:</strong></h4>
+							<h4>{{reviewdetails.title}}</h4>
+						</div>
+					</div>
+					<div class="row">
+						<h4 class="mb-2 ml-3"><strong>Ảnh sản phẩm từ người dùng:</strong></h4>
+						<div class="d-flex col-sm-12">
+							<div class="mr-5">
+								<div ng-if="reviewdetails.image1">
+									<a data-fancybox="gallery-{{reviewdetails.reviewId}}" href="{{reviewdetails.image1}}">
+										<img src="{{reviewdetails.image1}}" class="fancybox" style="width: 200px; height: 200px;">
+									</a>
+								</div>
+							</div>
+							<div class="mr-5">
+								<div ng-if="reviewdetails.image2">
+									<a data-fancybox="gallery-{{reviewdetails.reviewId}}" href="{{reviewdetails.image2}}">
+										<img src="{{reviewdetails.image2}}" class="fancybox" style="width: 200px; height: 200px;">
+									</a>
+								</div>
+							</div>
+							<div>
+								<div ng-if="reviewdetails.image3">
+									<a data-fancybox="gallery-{{reviewdetails.reviewId}}" href="{{reviewdetails.image3}}">
+										<img src="{{reviewdetails.image3}}" class="fancybox" style="width: 200px; height: 200px;">
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark btn-fw" data-toggle="tooltip" data-dismiss="modal"
+                        title="Đóng">Đóng</button>
+                </div>
+        </div>
+    </div>
 </div>
 

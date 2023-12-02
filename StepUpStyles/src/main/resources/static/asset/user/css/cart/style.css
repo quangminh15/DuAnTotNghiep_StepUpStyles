@@ -200,7 +200,7 @@ a:not([href]):not([tabindex]) {
 
 a:not([href]):not([tabindex]):hover,
 a:not([href]):not([tabindex]):focus {
-  color: #007bff !important;
+  /* color: #007bff !important; */
   text-decoration: none;
 }
 
@@ -625,7 +625,7 @@ pre code {
 
 @media (min-width: 1200px) {
   .container {
-    max-width: 1780px;
+    max-width: 1600px;
   }
 
 }

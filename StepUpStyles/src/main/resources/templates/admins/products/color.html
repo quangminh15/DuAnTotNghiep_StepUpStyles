@@ -88,8 +88,8 @@
 									<th ng-repeat="column in sortableColumns"
 										ng-click="sortByColumn(column.name)">{{ column.label }} <span
 										ng-if="sortColumn === column.name"> <span
-											ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-											ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+											ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+											ng-if="!sortReverse" class="ti-angle-double-up"></span>
 									</span>
 									</th>
 
@@ -162,7 +162,7 @@
 					<button type="button"
 						class="btn btn-outline-success btn-fw mr-2 export"
 						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="fa ti-file"></span>
+						<span class="ti-save"></span>
 					</button>
 					<button type="button"
 						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
@@ -189,8 +189,8 @@
 						<th ng-repeat="column in sortableColumns"
 							ng-click="sortByColumn(column.name)">{{ column.label }} <span
 							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="mdi mdi-long-arrow-down"></span> <span
-								ng-if="!sortReverse" class="mdi mdi-long-arrow-up"></span>
+								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+								ng-if="!sortReverse" class="ti-angle-double-up"></span>
 						</span>
 						</th>
 						<th class="actions"></th>

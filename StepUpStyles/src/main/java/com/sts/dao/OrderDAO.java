@@ -1,6 +1,7 @@
 package com.sts.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.sts.model.Order;
 import com.sts.model.OrderStatus;
@@ -13,4 +14,6 @@ public interface OrderDAO extends JpaRepository<Order,Integer>{
     List<Order> findByUser(User user);
 
     List<Order> findByOrderStatus(OrderStatus orderStatus);
+
+
 }

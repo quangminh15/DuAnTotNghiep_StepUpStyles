@@ -152,8 +152,18 @@ public class UserController {
 	@PostMapping("/profile-update-data")
 	public String process(Model model, @ModelAttribute("UserProfile") User user) {
 		loadstatuslogin(model);
+		String name = user.getFullName();
+		LocalDate birthday = user.getBirthday();
+		String phone = user.getPhone();
+		String img = getUserImageURL();
+		Integer id = userService.getUserIdCurrent();
+		System.out.println(name+birthday+phone+img+"ID: "+id);
+		if(birthday==null){
+			userService.updateProfile_noBirthday(name,phone,img,id);
+			return "redirect:/profile";
+		}
 		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), userService.getUserIdCurrent());
-		return "redirect:/profile-edit";
+		return "redirect:/profile";
 	}
 
 	@RequestMapping("/forgot-pass")
@@ -482,7 +492,9 @@ public class UserController {
 								.deleted(true)
 								.activaties(true)
 								.build();
-			userService.create(user);
+//			userService.create(user);
+			User us = userService.create(user);
+			System.out.println("123 "+ us.getUsersId());
 		}
 		return "redirect:/index";
 	}

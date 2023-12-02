@@ -86,6 +86,21 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
 		return productDetailsByCategory;
 	}
+	
+	@Override
+	public List<ProductDetail> getProductDetailsByBrand(Integer brandId) {
+		// Thực hiện truy vấn danh sách ProductDetail theo categoryId
+		List<ProductDetail> allProductDetails = productDetailDAO.findAll(); // Lấy tất cả sản phẩm
+		List<ProductDetail> productDetailsByBrand = new ArrayList<>();
+
+		for (ProductDetail productDetail : allProductDetails) {
+			if (productDetail.getProduct().getBrand().getBrandID().equals(brandId)) {
+				productDetailsByBrand.add(productDetail);
+			}
+		}
+
+		return productDetailsByBrand;
+	}
 
 	// Hai
 	@Autowired

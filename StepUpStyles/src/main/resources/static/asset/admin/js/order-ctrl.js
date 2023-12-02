@@ -50,19 +50,62 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 
 				$scope.allOrders.sort((a, b) => {
+					const statusPriority = {
+						'Pending': 3,
+						'Confirmed': 2,
+						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
+					};
 
-					return new Date(b.orderDate) - new Date(a.orderDate);
+					// Xác định mức độ ưu tiên cho từng order
+					const statusPriorityA = statusPriority[b.orderStatus] || 0;
+					const statusPriorityB = statusPriority[a.orderStatus] || 0;
+
+					if (statusPriorityA !== statusPriorityB) {
+						return statusPriorityA - statusPriorityB;
+					} else {
+						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
+						return new Date(b.orderDate) - new Date(a.orderDate);
+					}
 				});
-				$scope.filteredOrders = angular.copy($scope.allOrders);
-								
-				$scope.filteredOrders.forEach(item=>{
 
-					item.formattedDate=formatDate(item.orderDate)
+				$scope.filteredOrders = angular.copy($scope.allOrders);
+
+
+
+				$scope.ordersPending = $scope.allOrders.filter(order => {
+
+					return order.orderStatus == 'Pending';
+				}).length;
+
+				$scope.ordersConfirmed = $scope.allOrders.filter(order => {
+
+					return order.orderStatus == 'Confirmed';
+				}).length;
+
+				$scope.ordersShipping = $scope.allOrders.filter(order => {
+
+					return order.orderStatus == 'Shipping';
+				}).length;
+
+				$scope.ordersDelivered = $scope.allOrders.filter(order => {
+
+					return order.orderStatus == 'Delivered';
+				}).length;
+
+				$scope.ordersCancel = $scope.allOrders.filter(order => {
+
+					return order.orderStatus == 'Cancel';
+				}).length;
+
+				$scope.filteredOrders.forEach(item => {
+
+					item.formattedDate = formatDate(item.orderDate)
 				})
 				$scope.pager.first()
 				$scope.orders.forEach(item => {
 					//định dạng
-				
+
 					$http.get(`/rest/order/listOrder/detail?orderid=${item.orderId}`)
 						.then(respone => {
 							$scope.orderDetail = respone.data
@@ -73,7 +116,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 								$http.get("/rest/productimages/loadbyproduct/" + orderdetails.productDetail.product.productID).then(resp => {
 									orderdetails.image = resp.data;
 									console.log("s2", orderdetails.image);
-									
+
 
 								})
 
@@ -85,7 +128,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				console.error('Error fetching cart items:', error);
 			});
 
-			$scope.selectedActivity = 'all'
+		$scope.selectedActivity = 'all'
 	}
 	$scope.initialize()
 
@@ -149,7 +192,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 		},
 	};
 	$scope.sortableColumns = [
-		{ name: 'orderId', label: 'STT' },
+		{ name: 'orderId', label: 'Mã Đơn' },
 		{ name: 'shippingAddress.nameReceiver', label: 'Người Nhận' },
 		{ name: 'orderorderDate', label: 'Ngày đặt' },
 		{ name: 'paymentStatus', label: 'Tình trạng thanh toán' },
@@ -187,12 +230,12 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			return 0;
 		});
 	};
-	
+
 
 	function formatDate(date) {
 		// Parse the input date string
 		const inputDate = new Date(date);
-	
+
 		// format gio VN
 		const options = {
 			year: 'numeric',
@@ -204,30 +247,45 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			hour12: false, // 24-hour format
 			timeZone: 'Asia/Ho_Chi_Minh', //  time zone
 		};
-	
+
 		// Format the date using Intl.DateTimeFormat
 		const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
-	
+
 		return formattedDate;
 	}
-	
+
 	$scope.updateStatus = function (id, status) {
-		var vnStatus='';
-		if(status=='Confirmed'){
-			vnStatus="Đã xác nhận"
+		var vnStatus = '';
+		if (status == 'Confirmed') {
+			vnStatus = "Đã xác nhận"
 		}
-		else if(status=='Shipping'){
-			vnStatus="Đang giao"
+		else if (status == 'Shipping') {
+			vnStatus = "Đang giao"
 		}
-		else if(status=='Delivered'){
-			vnStatus="Đã giao"
+		else if (status == 'Delivered') {
+			vnStatus = "Đã giao"
 		}
-		else if(status=='Cancel'){
-			vnStatus="Đã hủy"
+		else if (status == 'Cancel') {
+			vnStatus = "Đã hủy"
+		}
+
+		//custom confirm alert
+
+		let statusColor = ""; // Default color
+
+		// Assuming vnStatus determines the color
+		if (vnStatus === "Đã xác nhận") {
+			statusColor = "text-info"; // Change color for "shipped" status to green
+		} else if (vnStatus === "Đang giao") {
+			statusColor = "text-warning"; // Change color for "processing" status to orange
+		}else if (vnStatus === "Đã giao") {
+			statusColor = "text-success"; // Change color for "processing" status to orange
+		}else if (vnStatus === "Đã hủy") {
+			statusColor = "text-danger"; // Change color for "processing" status to orange
 		}
 		Swal.fire({
 			title: "Cập nhật đơn hàng",
-			text: "Xác nhận cập nhật thái của đơn hàng thành " + vnStatus,
+			html: `<span>Xác nhận cập nhật thái của đơn hàng thành</span><h3 class="${statusColor}">${vnStatus}</h3>`,
 			icon: "info",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
@@ -248,7 +306,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 								toast.addEventListener('mouseenter', Swal.stopTimer)
 								toast.addEventListener('mouseleave', Swal.resumeTimer)
 							}
-							
+
 						})
 						Toast.fire({
 							icon: 'success',
@@ -297,52 +355,135 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			})
 	}
 
-	$scope.filterByStatus = function () {
+	$scope.filterByStatus = function (status) {
+
 		$scope.filteredOrders = angular.copy($scope.allOrders);
-		
-		if ($scope.selectedActivity === "newest" || $scope.selectedActivity === "all") {
-			$scope.filteredOrders.sort((a, b) => {
 
-				return new Date(b.orderDate) - new Date(a.orderDate);
-			});
+		if (status) {
+			if (status == 'pending') {
 
-		} else if ($scope.selectedActivity === "oldest") {
-			$scope.filteredOrders.sort((b, a) => {
-
-				return new Date(b.orderDate) - new Date(a.orderDate);
-			});
-		} else {
-			if ($scope.selectedActivity === "pending") {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Pending';
 				})
 
-			} else if ($scope.selectedActivity === "confirmed") {
+			} else if (status == 'confirmed') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Confirmed';
 				})
 
-			} else if ($scope.selectedActivity === "shipping") {
+			} else if (status == 'shipping') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Shipping';
 				})
 
-			} else if ($scope.selectedActivity === "shipped") {
+			} else if (status == 'shipped') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Delivered';
 				})
 
-			}else if ($scope.selectedActivity === "cancel") {
+			} else if (status == 'cancel') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Cancel';
 				})
 
+			} else {
+				$scope.filteredOrders.sort((a, b) => {
+
+
+					const statusPriority = {
+						'Pending': 3,
+						'Confirmed': 2,
+						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
+					};
+
+					// Xác định mức độ ưu tiên cho từng order
+					const statusPriorityA = statusPriority[b.orderStatus] || 0;
+					const statusPriorityB = statusPriority[a.orderStatus] || 0;
+
+					if (statusPriorityA !== statusPriorityB) {
+						return statusPriorityA - statusPriorityB;
+					} else {
+						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
+						return new Date(b.orderDate) - new Date(a.orderDate);
+					}
+
+
+				});
+			}
+		} else {
+			if ($scope.selectedActivity === "newest" || $scope.selectedActivity === "all") {
+				$scope.filteredOrders.sort((a, b) => {
+
+					const statusPriority = {
+						'Pending': 3,
+						'Confirmed': 2,
+						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
+					};
+
+					// Xác định mức độ ưu tiên cho từng order
+					const statusPriorityA = statusPriority[b.orderStatus] || 0;
+					const statusPriorityB = statusPriority[a.orderStatus] || 0;
+
+					if (statusPriorityA !== statusPriorityB) {
+						return statusPriorityA - statusPriorityB;
+					} else {
+						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
+						return new Date(b.orderDate) - new Date(a.orderDate);
+					}
+				});
+
+			} else if ($scope.selectedActivity === "oldest") {
+				$scope.filteredOrders.sort((b, a) => {
+
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				});
+			} else {
+
+
+				if ($scope.selectedActivity === "pending") {
+					$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+						return order.orderStatus == 'Pending';
+					})
+
+				} else if ($scope.selectedActivity === "confirmed") {
+					$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+						return order.orderStatus == 'Confirmed';
+					})
+
+				} else if ($scope.selectedActivity === "shipping") {
+					$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+						return order.orderStatus == 'Shipping';
+					})
+
+				} else if ($scope.selectedActivity === "shipped") {
+					$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+						return order.orderStatus == 'Delivered';
+					})
+
+				} else if ($scope.selectedActivity === "cancel") {
+					$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+
+						return order.orderStatus == 'Cancel';
+					})
+
+				}
+
 			}
 		}
+		$scope.filteredOrders.forEach(item => {
+
+			item.formattedDate = formatDate(item.orderDate)
+		})
 	}
 }])
