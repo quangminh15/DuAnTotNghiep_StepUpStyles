@@ -31,6 +31,7 @@ import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
+import com.sts.service.UserService;
 
 @CrossOrigin("*")
 @RestController
@@ -45,6 +46,9 @@ public class OrderRestController {
     UserDAO userdao;
     @Autowired
     OrderDetailDAO orderDtdao;
+
+     @Autowired
+    UserService uService;
 
     @PostMapping("/receiveCartData")
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
@@ -88,7 +92,8 @@ public class OrderRestController {
 
     @GetMapping("/listOrder")
     public List<Order> getListOrder() {
-        User user = userdao.findById(1).get();
+        Integer userID = uService.getUserIdCurrent();
+        User user = userdao.findById(userID).get();
 
         return orderService.loadByUser(user);
     }

@@ -7,9 +7,9 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
-	// localStorage.removeItem('selectedItems');
+	localStorage.removeItem('selectedItems');
 
-	
+
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
 	}
@@ -26,7 +26,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 		// localStorage.removeItem('selectedItems');
 		localStorage.removeItem('totalAmount');
-		localStorage.removeItem('selectedItems');
+		// localStorage.removeItem('selectedItems');
 		$http.get(`/rest/cart`)
 			.then(resp => {
 				const cartItems = resp.data;
@@ -95,8 +95,6 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				});
 
 				// Now, cartItems will have color and size information for each product
-				$scope.items = cartItems;
-				$scope.cartitems = cartItems
 
 				// $scope.items.forEach(item => {
 				// 	$http.get("/rest/discount/loadbyproduct/" + item.product.productID).then(resp => {
@@ -109,10 +107,16 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// 	})
 
 				// })
+				$scope.items = cartItems;
+				$scope.cartitems = cartItems
 				$scope.items.forEach(cartDetail => {
 					$http.get("/rest/productimages/loadbyproduct/" + cartDetail.product.productID).then(resp => {
 						cartDetail.product.productImages = resp.data;
 						console.log("images", cartDetail.product.productImages);
+					})
+
+					$http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+						cartDetail.product.directDiscount = resp.data.filter(directDiscounts => !directDiscounts.deleted);
 					})
 				})
 
@@ -164,12 +168,12 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	}
 	$scope.delete = function (id) {
 		$http.delete(`/rest/cart/delete?cartId=${id}`).then(function (respone) {
-			
+
 			$scope.initialize()
 		})
-		.catch(function (error) {
-			console.error('Failed to delete:', error);
-		});
+			.catch(function (error) {
+				console.error('Failed to delete:', error);
+			});
 	}
 	$scope.checkQuantity = function (qty) {
 
@@ -650,14 +654,23 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	function setTongTien() {
 		var tongTien = 0;
 		angular.forEach($scope.items, function (value, key) {
-			console.log(1, value.isSelected);
-			if (value.isSelected == true) {
-				console.log(value.isSelected);
-				tongTien += value.product.price * value.quantity;
+			if (value.product.directDiscount.status=="Đang diễn ra") {
+				
+				if (value.isSelected == true) {
+					console.log(value.isSelected);
+					tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
+				}
+				$scope.tongTien = tongTien;
+			} else {
+				if (value.isSelected == true) {
+					console.log(value.isSelected);
+					tongTien += value.product.price * value.quantity;
+				}
+				$scope.tongTien = tongTien;
 			}
 		});
 		console.log(tongTien);
-		$scope.tongTien = tongTien;
+		
 	}
 
 	//ADDRESS load -------------
