@@ -1048,6 +1048,8 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 		});
 	};
 
+//	Lọc trang sản phẩm thẻ combobox bắt đầu
+
 	$scope.filterByOption = function () {
 		var selectBox = document.getElementById("sortSelect");
 		var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -1235,6 +1237,197 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 				break;
 		}
 	};
+	
+//	........
+$scope.filterByOption2 = function () {
+		var selectBox = document.getElementById("sortSelect2");
+		var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+		switch (selectedValue) {
+			case 'name_asc':
+				$scope.sortByPropertyName();
+				$scope.chuyenTrang();
+				break;
+			case 'name_desc':
+				$scope.productitems.reverse();
+				$scope.chuyenTrang();
+				break;
+			case 'price_asc':
+				$scope.sortByPrice();
+				$scope.chuyenTrang();
+				break;
+			case 'price_desc':
+				$scope.productitems.sort(function (a, b) {
+					return b.price - a.price;
+				});
+				$scope.chuyenTrang();
+				break;
+			case 'price_0_1tr':
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.price >= 0 && item.price <= 1000000;
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm nào trong khoảng giá đó. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+			case 'price_1tr_2tr':
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.price > 1000000 && item.price <= 2000000;
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm nào trong khoảng giá đó. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+					$scope.chuyenTrang();
+				} else {
+					$scope.productitems = filteredItems;
+					$scope.chuyenTrang();
+				}
+				$scope.chuyenTrang();
+				break;
+			case 'price_2tr_plus':
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.price > 2000000;
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm nào trong khoảng giá đó. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+					$scope.chuyenTrang();
+				} else {
+					$scope.productitems = filteredItems;
+					$scope.chuyenTrang();
+				}
+				$scope.chuyenTrang();
+				break;
+
+			// Thêm case để lọc sản phẩm đang giảm giá
+			case 'discounted':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra");
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_0_15':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 0 && discount.directDiscount <= 15);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 0 --> 15%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_15_40':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 15 && discount.directDiscount <= 40);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 15 --> 40%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_40_60':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 40 && discount.directDiscount <= 60);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá từ 40 --> 60%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			case 'discount_60':
+				filterDiscounted = true;
+				// Thực hiện lọc các sản phẩm đang giảm giá từ 0 đến 15%
+				filteredItems = $scope.productitems.filter(function (item) {
+					return item.discount && item.discount.length > 0 &&
+						item.discount.some(discount => !discount.deleted && discount.status === "Đang diễn ra" &&
+							discount.directDiscount >= 60 && discount.directDiscount <= 100);
+				});
+				if (filteredItems.length === 0) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không có sản phẩm đang giảm giá trên 60%. Hãy chọn sản phẩm khác nhé',
+					});
+					$scope.initialize();
+				} else {
+					$scope.productitems = filteredItems;
+				}
+				$scope.chuyenTrang();
+				break;
+
+			default:
+				$scope.initialize();
+				$scope.chuyenTrang();
+				break;
+		}
+	};
+	
+//	Lọc trang sản phẩm thẻ combobox kết thúc
 
 	//Bộ lọc bắt đầu
 	$scope.filterProducts = function () {
