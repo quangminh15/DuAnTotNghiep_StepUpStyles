@@ -117,7 +117,8 @@ public class OrderRestController {
 
     @GetMapping("/find")
     public ResponseEntity<Boolean> checkIfOrderDetailIsReviewed(@RequestParam("orderDetailId") Integer orderDetailId) {
-        Review review = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, 40);
+    	Integer userId = uService.getUserIdCurrent();
+        Review review = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
         boolean isReviewed = review != null;
         return ResponseEntity.ok(isReviewed);
     }
