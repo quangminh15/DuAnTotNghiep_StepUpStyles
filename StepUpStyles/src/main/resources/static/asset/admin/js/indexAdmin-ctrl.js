@@ -236,6 +236,15 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 				return orderDate >= startOfWeek && orderDate <= endOfWeek;
 			}).length;
 
+			$scope.sorordersGiao = $scope.listorder.filter(order => {
+				
+				return order.orderStatus=="Delivered";
+			}).length;
+			$scope.sororderHuy = $scope.listorder.filter(order => {
+				
+				return order.orderStatus=="Cancel";
+			}).length;
+
 			$scope.ordersThisMonth = $scope.listorder.filter(order => {
 				const orderDate = new Date(order.orderDate);
 				return orderDate >= startOfMonth && orderDate <= endOfMonth;

@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.dao.CartDAO;
+import com.sts.dao.UserDAO;
+import com.sts.model.Cart;
 import com.sts.model.CartDetail;
 import com.sts.model.Color;
 import com.sts.model.Size;
+import com.sts.model.User;
 import com.sts.service.CartDetailService;
+import com.sts.service.UserService;
 
 @CrossOrigin("*")
 @RestController
@@ -28,7 +33,12 @@ public class CartDetailRestCotroller {
 
 	@Autowired
 	CartDetailService cardetailService;
-
+	@Autowired
+	CartDAO cartDao;
+	@Autowired
+	UserDAO userDao;
+	@Autowired
+	UserService userService;
 	@PostMapping
 	public void addToCart(
 			@RequestParam("id") Integer productId,
@@ -39,7 +49,11 @@ public class CartDetailRestCotroller {
 		// long customerId = 2;
 		// Need Modifying and @Transational to chú thích
 		// để đảm bảo tính nhất quán trong quá trình thao tác với dữ liệu trong SQL
-		cardetailService.addToCartItem(1, productId, sizeId, colorId, quantity);
+		Integer userID = userService.getUserIdCurrent();
+		User user = userDao.findById(userID).get();
+
+		Cart cart= cartDao.findByUser(user);
+		cardetailService.addToCartItem(cart.getCartId(), productId, sizeId, colorId, quantity);
 	}
 
 	@PutMapping("/updateCartItem")
@@ -61,8 +75,8 @@ public class CartDetailRestCotroller {
 	@GetMapping
 	public ResponseEntity<List<CartDetail>> getCartItemsByCustomerId() {
 		; // Same static customer ID as set in the UserDetails service
-
-		List<CartDetail> cartDetais = cardetailService.getCartItem(1);
+		Integer userID = userService.getUserIdCurrent();
+		List<CartDetail> cartDetais = cardetailService.getCartItem(userID);
 		return new ResponseEntity<>(cartDetais, HttpStatus.OK);
 	}
 

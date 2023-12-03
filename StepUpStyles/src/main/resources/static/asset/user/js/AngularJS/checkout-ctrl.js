@@ -71,6 +71,10 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 					cartDetail.product.productImages = resp.data;
 					console.log("images", cartDetail.product.productImages);
 				})
+				$http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+					cartDetail.product.directDiscount = resp.data.filter(directDiscounts => !directDiscounts.deleted);
+					
+				})
 			})
 			setTongTien()
 		}
@@ -78,8 +82,20 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	function setTongTien() {
         var tongTien = 0;
         angular.forEach($scope.cartIs, function (value, key) {
+			if (value.product.directDiscount.status=="Đang diễn ra") {
+				
+				
+					tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
+				
+				$scope.tongTien = tongTien;
+			} else {
+				
+					console.log(value.isSelected);
+					tongTien += value.product.price * value.quantity;
 			
-            tongTien += value.product.price * value.quantity;
+				$scope.tongTien = tongTien;
+			}
+            // tongTien += value.product.price * value.quantity;
             
         });
 		

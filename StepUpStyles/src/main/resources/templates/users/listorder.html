@@ -425,7 +425,7 @@
 											<p class="text-secondary">Tổng Tiền hàng: </p>
 										</td>
 										<td class="col30">
-											<p class="text-end">{{order.totalAmount-order.shippingFee|number:0}} ₫</p>
+											<p class="text-end">{{order.initialPrice|number:0}} ₫</p>
 										</td>
 									</tr>
 									<tr ng-if="order.discountPrice>0">
