@@ -29,6 +29,7 @@ import com.sts.model.User;
 import com.sts.model.VoucherUse;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
+import com.sts.service.UserService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -49,9 +50,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     VoucherUseDAO voucherUseDao;
 
+    @Autowired
+	UserService userService;
+
     @Override
     public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus, double discountPrice,Long voucherId) {
-        User user = userDao.findById(1).get();
+        Integer userID = userService.getUserIdCurrent();
+        User user = userDao.findById(userID).get();
        
         
         ShippingAddress address = addressDao.findById(addressId).get();

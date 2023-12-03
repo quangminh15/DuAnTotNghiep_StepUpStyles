@@ -71,6 +71,10 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 					cartDetail.product.productImages = resp.data;
 					console.log("images", cartDetail.product.productImages);
 				})
+				$http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID).then(resp => {
+					cartDetail.product.directDiscount = resp.data.filter(directDiscounts => !directDiscounts.deleted);
+					
+				})
 			})
 			setTongTien()
 		}
@@ -78,8 +82,20 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	function setTongTien() {
         var tongTien = 0;
         angular.forEach($scope.cartIs, function (value, key) {
+			if (value.product.directDiscount.status=="Đang diễn ra") {
+				
+				
+					tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
+				
+				$scope.tongTien = tongTien;
+			} else {
+				
+					console.log(value.isSelected);
+					tongTien += value.product.price * value.quantity;
 			
-            tongTien += value.product.price * value.quantity;
+				$scope.tongTien = tongTien;
+			}
+            // tongTien += value.product.price * value.quantity;
             
         });
 		
@@ -502,6 +518,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	$scope.caculatorDiscount()
 	//tien start
 	$scope.voucherUseTrue = [];
+	$scope.listOrder = [];
 
 	$scope.getVoucher = function () {
 		$http.get("/user/Idprofile").then((resp) =>{
@@ -512,6 +529,18 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			  // Thực hiện HTTP GET request đến API
 		$http.get('/rest/voucherUse/getTrue/' + userId)
 		.then(function (response) {
+			// $http.get('/rest/order/listOrder').then(function (response) {
+			// 	$scope.listOrder = response.data;
+			// 	console.log($scope.listOrder);
+			// 	$scope.listOrder.forEach(function(item){
+			// 		//kiem tra voucher co duoc su dung chua
+			// 	if (item.listOrder.voucherUse !== null) {
+			// 		item.isExpired = true;
+			// 	}
+			// 	})
+				
+			// });
+
 			// Xử lý dữ liệu trả về từ API
 			$scope.voucherUseTrue = response.data;
 			console.log($scope.voucherUseTrue);
@@ -519,6 +548,9 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
 				item.isExpired = isVoucherExpired(item.voucher.dateEnd);
+				item.isExpired = $scope.tongTien < item.voucher.total;
+				console.log($scope.tongtien);
+				console.log(item.voucher.total)
 			  });
 			  function formatDate(startDate) {
 				// Parse the input date string
@@ -576,6 +608,15 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 		$('#recycleBinModal').modal('show');
 	};
 
+	//khi an button huy thi se set ve null
+	$scope.huyChonVoucher = function () {
+		// Xóa voucher đã chọn
+		$scope.selectedVoucher = null;
+		$scope.discouted = 0;
+
+		//dong model
+		$('#recycleBinModal').modal('hide');
+	}
 
 	//tien end
 }])

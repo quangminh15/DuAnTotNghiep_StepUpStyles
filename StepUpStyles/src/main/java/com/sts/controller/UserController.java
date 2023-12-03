@@ -1,8 +1,10 @@
 package com.sts.controller;
 
+import com.sts.dao.CartDAO;
 import com.sts.dao.UserDAO;
 import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.DataOTP;
+import com.sts.model.Cart;
 import com.sts.model.OgirinAccount;
 import com.sts.model.Role;
 import com.sts.model.User;
@@ -42,6 +44,9 @@ public class UserController {
 
 	@Autowired
 	UserDAO userDAO;
+
+	@Autowired
+	CartDAO cartDAO;
 
 	@RequestMapping("/listorder")
 	public String listorder(Model model) {
@@ -397,7 +402,10 @@ public class UserController {
 			// Thực hiện xử lý dữ liệu và trả về status 200 OK nếu thành công
 			// Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
 			if (codeFromView.equals(this.vc.getCode())) {
-				userService.create(this.user);
+				User user = userService.create(this.user);
+				Cart cart = new Cart();
+				cart.setUser(user);
+				cartDAO.save(cart);
 				response.setStatus(HttpServletResponse.SC_OK); // Status 200 OK
 			} else {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error
@@ -494,6 +502,11 @@ public class UserController {
 								.build();
 //			userService.create(user);
 			User us = userService.create(user);
+
+			
+				Cart cart = new Cart();
+				cart.setUser(us);
+				cartDAO.save(cart);
 			System.out.println("123 "+ us.getUsersId());
 		}
 		return "redirect:/index";

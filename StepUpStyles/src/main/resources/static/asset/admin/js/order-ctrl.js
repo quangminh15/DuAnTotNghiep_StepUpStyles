@@ -155,12 +155,12 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 			}
 			return visiblePages;
 		},
-		get allOrders() {
+		get filteredOrders() {
 			var start = this.page * this.size;
-			return $scope.allOrders.slice(start, start + this.size);
+			return $scope.filteredOrders.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.allOrders.length / this.size);
+			return Math.ceil(1.0 * $scope.filteredOrders.length / this.size);
 		},
 		first() {
 			this.page = 0;
