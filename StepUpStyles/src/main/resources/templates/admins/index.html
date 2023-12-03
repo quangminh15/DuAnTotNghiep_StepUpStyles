@@ -73,9 +73,9 @@
 							<p class="mb-4">Tổng số đơn hàng</p>
 							<p class="fs-30 mb-2">{{totalOrders}} Đơn Hàng </p>
 							<div class="row">
-								<p class="col-md-4">Đơn hàng trong năm:{{ordersThisMonth}}</p>
-								<p class="col-md-4">Hết hàng: {{ outOfStockCount }}</p>
-								<p class="col-md-4">Gần hết: {{ nearlyOutOfStockCount }}</p>
+								
+								<p class="col-md-6">Đã Giao: {{ sororderHuy }}</p>
+								<p class="col-md-6">Đã Hủy: {{ sorordersGiao }}</p>
 							</div>
 						</div>
 					</div>
@@ -84,8 +84,7 @@
 					<div class="card card-light-danger">
 						<div class="card-body">
 							<p class="mb-4">Tổng số nhà cung cấp</p>
-							<p class="fs-30 mb-2">47033</p>
-							<p>0.22% (30 days)</p>
+							<p class="fs-30 mb-2">{{ totalSuppliers }} nhà cung cấp</p>
 						</div>
 					</div>
 				</div>

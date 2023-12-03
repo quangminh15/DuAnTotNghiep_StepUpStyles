@@ -31,6 +31,7 @@ import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.DTO.OrderDetailDTO;
 import com.sts.service.OrderService;
+import com.sts.service.UserService;
 
 @CrossOrigin("*")
 @RestController
@@ -46,6 +47,9 @@ public class OrderRestController {
     @Autowired
     OrderDetailDAO orderDtdao;
 
+     @Autowired
+    UserService uService;
+
     @PostMapping("/receiveCartData")
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") double initialPrice,
@@ -55,9 +59,9 @@ public class OrderRestController {
             @RequestParam("voucherUseId")Long voucherUID) {
         try {
             // Handle the list of CartData objects
-            System.out.println(fee);
-            System.out.println(initialPrice);
-            System.out.println(addressId);
+            // System.out.println(fee);
+            // System.out.println(initialPrice);
+            // System.out.println(addressId);
 
             
            
@@ -88,7 +92,8 @@ public class OrderRestController {
 
     @GetMapping("/listOrder")
     public List<Order> getListOrder() {
-        User user = userdao.findById(55).get();
+        Integer userID = uService.getUserIdCurrent();
+        User user = userdao.findById(userID).get();
 
         return orderService.loadByUser(user);
     }

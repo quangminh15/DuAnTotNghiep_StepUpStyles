@@ -236,6 +236,15 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 				return orderDate >= startOfWeek && orderDate <= endOfWeek;
 			}).length;
 
+			$scope.sorordersGiao = $scope.listorder.filter(order => {
+				
+				return order.orderStatus=="Delivered";
+			}).length;
+			$scope.sororderHuy = $scope.listorder.filter(order => {
+				
+				return order.orderStatus=="Cancel";
+			}).length;
+
 			$scope.ordersThisMonth = $scope.listorder.filter(order => {
 				const orderDate = new Date(order.orderDate);
 				return orderDate >= startOfMonth && orderDate <= endOfMonth;
@@ -342,4 +351,19 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 		},
 	};
 	//Long Hai end
+
+	//tien sờ ta
+
+	$scope.itemss = [];
+	$scope.initializeSupp = function () {
+		//load supplier no deleted
+		$http.get("/rest/supplier/nodeleted").then(resp => {
+			$scope.itemss = resp.data;
+			$scope.totalSuppliers = $scope.itemss.length;
+			console.log("Tổng toàn bộ nhà cung cấp:", $scope.totalSuppliers);
+		});
+	}
+    $scope.initializeSupp();
+
+	// tien en
 });
