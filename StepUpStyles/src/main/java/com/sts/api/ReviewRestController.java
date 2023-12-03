@@ -52,7 +52,8 @@ public class ReviewRestController {
         if (product == null) {
             return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
         }
-        User currentUser = uService.findById(1);
+        Integer userId = uService.getUserIdCurrent();
+        User currentUser = uService.findById(userId);
         if (currentUser == null) {
             return new ResponseEntity<>("Không tìm thấy người dùng.", HttpStatus.NOT_FOUND);
         }
