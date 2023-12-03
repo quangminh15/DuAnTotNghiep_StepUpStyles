@@ -513,17 +513,18 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			  // Thực hiện HTTP GET request đến API
 		$http.get('/rest/voucherUse/getTrue/' + userId)
 		.then(function (response) {
-			$http.get('/rest/order/listOrder').then(function (response) {
-				$scope.listOrder = response.data;
-				console.log($scope.listOrder);
-				$scope.listOrder.forEach(function(item){
-					//kiem tra voucher co duoc su dung chua
-				if (item.listOrder.voucherUse !== null) {
-					item.isExpired = true;
-				}
-				})
+			// $http.get('/rest/order/listOrder').then(function (response) {
+			// 	$scope.listOrder = response.data;
+			// 	console.log($scope.listOrder);
+			// 	$scope.listOrder.forEach(function(item){
+			// 		//kiem tra voucher co duoc su dung chua
+			// 	if (item.listOrder.voucherUse !== null) {
+			// 		item.isExpired = true;
+			// 	}
+			// 	})
 				
-			});
+			// });
+
 			// Xử lý dữ liệu trả về từ API
 			$scope.voucherUseTrue = response.data;
 			console.log($scope.voucherUseTrue);
@@ -531,6 +532,9 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
 				item.isExpired = isVoucherExpired(item.voucher.dateEnd);
+				item.isExpired = $scope.tongTien < item.voucher.total;
+				console.log($scope.tongtien);
+				console.log(item.voucher.total)
 			  });
 			  function formatDate(startDate) {
 				// Parse the input date string
