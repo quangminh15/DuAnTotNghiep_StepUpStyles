@@ -8,6 +8,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	$scope.form = {};
 	$scope.form.product = {};
 	$scope.form.color = {};
+	$scope.disableCreateButton = false;
 
 	$scope.sortableColumns = [
 		{ name: 'productDetailID', label: 'Mã chi tiết' },
@@ -308,6 +309,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 		$scope.form = {
 			deleted: false,
 		};
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -316,6 +318,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(productdetailitem) {
 		$scope.form = angular.copy(productdetailitem);
+		 $scope.disableCreateButton = true;
 	}
 
 	function checkDuplicateProductDetail(productdetailitem) {
@@ -497,6 +500,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 				text: 'Cập nhật thành công!!',
 			});
 			$scope.initialize();
+			$scope.disableCreateButton = false;
 		}).catch(error => {
 			Swal.fire({
 				icon: 'error',

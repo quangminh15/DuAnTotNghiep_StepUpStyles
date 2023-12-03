@@ -7,6 +7,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	$scope.form = {};
 	$scope.form.product = {};
 	$scope.selectedActivity = "all";
+	$scope.disableCreateButton = false; 
 
 	$scope.sortableColumns = [
 		{ name: 'colorID', label: 'Mã màu' },
@@ -291,6 +292,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			activities: false,
 			deleted: false,
 		};
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -299,6 +301,7 @@ app.controller("color-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(coloritem) {
 		$scope.form = angular.copy(coloritem);
+		$scope.disableCreateButton = true;
 	}
 
 	//	Thêm mới 
@@ -380,6 +383,7 @@ app.controller("color-ctrl", function($scope, $http) {
 			});
 			$scope.initialize();
 			$scope.reset();
+			$scope.disableCreateButton = false;
 		}).catch(error => {
 			Swal.fire({
 				icon: 'error',
