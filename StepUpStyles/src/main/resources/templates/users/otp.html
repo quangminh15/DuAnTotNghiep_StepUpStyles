@@ -18,9 +18,12 @@
         <div class="title">STS OTP</div>
         <div class="title">Xác Thực mã code</div>
         <p class="message">Chúng tôi đã gửi mã OTP đến địa chỉ Email của bạn</p>
-        <div class="inputs"><input id="input1" name="i1" type="text" maxlength="1"> <input id="input2" type="text"
-                                                                                           maxlength="1">
-            <input id="input3" type="text" maxlength="1"> <input id="input4" type="text" maxlength="1"></div>
+        <div class="inputs">
+            <input id="input1" name="i1" type="text" maxlength="1" oninput="moveToNextInput(event, 'input2')" onkeypress="return onlyNumber(event)">
+            <input id="input2" name="i2" type="text" maxlength="1" oninput="moveToNextInput(event, 'input3')" onkeypress="return onlyNumber(event)">
+            <input id="input3" name="i3" type="text" maxlength="1" oninput="moveToNextInput(event, 'input4')" onkeypress="return onlyNumber(event)">
+            <input id="input4" name="i4" type="text" maxlength="1">
+        </div>
         <a href="#" id="submitData">
             <span></span>
             <span></span>
@@ -29,6 +32,10 @@
             Xác Nhận
         </a>
     </form>
+
+    <a href="#" class="coutdown">
+            <h6 class="message">Gửi lại mã (------)</h6>
+    </a>
 </div>
 </body>
 <script>
@@ -54,13 +61,42 @@
         xhr.onreadystatechange = function () {
             if (xhr.status === 200) {
                 window.location.href = '/loginSTS'; // Chuyển hướng đến trang khác
-            }else {
+            } else {
                 document.querySelector('.message').innerText = "Mã OTP chưa đúng!";
             }
         };
         xhr.send(JSON.stringify(data));
     });
 </script>
+<script>
+    function moveToNextInput(event, nextInputId) {
+        const input = event.target;
+        const inputValue = input.value;
 
+        // Kiểm tra nếu giá trị nhập vào là số
+        if (!isNaN(inputValue) && inputValue !== '') {
+            const nextInput = document.getElementById(nextInputId);
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+    }
+
+    function onlyNumber(event) {
+        const charCode = event.which ? event.which : event.keyCode;
+
+        // Kiểm tra nếu ký tự nhập vào không phải là số (0-9) hoặc nếu không phải phím Backspace hoặc phím Delete
+        if (charCode < 48 || charCode > 57) {
+            if (charCode !== 8 && charCode !== 46) {
+                event.preventDefault();
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+<script>
+
+</script>
 
 </html>

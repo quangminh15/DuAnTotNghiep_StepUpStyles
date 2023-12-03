@@ -100,12 +100,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfile(String fullname, LocalDate birthday, String phone, String img, Integer userId) {
-        userDAO.updateProfile(fullname, birthday, phone, img, userId);
+    public void updateProfile(String fullname, LocalDate birthday, String phone, String img, String address, Integer userId) {
+        userDAO.updateProfile(fullname, birthday, phone, img, address, userId);
     }
 
     @Override
-    public void updateProfile_noBirthday(String fullname, String phone, String img, Integer userId) {
-        userDAO.updateProfile_noBirthday(fullname, phone, img, userId);
+    public void updateProfile_noBirthday(String fullname, String phone, String img, String address, Integer userId) {
+        userDAO.updateProfile_noBirthday(fullname, phone, img, address, userId);
     }
 }

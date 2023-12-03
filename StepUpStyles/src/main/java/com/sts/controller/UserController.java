@@ -50,6 +50,7 @@ public class UserController {
 
 	@RequestMapping("/listorder")
 	public String listorder(Model model) {
+		loadstatuslogin(model);
 		return "users/listorder";
 	}
 
@@ -161,13 +162,14 @@ public class UserController {
 		String phone = user.getPhone();
 		String img = getUserImageURL();
 		Integer id = userService.getUserIdCurrent();
+		String address = user.getAddress();
 		System.out.println(name+birthday+phone+img+"ID: "+id);
 // check point
 		if(birthday==null){
-			userService.updateProfile_noBirthday(name,phone,img,id);
+			userService.updateProfile_noBirthday(name,phone,img, address, id);
 			return "redirect:/profile";
 		}
-		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), userService.getUserIdCurrent());
+		userService.updateProfile(user.getFullName(), user.getBirthday(), user.getPhone(), getUserImageURL(), address, userService.getUserIdCurrent());
 		return "redirect:/profile";
 	}
 
