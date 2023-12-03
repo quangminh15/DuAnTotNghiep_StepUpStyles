@@ -63,8 +63,8 @@ public class PaymentController {
     OrderService orderService;
 
     @GetMapping("/purchase")
-    public String createOrderVNPay() {
-
+    public String createOrderVNPay(Model model) {
+        loadstatuslogin(model);
         Order order = orderService.createOrder(ordertemp.getOrderDetails(), ordertemp.getInitialPrice(),
                 ordertemp.getShippingFee(), ordertemp.getAddressID(), true, ordertemp.getDiscountPrice(),
                 ordertemp.getVoucherUseId());
@@ -82,8 +82,8 @@ public class PaymentController {
     private VNPayService vnPayService;
 
     @RequestMapping("/submitOrder")
-    public String submidOrder(HttpServletRequest request) {
-
+    public String submidOrder(HttpServletRequest request, Model model) {
+        loadstatuslogin(model);
         total = ordertemp.getInitialPrice() + ordertemp.getShippingFee();
         int orderTotal = 10000;
         String orderInfo = "Thanh Toán Đơn Hàng";
@@ -113,13 +113,13 @@ public class PaymentController {
 
     @RequestMapping("/paysuccess")
     public String success(Model model) {
-
+        loadstatuslogin(model);
         return "users/vnpay-success";
     }
 
     @RequestMapping("/pay-cod-success")
     public String successCOD(Model model) {
-
+        loadstatuslogin(model);
         return "users/pay-success";
     }
 

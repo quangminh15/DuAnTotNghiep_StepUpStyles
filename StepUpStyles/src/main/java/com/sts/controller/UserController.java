@@ -55,8 +55,7 @@ public class UserController {
 
 	@RequestMapping("/about")
 	public String about(Model model) {
-
-
+		loadstatuslogin(model);
 		return "users/about";
 	}
 
@@ -163,6 +162,7 @@ public class UserController {
 		String img = getUserImageURL();
 		Integer id = userService.getUserIdCurrent();
 		System.out.println(name+birthday+phone+img+"ID: "+id);
+// check point
 		if(birthday==null){
 			userService.updateProfile_noBirthday(name,phone,img,id);
 			return "redirect:/profile";
@@ -425,8 +425,6 @@ public class UserController {
 			// Thực hiện xử lý dữ liệu và trả về status 200 OK nếu thành công
 			// Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
 			if (codeFromView.equals(this.vc.getCode())) {
-				userService.create(this.user);
-				
 				response.setStatus(HttpServletResponse.SC_OK); // Status 200 OK
 			} else {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Status 500 Internal Server Error
@@ -478,6 +476,7 @@ public class UserController {
 		System.out.println("IMG: "+oauth2.getPrincipal().getAttribute("picture"));
 
 		userService.loginFromOAuth2(oauth2); // save to security context
+
 
   //    Call API Save in DB
 		String email = oauth2.getPrincipal().getAttribute("email");
