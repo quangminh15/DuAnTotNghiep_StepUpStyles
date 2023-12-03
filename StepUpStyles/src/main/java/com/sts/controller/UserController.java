@@ -50,8 +50,7 @@ public class UserController {
 
 	@RequestMapping("/about")
 	public String about(Model model) {
-
-
+		loadstatuslogin(model);
 		return "users/about";
 	}
 
@@ -158,6 +157,7 @@ public class UserController {
 		String img = getUserImageURL();
 		Integer id = userService.getUserIdCurrent();
 		System.out.println(name+birthday+phone+img+"ID: "+id);
+// check point
 		if(birthday==null){
 			userService.updateProfile_noBirthday(name,phone,img,id);
 			return "redirect:/profile";
