@@ -11,6 +11,7 @@ app.controller("product-ctrl", function($scope, $http) {
 	$scope.form.brand = {};
 	$scope.userDetails = null;
 	$scope.selectedActivity = "all";
+	$scope.disableCreateButton = false;
 
 	var checkImage = false;
 
@@ -327,6 +328,7 @@ app.controller("product-ctrl", function($scope, $http) {
 			deleted: false,
 			featured: false,
 		};
+		$scope.disableCreateButton = false;
 	}
 
 	//	Khởi đầu
@@ -362,6 +364,7 @@ app.controller("product-ctrl", function($scope, $http) {
 		}).catch(function(error) {
 			console.error("Lỗi khi lấy thông tin sản phẩm:", error);
 		});
+		 $scope.disableCreateButton = true;
 	}
 
 
@@ -575,15 +578,15 @@ app.controller("product-ctrl", function($scope, $http) {
 			return;
 		}
 
-		// Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
-		//		if (checkImage == true) {
-		//			Swal.fire({
-		//				icon: 'error',
-		//				title: 'Thất bại',
-		//				text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
-		//			})
-		//			return;
-		//		}
+//		 Lỗi khi cố gắng thay đổi trạng thái hoạt động khi thêm sản phẩm mới
+				if (checkImage == true) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Vui lòng thêm ảnh cho sản phẩm trước khi bật trạng thái hoạt động!',
+					})
+					return;
+				}
 
 
 		// Lấy giá trị từ CKEditor cho trường description và gán vào form.description
@@ -621,6 +624,7 @@ app.controller("product-ctrl", function($scope, $http) {
 						text: 'Cập nhật thành công!',
 					});
 					console.log("productitem:: ", productitem);
+					$scope.disableCreateButton = false;
 				}).catch(error => {
 					// Xử lý lỗi khi không thể cập nhật
 					Swal.fire({

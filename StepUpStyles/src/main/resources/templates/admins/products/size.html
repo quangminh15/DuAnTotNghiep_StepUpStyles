@@ -15,46 +15,28 @@
 						date:'dd-MM-yyyy' }}</div>
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="form-group col-md-6">
-					<label for="inputPassword3">Size giày</label> <input class="form-control" id="inputPassword3"
-						type="number" placeholder="Size giày" required="" ng-model="form.sizeNumber">
-				</div>
-
-				<div class="form-group col-md-6">
-					<label class="col-form-label text-sm-left" style="padding: 0">Trạng
-						thái</label>
-					<div class="form-check mt-1">
-						<label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input" ng-value="true" type="radio"
-								name="available" checked=""><span
-								class="custom-control-label custom-control-color">Bật</span>
-						</label> <label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input" ng-value="false" type="radio"
-								name="available"><span class="custom-control-label custom-control-color">Tắt</span>
-						</label>
-					</div>
-				</div>
-			</div>
-			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-					title="Thêm sản phẩm mới">
-					<span class="fa fa-plus-circle"></span>
-				</button>
-				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-					title="Cập nhật sản phẩm">
-					<span class="fa fa-wrench"></span>
-				</button>
-				<button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
-					data-toggle="tooltip" title="Xóa sản phẩm">
-					<span class="ti-trash"></span>
-				</button>
-				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
-					title="Làm mới form">
-					<span class="fa fa-refresh"></span>
-				</button>
-			</div>
+		</div>
+		<div class="template-demo text-right mb-3">
+			<button type="button" ng-click="create()"
+				class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+				title="Thêm sản phẩm mới" ng-disabled="disableCreateButton">
+				<span class="ti-agenda"></span>
+			</button>
+			<button type="button" ng-click="update()"
+				class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				title="Cập nhật sản phẩm">
+				<span class="ti-support"></span>
+			</button>
+			<button type="button" ng-click="confirmHide()" type="submit"
+				class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
+				title="Xóa sản phẩm">
+				<span class="ti-trash"></span>
+			</button>
+			<button type="button" ng-click="reset()"
+				class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				title="Làm mới form">
+				<span class="ti-control-shuffle"></span>
+			</button>
 		</div>
 	</div>
 

@@ -6,6 +6,7 @@ app.controller("category-ctrl", function($scope, $http) {
 	$scope.form = {};
 	$scope.form.productGroup = {};
 	$scope.selectedActivity = "all";
+	$scope.disableCreateButton = false;
 
 	$scope.sortableColumns = [
 		{ name: 'categoryID', label: 'Mã danh mục' },
@@ -304,11 +305,12 @@ app.controller("category-ctrl", function($scope, $http) {
 			activities: false,
 			deleted: false,
 		};
-		
+
 		var fileInput = document.getElementById('photo');
 		if (fileInput) {
 			fileInput.value = '';
 		}
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -317,6 +319,7 @@ app.controller("category-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(categoryitem) {
 		$scope.form = angular.copy(categoryitem);
+		$scope.disableCreateButton = true;
 	}
 
 
@@ -331,7 +334,7 @@ app.controller("category-ctrl", function($scope, $http) {
 			});
 			return;
 		}
-		
+
 		//Lỗi trùng tên danh mục sản phẩm
 		let existingCategoryName = $scope.categoryitems.find(categoryitem => categoryitem.categoryName === $scope.form.categoryName);
 		if (existingCategoryName) {
@@ -436,6 +439,7 @@ app.controller("category-ctrl", function($scope, $http) {
 				$scope.initialize();
 				$scope.reset();
 				console.log("categoryitem", categoryitem);
+				$scope.disableCreateButton = false;
 			}).catch(error => {
 				Swal.fire({
 					icon: 'error',
@@ -632,7 +636,7 @@ app.controller("category-ctrl", function($scope, $http) {
 		})
 	}
 	//sau khi xác nhận thành công thì xóa luôn (Nút xóa ở TABLE) Kết thúc
-	
+
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})

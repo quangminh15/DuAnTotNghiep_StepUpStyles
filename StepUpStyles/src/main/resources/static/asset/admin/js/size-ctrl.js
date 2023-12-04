@@ -6,6 +6,7 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.form = {};
 	$scope.form.products = {};
 	$scope.selectedActivity = "all";
+	$scope.disableCreateButton = false;
 
 	$scope.sortableColumns = [
 		{ name: 'sizeID', label: 'Mã cấu hình' },
@@ -285,6 +286,7 @@ app.controller("size-ctrl", function($scope, $http) {
 			activities: false,
 			deleted: false,
 		};
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -293,6 +295,7 @@ app.controller("size-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(sizeitem) {
 		$scope.form = angular.copy(sizeitem);
+		 $scope.disableCreateButton = true;
 	}
 
 	//	Thêm mới 
@@ -420,6 +423,7 @@ app.controller("size-ctrl", function($scope, $http) {
 			});
 			$scope.initialize();
 			$scope.reset();
+			$scope.disableCreateButton = false;
 		}).catch(error => {
 			Swal.fire({
 				icon: 'error',
