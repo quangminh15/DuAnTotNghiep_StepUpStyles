@@ -4,45 +4,46 @@
 		<div class="card-body">
 			<h4 class="mb-3">Danh sách sản phẩm yêu thích</h4>
 			<div class="d-flex justify-content-between align-items-center">
-					<div class="col-sm-3 stretch-card transparent">
-						<div class="card card-tale">
-							<div class="card-body">
-								<h4>Tổng lượt yêu thích : {{countF}}</h4>
-							</div>
+				<div class="col-sm-3 stretch-card transparent">
+					<div class="card card-tale">
+						<div class="card-body">
+							<h4>Tổng lượt yêu thích : {{countF}}</h4>
 						</div>
 					</div>
-					<!-- <div class="col-sm-2 stretch-card transparent">
+				</div>
+				<!-- <div class="col-sm-2 stretch-card transparent">
 						<div class="card card-tale">
 							<div class="card-body">
 								<h4>Hihi : {{mostLikedProduct.productName}}</h4>
 							</div>
 						</div>
 					</div> -->
-			<div class="row">
-				<div class="col-sm-4">
-					<select ng-model="selectedProduct" ng-change="filterByProduct()" class="form-control">
-					<option value="">Chọn sản phẩm</option>
-					<option ng-repeat="item in prods" ng-value="{{item.productID}}">{{item.productName}}</option>
-				</select>
-				</div>		
-				<div class="col-sm-4">
-					<select ng-model="selectedUser" ng-change="filterByUser()" class="form-control">
-					<option value="">Chọn người dùng</option>
-					<option ng-repeat="item in users" value="{{item.usersId}}">{{item.fullName}}</option>
-				</select>	
+				<div class="row">
+					<div class="col-sm-4">
+						<select ng-model="selectedProduct" ng-change="filterByProduct()" class="form-control">
+							<option value="">Chọn sản phẩm</option>
+							<option ng-repeat="item in prods" ng-value="{{item.productID}}">{{item.productName}}
+							</option>
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<select ng-model="selectedUser" ng-change="filterByUser()" class="form-control">
+							<option value="">Chọn người dùng</option>
+							<option ng-repeat="item in users" value="{{item.usersId}}">{{item.fullName}}</option>
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+							title="Xuất file Excel">
+							<span class="fa fa-file-excel-o" aria-hidden="true"></span>
+						</button>
+						<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+							title="Xuất file PDF">
+							<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
+						</button>
+					</div>
 				</div>
-				<div class="col-sm-4">
-					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
-					title="Xuất file Excel">
-					<span class="ti-save"></span>
-				</button>
-				<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
-					title="Xuất file PDF">
-					<span class="ti-files"></span>
-				</button>
-				</div>																	
 			</div>
-			</div>	
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>

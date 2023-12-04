@@ -5,21 +5,17 @@
 			<h4 class="card-title">Form sản phẩm</h4>
 			<div class="row">
 				<div class="form-group col-md-4">
-					<label for="inputUserName">Mã sản phẩm:</label> <input
-						class="form-control" id="inputUserName" type="number"
-						placeholder="Mã sản phẩm" ng-model="form.productID"
-						readonly="true">
+					<label for="inputUserName">Mã sản phẩm:</label> <input class="form-control" id="inputUserName"
+						type="number" placeholder="Mã sản phẩm" ng-model="form.productID" readonly="true">
 				</div>
 				<div class="form-group col-md-4">
-					<label for="inputPassword3">Người tạo</label> <input
-						class="form-control" id="inputPassword3" type="text" required=""
-						ng-model="form.user.fullName" placeholder="Người tạo"
-						readonly="true">
+					<label for="inputPassword3">Người tạo</label> <input class="form-control" id="inputPassword3"
+						type="text" required="" ng-model="form.user.fullName" placeholder="Người tạo" readonly="true">
 				</div>
 				<div class="form-group col-md-4">
 					<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
-					<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
-						readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
+					<div ng-model="form.modifyDate" class="form-control" id="ngaytao" readonly="true"
+						placeholder="dd-MM-yyyy">{{ form.modifyDate
 						| date:'dd-MM-yyyy' }}</div>
 				</div>
 			</div>
@@ -28,8 +24,7 @@
 				<div class="form-group col-md-6">
 					<label>Danh mục</label>
 					<div>
-						<select class="select2 form-control"
-							ng-model="form.category.categoryID">
+						<select class="select2 form-control" ng-model="form.category.categoryID">
 							<option value="" disabled selected>Vui lòng chọn danh
 								mục</option>
 							<option ng-repeat="p in cates" ng-value="p.categoryID">{{p.categoryName}}</option>
@@ -50,15 +45,13 @@
 
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputPassword4">Tên sản phẩm</label> <input
-						class="form-control" id="inputPassword4" type="text" required=""
-						placeholder="Tên sản phẩm" ng-model="form.productName">
+					<label for="inputPassword4">Tên sản phẩm</label> <input class="form-control" id="inputPassword4"
+						type="text" required="" placeholder="Tên sản phẩm" ng-model="form.productName">
 				</div>
 
 				<div class="form-group col-md-6">
-					<label for="inputPassword1">Giá</label> <input class="form-control"
-						id="inputPassword1" type="number" required=""
-						ng-model="form.price" placeholder="Giá sản phẩm">
+					<label for="inputPassword1">Giá</label> <input class="form-control" id="inputPassword1"
+						type="number" required="" ng-model="form.price" placeholder="Giá sản phẩm">
 				</div>
 			</div>
 
@@ -68,13 +61,12 @@
 						thái</label>
 					<div class="form-check mt-1">
 						<label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="true" type="radio" name="available" checked=""><span
-							class="custom-control-label custom-control-color">Bật</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="true" type="radio"
+								name="available" checked=""><span
+								class="custom-control-label custom-control-color">Bật</span>
 						</label> <label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="false" type="radio" name="available"><span
-							class="custom-control-label custom-control-color">Tắt</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="false" type="radio"
+								name="available"><span class="custom-control-label custom-control-color">Tắt</span>
 						</label>
 					</div>
 				</div>
@@ -84,13 +76,12 @@
 						phẩm nổi bật</label>
 					<div class="form-check mt-1">
 						<label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.featured" class="custom-control-input"
-							ng-value="true" type="radio" name="featured" checked=""><span
-							class="custom-control-label custom-control-color">Bật</span>
+							<input ng-model="form.featured" class="custom-control-input" ng-value="true" type="radio"
+								name="featured" checked=""><span
+								class="custom-control-label custom-control-color">Bật</span>
 						</label> <label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.featured" class="custom-control-input"
-							ng-value="false" type="radio" name="featured"><span
-							class="custom-control-label custom-control-color">Tắt</span>
+							<input ng-model="form.featured" class="custom-control-input" ng-value="false" type="radio"
+								name="featured"><span class="custom-control-label custom-control-color">Tắt</span>
 						</label>
 					</div>
 				</div>
@@ -99,31 +90,26 @@
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="control-label">Mô tả</label>
-					<textarea name="description" ng-model="form.description"
-						id="description"></textarea>
+					<textarea name="description" ng-model="form.description" id="description"></textarea>
 				</div>
 			</div>
 
 			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()"
-					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
 					title="Thêm sản phẩm mới">
-					<span class="ti-agenda"></span>
+					<span class="fa fa-plus-circle"></span>
 				</button>
-				<button type="button" ng-click="update()"
-					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 					title="Cập nhật sản phẩm">
-					<span class="ti-support"></span>
+					<span class="fa fa-wrench"></span>
 				</button>
-				<button type="button" ng-click="confirmHide()" type="submit"
-					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-					title="Xóa sản phẩm">
+				<button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
+					data-toggle="tooltip" title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
 				</button>
-				<button type="button" ng-click="reset()"
-					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
 					title="Làm mới form">
-					<span class="ti-control-shuffle"></span>
+					<span class="fa fa-refresh"></span>
 				</button>
 			</div>
 		</div>
@@ -132,17 +118,14 @@
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 		<!-- 	thùng rác bắt đầu -->
-		<div class="modal fade" id="recycleBinModal" tabindex="-1"
-			aria-labelledby="searchModalLabel" aria-hidden="true"
+		<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
 			style="overflow: hidden;">
 			<div class="modal-dialog modal-dialog-centered modal-xl"
 				style="width: 1800px; height: 600px; margin: 0 auto;">
-				<div class="modal-content"
-					style="background-color: #eee; max-width: 2000px; width: 120%;">
+				<div class="modal-content" style="background-color: #eee; max-width: 2000px; width: 120%;">
 					<div class="modal-header">
 						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-						<button class="close modal-close" type="button"
-							data-dismiss="modal" aria-hidden="true">
+						<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 							<span class="ti-close"></span>
 						</button>
 					</div>
@@ -150,12 +133,11 @@
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th ng-repeat="column in sortableColumns"
-										ng-click="sortByColumn(column.name)">{{ column.label }} <span
-										ng-if="sortColumn === column.name"> <span
-											ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-											ng-if="!sortReverse" class="ti-angle-double-up"></span>
-									</span>
+									<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+										column.label }} <span ng-if="sortColumn === column.name"> <span
+												ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+												ng-if="!sortReverse" class="ti-angle-double-up"></span>
+										</span>
 									</th>
 
 									<th class="actions"></th>
@@ -172,8 +154,7 @@
 									<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 									<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
 									<td class="actions">
-										<button class="btn btn-space btn btn-primary "
-											ng-click="restore(productitem)">
+										<button class="btn btn-space btn btn-primary " ng-click="restore(productitem)">
 											<i class="ti-back-right"></i>
 										</button>
 										<button class="btn btn-space btn btn-danger "
@@ -195,11 +176,10 @@
 										</button>
 									</li>
 
-									<li class="page-item"
-										ng-repeat="RestorePage in RestoreVisiblePages"
-										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-										class="page-link" href=""
-										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+									<li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+										<a class="page-link" href=""
+											ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
 											RestorePage.value }}</a></li>
 
 									<li class="page-item">
@@ -222,32 +202,27 @@
 
 				<div class="d-flex">
 					<!-- Thẻ select box -->
-					<select class="form-control mr-2" ng-model="selectedActivity"
-						data-toggle="tooltip" title="Lọc theo trạng thái sản phẩm"
-						ng-change="filterByActivities()" style="width: 200px;">
+					<select class="form-control mr-2" ng-model="selectedActivity" data-toggle="tooltip"
+						title="Lọc theo trạng thái sản phẩm" ng-change="filterByActivities()" style="width: 200px;">
 						<option value="all">Tất cả</option>
 						<option value="true">Đang bật</option>
 						<option value="false">Đang tắt</option>
 					</select>
-					<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
-						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="ti-save"></span>
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+						title="Xuất file Excel">
+						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 					</button>
-					<button type="button"
-						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
-						data-toggle="tooltip" title="Xuất file PDF">
-						<span class="ti-files"></span>
+					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+						title="Xuất file PDF">
+						<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click="searchProductByName()"
-						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
-						title="Tìm kiếm">
+					<button ng-click="searchProductByName()" class="btn btn-outline-info btn-fw mr-2"
+						data-toggle="tooltip" title="Tìm kiếm">
 						<span class="ti-search"></span>
 					</button>
 					<!-- Nút thùng rác -->
-					<button ng-click="openRecycleBinForm()"
-						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					<button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 						title="Thùng rác">
 						<span class="ti-trash"></span>
 					</button>
@@ -257,12 +232,11 @@
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>
-						<th ng-repeat="column in sortableColumns"
-							ng-click="sortByColumn(column.name)">{{ column.label }} <span
-							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-								ng-if="!sortReverse" class="ti-angle-double-up"></span>
-						</span>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
+							</span>
 						</th>
 						<th class="actions"></th>
 					</tr>
@@ -278,14 +252,13 @@
 						<td>{{productitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 						<td>{{productitem.featured ? 'Đang bật' : 'Đang tắt' }}</td>
 						<td class="actions">
-							<button ng-click="edit(productitem)"
-								class="btn btn-inverse-primary btn-rounded btn-icon"
+							<button ng-click="edit(productitem)" class="btn btn-inverse-primary btn-rounded btn-icon"
 								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
 							<button ng-click="confirmHideTable(productitem)"
-								class="btn btn-inverse-danger btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Xóa">
+								class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
 							</button>
 						</td>
@@ -303,8 +276,8 @@
 						</li>
 
 						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
 								page.value }}</a></li>
 
 						<li class="page-item">

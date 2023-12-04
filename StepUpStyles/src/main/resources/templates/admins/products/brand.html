@@ -5,20 +5,18 @@
 			<h4 class="card-title">Thương hiệu sản phẩm</h4>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputUserName">Mã thương hiệu:</label> <input
-						class="form-control" id="inputUserName" type="number"
-						ng-model="form.brandID" readonly="true">
+					<label for="inputUserName">Mã thương hiệu:</label> <input class="form-control" id="inputUserName"
+						type="number" ng-model="form.brandID" readonly="true">
 				</div>
 				<div class="form-group col-md-6">
-					<label for="inputPassword">Tên thương hiệu:</label> <input
-						class="form-control" id="inputPassword" type="text"
-						placeholder="Tên thương hiệu" ng-model="form.brandName">
+					<label for="inputPassword">Tên thương hiệu:</label> <input class="form-control" id="inputPassword"
+						type="text" placeholder="Tên thương hiệu" ng-model="form.brandName">
 				</div>
 
 
 				<div class="form-group col-md-6">
-					<label for="inputPassword3">Hình ảnh</label> <input
-						class="form-control" id="photo" ng-model="form.brandImage" type="file">
+					<label for="inputPassword3">Hình ảnh</label> <input class="form-control" id="photo"
+						ng-model="form.brandImage" type="file">
 				</div>
 
 				<div class="form-group col-md-6">
@@ -26,44 +24,38 @@
 						thái</label>
 					<div class="form-check mt-1">
 						<label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="true" type="radio" name="available" checked=""><span
-							class="custom-control-label custom-control-color">Bật</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="true" type="radio"
+								name="available" checked=""><span
+								class="custom-control-label custom-control-color">Bật</span>
 						</label> <label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="false" type="radio" name="available"><span
-							class="custom-control-label custom-control-color">Tắt</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="false" type="radio"
+								name="available"><span class="custom-control-label custom-control-color">Tắt</span>
 						</label>
 					</div>
 				</div>
 
 
 				<div class="form-group col-md-12" ng-if="form.brandImage">
-					<img style="height: 60%; width: 20%;" alt=""
-						src="{{ form.brandImage }}">
+					<img style="height: 60%; width: 20%;" alt="" src="{{ form.brandImage }}">
 				</div>
 			</div>
 
 			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()"
-					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
 					title="Thêm sản phẩm mới">
-					<span class="ti-agenda"></span>
+					<span class="fa fa-plus-circle"></span>
 				</button>
-				<button type="button" ng-click="update()"
-					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 					title="Cập nhật sản phẩm">
-					<span class="ti-support"></span>
+					<span class="fa fa-wrench"></span>
 				</button>
-				<button type="button" ng-click="confirmHide()" type="submit"
-					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-					title="Xóa sản phẩm">
+				<button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
+					data-toggle="tooltip" title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
 				</button>
-				<button type="button" ng-click="reset()"
-					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
 					title="Làm mới form">
-					<span class="ti-control-shuffle"></span>
+					<span class="fa fa-refresh"></span>
 				</button>
 			</div>
 		</div>
@@ -72,17 +64,13 @@
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 		<!-- 	thùng rác bắt đầu -->
-		<div class="modal fade" id="recycleBinModal" tabindex="-1"
-			aria-labelledby="searchModalLabel" aria-hidden="true"
+		<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
 			style="overflow: hidden;">
-			<div class="modal-dialog modal-dialog-centered modal-xl"
-				style="width: 1500px; height: 600px;">
-				<div class="modal-content"
-					style="background-color: #eee; max-width: 1500px">
+			<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+				<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 					<div class="modal-header">
 						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-						<button class="close modal-close" type="button"
-							data-dismiss="modal" aria-hidden="true">
+						<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 							<span class="mdi mdi-close"></span>
 						</button>
 					</div>
@@ -90,12 +78,11 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th ng-repeat="column in sortableColumns"
-										ng-click="sortByColumn(column.name)">{{ column.label }} <span
-										ng-if="sortColumn === column.name"> <span
-											ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-											ng-if="!sortReverse" class="ti-angle-double-up"></span>
-									</span>
+									<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+										column.label }} <span ng-if="sortColumn === column.name"> <span
+												ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+												ng-if="!sortReverse" class="ti-angle-double-up"></span>
+										</span>
 									</th>
 
 									<th class="actions"></th>
@@ -114,8 +101,7 @@
 									<td>{{branditem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 									<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 									<td class="actions">
-										<button class="btn btn-space btn btn-primary "
-											ng-click="restore(branditem)">
+										<button class="btn btn-space btn btn-primary " ng-click="restore(branditem)">
 											<i class="ti-back-right"></i>
 										</button>
 										<button class="btn btn-space btn btn-danger "
@@ -136,11 +122,10 @@
 										</button>
 									</li>
 
-									<li class="page-item"
-										ng-repeat="RestorePage in RestoreVisiblePages"
-										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-										class="page-link" href=""
-										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+									<li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+										<a class="page-link" href=""
+											ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
 											RestorePage.value }}</a></li>
 
 									<li class="page-item">
@@ -162,32 +147,27 @@
 
 				<div class="d-flex">
 					<!-- Thẻ select box -->
-					<select class="form-control mr-2" ng-model="selectedActivity"
-						data-toggle="tooltip" title="Lọc theo trạng thái thương hiệu"
-						ng-change="filterByActivities()" style="width: 200px;">
+					<select class="form-control mr-2" ng-model="selectedActivity" data-toggle="tooltip"
+						title="Lọc theo trạng thái thương hiệu" ng-change="filterByActivities()" style="width: 200px;">
 						<option value="all">Tất cả</option>
 						<option value="true">Đang bật</option>
 						<option value="false">Đang tắt</option>
 					</select>
-					<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
-						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="ti-save"></span>
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+						title="Xuất file Excel">
+						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 					</button>
-					<button type="button"
-						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
-						data-toggle="tooltip" title="Xuất file PDF">
-						<span class="ti-files"></span>
+					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+						title="Xuất file PDF">
+						<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click="searchProductGroupByName()"
-						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
-						title="Tìm kiếm">
+					<button ng-click="searchProductGroupByName()" class="btn btn-outline-info btn-fw mr-2"
+						data-toggle="tooltip" title="Tìm kiếm">
 						<span class="ti-search"></span>
 					</button>
 					<!-- Nút thùng rác -->
-					<button ng-click="openRecycleBinForm()"
-						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					<button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 						title="Thùng rác">
 						<span class="ti-trash"></span>
 					</button>
@@ -196,12 +176,11 @@
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>
-						<th ng-repeat="column in sortableColumns"
-							ng-click="sortByColumn(column.name)">{{ column.label }} <span
-							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-								ng-if="!sortReverse" class="ti-angle-double-up"></span>
-						</span>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
+							</span>
 						</th>
 						<th class="actions"></th>
 					</tr>
@@ -213,21 +192,19 @@
 
 						<td>
 							<div class="image-container">
-								<img class="image-content" alt="{{branditem.brandName}}"
-									src="{{branditem.brandImage}}">
+								<img class="image-content" alt="{{branditem.brandName}}" src="{{branditem.brandImage}}">
 							</div>
 						</td>
 						<td>{{branditem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 						<td>{{branditem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 						<td class="actions">
-							<button ng-click="edit(branditem)"
-								class="btn btn-inverse-primary btn-rounded btn-icon"
+							<button ng-click="edit(branditem)" class="btn btn-inverse-primary btn-rounded btn-icon"
 								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
 							<button ng-click="confirmHideTable(branditem)"
-								class="btn btn-inverse-danger btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Xóa">
+								class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
 							</button>
 						</td>
@@ -245,8 +222,8 @@
 						</li>
 
 						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
 								page.value }}</a></li>
 
 						<li class="page-item">

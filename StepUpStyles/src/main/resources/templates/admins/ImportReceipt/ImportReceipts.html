@@ -40,11 +40,11 @@
                 </button>
                 <button type="button" ng-click="create()" class="btn btn-outline-success btn-fw" data-toggle="tooltip"
                     title="Thêm phiếu nhập">
-                    <span class="ti-save"></span>
+                    <span class="fa fa-plus-circle"></span>
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
                     title="Làm mới">
-                    <span class="ti-control-shuffle"></span>
+                    <span class="fa fa-refresh"></span>
                 </button>
             </div>
         </div>
@@ -97,7 +97,7 @@
                 </button>
                 <button type="button" ng-click="createDetail()" class="btn btn-outline-success btn-fw"
                     data-toggle="tooltip" title="Thêm chi tiết phiếu nhập">
-                    <span class="ti-save-alt"></span>
+                    <span class="fa fa-plus-circle"></span>
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
                     title="Làm mới">
@@ -196,7 +196,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div ng-show="importDetail.length == 0" style="text-align: center; justify-content: center; margin: 10px; height: 300px; margin: 10px;">
+            <div ng-show="importDetail.length == 0"
+                style="text-align: center; justify-content: center; margin: 10px; height: 300px; margin: 10px;">
                 <i class="ti-layout-width-default"
                     style="font-size: 200px; color: grey; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); line-height: 300px;"></i>
             </div>
@@ -232,13 +233,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger btn-fw exportPdf" data-toggle="tooltip"
-                        title="Xuất file PDF">
-                        <span class="ti-files"></span>
-                    </button>
-                    <button type="button" class="btn btn-outline-success btn-fw exportExcel" data-toggle="tooltip"
+                    <button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
                         title="Xuất file Excel">
-                        <span class="ti-file"></span>
+                        <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+                        title="Xuất file PDF">
+                        <span class="fa fa-file-pdf-o" aria-hidden="true"></span>
                     </button>
                     <button type="button" class="btn btn-outline-dark btn-fw" data-toggle="tooltip" data-dismiss="modal"
                         title="Đóng"><span class="ti-close"></span></button>
