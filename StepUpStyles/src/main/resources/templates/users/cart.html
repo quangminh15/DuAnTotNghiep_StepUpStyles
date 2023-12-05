@@ -77,11 +77,16 @@
 								<tbody>
 
 
-
-									<tr class="text-left" ng-repeat="item in items">
+<style>
+	.out-of-stock{
+		background-color: #eeeeee;
+	}
+</style>
+									<tr class="text-left" ng-repeat="item in items" ng-class="{'out-of-stock ': item.quantity > item.productDetail.quantity}">
 										<td>
 											<input ng-if="item.quantity <= item.productDetail.quantity" type="checkbox"
 												ng-checked="item.isSelected" ng-click="checkOne($index)" />
+											<span ng-if="item.quantity > item.productDetail.quantity" class="badge badge-pill badge-secondary font-weight-bolder ">Hết hàng</span>
 										</td>
 
 										<td class="image-prod ">
@@ -176,13 +181,13 @@
 										<!-- </td> -->
 
 										<td class="price text-left"><span class="price"
-											ng-if="item.product.directDiscounts[0].priceDiscount == null"> {{
+											ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
 												item.product.price | number:0 }} ₫</span> <span class="price"
-											ng-if="item.product.directDiscounts[0].status === 'Đang diễn ra' && item.product.directDiscounts[0].priceDiscount">
+											ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
 											<del class="text-secondary">{{item.product.price | number:0 }} ₫</del> {{
-												item.product.directDiscounts[0].priceDiscount | number:0 }} ₫
+												item.product.directDiscount[0].priceDiscount | number:0 }} ₫
 										</span> <span class="price"
-											ng-if="item.product.directDiscounts[0].status !== 'Đang diễn ra' && item.product.directDiscounts[0].priceDiscount">
+											ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
 											{{ item.product.price | number:0 }} ₫ </span>
 										</td>
 
@@ -224,13 +229,13 @@
 										<td class="total text-left">
 
 											<span class="price"
-											ng-if="item.product.directDiscounts[0].priceDiscount == null"> {{
+											ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
 												item.product.price*item.quantity| number:0 }} ₫</span> <span class="price"
-											ng-if="item.product.directDiscounts[0].status === 'Đang diễn ra' && item.product.directDiscounts[0].priceDiscount">
+											ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
 											{{
-												item.product.directDiscounts[0].priceDiscount*item.quantity | number:0 }} ₫
+												item.product.directDiscount[0].priceDiscount*item.quantity | number:0 }} ₫
 										</span> <span class="price"
-											ng-if="item.product.directDiscounts[0].status !== 'Đang diễn ra' && item.product.directDiscounts[0].priceDiscount">
+											ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
 											{{ item.product.price*item.quantity | number:0 }} ₫ </span>
 										</td>
 										<td class="product-remove "><a ng-click="delete(item.cartDetailId)">X</a></td>

@@ -10,6 +10,7 @@
 </head>
 
 <body class="" ng-controller="checkout-ctrl">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
 	<!-- <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
 		rel="stylesheet">
@@ -22,6 +23,7 @@
 	<link rel="stylesheet" href="/asset/user/css/cart/owl.carousel.min.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/owl.theme.default.min.css">
 	<link rel="stylesheet" href="/asset/user/css/cart/magnific-popup.css">
+	
 
 	<link rel="stylesheet" href="/asset/user/css/cart/aos.css">
 
@@ -101,7 +103,8 @@
 											</div>
 										</div>
 										<div class="col-md-2">
-											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)"ng-disabled="item.isExpired"
+											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher"
+												ng-change="caculatorDiscount(item)" ng-disabled="item.isExpired"
 												ng-value="item" />
 										</div>
 									</div>
@@ -129,11 +132,11 @@
 			<div class="row ">
 				<div class="col-lg-12 cart-wrap ftco-animate ">
 					<!-- Button trigger modal -->
-<style>
-	h4{
-		color: black;
-	}
-</style>
+					<style>
+						h4 {
+							color: black;
+						}
+					</style>
 
 					<div style="border-top: 3px tomato solid;" class="cart-total mb-3 bg-white">
 						<div class="row">
@@ -141,7 +144,8 @@
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
 
-								<h3>{{addressDefault.nameReceiver}} | {{addressDefault.phoneReceiver}} <span class="badge badge-danger">Mặc
+								<h3>{{addressDefault.nameReceiver}} | {{addressDefault.phoneReceiver}} <span
+										class="badge badge-danger">Mặc
 										Định</span></h3> <span>{{addressDefault.addressDetails}},
 									{{addressDefault.ward}}, {{addressDefault.district}},
 									{{addressDefault.province}}</span>
@@ -208,7 +212,7 @@
 											class="fa fa-plus"></i> Tạo Mới</a>
 								</div>
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-danger" data-dismiss="modal">Đóng	</a>
+									<a type="button" class="btn btn-danger" data-dismiss="modal">Đóng </a>
 								</div>
 							</div>
 
@@ -237,13 +241,17 @@
 							<!-- Modal body -->
 							<div class="modal-body ">
 								<div class=" card-body cart-wrap  ftco-animate">
-									<form action="#" class="info .ftco-cart">
-										<div class="row">
+									
+									<form action="#" class="info .ftco-cart was-validated">
+										<div class="row form-group">
 
-											<div class="form-group col-lg-6 col-md-6 col-sm-12">
+											<div class=" input-group-textcol-lg-6 col-md-6 col-sm-12 ">
 												<label for="">Họ Tên</label>
-												<input ng-model="form.nameReceiver" type="text"
-													class="form-control text-left px-3" placeholder="">
+												
+												<input ng-model="form.nameReceiver" type="text" style="outline: none;"
+													class="text-left px-3 border border-3" ng-change="checkInput()" placeholder="" required ng-class="{'border border-danger': test==false,'border border-success': test==true}">
+												<div class="valid-feedback">Valid.</div>
+												<div class="invalid-feedback">Please fill out this field.</div>
 											</div>
 											<div class="form-group col-lg-6 col-md-6 col-sm-12">
 												<label for="">Số Điện Thoại</label>
@@ -293,7 +301,6 @@
 										<label data-toggle="tooltip" data-placement="top"
 											title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặt định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này"
 											for="check"> Đặt Làm Mặc Định</label>
-									</form>
 
 								</div>
 
@@ -302,7 +309,7 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-dismiss="modal"
+									<a type="submit" class="btn btn-success" 
 										ng-click="createAddress(form.checked,form.nameReceiver,form.phone,form.addressDetails)"><i
 											class="fa fa-plus"></i> Luu</a>
 								</div>
@@ -312,11 +319,14 @@
 								</div>
 
 							</div>
+						</form>
+
 
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- ---------------------------------------------------------------------------------------->
 			<div class="row ">
 				<div class="col-lg-12 cart-wrap ftco-animate ">
 					<!-- Button trigger modal -->
@@ -355,16 +365,17 @@
 
 										</div>
 										<div class="col-lg-2  align-items-center">
-										
+
 											<span class="price"
-											ng-if="iCart.product.directDiscounts[0].priceDiscount == null"> {{
+												ng-if="iCart.product.directDiscounts[0].priceDiscount == null"> {{
 												iCart.product.price | number:0 }} ₫</span> <span class="price"
-											ng-if="iCart.product.directDiscounts[0].status === 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
-											<del class="text-secondary">{{iCart.product.price | number:0 }} ₫</del> {{
+												ng-if="iCart.product.directDiscounts[0].status === 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
+												<del class="text-secondary">{{iCart.product.price | number:0 }} ₫</del>
+												{{
 												iCart.product.directDiscounts[0].priceDiscount | number:0 }} ₫
-										</span> <span class="price"
-											ng-if="iCart.product.directDiscounts[0].status !== 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
-											{{ iCart.product.price | number:0 }} ₫ </span>
+											</span> <span class="price"
+												ng-if="iCart.product.directDiscounts[0].status !== 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
+												{{ iCart.product.price | number:0 }} ₫ </span>
 											</p>
 
 										</div>
@@ -377,13 +388,15 @@
 											<h3>
 
 												<span class="price"
-											ng-if="iCart.product.directDiscounts[0].priceDiscount == null"> {{
-												iCart.product.price* iCart.quantity | number:0 }} ₫</span> <span class="price"
-											ng-if="iCart.product.directDiscounts[0].status === 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
-											{{iCart.product.directDiscounts[0].priceDiscount* iCart.quantity | number:0 }} ₫
-										</span> <span class="price"
-											ng-if="iCart.product.directDiscounts[0].status !== 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
-											{{ iCart.product.price* iCart.quantity | number:0 }} ₫ </span>
+													ng-if="iCart.product.directDiscounts[0].priceDiscount == null"> {{
+													iCart.product.price* iCart.quantity | number:0 }} ₫</span> <span
+													class="price"
+													ng-if="iCart.product.directDiscounts[0].status === 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
+													{{iCart.product.directDiscounts[0].priceDiscount* iCart.quantity |
+													number:0 }} ₫
+												</span> <span class="price"
+													ng-if="iCart.product.directDiscounts[0].status !== 'Đang diễn ra' && iCart.product.directDiscounts[0].priceDiscount">
+													{{ iCart.product.price* iCart.quantity | number:0 }} ₫ </span>
 											</h3>
 										</div>
 
@@ -426,29 +439,29 @@
 												<div>Giảm: {{selectedVoucher.voucher.discountAmount}}%</div>
 												<div>Đơn tối thiểu: {{formatToVND(selectedVoucher.voucher.total)}}</div>
 												<div style="font-size: 11px; color: red;">Áp dụng:
-													{{selectedVoucher.formattedStartDate}} - {{selectedVoucher.formattedEndDate}}
+													{{selectedVoucher.formattedStartDate}} -
+													{{selectedVoucher.formattedEndDate}}
 												</div>
 											</div>
 										</div>
-										
+
 									</div>
 								</div>
-								<a class="btn mt-3"
-										style="background-color: #ff7315; color: white;"ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
-											style="margin-right: 10px;" ></i>Chọn Voucher</a>
+								<a class="btn mt-3" style="background-color: #ff7315; color: white;"
+									ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
+										style="margin-right: 10px;"></i>Chọn Voucher</a>
 							</div>
 
 							<div class="col-lg-6 card d-flex align-items-center justify-content-center border-bottom-0 border-top-0 border-left-0"
 								ng-if="!selectedVoucher">
 								<h3 class="font-weight-bolder ">Voucher</h3>
-								<div
-									style="text-align: center; justify-content: center; margin: 10px;">
+								<div style="text-align: center; justify-content: center; margin: 10px;">
 									<i class="fas fa-gift" style="font-size: 100px; color: #ff7315;"></i>
 									<p>Hiện tại bạn chưa chọn voucher nào</p>
-									
-									<a class="btn"
-										style="background-color: #ff7315; color: white;"ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
-											style="margin-right: 10px;" ></i>Chọn Voucher</a>
+
+									<a class="btn" style="background-color: #ff7315; color: white;"
+										ng-click="openRecycleBinForm()"><i class="fa fa-ticket"
+											style="margin-right: 10px;"></i>Chọn Voucher</a>
 								</div>
 							</div>
 
@@ -456,35 +469,46 @@
 								<h3 class="font-weight-bolder ">Tổng Thanh Toán</h3>
 								<div class="d-flex cart-total">
 									<p class="text-right ">
-										<span class="font-weight-bolder mb-2" style="font-size: larger;">Thành Tiền:</span>
-										<span class="font-weight-bolder mb-2" style="font-size: larger;">Phí Ship:</span>
-										<span class="font-weight-bolder mb-2" style="font-size: larger;"ng-if="discouted>0">Giảm Giá:</span>
-										<span class="font-weight-bolder mb-1" style="font-size: larger;">Tổng Tiền:</span>
+										<span class="font-weight-bolder mb-2" style="font-size: larger;">Thành
+											Tiền:</span>
+										<span class="font-weight-bolder mb-2" style="font-size: larger;">Phí
+											Ship:</span>
+										<span class="font-weight-bolder mb-2" style="font-size: larger;"
+											ng-if="discouted>0">Giảm Giá:</span>
+										<span class="font-weight-bolder mb-1" style="font-size: larger;">Tổng
+											Tiền:</span>
 									</p>
 									<p class="text-right ">
 
 										<span class=" mb-2" style="font-size: larger;">{{tongTien | number:0 }} ₫</span>
-										<span class=" mb-2" style="font-size: larger;">{{shippingFee | number:0 }} ₫</span>
-										<span class=" mb-2" style="font-size: larger;" ng-if="discouted>0">-{{discouted| number:0 }} ₫</span>
-										<span class=" mb-1  text-danger font-weight-bolder" style="font-size: larger;">{{(tongTien-discouted) + shippingFee | number:0 }} ₫</span>
+										<span class=" mb-2" style="font-size: larger;">{{shippingFee | number:0 }}
+											₫</span>
+										<span class=" mb-2" style="font-size: larger;" ng-if="discouted>0">-{{discouted|
+											number:0 }} ₫</span>
+										<span class=" mb-1  text-danger font-weight-bolder"
+											style="font-size: larger;">{{(tongTien-discouted) + shippingFee | number:0
+											}} ₫</span>
 									</p>
 
 								</div>
 								<h3 class="font-weight-bolder ">Tiến hành thanh toán</h3>
-								
-								<a ng-click="sendDataToJava()" class="btn py-3 px-4 ml-3 mr-2 bg-success text-white font-weight-bolder "><img width="40px" src="/asset/user/img/cod.png"/>Thanht toán
+
+								<a ng-click="sendDataToJava()"
+									class="btn py-3 px-4 ml-3 mr-2 bg-success text-white font-weight-bolder "><img
+										width="40px" src="/asset/user/img/cod.png" />Thanht toán
 									khi nhận hàng</a>
 								<a ng-click="getDataPayment()" th:href="@{/submitOrder} "
-									class="btn py-3 px-4 mr-2 bg-info text-white font-weight-bolder"><img width="50px" src="/asset/user/img/logoVnpay.webp"/> vnpay</a>
+									class="btn py-3 px-4 mr-2 bg-info text-white font-weight-bolder"><img width="50px"
+										src="/asset/user/img/logoVnpay.webp" /> vnpay</a>
 							</div>
 						</div>
 						<div class="row mt-3 text-right border-top d-flex justify-content-end">
 
-							
+
 							<div class="mt-3 text-center ">
-								
+
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
@@ -536,7 +560,8 @@
 	<script src="/asset/user/js/cart/jquery.min.js"></script>
 	<script src="/asset/user/js/cart/jquery-migrate-3.0.1.min.js"></script>
 	<script src="/asset/user/js/cart/popper.min.js"></script>
-	<script src="/asset/user/js/cart/bootstrap.min.js"></script>
+	<!-- <script src="/asset/user/js/cart/bootstrap.min.js"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/asset/user/js/cart/jquery.easing.1.3.js"></script>
 	<script src="/asset/user/js/cart/jquery.waypoints.min.js"></script>
 	<script src="/asset/user/js/cart/jquery.stellar.min.js"></script>
@@ -546,6 +571,7 @@
 	<script src="/asset/user/js/cart/jquery.animateNumber.min.js"></script>
 	<script src="/asset/user/js/cart/bootstrap-datepicker.js"></script>
 	<script src="/asset/user/js/cart/scrollax.min.js"></script>
+	
 	<script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 	<script src="/asset/user/js/cart/google-map.js"></script>

@@ -49,25 +49,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				console.log("orders", $scope.allOrders);
 
 
-				$scope.allOrders.sort((a, b) => {
-					const statusPriority = {
-						'Pending': 3,
-						'Confirmed': 2,
-						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
-						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
-					};
-
-					// Xác định mức độ ưu tiên cho từng order
-					const statusPriorityA = statusPriority[b.orderStatus] || 0;
-					const statusPriorityB = statusPriority[a.orderStatus] || 0;
-
-					if (statusPriorityA !== statusPriorityB) {
-						return statusPriorityA - statusPriorityB;
-					} else {
-						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
-						return new Date(b.orderDate) - new Date(a.orderDate);
-					}
-				});
+				
 
 				$scope.filteredOrders = angular.copy($scope.allOrders);
 
@@ -102,6 +84,33 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 					item.formattedDate = formatDate(item.orderDate)
 				})
+				$scope.filteredOrders.sort((a, b) => {
+					const statusPriority = {
+						'Pending': 3,
+						'Confirmed': 2,
+						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
+					};
+
+					// Xác định mức độ ưu tiên cho từng order
+					const statusPriorityA = statusPriority[b.orderStatus] || 0;
+					const statusPriorityB = statusPriority[a.orderStatus] || 0;
+
+					if (statusPriorityA !== statusPriorityB) {
+						
+						return statusPriorityA - statusPriorityB;
+					} else {
+						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
+						
+						if ((statusPriorityA==3 && statusPriorityB==3 )|| (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
+							
+							return new Date(a.orderDate) - new Date(b.orderDate);
+						}else{
+
+							return new Date(b.orderDate) - new Date(a.orderDate);
+						}
+					}
+				});
 				$scope.pager.first()
 				$scope.orders.forEach(item => {
 					//định dạng
@@ -359,6 +368,8 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 		$scope.filteredOrders = angular.copy($scope.allOrders);
 
+		
+
 		if (status) {
 			if (status == 'pending') {
 
@@ -387,7 +398,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 			} else if (status == 'cancel') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
-
+					
 					return order.orderStatus == 'Cancel';
 				})
 
@@ -396,9 +407,11 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 
 					const statusPriority = {
-						'Pending': 3,
-						'Confirmed': 2,
-						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						'Pending': 5,
+						'Confirmed': 4,
+						'Shipping': 3, 
+						'Delivered': 2,
+						'Cancel': 1,// Đặt ưu tiên cho orderStatus 'pending'
 						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
 					};
 
@@ -407,10 +420,18 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					const statusPriorityB = statusPriority[a.orderStatus] || 0;
 
 					if (statusPriorityA !== statusPriorityB) {
+						
 						return statusPriorityA - statusPriorityB;
 					} else {
 						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
-						return new Date(b.orderDate) - new Date(a.orderDate);
+						
+						if ((statusPriorityA==3 && statusPriorityB==3) || (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
+							
+							return new Date(b.orderDate) - new Date(a.orderDate);
+						}else{
+
+							return new Date(a.orderDate) - new Date(b.orderDate);
+						}
 					}
 
 
@@ -432,10 +453,18 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					const statusPriorityB = statusPriority[a.orderStatus] || 0;
 
 					if (statusPriorityA !== statusPriorityB) {
+						
 						return statusPriorityA - statusPriorityB;
 					} else {
 						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
-						return new Date(b.orderDate) - new Date(a.orderDate);
+						
+						if ((statusPriorityA==3 && statusPriorityB==3 )|| (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
+							
+							return new Date(b.orderDate) - new Date(a.orderDate);
+						}else{
+
+							return new Date(a.orderDate) - new Date(b.orderDate);
+						}
 					}
 				});
 
@@ -481,9 +510,11 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 
 			}
 		}
+		$scope.pager.first()
 		$scope.filteredOrders.forEach(item => {
 
 			item.formattedDate = formatDate(item.orderDate)
 		})
+		
 	}
 }])
