@@ -520,6 +520,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	$scope.voucherUseTrue = [];
 	$scope.listOrder = [];
 
+	$scope.filteredVouchers = [];
+
 	$scope.getVoucher = function () {
 		$http.get("/user/Idprofile").then((resp) =>{
 			var userId = resp.data;
@@ -544,6 +546,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			// Xử lý dữ liệu trả về từ API
 			$scope.voucherUseTrue = response.data;
 			console.log($scope.voucherUseTrue);
+
 			$scope.voucherUseTrue.forEach(function (item) {
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
@@ -585,6 +588,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 				// So sánh ngày kết thúc với ngày hiện tại
 				return voucherEndDate < currentDate;
 			}
+
 		})
 			})
 		  })

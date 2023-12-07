@@ -22,3 +22,8 @@
 h4 {
     color: white;
 }
+
+.disabled-voucher {
+    opacity: 0.5;
+    pointer-events: none;
+}

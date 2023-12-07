@@ -97,7 +97,7 @@ app.controller("voucher-ctrl", function ($scope, $http) {
                         <div class="voucher-modal-content">
                         <div class="row" style="margin-left: 0px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative; margin-bottom: 10px;">
                                             <div class="col-md-3"
-                                                style="background-color: orange; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                                style="background-color: #ff7315; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                                                 <svg width="50" height="70" xmlns="http://www.w3.org/2000/svg">
                                                     <text x="15" y="50" font-size="30" fill="white">%</text>
                                                 </svg>

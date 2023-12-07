@@ -1,8 +1,10 @@
-app.controller("voucher-ctrl", function($scope, $http){
+app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
     $scope.voucherItem = [];
 	$scope.voucherNoDelItem = [];
 	$scope.voucherDelItem = [];
 	$scope.form = {};
+
+	CKEDITOR.replace('description');
 
     $scope.sortableColumns = [
         { name: 'total', label: 'Đơn hàng tối thiểu' },
@@ -100,6 +102,12 @@ app.controller("voucher-ctrl", function($scope, $http){
 
 	//	Xóa form
 	$scope.reset = function () {
+		var ckeditor = CKEDITOR.instances.description;
+
+		if (ckeditor) {
+			ckeditor.setData('');
+		}
+
 		$scope.form = {
 		};
 	}
@@ -112,7 +120,9 @@ app.controller("voucher-ctrl", function($scope, $http){
 		$scope.form = angular.copy(ddI);
 		$scope.form.dateStart = new Date($scope.form.dateStart);
 		$scope.form.dateEnd = new Date($scope.form.dateEnd);
-		$scope.form.discountAmount = $scope.form.discountAmount
+		$scope.form.discountAmount = $scope.form.discountAmount;
+		// Cập nhật giá trị CKEditor
+		CKEDITOR.instances.description.setData($scope.form.description);
 	}
 
     //format tien te vnd
@@ -133,12 +143,12 @@ app.controller("voucher-ctrl", function($scope, $http){
 
 	//	Thêm mới 
 	$scope.create = function () {
-		//Không chọn sản phẩm
+		//Không nhap don gia toi thieu
 		if (!$scope.form.total) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập mức giá tối thiểu cho đơn hàng!',
+				text: 'Vui lòng nhập một số lớn hơn 0 cho mức giá tối thiểu của đơn hàng!',
 			})
 			return;
 		}
@@ -148,7 +158,7 @@ app.controller("voucher-ctrl", function($scope, $http){
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập mức giảm giá!',
+				text: 'Vui lòng nhập một số lớn hơn 0 cho giảm giá!',
 			})
 			return;
 		}
@@ -189,6 +199,27 @@ app.controller("voucher-ctrl", function($scope, $http){
 				title: 'Thất bại',
 				text: 'Thời gian kết thúc phải sau ngày bắt đầu!',
 			})
+			return;
+		}
+
+		// if (!$scope.form.description) {
+		// 	Swal.fire({
+		// 		icon: 'error',
+		// 		title: 'Thất bại',
+		// 		text: 'Vui lòng nhập mô tả cho voucher!',
+		// 	});
+		// 	return;
+		// }
+
+		var descriptionEditor = CKEDITOR.instances.description;
+		$scope.form.description = descriptionEditor.getData().trim();
+
+		if (!$scope.form.description) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập mô tả cho voucher!',
+			});
 			return;
 		}
 
@@ -284,6 +315,9 @@ app.controller("voucher-ctrl", function($scope, $http){
 			})
 			return;
 		}
+
+		var descriptionEditor = CKEDITOR.instances.description;
+		$scope.form.description = descriptionEditor.getData();
 
 		//format date
 		var dynamicDateValueS = $scope.form.dateStart;
@@ -482,12 +516,12 @@ app.controller("voucher-ctrl", function($scope, $http){
 		})
 	};
 
-	$scope.formatDescription = function (description) {
-		// Đặt một giới hạn độ dài cho địa chỉ
+	$scope.formatDescription = function(description) {
+		// Đặt một giới hạn độ dài cho mô tả
 		var maxLength = 20;
 	
-		// Kiểm tra độ dài địa chỉ và trả về địa chỉ được cắt hoặc không đổi
-		if (description.length > maxLength) {
+		// Kiểm tra độ dài mô tả và trả về mô tả được cắt hoặc không đổi
+		if (description && description.length > maxLength) {
 			return description.substring(0, maxLength) + '...';
 		} else {
 			return description;
