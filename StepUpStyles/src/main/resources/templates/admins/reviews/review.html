@@ -10,24 +10,24 @@
 					<!-- Thẻ select box -->
 					<div class="col-sm-3">
                         <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
-                        <select class="form-control mr-1" ng-model="productId" id="productName"
+                        <select class="form-control mr-1 select2" ng-model="productId" id="productName" ng-change="filterByProduct()"
                             style="width: 200px; margin-bottom: 10px">
-                            <option value="">Tất cả</option>
+                            <option value="">Chọn sản phẩm</option>
                             <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
                         </select>
                     </div>
                     <div class="col-sm-3">
                         <label for="userId">Người dùng:</label>
-                        <select class="form-control mr-1" ng-model="usersId" id="userId"
+                        <select class="form-control mr-1" ng-model="usersId" id="userId" ng-change="filterByUser()"
                         style="width: 200px; margin-bottom: 10px">
-                            <option value="">Tất cả</option>
+                            <option value="">Chọn người dùng</option>
                             <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
                         </select>
                     </div>
                     <div class="col-sm-3">
                         <label for="rating">Sao đánh giá:</label>
-                        <select class="form-control mr-1" ng-model="rating" id="rating">
-                            <option value="">Tất cả</option>
+                        <select class="form-control mr-1" ng-model="rating" id="rating" ng-change="filterByStar()">
+                            <option value="">Chọn sao</option>
                             <option value="1">1 sao</option>
                             <option value="2">2 sao</option>
                             <option value="3">3 sao</option>
@@ -35,9 +35,20 @@
                             <option value="5">5 sao</option>
                         </select>
                     </div>
-                    <div class="col-sm-5 template-demo text-right mt-3"  >
-                        <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button>
-                        <button ng-click="reset()" class="btn btn-primary">Đặt lại</button>
+					<div class="col-sm-3">
+						<label for="dateFilter">Lọc theo:</label>
+						<select class="form-control" ng-model="dateFilter" id="dateFilter"
+								ng-change="applyDateFilter()">
+							<option value="">Tất cả thời gian</option>	
+							<option value="today">Hôm nay</option>
+							<option value="thisWeek">Tuần này</option>
+							<option value="thisMonth">Tháng này</option>
+							<option value="thisYear">Năm nay</option>
+						</select>
+					</div>
+                    <div class="col-sm-3 template-demo mt-3"  >
+                        <!-- <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button> -->
+                        <!-- <button ng-click="reset()" class="btn btn-primary">Đặt lại</button> -->
 						<button type="button"
 						class="btn btn-outline-success btn-fw mr-2 export"
 						data-toggle="tooltip" title="Xuất file Excel">
@@ -67,7 +78,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="reviewitem in pager.reviewitems">
-                        <td>{{reviewitem.reviewId}}</td>
+                        <td style="color: #26aa99; font-weight: bold; font-size: large; text-align: center;">#{{reviewitem.orderDetail.orderDetailId}}</strong></td>
                         <td style="overflow: hidden; max-width: 100px;">
 							{{reviewitem.product.productName}}
 						</td>
@@ -88,7 +99,7 @@
 						<td>
 							<div ng-if="reviewitem.image1">
 								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image1}}">
-									<img src="{{reviewitem.image1}}" class="fancybox" style="width: 50px; height: 50px;">
+									<img ng-src="{{reviewitem.image1}}" class="fancybox" style="width: 50px; height: 50px;">
 								</a>
 							</div>
 							<div ng-if="!reviewitem.image1">
@@ -98,7 +109,7 @@
 						<td>
 							<div ng-if="reviewitem.image2">
 								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image2}}">
-									<img src="{{reviewitem.image2}}" class="fancybox" style="width: 50px; height: 50px;">
+									<img ng-src="{{reviewitem.image2}}" class="fancybox" style="width: 50px; height: 50px;">
 								</a>
 							</div>
 							<div ng-if="!reviewitem.image2">
@@ -108,7 +119,7 @@
 						<td>
 							<div ng-if="reviewitem.image3">
 								<a data-fancybox="gallery-{{reviewitem.reviewId}}" href="{{reviewitem.image3}}">
-									<img src="{{reviewitem.image3}}" class="fancybox" style="width: 50px; height: 50px;">
+									<img ng-src="{{reviewitem.image3}}" class="fancybox" style="width: 50px; height: 50px;">
 								</a>
 							</div>
 							<div ng-if="!reviewitem.image3">
@@ -188,21 +199,21 @@
 							<div class="mr-5">
 								<div ng-if="reviewdetails.image1">
 									<a data-fancybox="rv-{{reviewdetails.reviewId}}" href="{{reviewdetails.image1}}">
-										<img src="{{reviewdetails.image1}}" class="fancybox" style="width: 200px; height: 200px;">
+										<img ng-src="{{reviewdetails.image1}}" class="fancybox" style="width: 200px; height: 200px;">
 									</a>
 								</div>
 							</div>
 							<div class="mr-5">
 								<div ng-if="reviewdetails.image2">
 									<a data-fancybox="rv-{{reviewdetails.reviewId}}" href="{{reviewdetails.image2}}">
-										<img src="{{reviewdetails.image2}}" class="fancybox" style="width: 200px; height: 200px;">
+										<img ng-src="{{reviewdetails.image2}}" class="fancybox" style="width: 200px; height: 200px;">
 									</a>
 								</div>
 							</div>
 							<div>
 								<div ng-if="reviewdetails.image3">
 									<a data-fancybox="rv-{{reviewdetails.reviewId}}" href="{{reviewdetails.image3}}">
-										<img src="{{reviewdetails.image3}}" class="fancybox" style="width: 200px; height: 200px;">
+										<img ng-src="{{reviewdetails.image3}}" class="fancybox" style="width: 200px; height: 200px;">
 									</a>
 								</div>
 							</div>

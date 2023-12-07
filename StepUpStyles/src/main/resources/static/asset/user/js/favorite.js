@@ -89,6 +89,23 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 				// Nếu người dùng xác nhận xóa, thì gửi yêu cầu xóa sản phẩm yêu thích
 				$http.delete('/rest/favorites/delete/' + product.productID)
 					.then(function (response) {
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer)
+								toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+						})
+
+						Toast.fire({
+							icon: 'success',
+							title: 'Đã xóa sản phẩm ' + product.productName + ' khỏi danh sách yêu thích',
+
+						})
 						$scope.getAllUserFavorite();
 						updateFavoriteCount();
 					})
@@ -129,6 +146,10 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 	$scope.getReviewByProduct = function (productID) {
 		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
 			$scope.allreviews = resp.data;
+			$scope.allreviews.forEach(rvitem => {
+				rvitem.dateLike = new Date(rvitem.dateLike)
+			})
+			$scope.allreviews.sort((a, b) => b.reviewDate - a.reviewDate);
 			$scope.reviewPager.first()
 			$scope.filterByRating(null);
 			$scope.countReviews($scope.allreviews);

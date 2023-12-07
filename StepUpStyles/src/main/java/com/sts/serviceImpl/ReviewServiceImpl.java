@@ -109,6 +109,46 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewDTOList;
     }
 
+//     @Override
+// public List<TotalProductRatingDTO> getTotalProductRating(int year) {
+//     String sql = "SELECT MONTH(r.review_date) AS month, p.product_name AS productName, " +
+//         "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
+//         "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
+//         "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
+//         "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
+//         "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
+//         "FROM Review r " +
+//         "JOIN Product p ON r.product_id = p.product_id " +
+//         "WHERE YEAR(r.review_date) = :year " +
+//         "GROUP BY p.product_name, MONTH(r.review_date)";
+
+//     MapSqlParameterSource parameters = new MapSqlParameterSource();
+//     parameters.addValue("year", year);
+
+//     List<TotalProductRatingDTO> reviewDTOList = new ArrayList<>();
+
+//     List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql, parameters);
+
+//     for (Map<String, Object> row : rows) {
+//         int month = (int) row.get("month"); // Sửa thành "month" (thay "Month")
+
+//         Map<String, Integer> ratings = new HashMap<>();
+//         ratings.put("1 sao", (int) row.get("oneStar"));
+//         ratings.put("2 sao", (int) row.get("twoStar"));
+//         ratings.put("3 sao", (int) row.get("threeStar"));
+//         ratings.put("4 sao", (int) row.get("fourStar"));
+//         ratings.put("5 sao", (int) row.get("fiveStar"));
+
+//         String productName = (String) row.get("productName"); // Lấy tên sản phẩm từ kết quả truy vấn
+
+//         TotalProductRatingDTO reviewDTO = new TotalProductRatingDTO(month, productName, ratings);
+//         reviewDTOList.add(reviewDTO);
+//     }
+
+//     return reviewDTOList;
+// }
+
+
     @Override
     public List<Review> searchs(Integer productId, Integer usersId, Integer rating) {
         return reviewDAO.search(productId, usersId, rating);

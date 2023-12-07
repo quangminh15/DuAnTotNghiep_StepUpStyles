@@ -1,11 +1,11 @@
-app.controller("review-ctrl", function($scope, $http){
+app.controller("review-ctrl", function ($scope, $http) {
 	$scope.reviewitems = [];
 	$scope.prods = [];
 	$scope.users = [];
 	$scope.form = {};
 	$scope.reviewdetails = {}
 	$scope.showSelectBoxEmptyWarning = false;
-	$scope.initialize = function() {
+	$scope.initialize = function () {
 		//load review
 		$http.get("/rest/reviews/loadall").then(resp => {
 			$scope.reviewitems = resp.data;
@@ -20,7 +20,7 @@ app.controller("review-ctrl", function($scope, $http){
 		$http.get("/rest/products/loadall").then(resp => {
 			$scope.prods = resp.data;
 		});
-		
+
 		//load User
 		$http.get("/rest/userbyroleUser").then(resp => {
 			$scope.users = resp.data;
@@ -33,7 +33,7 @@ app.controller("review-ctrl", function($scope, $http){
 	$scope.pager = {
 		page: 0,
 		size: 8,
-		getPageNumbers: function() {
+		getPageNumbers: function () {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
 			var visiblePages = [];
@@ -90,9 +90,9 @@ app.controller("review-ctrl", function($scope, $http){
 		},
 	};
 
-	$scope.showReview = function(reviewId){
+	$scope.showReview = function (reviewId) {
 		$http.get("/rest/reviews/" + reviewId).then(resp => {
-			$scope.reviewdetails =  resp.data;
+			$scope.reviewdetails = resp.data;
 			$('#reviewModal').modal('show');
 			console.log("Success", resp);
 		}).catch(error => {
@@ -112,65 +112,139 @@ app.controller("review-ctrl", function($scope, $http){
 			});
 	};
 
-	$scope.filterByProduct = function() {
-		if ($scope.selectedProduct) {
-			$http.get("/rest/reviews/loadbyproducts/" + $scope.selectedProduct).then(resp => {
+	$scope.filterByProduct = function () {
+		if ($scope.productId) {
+			$scope.usersId = ""
+			$scope.rating = ""
+			$http.get("/rest/reviews/loadbyproducts/" + $scope.productId).then(resp => {
 				$scope.reviewitems = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				$scope.pager.first();
-			});
-		} else {
-			$scope.initialize();
-		}
-	};
-
-	$scope.filterByUser = function() {
-		if ($scope.selectedUser) {
-			$http.get("/rest/reviews/loadbyusers/" + $scope.selectedUser).then(resp => {
-				$scope.reviewitems = resp.data;
-				$scope.pager.first();
-			}).catch(error => {
-				$scope.pager.first();
-			});
-		} else {
-			$scope.initialize();
-		}
-	};
-
-	$scope.searchReviews = function() {
-		if(!$scope.productId || !$scope.usersId || !$scope.rating){
-			Swal.fire({
-				icon: 'error',
-				title: 'Thất bại',
-				text: 'Vui lòng chọn đầy đủ các trường để thực hiện chức năng tìm kiếm!'
-			})
-		}else{
-			$http.get(`/rest/reviews/search?productId=${$scope.productId}&usersId=${$scope.usersId}&rating=${$scope.rating}`)
-            .then(function(response) {
-                $scope.reviewitems = response.data;
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
-						text: 'Không tìm thấy kết quả phù hợp!'
-					})
+						text: 'Không tìm thấy sản phẩm phù hợp. Vui lòng chọn lại!',
+					});
 					$scope.initialize();
+					$scope.productId = ""
+				}else{
+					$scope.pager.first();
 				}
+			}).catch(error => {
 				$scope.pager.first();
-			})
+			});
+		} else {
+			$scope.initialize();
 		}
-	}
+	};
 
-	$scope.reset = function(){
+	$scope.filterByUser = function () {
+		if ($scope.usersId) {
+			$scope.productId = ""
+			$scope.rating = ""
+			$http.get("/rest/reviews/loadbyusers/" + $scope.usersId).then(resp => {
+				$scope.reviewitems = resp.data;
+				if($scope.reviewitems.length == 0){
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy người dùng phù hợp. Vui lòng chọn lại!',
+					});
+					$scope.initialize();
+					$scope.usersId = ""
+				}else{
+					$scope.pager.first();
+				}
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
+	};
+
+	$scope.filterByStar = function () {
+		if ($scope.rating) {
+			$scope.productId = ""
+			$scope.usersId = ""
+			$http.get("/rest/reviews/loadbystar/" + $scope.rating).then(resp => {
+				$scope.reviewitems = resp.data;
+				if($scope.reviewitems.length == 0){
+					Swal.fire({
+						icon: 'error',
+						title: 'Thất bại',
+						text: 'Không tìm thấy sao đánh giá phù hợp. Vui lòng chọn lại!',
+					});
+					$scope.initialize();
+					$scope.rating = ""
+				}else{
+				$scope.pager.first();
+			}
+			}).catch(error => {
+				$scope.pager.first();
+			});
+		} else {
+			$scope.initialize();
+		}
+	};
+
+	// $scope.searchReviews = function () {
+	// 	// if (!$scope.productId || !$scope.usersId || !$scope.rating) {
+	// 	// 	Swal.fire({
+	// 	// 		icon: 'error',
+	// 	// 		title: 'Thất bại',
+	// 	// 		text: 'Vui lòng chọn đầy đủ các trường để thực hiện chức năng tìm kiếm!'
+	// 	// 	})
+	// 	// } else {
+	// 		$http.get("/rest/reviews/search",
+	// 			{
+	// 				params: {
+	// 					productId: $scope.productId ? parseInt($scope.productId) : undefined,
+	// 					usersId: $scope.usersId ? parseInt($scope.usersId) : undefined,
+	// 					rating: $scope.rating ? parseInt($scope.rating) : undefined
+	// 				}
+	// 			}
+	// 		)
+	// 			.then(function (response) {
+	// 				$scope.reviewitems = response.data;
+	// 				console.log("rev",$scope.reviewitems);
+	// 				// if ($scope.reviewitems.length == 0) {
+	// 				// 	Swal.fire({
+	// 				// 		icon: 'error',
+	// 				// 		title: 'Thất bại',
+	// 				// 		text: 'Không tìm thấy kết quả phù hợp!'
+	// 				// 	})
+	// 				// 	$scope.initialize();
+	// 				// }
+	// 				$scope.pager.first();
+	// 			})
+	// 	// }
+	// }
+
+	$scope.searchReviews = function () {
+			$http.get("/rest/reviews/search", {
+				params: {
+					productId: $scope.productId,
+					usersId: $scope.usersId,
+					rating: $scope.rating
+				}
+			}).then(function (response) {
+				$scope.reviewitems = response.data;
+				$scope.pager.first();
+			}).catch(function (error) {
+				// Xử lý lỗi
+			});
+	}
+	
+
+	$scope.reset = function () {
 		$scope.initialize();
 		$scope.productId = "";
-        $scope.usersId = "";
-  		$scope.rating = "";
+		$scope.usersId = "";
+		$scope.rating = "";
 	}
 
 	$scope.sortableColumns = [
-		{ name: 'reviewId', label: 'Mã đánh giá' },
+		{ name: 'orderDetail.orderDetailId', label: 'Mã đơn hàng' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'user.fullName', label: 'Tên người dùng' },
 		{ name: 'title', label: 'Nội dung' },
@@ -182,7 +256,7 @@ app.controller("review-ctrl", function($scope, $http){
 	];
 
 
-	$scope.sortByColumn = function(columnName) {
+	$scope.sortByColumn = function (columnName) {
 		if ($scope.sortColumn === columnName) {
 			$scope.sortReverse = !$scope.sortReverse;
 		} else {
@@ -190,12 +264,16 @@ app.controller("review-ctrl", function($scope, $http){
 			$scope.sortReverse = false;
 		}
 
-		$scope.reviewitems.sort(function(a, b) {
+		$scope.reviewitems.sort(function (a, b) {
 			var aValue = a[columnName];
 			var bValue = b[columnName];
 			if (columnName === 'product.productName') {
 				aValue = a.product.productName;
 				bValue = b.product.productName;
+			}
+			if (columnName === 'orderDetail.orderDetailId') {
+				aValue = a.orderDetail.orderDetailId;
+				bValue = b.orderDetail.orderDetailId;
 			}
 			if (columnName === 'user.fullName') {
 				aValue = a.user.fullName;
@@ -217,11 +295,11 @@ app.controller("review-ctrl", function($scope, $http){
 		});
 	};
 
-	$(function() {
+	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 
-	$('.export').click(function() {
+	$('.export').click(function () {
 
 		let timerInterval
 		Swal.fire({
@@ -251,7 +329,7 @@ app.controller("review-ctrl", function($scope, $http){
 		})
 	});
 
-	$('.pdf-file').click(function() {
+	$('.pdf-file').click(function () {
 		let timerInterval
 		Swal.fire({
 			icon: 'info',
@@ -287,15 +365,15 @@ app.controller("review-ctrl", function($scope, $http){
 		})
 	});
 
-	var myApp1 = new function() {
-		this.printTable = function() {
+	var myApp1 = new function () {
+		this.printTable = function () {
 			var tab = document.getElementById('sampleTable');
-			var win = window.open('', '', 'height=700,width=700');
+			var win = window.open('', '', 'height=700,width=1200');
 			win.document.write(tab.outerHTML);
 			win.document.close();
 			win.print();
 		}
 
 	}
-	
+
 })

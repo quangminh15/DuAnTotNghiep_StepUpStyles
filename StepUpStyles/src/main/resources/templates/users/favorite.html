@@ -165,7 +165,7 @@
 				<!--//row1-->
 
 				<!--/pagination-->
-				<div class="pagination" style="margin: 0px 10px 20px;">
+					<div class="pagination" style="margin: 0px 10px 20px;" ng-if="userItemsFavorite.length > 0">
 					<ul>
 						<li class="prev"><a ng-click="favoritePager.first()"><span
 								class="fa fa-angle-double-left"></span></a></li>
@@ -177,7 +177,7 @@
 						<li class="next"><a ng-click="favoritePager.last()"><span
 								class="fa fa-angle-double-right"></span></a></li>
 					</ul>
-				</div>
+				    </div>		
 				<!--//pagination-->
 
 			</div>

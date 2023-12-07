@@ -95,8 +95,8 @@ public class ReviewRestController {
 	public List<Review> getUserByUser(@PathVariable Integer usersId) {
 		return reviewService.getUsersByUsersId(usersId);
 	}
-    @GetMapping("/rest/reviews/loadbystar")
-	public List<Review> getStar(@RequestParam Integer rating) {
+    @GetMapping("/rest/reviews/loadbystar/{rating}")
+	public List<Review> getStar(@PathVariable Integer rating) {
 		return reviewService.getReviewByStar(rating);
 	}
 
@@ -120,11 +120,12 @@ public class ReviewRestController {
     }
 
     @GetMapping("/rest/reviews/search")
-    public List<Review> searchReviews(
+    public ResponseEntity<List<Review>> searchReviews(
             @RequestParam(name = "productId", required = false) Integer productId,
             @RequestParam(name = "usersId", required = false) Integer usersId,
             @RequestParam(name = "rating", required = false) Integer rating) {
-        return reviewService.searchs(productId, usersId, rating);
+        List<Review> reviews = reviewService.searchs(productId, usersId, rating);
+        return ResponseEntity.ok().body(reviews);
     }
 
     @GetMapping("/rest/userbyroleUser")
