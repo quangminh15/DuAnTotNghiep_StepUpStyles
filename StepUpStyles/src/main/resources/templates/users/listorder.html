@@ -3,7 +3,7 @@
 
 <head>
 
-	<title>SUS || CHI TIẾT</title>
+	<title>FSHOP || CHI TIẾT</title>
 
 </head>
 
@@ -117,6 +117,24 @@
 		.col30 {
 			width: 30%;
 		}
+
+		.btn-delete {
+			position: absolute;
+			top: 5;
+			right: 100;
+			background: transparent;
+			border: none;
+			font-size: 20px;
+			color: red;
+			cursor: pointer;
+			/* display: none; */
+			/* Ẩn ban đầu */
+		}
+
+		.btn-delete :hover {
+			display: block;
+			/* Hiển thị khi di chuột vào ảnh */
+		}
 	</style>
 	<!-- <link rel="stylesheet" href="/asset/user/css/cart/style.css"> -->
 	<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
@@ -158,35 +176,59 @@
 							<textarea class="form-control" id="reviewText" rows="3" ng-model="title"
 								placeholder="Hãy chia sẻ những trải nghiệm của bạn về sản phẩm này"></textarea>
 						</div>
-						<div class="form-group">
-							<label for="image1" class="custom-file-upload">
-								<i class="fa fa-camera"></i> Thêm ảnh 1
-							</label>
-							<label for="image2" class="custom-file-upload">
-								<i class="fa fa-camera"></i> Thêm ảnh 2
-							</label>
-							<label for="image3" class="custom-file-upload">
-								<i class="fa fa-camera"></i> Thêm ảnh 3
-							</label>
-							<div class="d-flex">
-								<input type="file" id="image1" accept="image/*" style="display:none;"
-									onchange="displayImage(this, 'selectedImage1');">
-								<img id="selectedImage1"
-									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-								<input type="file" id="image2" accept="image/*" style="display:none;"
-									onchange="displayImage(this, 'selectedImage2');">
-								<img id="selectedImage2"
-									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-								<input type="file" id="image3" accept="image/*" style="display:none;"
-									onchange="displayImage(this, 'selectedImage3');">
-								<img id="selectedImage3"
-									style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
+						<div class="accordion" id="accordionExample">
+							<div class="card">
+								<div class="card-header" id="headingOne">
+									<h2 class="mb-0">
+										<button class="btn btn-link" type="button" data-toggle="collapse"
+											data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+											style="color: #ff7315;">
+											Thêm ảnh sản phẩm nếu có (Tối đa 3 ảnh)
+										</button>
+									</h2>
+								</div>
+								<div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+									data-parent="#accordionExample">
+									<div class="card-body">
+										<div class="form-group">
+											<label for="image1" class="custom-file-upload">
+												<i class="fa fa-picture-o"> Ảnh 1</i>
+											</label>
+											<label for="image2" class="custom-file-upload">
+												<i class="fa fa-picture-o"> Ảnh 2</i>
+											</label>
+											<label for="image3" class="custom-file-upload">
+												<i class="fa fa-picture-o"> Ảnh 3</i>
+											</label>
+											<div class="d-flex">
+												<input type="file" id="image1" accept="image/*" style="display:none;"
+													onchange="displayImage(this, 'selectedImage1');">
+												<img id="selectedImage1"
+													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+												<!-- <button class="btn-delete"
+													onclick="removeImage('selectedImage1', 'image1');">×</button> -->
+												<input type="file" id="image2" accept="image/*" style="display:none;"
+													onchange="displayImage(this, 'selectedImage2');">
+												<img id="selectedImage2"
+													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
+												<!-- <button class="btn-delete"
+													onclick="removeImage('selectedImage2', 'image2');">×</button> -->
+												<input type="file" id="image3" accept="image/*" style="display:none;"
+													onchange="displayImage(this, 'selectedImage3');">
+												<img id="selectedImage3"
+													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
+												<!-- <button class="btn-delete"
+													onclick="removeImage('selectedImage3', 'image3');">×</button> -->
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-secondary" data-dismiss="modal">Trở lại</button>
+					<button class="btn btn-secondary" data-dismiss="modal" ng-click="resetReviewForm()">Trở lại</button>
 					<button class="btn btn-danger" ng-click="createReview()">Hoàn thành</button>
 				</div>
 			</div>
@@ -229,17 +271,17 @@
 							<div>
 								<a ng-if="reviewedOrder.image1" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
 									href="{{reviewedOrder.image1}}">
-									<img src="{{reviewedOrder.image1}}" class="fancybox"
+									<img ng-src="{{reviewedOrder.image1}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
 								<a ng-if="reviewedOrder.image2" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
 									href="{{reviewedOrder.image2}}">
-									<img src="{{reviewedOrder.image2}}" class="fancybox"
+									<img ng-src="{{reviewedOrder.image2}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
 								<a ng-if="reviewedOrder.image3" data-fancybox="gallery-{{reviewedOrder.reviewId}}"
 									href="{{reviewedOrder.image3}}">
-									<img src="{{reviewedOrder.image3}}" class="fancybox"
+									<img ng-src="{{reviewedOrder.image3}}" class="fancybox"
 										style="width: 100px; height: 100px; object-fit: cover;">
 								</a>
 							</div>
@@ -320,9 +362,10 @@
 					<div class="card">
 						<div class=" bg-white" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);" id="headingOne">
 							<h2 class="mb-0 d-flex justify-content-between " style="color: #26aa99;">
-								<div >
+								<div>
 
-									<h4 class="font-weight-bolder "><span ng-if="order.orderStatus=='Pending'"> Chờ xác nhận </span>
+									<h4 class="font-weight-bolder "><span ng-if="order.orderStatus=='Pending'"> Chờ xác
+											nhận </span>
 										<span ng-if="order.orderStatus=='Confirmed'"> Đã xác nhận</span>
 										<span ng-if="order.orderStatus=='Shipping'"> Đang giao hàng</span>
 										<span ng-if="order.orderStatus=='Delivered'"> Đã giao</span>
@@ -330,7 +373,7 @@
 										| Mã đơn: #{{order.orderId}}
 
 									</h4>
-									
+
 								</div>
 								<p><span ng-if="order.orderStatus=='Pending'"><i class="fa fa-spinner fa-spin"></i> Đơn
 										hàng đang được chờ người bán xác nhận và chuẩn bị </span>
@@ -339,8 +382,9 @@
 										chuyển</span>
 									<span ng-if="order.orderStatus=='Shipping'"><i class="fa fa-truck"
 											aria-hidden="true"></i> Đơn hàng đang trên đường giao đến bạn</span>
-									<span ng-if="order.orderStatus=='Delivered'"> <span><i class="fa fa-inbox" aria-hidden="true"></i>
-											</span>Đơn hàng đã được giao
+									<span ng-if="order.orderStatus=='Delivered'"> <span><i class="fa fa-inbox"
+												aria-hidden="true"></i>
+										</span>Đơn hàng đã được giao
 										thành công</span>
 									<span ng-if="order.orderStatus=='Cancel'"> Đơn hàng đã được hủy</span>
 
@@ -358,7 +402,10 @@
 							data-parent="#accordionExample">
 							<div class="card-body p-2 align-items-center subcard">
 								<p class="text-dark font-weight-bolder">Thông Tin Giao Hàng :</p>
-								<p class="font-weight-bolder" style="color: #ff7315;"><span>{{order.orderStatus=='Delivered'?'Ngày Nhận Hàng:  ':'Ngày giao dự kiến: '}}</span> {{order.deliveryDate|date:'dd-MM-yyyy'}}</p>
+								<p class="font-weight-bolder" style="color: #ff7315;">
+									<span>{{order.orderStatus=='Delivered'?'Ngày Nhận Hàng: ':'Ngày giao dự kiến:
+										'}}</span> {{order.deliveryDate|date:'dd-MM-yyyy'}}
+								</p>
 								<p class="text-dark">{{order.shippingAddress.nameReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.phoneReceiver}}</p>
 								<p class="text-dark">{{order.shippingAddress.ward}},
@@ -369,7 +416,8 @@
 								<p class="text-dark font-weight-bolder">Thanh Toán</p>
 								<div class="d-flex ">
 									<p class="text-dark">Phương Thức thanh toán:</p>
-									<p class="text-dark ml-2 font-weight-bolder">{{order.paymentMenthod.paymentMenthodName}}</p>
+									<p class="text-dark ml-2 font-weight-bolder">
+										{{order.paymentMenthod.paymentMenthodName}}</p>
 								</div>
 								<div class="d-flex ">
 									<p class="text-dark">Giảm giá: </p>
@@ -471,7 +519,8 @@
 						<button class="btn btn-danger">Huy Don Hang</button>
 						<button class="btn btn-danger" ng-click="showModalReview()">Danh Gia</button> -->
 
-						<button ng-if="order.orderStatus=='Pending'"class="btn btn-danger" ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn
+						<button ng-if="order.orderStatus=='Pending'" class="btn btn-danger"
+							ng-click="updateStatus(order.orderId,'Cancel')">Hủy đơn
 							hàng</button>
 					</div>
 

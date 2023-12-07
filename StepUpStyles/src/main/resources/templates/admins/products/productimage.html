@@ -5,15 +5,13 @@
 			<h4 class="card-title">Hình ảnh</h4>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputUserName">Mã màu:</label> <input
-						class="form-control" id="inputUserName" type="text"
-						ng-model="form.productImageID" readonly="true">
+					<label for="inputUserName">Mã màu:</label> <input class="form-control" id="inputUserName"
+						type="text" ng-model="form.productImageID" readonly="true">
 				</div>
 				<div class="form-group col-md-6">
 					<label>Sản phẩm</label>
 					<div>
-						<select class="select2 form-control"
-							ng-model="form.product.productID">
+						<select class="select2 form-control" ng-model="form.product.productID">
 							<option value="" disabled selected>Vui lòng chọn sản
 								phẩm</option>
 							<option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
@@ -25,36 +23,30 @@
 			<div class="row">
 
 				<div class="form-group col-md-12">
-					<label for="inputPassword3">Hình ảnh</label> <input
-						class="form-control" id="photo" type="file">
+					<label for="inputPassword3">Hình ảnh</label> <input class="form-control" id="photo" type="file">
 				</div>
 
 			</div>
 			<div class="form-group col-md-12" ng-if="form.imagePath">
-				<label>Hình ảnh</label> <img style="height: 20%; width: 20%;" alt=""
-					src="{{ form.imagePath }}">
+				<label>Hình ảnh</label> <img style="height: 20%; width: 20%;" alt="" src="{{ form.imagePath }}">
 			</div>
 
 			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()"
-					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-					title="Thêm sản phẩm mới">
-					<span class="ti-agenda"></span>
+				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+					title="Thêm sản phẩm mới" ng-disabled="disableCreateButton">
+					<span class="fa fa-plus-circle"></span>
 				</button>
-				<button type="button" ng-click="update()"
-					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 					title="Cập nhật sản phẩm">
-					<span class="ti-support"></span>
+					<span class="fa fa-wrench"></span>
 				</button>
-				<button type="button" ng-click="confirmDelete()" type="submit"
-					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-					title="Xóa sản phẩm">
+				<button type="button" ng-click="confirmDelete()" type="submit" class="btn btn-outline-danger btn-fw"
+					data-toggle="tooltip" title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
 				</button>
-				<button type="button" ng-click="reset()"
-					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
 					title="Làm mới form">
-					<span class="ti-control-shuffle"></span>
+					<span class="fa fa-refresh"></span>
 				</button>
 			</div>
 		</div>
@@ -68,27 +60,23 @@
 				<!-- tìm kiếm theo tên bắt đầu  -->
 				<div class="d-flex">
 					<!-- Thẻ select box -->
-					<select class="form-control mr-2" ng-model="selectedProduct"
-						ng-change="filterByProduct()" data-toggle="tooltip"
-						title="Lọc theo tên sản phẩm"
+					<select class="form-control mr-2" ng-model="selectedProduct" ng-change="filterByProduct()"
+						data-toggle="tooltip" title="Lọc theo tên sản phẩm"
 						ng-options="product.productID as product.productName for product in prods"
 						style="width: 200px;">
 						<option value="">Tất cả sản phẩm</option>
 					</select>
-					<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
-						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="ti-save"></span>
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+						title="Xuất file Excel">
+						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 					</button>
-					<button type="button"
-						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
-						data-toggle="tooltip" title="Xuất file PDF">
-						<span class="ti-files"></span>
+					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+						title="Xuất file PDF">
+						<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click="searchColorByName()"
-						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
-						title="Tìm kiếm">
+					<button ng-click="searchColorByName()" class="btn btn-outline-info btn-fw mr-2"
+						data-toggle="tooltip" title="Tìm kiếm">
 						<span class="ti-search"></span>
 					</button>
 				</div>
@@ -96,12 +84,11 @@
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>
-						<th ng-repeat="column in sortableColumns"
-							ng-click="sortByColumn(column.name)">{{ column.label }} <span
-							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-								ng-if="!sortReverse" class="ti-angle-double-up"></span>
-						</span>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
+							</span>
 						</th>
 						<th class="actions"></th>
 					</tr>
@@ -119,13 +106,13 @@
 						</td>
 						<td class="actions">
 							<button ng-click="edit(productimageitem)"
-								class="btn btn-inverse-primary btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+								class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
 							<button ng-click="confirmDeleteTable(productimageitem)"
-								class="btn btn-inverse-danger btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Xóa">
+								class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
 							</button>
 						</td>
@@ -143,8 +130,8 @@
 						</li>
 
 						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
 								page.value }}</a></li>
 
 						<li class="page-item">

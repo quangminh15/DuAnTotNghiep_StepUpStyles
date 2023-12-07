@@ -15,5 +15,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class TotalProductRatingDTO {
 	private int month;
+    private String productName;
     private Map<String, Integer> ratings;
+
+    public TotalProductRatingDTO(int month, Map<String, Integer> ratings) {
+        this.month = month;
+        this.ratings = ratings;
+    }
 }

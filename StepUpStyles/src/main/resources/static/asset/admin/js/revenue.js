@@ -131,7 +131,7 @@ app.controller("revenues-ctrl", function ($scope, $http) {
 
 
     function updateMonthlyChart(selectedYear) {
-        $scope.pager.first()
+        $scope.pager.first()    
         if (!selectedYear) {
             selectedYear = new Date().getFullYear();
             $scope.presentYear = selectedYear;

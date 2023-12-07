@@ -5,23 +5,19 @@
 			<h4 class="card-title">Danh mục sản phẩm</h4>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputUserName">Mã danh mục:</label> <input
-						class="form-control" id="inputUserName" type="number"
-						ng-model="form.categoryID" readonly="true">
+					<label for="inputUserName">Mã danh mục:</label> <input class="form-control" id="inputUserName"
+						type="number" ng-model="form.categoryID" readonly="true">
 				</div>
 
 				<div class="form-group col-md-6">
-					<label for="inputPassword3">Tên danh mục</label> <input
-						class="form-control" id="inputPassword3" type="text"
-						placeholder="Tên danh mục" required=""
-						ng-model="form.categoryName">
+					<label for="inputPassword3">Tên danh mục</label> <input class="form-control" id="inputPassword3"
+						type="text" placeholder="Tên danh mục" required="" ng-model="form.categoryName">
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputPassword3">Hình ảnh</label> <input
-						class="form-control" id="photo" type="file">
+					<label for="inputPassword3">Hình ảnh</label> <input class="form-control" id="photo" type="file">
 				</div>
 
 				<div class="form-group col-md-6">
@@ -29,13 +25,12 @@
 						thái</label>
 					<div class="form-check mt-1">
 						<label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="true" type="radio" name="available" checked=""><span
-							class="custom-control-label custom-control-color">Bật</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="true" type="radio"
+								name="available" checked=""><span
+								class="custom-control-label custom-control-color">Bật</span>
 						</label> <label class="custom-control custom-radio custom-control-inline">
-							<input ng-model="form.activities" class="custom-control-input"
-							ng-value="false" type="radio" name="available"><span
-							class="custom-control-label custom-control-color">Tắt</span>
+							<input ng-model="form.activities" class="custom-control-input" ng-value="false" type="radio"
+								name="available"><span class="custom-control-label custom-control-color">Tắt</span>
 						</label>
 					</div>
 				</div>
@@ -43,31 +38,26 @@
 
 			<div class="row">
 				<div class="form-group col-md-12" ng-if="form.categoryImage">
-					<img style="height: 60%; width: 20%;" alt=""
-						src="{{ form.categoryImage }}">
+					<img style="height: 60%; width: 20%;" alt="" src="{{ form.categoryImage }}">
 				</div>
 			</div>
 
 			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()"
-					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-					title="Thêm sản phẩm mới">
-					<span class="ti-agenda"></span>
+				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+					title="Thêm sản phẩm mới" ng-disabled="disableCreateButton">
+					<span class="fa fa-plus-circle"></span>
 				</button>
-				<button type="button" ng-click="update()"
-					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 					title="Cập nhật sản phẩm">
-					<span class="ti-support"></span>
+					<span class="fa fa-wrench"></span>
 				</button>
-				<button type="button" ng-click="confirmHide()" type="submit"
-					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-					title="Xóa sản phẩm">
+				<button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
+					data-toggle="tooltip" title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
 				</button>
-				<button type="button" ng-click="reset()"
-					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
 					title="Làm mới form">
-					<span class="ti-control-shuffle"></span>
+					<span class="fa fa-refresh"></span>
 				</button>
 			</div>
 		</div>
@@ -76,16 +66,13 @@
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 		<!-- 	thùng rác bắt đầu -->
-		<div class="modal fade" id="recycleBinModal" tabindex="-1"
-			aria-labelledby="searchModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-xl"
-				style="width: 1500px; height: 600px;">
-				<div class="modal-content"
-					style="background-color: #eee; max-width: 1500px">
+		<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+				<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 					<div class="modal-header">
 						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-						<button class="close modal-close" type="button"
-							data-dismiss="modal" aria-hidden="true">
+						<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 							<span class="mdi mdi-close"></span>
 						</button>
 					</div>
@@ -93,12 +80,11 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th ng-repeat="column in sortableColumns"
-										ng-click="sortByColumn(column.name)">{{ column.label }} <span
-										ng-if="sortColumn === column.name"> <span
-											ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-											ng-if="!sortReverse" class="ti-angle-double-up"></span>
-									</span>
+									<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+										column.label }} <span ng-if="sortColumn === column.name"> <span
+												ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+												ng-if="!sortReverse" class="ti-angle-double-up"></span>
+										</span>
 									</th>
 
 									<th class="actions"></th>
@@ -110,16 +96,14 @@
 									<td>{{categoryitem.categoryName}}</td>
 									<td>
 										<div class="image-container">
-											<img class="image-content"
-												alt="{{categoryitem.categoryName}}"
+											<img class="image-content" alt="{{categoryitem.categoryName}}"
 												src="{{categoryitem.categoryImage}}">
 										</div>
 									</td>
 									<td>{{categoryitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 									<td>{{categoryitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 									<td class="actions">
-										<button class="btn btn-space btn btn-primary "
-											ng-click="restore(categoryitem)">
+										<button class="btn btn-space btn btn-primary " ng-click="restore(categoryitem)">
 											<i class="ti-back-right"></i>
 										</button>
 										<button class="btn btn-space btn btn-danger "
@@ -140,11 +124,10 @@
 										</button>
 									</li>
 
-									<li class="page-item"
-										ng-repeat="RestorePage in RestoreVisiblePages"
-										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-										class="page-link" href=""
-										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+									<li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+										<a class="page-link" href=""
+											ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
 											RestorePage.value }}</a></li>
 
 									<li class="page-item">
@@ -165,32 +148,27 @@
 				<h4 class="mb-0">Danh sách danh mục sản phẩm</h4>
 				<div class="d-flex">
 					<!-- Thẻ select box -->
-					<select class="form-control mr-2" ng-model="selectedActivity"
-						data-toggle="tooltip" title="Lọc theo trạng thái danh mục"
-						ng-change="filterByActivities()" style="width: 200px;">
+					<select class="form-control mr-2" ng-model="selectedActivity" data-toggle="tooltip"
+						title="Lọc theo trạng thái danh mục" ng-change="filterByActivities()" style="width: 200px;">
 						<option value="all">Tất cả</option>
 						<option value="true">Đang bật</option>
 						<option value="false">Đang tắt</option>
 					</select>
-					<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
-						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="ti-save"></span>
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+						title="Xuất file Excel">
+						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 					</button>
-					<button type="button"
-						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
-						data-toggle="tooltip" title="Xuất file PDF">
-						<span class="ti-files"></span>
+					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+						title="Xuất file PDF">
+						<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click="searchProductCateByName()"
-						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
-						title="Tìm kiếm">
+					<button ng-click="searchProductCateByName()" class="btn btn-outline-info btn-fw mr-2"
+						data-toggle="tooltip" title="Tìm kiếm">
 						<span class="ti-search"></span>
 					</button>
 					<!-- Nút thùng rác -->
-					<button ng-click="openRecycleBinForm()"
-						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					<button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 						title="Thùng rác">
 						<span class="ti-trash"></span>
 					</button>
@@ -200,12 +178,11 @@
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>
-						<th ng-repeat="column in sortableColumns"
-							ng-click="sortByColumn(column.name)">{{ column.label }} <span
-							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-								ng-if="!sortReverse" class="ti-angle-double-up"></span>
-						</span>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
+							</span>
 						</th>
 						<th class="actions"></th>
 					</tr>
@@ -223,14 +200,13 @@
 						<td>{{categoryitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 						<td>{{categoryitem.activities ? 'Đang bật' : 'Đang tắt' }}</td>
 						<td class="actions">
-							<button ng-click="edit(categoryitem)"
-								class="btn btn-inverse-primary btn-rounded btn-icon"
+							<button ng-click="edit(categoryitem)" class="btn btn-inverse-primary btn-rounded btn-icon"
 								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
 							<button ng-click="confirmHideTable(categoryitem)"
-								class="btn btn-inverse-danger btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Xóa">
+								class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
 							</button>
 						</td>
@@ -248,8 +224,8 @@
 						</li>
 
 						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
 								page.value }}</a></li>
 
 						<li class="page-item">

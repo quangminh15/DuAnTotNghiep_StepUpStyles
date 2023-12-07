@@ -25,7 +25,7 @@
 
 <head>
 
-	<title>SUS || CHI TIẾT</title>
+	<title>FSHOP || CHI TIẾT</title>
 
 </head>
 
@@ -202,13 +202,13 @@
 						<!-- 							<h4 ng-bind-html="productDetails.description | unsafeHtml"></h4> -->
 						<!-- 						</div> -->
 
-						<div class="description mb-4">
-							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5>
-							<form action="#" class="d-flex" method="post">
-								<input type="text" placeholder="Mã giảm giá" required>
-								<button class="submit btn" type="submit">OK</button>
-							</form>
-						</div>
+<!-- 						<div class="description mb-4"> -->
+<!-- 							<h5>Điền mã giảm giá để được hưởng ưu đãi</h5> -->
+<!-- 							<form action="#" class="d-flex" method="post"> -->
+<!-- 								<input type="text" placeholder="Mã giảm giá" required> -->
+<!-- 								<button class="submit btn" type="submit">OK</button> -->
+<!-- 							</form> -->
+<!-- 						</div> -->
 
 					</div>
 				</div>
@@ -492,15 +492,15 @@
 						<p class="mb-2" style="word-wrap: break-word; color: black;">{{rv.title}}</p>
 						<div>
 							<a ng-if="rv.image1" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image1}}">
-								<img src="{{rv.image1}}" class="fancybox"
+								<img ng-src="{{rv.image1}}" class="fancybox"
 									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 							<a ng-if="rv.image2" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image2}}">
-								<img src="{{rv.image2}}" class="fancybox"
+								<img ng-src="{{rv.image2}}" class="fancybox"
 									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 							<a ng-if="rv.image3" data-fancybox="gallery-{{rv.reviewId}}" href="{{rv.image3}}">
-								<img src="{{rv.image3}}" class="fancybox"
+								<img ng-src="{{rv.image3}}" class="fancybox"
 									style="width: 100px; height: 100px; object-fit: cover;">
 							</a>
 						</div>

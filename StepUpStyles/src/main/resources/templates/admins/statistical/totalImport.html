@@ -44,7 +44,34 @@
         border-bottom: 1px solid #ddd;
     }
 </style>
-<div class="main-content container-fluid">
+<!-- <div class="nemain-content contair-fluid" style="margin-bottom: 100px; height: 483px;">
+    <div class="card" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; height: 580px;">
+        <div class="rounded-top bg-primary card-header card-header-divider">
+            <span class="card-subtitle" style="color: white; font-size: 18px;">Thống kê số lượng sản phẩm đã nhập</span>
+        </div>
+        <div class="card-body container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="">Năm</label>
+                    <select class="form-control" ng-model="selectedYear" ng-options="year for year in years"
+                        ng-change="updateChartData()">
+                        <option value="">Chọn năm</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="">Tháng</label>
+                    <select class="form-control" ng-model="selectedMonth" ng-options="month for month in months"
+                        ng-change="updateChartData()">
+                        <option value="">Chọn tháng</option>
+                    </select>
+                </div>
+            </div>
+            <canvas id="column-chart" height="80"></canvas>
+        </div>
+    </div>
+</div> -->
+
+<div class="content-wrapper">
     <div class="card" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
         <div class="rounded-top bg-primary card-header card-header-divider">
             <span class="card-subtitle" style="color: white; font-size: 18px;">Thống kê số lượng sản phẩm đã nhập</span>

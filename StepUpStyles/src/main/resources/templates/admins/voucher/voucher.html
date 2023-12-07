@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Đơn hàng tối thiểu</label>
-                    <input class="form-control" id="inputPassword3" type="text" placeholder="Đơn hàng tối thiểu"
+                    <input class="form-control" id="inputPassword3" type="number" placeholder="Đơn hàng tối thiểu"
                         required="" ng-model="form.total">
                 </div>
                 <div class="form-group col-md-6">
@@ -27,17 +27,17 @@
                 </div>
                 <div class="form-group col-md-12">
                     <label class="control-label">Mô tả</label>
-                    <textarea class="form-control" id="inputTextarea3" ng-model="form.description" rows="5"></textarea>
+                    <textarea class="form-control" id="description" ng-model="form.description" ></textarea>
                 </div>
             </div>
             <div class="template-demo text-right mb-3">
                 <button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
                     title="Thêm giảm giá mới">
-                    <span class="ti-agenda"></span>
+                    <span class="fa fa-plus-circle"></span>
                 </button>
                 <button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
                     title="Cập nhật giảm giá">
-                    <span class="ti-support"></span>
+                    <span class="fa fa-wrench"></span>
                 </button>
                 <button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
                     data-toggle="tooltip" title="Xóa giảm giá">
@@ -45,7 +45,7 @@
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
                     title="Làm mới">
-                    <span class="ti-control-shuffle"></span>
+                    <span class="fa fa-refresh"></span>
                 </button>
             </div>
         </div>
@@ -90,9 +90,6 @@
                                     </td>
                                     <td data-toggle="tooltip" title="{{ddI.description}}">
                                         {{formatDescription(ddI.description)}}</td>
-                                    <td
-                                        ng-class="{'dienra': ddI.status === 'Đang diễn ra','chuadien': ddI.status === 'Chưa diễn ra',  'ketthuc': ddI.status === 'Đã kết thúc'}">
-                                        {{ddI.status}}</td>
                                     <td class="actions">
                                         <button class="btn btn-space btn btn-primary " ng-click="restore(ddI)">
                                             <i class="ti-back-right"></i>

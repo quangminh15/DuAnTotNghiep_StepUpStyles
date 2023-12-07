@@ -3,7 +3,7 @@
 	th:replace="~{/users/layout_user :: content(~{::body},~{::title})}">
 
 <head>
-<title>SUS || TRANG CHỦ</title>
+<title>FSHOP || TRANG CHỦ</title>
 </head>
 
 <body ng-controller="index-ctrl">
@@ -170,23 +170,22 @@
 					<!---728x90--->
 
 				</div>
-				<div class="welcome-grids row mt-5">
-					<div ng-repeat="brand in brans"
-						class="col-lg-2 col-md-4 col-6 welcome-image">
-						<!-- col-lg-2 col-md-4 col-6  -->
-						<div class="boxhny13">
-							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
-								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
-								<div class="boxhny-content">
-									<h3 class="title">Xem
-								</div>
-							</a>
-						</div>
-						<h4>
-							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
-						</h4>
-					</div>
-				</div>
+				<div class="welcome-grids row mt-5 justify-content-center d-flex">
+    <div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
+        <div class="boxhny13">
+            <a ng-click="getProductsAndNavigate(brand.brandID)">
+                <img ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
+                <div class="boxhny-content">
+                    <h3 class="title">Xem</h3>
+                </div>
+            </a>
+        </div>
+        <h4>
+            <a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
+        </h4>
+    </div>
+</div>
+
 			</div>
 		</div>
 
@@ -204,7 +203,7 @@
 				<!---728x90--->
 
 			</div>
-			<div class="welcome-grids row">
+			<div class="welcome-grids row mt-5 justify-content-center d-flex">
 				<div ng-repeat="category in cates"
 					class="col-lg-2 col-md-4 col-6 welcome-image">
 					<!-- col-lg-2 col-md-4 col-6  -->

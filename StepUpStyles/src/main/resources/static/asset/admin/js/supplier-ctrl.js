@@ -133,7 +133,9 @@ app.controller("supplier-ctrl", function($scope, $http){
 
 		//load supplier no deleted
 		$http.get("/rest/supplier/nodeleted").then(resp => {
+			resp.data.sort((a, b) => b.supplierId - a.supplierId);
 			$scope.itemss = resp.data;
+			console.log($scope.itemss)
 			$scope.pager.first();
 			$scope.RestorePager.first();
 		});

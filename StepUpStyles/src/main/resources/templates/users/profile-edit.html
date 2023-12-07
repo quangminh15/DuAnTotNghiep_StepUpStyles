@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>SUS || Thông tin cá nhân</title>
+    <title>FSHOP || Thông tin cá nhân</title>
 
 </head>
 
@@ -25,20 +25,20 @@
         <div class="profile-nav col-md-3">
             <div class="panel">
                 <div class="user-heading round">
-                    <a href="#">
-                        <img th:src="${UserProfile.image}" alt>
+                    <a href="">
+                        <img th:src="${UserProfile.image}"  alt="" id="userImage">
                     </a>
                     <h1 th:text="${UserProfile.fullName}">---</h1>
                     <!--                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d1c001d1c00390d111c3c14181015571a1614">[email&#160;protected]</a></p>-->
                 </div>
                 <ul class="nav nav-pills nav-
                 stacked" style="font-size: 1.4rem">
-                    <li class="active"><a href="#"> <i class="fa fa-user"></i>Tổng quan</a></li>
+                    <li ><a href="#" > <i class="fa fa-user"></i>Tổng quan</a></li>
                     <!--                    <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span class="label label-warning pull-right r-activity">9</span></a></li>-->
-                    <li><a href="/profile-edit"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
-                    <li><a href="#"> <i class="fa fa-heart"></i>Sản phẩm yêu thích</a></li>
-                    <li><a href="#"> <i class="fa fa-cart-arrow-down"></i>Đơn hàng</a></li>
-                    <li><a href="#"> <i class="fa fa-unlock-alt" aria-hidden="true"></i>Đổi mật khẩu</a></li>
+                    <li class="active"><a href="/profile-edit"> <i class="fa fa-edit"></i>Chỉnh sửa thông tin</a></li>
+                    <li><a href="/favorite"> <i class="fa fa-heart"></i>Sản phẩm yêu thích</a></li>
+                    <li><a href="/listorder"> <i class="fa fa-cart-arrow-down"></i>Đơn hàng</a></li>
+                    <li><a href="/change-pass"> <i class="fa fa-unlock-alt" aria-hidden="true"></i>Đổi mật khẩu</a></li>
                     <li><a href="auth/logoff"> <i class="fa fa-sign-out" aria-hidden="true"></i>Đăng xuất</a></li>
                 </ul>
             </div>
@@ -82,8 +82,14 @@
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
-                                    <span class="input-group-text" style="font-size: 1.4em;">Vai trò</span>
-                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{role}" readonly>
+                                    <span class="input-group-text" style="font-size: 1.4em;">Địa chỉ</span>
+                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{address}">
+                                </div>
+                            </div>
+                            <div class="bio-row">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="font-size: 1.4em;">Hình ảnh</span>
+                                    <input type="file" accept="image/jpeg, image/png, image/gif, image/tiff" aria-label="First name" class="form-control" style="font-size: 1.4em;" name="ImageFile" onchange="previewImage(event)">
                                 </div>
                             </div>
                             <div class="bio-row">
@@ -240,6 +246,19 @@
             inputGroup.style.fontSize = '1.5em'; // Thêm thuộc tính font-size
         }
     });
+</script>
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                document.getElementById('userImage').src = imageSrc;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 </body>
 </html>

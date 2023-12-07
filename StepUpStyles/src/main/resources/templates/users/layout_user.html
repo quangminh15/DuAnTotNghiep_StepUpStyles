@@ -307,11 +307,15 @@ a:hover, button:hover {
 				reader.readAsDataURL(input.files[0]);
 			}
 		}
-		function removeImage(imageId) {
+		function removeImage(imageId, inputId) {
     var imageElement = document.getElementById(imageId);
-    imageElement.src = ''; // Gán đường dẫn trống để xóa ảnh
-    imageElement.style.display = 'none'; // Ẩn phần tử
+    var inputElement = document.getElementById(inputId);
+
+    imageElement.src = '';
+    imageElement.style.display = 'none';
+    inputElement.value = ''; // Xóa giá trị của input file
 }
+
 
 // 		function displayImage(input, imageId) {
 //     var imageElement = document.querySelector('#' + imageId);

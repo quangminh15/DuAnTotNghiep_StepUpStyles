@@ -4,6 +4,7 @@ app.controller("productimage-ctrl", function($scope, $http) {
 	$scope.productNames = [];
 	$scope.form = {};
 	$scope.form.product = {};
+	$scope.disableCreateButton = false;
 
 	$scope.sortableColumns = [
 		{ name: 'productImageID', label: 'Mã ảnh' },
@@ -232,6 +233,7 @@ app.controller("productimage-ctrl", function($scope, $http) {
 		if (fileInput) {
 			fileInput.value = '';
 		}
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -240,6 +242,7 @@ app.controller("productimage-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(productimageitem) {
 		$scope.form = angular.copy(productimageitem);
+		 $scope.disableCreateButton = true;
 	}
 
 	function checkDuplicateColor(productimageitem) {
@@ -360,6 +363,7 @@ app.controller("productimage-ctrl", function($scope, $http) {
 					text: 'Cập nhật thành công!!',
 				});
 				$scope.initialize();
+				$scope.disableCreateButton = false;
 			}).catch(error => {
 				Swal.fire({
 					icon: 'error',

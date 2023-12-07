@@ -5,14 +5,13 @@
 			<h4 class="card-title">Sản phẩm chi tiết</h4>
 			<div class="row">
 				<div class="form-group col-md-6">
-					<label for="inputUserName">Mã chi tiết:</label> <input
-						class="form-control" id="inputUserName" type="text"
-						ng-model="form.productDetailID" readonly="true">
+					<label for="inputUserName">Mã chi tiết:</label> <input class="form-control" id="inputUserName"
+						type="text" ng-model="form.productDetailID" readonly="true">
 				</div>
 				<div class="form-group col-md-6">
 					<label for="ngaytao" class="form-label fs-17">Ngày tạo:</label>
-					<div ng-model="form.modifyDate" class="form-control" id="ngaytao"
-						readonly="true" placeholder="dd-MM-yyyy">{{ form.modifyDate
+					<div ng-model="form.modifyDate" class="form-control" id="ngaytao" readonly="true"
+						placeholder="dd-MM-yyyy">{{ form.modifyDate
 						| date:'dd-MM-yyyy' }}</div>
 				</div>
 			</div>
@@ -20,8 +19,7 @@
 				<div class="form-group col-md-6">
 					<label>Sản phẩm</label>
 					<div>
-						<select class="select2 form-control"
-							ng-model="form.product.productID">
+						<select class="select2 form-control" ng-model="form.product.productID">
 							<option value="" disabled selected>Vui lòng chọn sản
 								phẩm</option>
 							<option ng-repeat="p in prods" ng-value="p.productID">{{p.productName}}</option>
@@ -52,32 +50,27 @@
 					</div>
 				</div>
 				<div class="form-group col-md-6">
-					<label for="inputPassword3">Số lượng</label> <input
-						class="form-control" id="inputPassword3" type="text"
-						placeholder="Số lượng" required="" ng-model="form.quantity">
+					<label for="inputPassword3">Số lượng</label> <input class="form-control" id="inputPassword3"
+						type="text" placeholder="Số lượng" required="" ng-model="form.quantity">
 				</div>
 			</div>
 
 			<div class="template-demo text-right mb-3">
-				<button type="button" ng-click="create()"
-					class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-					title="Thêm sản phẩm mới">
-					<span class="ti-agenda"></span>
+				<button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
+					title="Thêm sản phẩm mới" ng-disabled="disableCreateButton">
+					<span class="fa fa-plus-circle"></span>
 				</button>
-				<button type="button" ng-click="update()"
-					class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 					title="Cập nhật sản phẩm">
-					<span class="ti-support"></span>
+					<span class="fa fa-wrench"></span>
 				</button>
-				<button type="button" ng-click="confirmHide()" type="submit"
-					class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-					title="Xóa sản phẩm">
+				<button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
+					data-toggle="tooltip" title="Xóa sản phẩm">
 					<span class="ti-trash"></span>
 				</button>
-				<button type="button" ng-click="reset()"
-					class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
+				<button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
 					title="Làm mới form">
-					<span class="ti-control-shuffle"></span>
+					<span class="fa fa-refresh"></span>
 				</button>
 			</div>
 		</div>
@@ -86,16 +79,13 @@
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 		<!-- 	thùng rác bắt đầu -->
-		<div class="modal fade" id="recycleBinModal" tabindex="-1"
-			aria-labelledby="searchModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-xl"
-				style="width: 1500px; height: 600px;">
-				<div class="modal-content"
-					style="background-color: #eee; max-width: 1500px">
+		<div class="modal fade" id="recycleBinModal" tabindex="-1" aria-labelledby="searchModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 1500px; height: 600px;">
+				<div class="modal-content" style="background-color: #eee; max-width: 1500px">
 					<div class="modal-header">
 						<h5 class="modal-title" id="searchModalLabel">Thùng rác</h5>
-						<button class="close modal-close" type="button"
-							data-dismiss="modal" aria-hidden="true">
+						<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 							<span class="mdi mdi-close"></span>
 						</button>
 					</div>
@@ -103,20 +93,18 @@
 						<table class="table" style="text-align: center;">
 							<thead>
 								<tr>
-									<th ng-repeat="column in sortableColumns"
-										ng-click="sortByColumn(column.name)">{{ column.label }} <span
-										ng-if="sortColumn === column.name"> <span
-											ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-											ng-if="!sortReverse" class="ti-angle-double-up"></span>
-									</span>
+									<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+										column.label }} <span ng-if="sortColumn === column.name"> <span
+												ng-if="sortReverse" class="ti-angle-double-down"></span> <span
+												ng-if="!sortReverse" class="ti-angle-double-up"></span>
+										</span>
 									</th>
 
 									<th class="actions"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr
-									ng-repeat="productdetailitem in RestorePager.productdetailitemss">
+								<tr ng-repeat="productdetailitem in RestorePager.productdetailitemss">
 									<td>{{productdetailitem.productDetailID}}</td>
 									<td>{{productdetailitem.modifyDate | date: 'dd-MM-yyyy'}}</td>
 									<td>{{productdetailitem.product.productName}}</td>
@@ -146,11 +134,10 @@
 										</button>
 									</li>
 
-									<li class="page-item"
-										ng-repeat="RestorePage in RestoreVisiblePages"
-										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }"><a
-										class="page-link" href=""
-										ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
+									<li class="page-item" ng-repeat="RestorePage in RestoreVisiblePages"
+										ng-class="{ 'active': (RestorePager.value === RestorePager.RestorePage + 1) }">
+										<a class="page-link" href=""
+											ng-click="RestorePager.RestoreGoto(RestorePage.value)">{{
 											RestorePage.value }}</a></li>
 
 									<li class="page-item">
@@ -170,25 +157,21 @@
 			<div class="d-flex justify-content-between align-items-center">
 				<h4 class="mb-0">Sản phẩm chi tiết</h4>
 				<div class="d-flex">
-					<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
-						data-toggle="tooltip" title="Xuất file Excel">
-						<span class="ti-save"></span>
+					<button type="button" class="btn btn-outline-success btn-fw mr-2 export" data-toggle="tooltip"
+						title="Xuất file Excel">
+						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 					</button>
-					<button type="button"
-						class="btn btn-outline-danger btn-fw mr-2 pdf-file"
-						data-toggle="tooltip" title="Xuất file PDF">
-						<span class="ti-files"></span>
+					<button type="button" class="btn btn-outline-danger btn-fw mr-2 pdf-file" data-toggle="tooltip"
+						title="Xuất file PDF">
+						<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 					</button>
 					<!-- Nút tìm kiếm -->
-					<button ng-click=searchProductDetailByName()
-						class="btn btn-outline-info btn-fw mr-2" data-toggle="tooltip"
-						title="Tìm kiếm">
+					<button ng-click=searchProductDetailByName() class="btn btn-outline-info btn-fw mr-2"
+						data-toggle="tooltip" title="Tìm kiếm">
 						<span class="ti-search"></span>
 					</button>
 					<!-- Nút thùng rác -->
-					<button ng-click="openRecycleBinForm()"
-						class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
+					<button ng-click="openRecycleBinForm()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
 						title="Thùng rác">
 						<span class="ti-trash"></span>
 					</button>
@@ -197,12 +180,11 @@
 			<table class="table table-hover" id="sampleTable">
 				<thead>
 					<tr>
-						<th ng-repeat="column in sortableColumns"
-							ng-click="sortByColumn(column.name)">{{ column.label }} <span
-							ng-if="sortColumn === column.name"> <span
-								ng-if="sortReverse" class="ti-angle-double-down"></span> <span
-								ng-if="!sortReverse" class="ti-angle-double-up"></span>
-						</span>
+						<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
+							}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+									class="ti-angle-double-down"></span> <span ng-if="!sortReverse"
+									class="ti-angle-double-up"></span>
+							</span>
 						</th>
 						<th class="actions"></th>
 					</tr>
@@ -214,8 +196,7 @@
 						<td>{{productdetailitem.product.productName}}</td>
 						<td>{{productdetailitem.color.colorName}}</td>
 						<td>{{productdetailitem.size.sizeNumber}}</td>
-						<td
-							ng-style="{
+						<td ng-style="{
         'background-color': productdetailitem.quantity == 0 ? '#fa0e0ec7' : 
                            (productdetailitem.quantity < 10 ? '#dcdc1a' : 'none'),
         'font-weight': productdetailitem.quantity == 0 || productdetailitem.quantity < 10 ? 'bold' : 'normal'
@@ -224,13 +205,13 @@
 
 						<td class="actions">
 							<button ng-click="edit(productdetailitem)"
-								class="btn btn-inverse-primary btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Chỉnh sửa">
+								class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Chỉnh sửa">
 								<i class="ti-pencil"></i>
 							</button>
 							<button ng-click="confirmHideTable(productdetailitem)"
-								class="btn btn-inverse-danger btn-rounded btn-icon"
-								data-toggle="tooltip" data-placement="top" title="Xóa">
+								class="btn btn-inverse-danger btn-rounded btn-icon" data-toggle="tooltip"
+								data-placement="top" title="Xóa">
 								<i class="ti-trash"></i>
 							</button>
 						</td>
@@ -247,8 +228,8 @@
 						</li>
 
 						<li class="page-item" ng-repeat="page in visiblePages"
-							ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-							class="page-link" href="" ng-click="pager.goto(page.value)">{{
+							ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+								ng-click="pager.goto(page.value)">{{
 								page.value }}</a></li>
 
 						<li class="page-item">

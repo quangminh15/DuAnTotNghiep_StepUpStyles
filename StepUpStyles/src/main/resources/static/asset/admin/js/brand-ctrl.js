@@ -4,6 +4,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 	$scope.branditemsLoadAll = [];
 	$scope.form = {};
 	$scope.selectedActivity = "all";
+	$scope.disableCreateButton = false; 
 
 	$scope.sortableColumns = [
 		{ name: 'brandID', label: 'Mã thương hiệu' },
@@ -305,6 +306,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		if (fileInput) {
 			fileInput.value = '';
 		}
+		$scope.disableCreateButton = false;
 	}
 	//	Khởi đầu
 	$scope.initialize();
@@ -313,6 +315,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(branditem) {
 		$scope.form = angular.copy(branditem);
+		$scope.disableCreateButton = true;
 	}
 
 	// Tìm kiếm  
@@ -471,6 +474,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 				$scope.initialize();
 				$scope.reset();
 				console.log("branditem", branditem);
+				$scope.disableCreateButton = false;
 			}).catch(error => {
 				Swal.fire({
 					icon: 'error',
@@ -497,6 +501,7 @@ app.controller("brand-ctrl", function($scope, $http) {
 		// Reset searchKeyword
 		searchValue = '';
 		$('#recycleBinModal').modal('show');
+		 
 	};
 
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu

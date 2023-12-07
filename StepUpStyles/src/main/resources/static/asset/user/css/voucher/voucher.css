@@ -1,22 +1,22 @@
 .custom-button {
     background-color: white;
-    color: orange;
+    color:  #ff7315;
     padding: 1px 20px; 
-    border: 2px solid orange; 
+    border: 2px solid  #ff7315;
     border-radius: 5px; 
     cursor: pointer;
 }
 
 .custom-button:hover {
-    background-color: orange;
+    background-color:  #ff7315;
     color: white; 
 }
 
 .custom-button-saved{
     background-color: white;
-    color: wheat;
+    color:  #e6ae89;
     padding: 1px 20px; 
-    border: 2px solid wheat; 
+    border: 2px solid #e6ae89; 
     border-radius: 5px; 
     cursor: pointer;
 }

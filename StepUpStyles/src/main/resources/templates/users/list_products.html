@@ -4,8 +4,17 @@
 
 <head>
 
-<title>SUS || SẢN PHẨM</title>
+<title>FSHOP || SẢN PHẨM</title>
+<style>
+    .ecom-ordering-select {
+        display: flex;
+        align-items: center;
+    }
 
+    .ecom-ordering-select select {
+        margin-right: 10px; /* Khoảng cách giữa các thẻ select */
+    }
+</style>
 </head>
 
 <body ng-controller="favorite-ctrl">
@@ -278,9 +287,6 @@
 					</div>
 					<div class="ecommerce-right-hny col-lg-8">
 						<div class="row ecomhny-topbar">
-							<div class="col-6 ecomhny-result">
-								<h4 class="ecomhny-result-count"></h4>
-							</div>
 							<div class="col-6 ecomhny-topbar-ordering">
 
 								<div class="ecom-ordering-select d-flex">
@@ -294,6 +300,18 @@
 											cao</option>
 										<option value="price_desc">Sắp xếp theo giá: cao ->
 											thấp</option>
+									</select>
+									
+									
+								</div>
+							</div>
+							<div class="col-6 ecomhny-topbar-ordering">
+
+								<div class="ecom-ordering-select d-flex">
+									<span class="fa fa-angle-down" aria-hidden="true"></span> <select
+										id="sortSelect2" ng-change="filterByOption2()"
+										ng-model="selectedOption2">
+										<option value="">Tất cả</option>
 										<option value="price_0_1tr">Lọc theo giá từ 0đ đến
 											1.000.000đ</option>
 										<option value="price_1tr_2tr">Lọc theo giá từ
@@ -306,6 +324,8 @@
 										<option value="discount_40_60">Giảm giá 40 --> 60%</option>
 										<option value="discount_60">Giảm giá trên 60%</option>
 									</select>
+									
+									
 								</div>
 							</div>
 						</div>
