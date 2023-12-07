@@ -57,7 +57,7 @@
 		style="overflow: hidden;">
 		<div class="modal-dialog modal-dialog-centered modal-xl" style="width: 600px; height: 600px; margin: 0 auto;">
 			<div class="modal-content" style="background-color: #eee;">
-				<div class="modal-header" style="background: #ff7315;">
+				<div class="modal-header" style="background:  #ff7315;">
 					<h4 style="color: white;">Chọn Fourshoe Voucher</h4>
 					<button class="close modal-close" type="button" data-dismiss="modal" aria-hidden="true">
 						<span class="mdi mdi-close"></span>
@@ -66,22 +66,21 @@
 				<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
 					<div ng-show="voucherUseTrue.length == 0"
 						style="text-align: center; justify-content: center; margin: 10px;">
-						<i class="fa fa-ticket" style="font-size: 100px; color: #ff7315;"></i>
+						<i class="fa fa-ticket" style="font-size: 100px; color:  #ff7315;"></i>
 						<p>Hiện tại bạn chưa chọn voucher nào</p>
-						<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;"><i
+						<a href="/list_products" class="btn" style="background-color:  #ff7315; color: white;"><i
 								class="fa fa-refresh fa-spin fa-3x fa-fw" style="margin-right: 10px;"></i>Tiếp tục mua sắm</a>
 					</div>
 					<div class="container" ng-show="voucherUseTrue">
 						<div class="row">
-
-							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;">
+							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;" ng-class="{'disabled-voucher': item.isExpired}">
 								<div class="card boxvou"
-									style="height: 130px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
+									style="height: 134px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
 									<div class="row">
 										<div class="col-md-3"
-											style="background-color: #ff7315; justify-content: center; align-items: center;">
+											style="background-color:  #ff7315; justify-content: center; align-items: center;">
 											<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
-												<text x="45" y="45" font-size="20" fill="white">%</text>
+												<text x="45" y="45" font-size="25" fill="white">%</text>
 											</svg>
 											<div style=" margin-top: 15px; margin-bottom: 20px;">
 												<div class="gg"
@@ -101,7 +100,7 @@
 											</div>
 										</div>
 										<div class="col-md-2">
-											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)"ng-disabled="item.isExpired"
+											<input type="radio" name="voucherRadio" ng-model="$parent.selectedVoucher" ng-change="caculatorDiscount(item)" ng-disabled="item.isExpired"
 												ng-value="item" />
 										</div>
 									</div>
@@ -405,7 +404,7 @@
 							<div class="col-lg-6 card d-flex align-items-center justify-content-center border-bottom-0 border-top-0 border-left-0"
 								ng-if="selectedVoucher">
 								<h3 class="font-weight-bolder ">Voucher Đã chọn</h3>
-								<div class="boxvou" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; width: 60%;">
+								<div class="boxvou" style=" box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; width: 70%;">
 									<div class="row">
 										<div class="col-md-3"
 											style="background-color: #ff7315; justify-content: center; align-items: center;">

@@ -70,7 +70,7 @@ public class DiscountServiceImpl implements DiscountService {
 		}
 	}
 
-	@Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
+	@Scheduled(cron = "* * * * * *")
 	public void updateDiscountStatus() {
 		List<DirectDiscount> discounts = discountDAO.findAll();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");

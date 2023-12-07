@@ -324,6 +324,17 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			return;
 		}
 
+		if ($scope.form.directDiscount < 0 || $scope.form.directDiscount > 100) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giảm giá từ 1 đến 100 (%)!',
+			})
+			return;
+		}
+
+		
+
 		if (!$scope.form.startDate) {
 			Swal.fire({
 				icon: 'error',
@@ -358,7 +369,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Thời gian kết thúc phải sau ngày bắt đầu!',
+				text: 'Thời gian kết thúc phải sau thời gian bắt đầu!',
 			})
 			return;
 		}

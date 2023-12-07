@@ -26,8 +26,8 @@ app.controller("totalImport-ctrl", function($scope, $http) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true,
-                    suggestedMax: 50 // Đặt giá trị lớn nhất trên trục y
+                    beginAtZero: true   
+                    
                 }
             }
         }
@@ -68,8 +68,13 @@ app.controller("totalImport-ctrl", function($scope, $http) {
 
             chart.data.labels = productNames;
             chart.data.datasets = [dataset]; // Sử dụng một mảng cho datasets
-            chart.options.scales.y.beginAtZero = true; // Đảm bảo bắt đầu từ 0
-            chart.options.scales.y.suggestedMax = Math.max.apply(Math, productQuantities) + 1; // Tính giá trị lớn nhất trong dữ liệu
+            chart.options.scales = {
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max.apply(Math, productQuantities) + 1
+                }
+            };
+            
             chart.update();
         });
     };
