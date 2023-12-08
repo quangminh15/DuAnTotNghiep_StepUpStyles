@@ -553,8 +553,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			$scope.voucherUseTrue.forEach(function (item) {
 				item.formattedStartDate = formatDate(item.voucher.dateStart);
 				item.formattedEndDate = formatDate(item.voucher.dateEnd);
-				item.isExpired = isVoucherExpired(item.voucher.dateEnd);
-				item.isExpired = $scope.tongTien < item.voucher.total;
+				item.isExpired = isVoucherExpired(item.voucher.dateEnd) || $scope.tongTien < item.voucher.total;
 				console.log($scope.tongtien);
 				console.log(item.voucher.total)
 			  });
