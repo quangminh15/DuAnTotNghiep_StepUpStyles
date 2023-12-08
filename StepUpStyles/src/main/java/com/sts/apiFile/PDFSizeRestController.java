@@ -39,7 +39,7 @@ public class PDFSizeRestController {
 
         // Tạo một đối tượng Document của iText
         Document document = new Document();
-        String relativePath = "/font-times-new-roman.ttf"; // Đường dẫn tới font chữ, bạn cần sửa lại đúng đường dẫn của font chữ trên máy bạn
+        String relativePath = "/font-times-new-roman/font-times-new-roman.ttf"; // Đường dẫn tới font chữ, bạn cần sửa lại đúng đường dẫn của font chữ trên máy bạn
         BaseFont baseFont = BaseFont.createFont(relativePath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         Font font = new Font(baseFont);
