@@ -23,21 +23,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sts.model.ProductDetail;
 import com.sts.model.Size;
 import com.sts.model.Supplier;
 
 @Controller
-public class ExcelSizeRestController {
+public class ExcelProductDetailRestController {
 
-    @PostMapping("/export-excelSize")
+    @PostMapping("/export-excelProductDetail")
     @ResponseBody
-    public void exportExcel(HttpServletResponse response, @RequestBody List<Size> sizes)
+    public void exportExcel(HttpServletResponse response, @RequestBody List<ProductDetail> productDetails)
             throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=SizeStepUpStyle.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=ProductDetailStepUpStyle.xlsx");
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Danh sách size giày");
+        Sheet sheet = workbook.createSheet("Danh sách sản phẩm chi tiết");
 
         // Tạo một dòng mới ở đầu bảng
         Row titleRow = sheet.createRow(0);
@@ -62,18 +63,18 @@ public class ExcelSizeRestController {
         // Tạo hàng trống sau hàng 
         Row suppRow = sheet.createRow(1);
 
-        // Tạo một ô để đặt giá trị DSSize
-        Cell sizeCell = suppRow.createCell(1);
-        sizeCell.setCellValue("Danh sách size giày");
+        // Tạo một ô để đặt giá trị "Danh sách sản phẩm chi tiết"
+        Cell detailCell = suppRow.createCell(1);
+        detailCell.setCellValue("Danh sách sản phẩm chi tiết");
 
-        CellStyle sizeStyle = workbook.createCellStyle();
-        Font sizeFont = workbook.createFont();
-        sizeFont.setFontHeightInPoints((short) 16);
-        sizeFont.setBold(true);
-        sizeStyle.setFont(sizeFont);
-        sizeStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
-        sizeStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
-        sizeCell.setCellStyle(sizeStyle);
+        CellStyle detailStyle = workbook.createCellStyle();
+        Font detailFont = workbook.createFont();
+        detailFont.setFontHeightInPoints((short) 16);
+        detailFont.setBold(true);
+        detailStyle.setFont(detailFont);
+        detailStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
+        detailStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
+        detailCell.setCellStyle(detailStyle);
 
         // Tạo CellStyle cho ô dữ liệu
         CellStyle dataCellStyle = workbook.createCellStyle();
@@ -90,7 +91,7 @@ public class ExcelSizeRestController {
 
         // Tạo hàng tiêu đề và đặt CellStyle cho từng ô trong hàng
         Row headerRow = sheet.createRow(5);
-        String[] headers = { "ID", "Số size", "Hoạt động", "Số lượng", "Ngày sửa đổi" };
+        String[] headers = { "ID", "Số lượng", "Ngày điều chỉnh", "Màu", "Tên sản phẩm", "Size" };
 
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -99,18 +100,18 @@ public class ExcelSizeRestController {
         }
 
         int rowNum = 6; // Bắt đầu từ hàng số 2 sau dòng tiêu đề
-        for (Size item : sizes) {
+        for (ProductDetail item : productDetails) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(item.getSizeID());
-            row.createCell(1).setCellValue(item.getSizeNumber());
-            Cell activityCell = row.createCell(2);
-            activityCell.setCellValue(item.getActivities() ? "Đang hoạt động" : "Không hoạt động");
-            row.createCell(3).setCellValue(item.getSizeNumber());
-            Cell dateCell = row.createCell(4);
+            row.createCell(0).setCellValue(item.getProductDetailID());
+            row.createCell(1).setCellValue(item.getQuantity());
+            Cell dateCell = row.createCell(2);
             if (item.getModifyDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 dateCell.setCellValue(dateFormat.format(item.getModifyDate()));
             }
+            row.createCell(3).setCellValue(item.getColor().getColorName());
+            row.createCell(4).setCellValue(item.getProduct().getProductName());
+            row.createCell(5).setCellValue(item.getSize().getSizeNumber());
 
             // Đặt CellStyle cho từng ô dữ liệu
             for (int i = 0; i < headers.length; i++) {

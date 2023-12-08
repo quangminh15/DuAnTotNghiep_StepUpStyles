@@ -23,21 +23,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sts.model.Color;
 import com.sts.model.Size;
 import com.sts.model.Supplier;
 
 @Controller
-public class ExcelSizeRestController {
+public class ExcelColorRestController {
 
-    @PostMapping("/export-excelSize")
+    @PostMapping("/export-excelColor")
     @ResponseBody
-    public void exportExcel(HttpServletResponse response, @RequestBody List<Size> sizes)
+    public void exportExcel(HttpServletResponse response, @RequestBody List<Color> colors)
             throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=SizeStepUpStyle.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=ColorStepUpStyle.xlsx");
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Danh sách size giày");
+        Sheet sheet = workbook.createSheet("Danh sách màu");
 
         // Tạo một dòng mới ở đầu bảng
         Row titleRow = sheet.createRow(0);
@@ -63,17 +64,17 @@ public class ExcelSizeRestController {
         Row suppRow = sheet.createRow(1);
 
         // Tạo một ô để đặt giá trị DSSize
-        Cell sizeCell = suppRow.createCell(1);
-        sizeCell.setCellValue("Danh sách size giày");
+        Cell colorCell = suppRow.createCell(1);
+        colorCell.setCellValue("Danh sách màu");
 
-        CellStyle sizeStyle = workbook.createCellStyle();
+        CellStyle colorStyle = workbook.createCellStyle();
         Font sizeFont = workbook.createFont();
         sizeFont.setFontHeightInPoints((short) 16);
         sizeFont.setBold(true);
-        sizeStyle.setFont(sizeFont);
-        sizeStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
-        sizeStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
-        sizeCell.setCellStyle(sizeStyle);
+        colorStyle.setFont(sizeFont);
+        colorStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
+        colorStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
+        colorCell.setCellStyle(colorStyle);
 
         // Tạo CellStyle cho ô dữ liệu
         CellStyle dataCellStyle = workbook.createCellStyle();
@@ -90,7 +91,7 @@ public class ExcelSizeRestController {
 
         // Tạo hàng tiêu đề và đặt CellStyle cho từng ô trong hàng
         Row headerRow = sheet.createRow(5);
-        String[] headers = { "ID", "Số size", "Hoạt động", "Số lượng", "Ngày sửa đổi" };
+        String[] headers = { "ID", "Tên màu", "Trạng thái", "Ngày điều chỉnh"};
 
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -99,14 +100,14 @@ public class ExcelSizeRestController {
         }
 
         int rowNum = 6; // Bắt đầu từ hàng số 2 sau dòng tiêu đề
-        for (Size item : sizes) {
+        for (Color item : colors) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(item.getSizeID());
-            row.createCell(1).setCellValue(item.getSizeNumber());
+            row.createCell(0).setCellValue(item.getColorID());
+            row.createCell(1).setCellValue(item.getColorName());
+            
             Cell activityCell = row.createCell(2);
             activityCell.setCellValue(item.getActivities() ? "Đang hoạt động" : "Không hoạt động");
-            row.createCell(3).setCellValue(item.getSizeNumber());
-            Cell dateCell = row.createCell(4);
+            Cell dateCell = row.createCell(3);
             if (item.getModifyDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 dateCell.setCellValue(dateFormat.format(item.getModifyDate()));

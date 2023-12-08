@@ -618,8 +618,8 @@ app.controller("size-ctrl", function($scope, $http) {
 	$scope.exportPdf = function () {
 		$http({
 		  method: "POST",
-		  url: "/supplier-pdf",
-		  data: $scope.itemss,
+		  url: "/size-pdf",
+		  data: $scope.sizeitems,
 		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
 		  headers: {
 			"Content-Type": "application/json",
@@ -633,7 +633,7 @@ app.controller("size-ctrl", function($scope, $http) {
 			// Tạo một thẻ a để tải xuống tệp PDF
 			var a = document.createElement("a");
 			a.href = url;
-			a.download = "DSSupplier.pdf";
+			a.download = "DSSize.pdf";
 			document.body.appendChild(a);
 			a.click();
 			URL.revokeObjectURL(url);
@@ -647,7 +647,7 @@ app.controller("size-ctrl", function($scope, $http) {
 		$http({
 		  method: "POST",
 		  url: "/export-excelSize", // Thay thế với URL phía máy chủ đúng
-		  data: $scope.itemss,
+		  data: $scope.sizeitems,
 		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
 		  headers: {
 			"Content-Type": "application/json",

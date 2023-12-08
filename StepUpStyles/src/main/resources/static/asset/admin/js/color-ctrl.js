@@ -576,7 +576,65 @@ app.controller("color-ctrl", function($scope, $http) {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 
-	$('.export').click(function() {
+	$scope.exportPdf = function () {
+		$http({
+		  method: "POST",
+		  url: "/color-pdf",
+		  data: $scope.sizeitems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+			var blob = new Blob([response.data], { type: "application/pdf" });
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ a để tải xuống tệp PDF
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "DSColor.pdf";
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất PDF thất bại:", error);
+		});
+	};
+
+	$scope.exportExcel = function () {
+		$http({
+		  method: "POST",
+		  url: "/export-excelColor", // Thay thế với URL phía máy chủ đúng
+		  data: $scope.coloritems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+			var blob = new Blob([response.data], {
+			  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			});
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ <a> để tải xuống tệp Excel
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "ColorStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất ra Excel thất bại:", error);
+		  });
+	  };
+
+	$('.exportPdf').click(function() {
 
 		let timerInterval
 		Swal.fire({
@@ -601,15 +659,15 @@ app.controller("color-ctrl", function($scope, $http) {
 				console.log('I was closed by the timer')
 
 				//code xuất file
-				var table2excel = new Table2Excel();
-				table2excel.export(document.querySelectorAll("table.table"));
+				$scope.exportPdf();
 			}
 
 		})
 
 	});
 
-	$('.pdf-file').click(function() {
+	$('.exportExcel').click(function() {
+
 		let timerInterval
 		Swal.fire({
 			icon: 'info',
@@ -633,17 +691,11 @@ app.controller("color-ctrl", function($scope, $http) {
 				console.log('I was closed by the timer')
 
 				//code xuất file
-				var elment = document.getElementById('sampleTable');
-				var opt = {
-					margin: 0.5,
-					filename: 'myfilepdf.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				};
-				html2pdf(elment, opt);
+				$scope.exportExcel();
 			}
+
 		})
+
 	});
 
 	var myApp1 = new function() {

@@ -3,7 +3,6 @@ package com.sts.apiFile;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,21 +22,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sts.model.Size;
-import com.sts.model.Supplier;
+import com.sts.model.Brand;
+import com.sts.model.Category;
+import com.sts.model.ProductImage;
 
 @Controller
-public class ExcelSizeRestController {
+public class ExcelCategoryRestController {
 
-    @PostMapping("/export-excelSize")
+    @PostMapping("/export-excelCategory")
     @ResponseBody
-    public void exportExcel(HttpServletResponse response, @RequestBody List<Size> sizes)
+    public void exportExcel(HttpServletResponse response, @RequestBody List<Category> categories)
             throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=SizeStepUpStyle.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=CategoryStepUpStyle.xlsx");
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Danh sách size giày");
+        Sheet sheet = workbook.createSheet("Danh sách danh mục sản phẩm");
 
         // Tạo một dòng mới ở đầu bảng
         Row titleRow = sheet.createRow(0);
@@ -47,7 +47,7 @@ public class ExcelSizeRestController {
         titleCell.setCellValue("STEP UP STYLE");
 
         sheet.setColumnWidth(0, 15 * 400);
-        
+
         // Tạo CellStyle cho ô tiêu đề
         CellStyle titleCellStyle = workbook.createCellStyle();
         Font titleFont = workbook.createFont();
@@ -62,18 +62,18 @@ public class ExcelSizeRestController {
         // Tạo hàng trống sau hàng 
         Row suppRow = sheet.createRow(1);
 
-        // Tạo một ô để đặt giá trị DSSize
-        Cell sizeCell = suppRow.createCell(1);
-        sizeCell.setCellValue("Danh sách size giày");
+        // Tạo một ô để đặt giá trị "Danh sách danh mục"
+        Cell detailCell = suppRow.createCell(1);
+        detailCell.setCellValue("Danh sách danh mục");
 
-        CellStyle sizeStyle = workbook.createCellStyle();
-        Font sizeFont = workbook.createFont();
-        sizeFont.setFontHeightInPoints((short) 16);
-        sizeFont.setBold(true);
-        sizeStyle.setFont(sizeFont);
-        sizeStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
-        sizeStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
-        sizeCell.setCellStyle(sizeStyle);
+        CellStyle detailStyle = workbook.createCellStyle();
+        Font detailFont = workbook.createFont();
+        detailFont.setFontHeightInPoints((short) 16);
+        detailFont.setBold(true);
+        detailStyle.setFont(detailFont);
+        detailStyle.setAlignment(HorizontalAlignment.CENTER); // Căn giữa theo chiều ngang
+        detailStyle.setVerticalAlignment(VerticalAlignment.CENTER); // Căn giữa theo chiều dọc
+        detailCell.setCellStyle(detailStyle);
 
         // Tạo CellStyle cho ô dữ liệu
         CellStyle dataCellStyle = workbook.createCellStyle();
@@ -90,7 +90,7 @@ public class ExcelSizeRestController {
 
         // Tạo hàng tiêu đề và đặt CellStyle cho từng ô trong hàng
         Row headerRow = sheet.createRow(5);
-        String[] headers = { "ID", "Số size", "Hoạt động", "Số lượng", "Ngày sửa đổi" };
+        String[] headers = { "ID", "Hoạt động", "Đường dẫn ảnh", "Ngày điều chỉnh", "Tên danh mục" };
 
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -99,18 +99,23 @@ public class ExcelSizeRestController {
         }
 
         int rowNum = 6; // Bắt đầu từ hàng số 2 sau dòng tiêu đề
-        for (Size item : sizes) {
+        for (Category category : categories) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(item.getSizeID());
-            row.createCell(1).setCellValue(item.getSizeNumber());
-            Cell activityCell = row.createCell(2);
-            activityCell.setCellValue(item.getActivities() ? "Đang hoạt động" : "Không hoạt động");
-            row.createCell(3).setCellValue(item.getSizeNumber());
-            Cell dateCell = row.createCell(4);
-            if (item.getModifyDate() != null) {
+            row.createCell(0).setCellValue(category.getCategoryID());
+
+            // Chuyển giá trị của cột "Hoạt động" thành "Đang hoạt động" hoặc "Không hoạt động"
+            String activityStatus = category.getActivities() ? "Đang hoạt động" : "Không hoạt động";
+            row.createCell(1).setCellValue(activityStatus);
+
+            row.createCell(2).setCellValue(category.getCategoryImage());
+
+            Cell dateCell = row.createCell(3);
+            if (category.getModifyDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateCell.setCellValue(dateFormat.format(item.getModifyDate()));
+                dateCell.setCellValue(dateFormat.format(category.getModifyDate()));
             }
+
+            row.createCell(4).setCellValue(category.getCategoryName());
 
             // Đặt CellStyle cho từng ô dữ liệu
             for (int i = 0; i < headers.length; i++) {
@@ -130,3 +135,4 @@ public class ExcelSizeRestController {
         workbook.close();
     }
 }
+
