@@ -964,7 +964,9 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 						$scope.colorss.push(item.color);
 					}
 				});
-				$scope.sizess = $scope.sizess.filter((v, i, a) => a.findIndex(t => t.sizeNumber === v.sizeNumber) === i);
+				$scope.sizess = $scope.sizess
+            .filter((v, i, a) => a.findIndex(t => t.sizeNumber === v.sizeNumber) === i)
+            .sort((a, b) => a.sizeNumber - b.sizeNumber);
 			}).catch(function (error) {
 				console.error('Error fetching product details', error);
 			});
@@ -976,21 +978,29 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 
 	$scope.loadProductFromLocalStorage();
 
-	$scope.setSelectedSize = function (selectedSize) {
-		$scope.size = selectedSize;
-		console.log("size đã chọn: ", selectedSize);
+$scope.setSelectedSize = function (selectedSize) {
+    $scope.size = selectedSize;
+    console.log("size đã chọn: ", selectedSize);
 
-		// Lọc danh sách màu dựa trên size đã chọn
-		$scope.filteredColors = $scope.productDetails.productDetail
-			.filter(function (item) {
-				return item.size.sizeNumber === parseFloat(selectedSize);
-			})
-			.map(function (item) {
-				return item.color;
-			});
+    // Lọc danh sách màu dựa trên size đã chọn
+    $scope.filteredColors = [];
+    var seenColors = {}; // Sử dụng đối tượng để theo dõi màu đã xuất hiện
 
-		console.log("Màu lọc được: ", $scope.filteredColors);
-	};
+    $scope.productDetails.productDetail
+        .filter(function (item) {
+            return item.size.sizeNumber === parseFloat(selectedSize);
+        })
+        .forEach(function (item) {
+            // Kiểm tra xem màu đã xuất hiện hay chưa
+            if (!seenColors[item.color.colorID]) {
+                seenColors[item.color.colorID] = true;
+                $scope.filteredColors.push(item.color);
+            }
+        });
+
+    console.log("Màu lọc được: ", $scope.filteredColors);
+};
+
 
 	$scope.setSelectedColor = function (selectedColor) {
 		$scope.color = selectedColor;

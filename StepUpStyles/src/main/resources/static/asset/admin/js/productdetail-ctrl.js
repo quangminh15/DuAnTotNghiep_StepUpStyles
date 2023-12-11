@@ -491,6 +491,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 
 
 		var productdetailitem = angular.copy($scope.form);
+		productdetailitem.modifyDate = new Date();
 		$http.put('/rest/productdetails/update/' + productdetailitem.productDetailID, productdetailitem).then(resp => {
 			var index = $scope.productdetailitems.findIndex(p => p.productDetailID == productdetailitem.productDetailID);
 			$scope.productdetailitems[index] = productdetailitem;
@@ -499,7 +500,7 @@ app.controller("productdetail-ctrl", function($scope, $http) {
 				title: 'Thành công',
 				text: 'Cập nhật thành công!!',
 			});
-			$scope.initialize();
+			$scope.initialize();$scope.reset();
 			$scope.disableCreateButton = false;
 		}).catch(error => {
 			Swal.fire({
