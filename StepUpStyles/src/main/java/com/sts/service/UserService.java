@@ -38,4 +38,5 @@ public interface UserService {
 	void updateProfile(String fullname, LocalDate birthday, String phone, String img, String address, Integer userId);
 
 	void updateProfile_noBirthday(String fullname, String phone, String img, String address, Integer userId);
+
 }
