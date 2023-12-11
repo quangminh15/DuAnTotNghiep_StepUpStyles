@@ -8,7 +8,7 @@
 		<div class="card-body" style="text-align: center;">
 			<div class="d-flex justify-content-between align-items-center">
 				<button class="border-0 card-title d-flex py-3 badge badge-secondary text-white font-weight-bolder" ng-click="filterByStatus('all')">
-					<!-- Thẻ select box -->
+					<i class="ti-package mr-1"></i>
 					<span >
 						Tổng số Đơn hàng : {{allOrders.length}}
 
@@ -17,6 +17,7 @@
 				</button>
 				<button class="border-0 card-title d-flex py-3  badge badge-primary text-white font-weight-bolder"ng-click="filterByStatus('pending')" >
 					<!-- Thẻ select box -->
+					<i class="fa fa-hourglass-2 mr-1"></i>
 					<span >
 						
 						Chờ xác nhận : {{ordersPending}}
@@ -25,7 +26,8 @@
 
 				</button>
 				<button class="border-0 card-title d-flex py-3  badge badge-info text-white font-weight-bolder" ng-click="filterByStatus('confirmed')">
-					<!-- Thẻ select box -->
+					
+					<i class="fa fa-check-square-o mr-1"></i>
 					<span >
 						Đã xác nhận : {{ordersConfirmed}}
 
@@ -33,14 +35,14 @@
 
 				</button>
 				<button class="border-0 card-title d-flex py-3  badge badge-warning text-white font-weight-bolder"ng-click="filterByStatus('shipping')">
-					<!-- Thẻ select box -->
+					<i class="fa fa-truck mr-1"></i>
 					<span >
 						Đang  giao : {{ordersShipping}}
 
 					</span>
 
 				</button><button class="border-0 card-title d-flex py-3  badge badge-success text-white font-weight-bolder"ng-click="filterByStatus('shipped')">
-					<!-- Thẻ select box -->
+						<i class="fa fa-inbox mr-1"></i>
 					<span >
 						Đã giao : {{ordersDelivered}}
 					</span>
@@ -48,6 +50,7 @@
 				</buttonv>
 				<button class="border-0 card-title d-flex py-3  badge badge-danger text-white font-weight-bolder"ng-click="filterByStatus('cancel')">
 					<!-- Thẻ select box -->
+					<i class="fa fa-times-circle-o mr-1"></i>
 					<span >
 						Đã Hủy : {{ordersCancel}}
 					</span>

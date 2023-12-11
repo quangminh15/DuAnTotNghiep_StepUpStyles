@@ -74,7 +74,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 			// Tạo một thẻ a để tải xuống tệp PDF
 			var a = document.createElement("a");
 			a.href = url;
-			a.download = "DSSupplier.pdf";
+			a.download = "DSSize.pdf";
 			document.body.appendChild(a);
 			a.click();
 			URL.revokeObjectURL(url);

@@ -341,7 +341,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 
 		$http.put(`/rest/address/updateDefault?shipid=${id}`)
 			.then(resp => {
-				console.log(id);
+				console.log("shipaddres",id);
 				$scope.initialize();
 			}).catch(function (error) {
 				console.error('Error fetching cart items:', error);
@@ -350,31 +350,34 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 
 	}
 	$scope.createAddress = function (checked, name, phone, detail) {
-		
+		// alert(checked)
+		$scope.test=false
 		
 			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
-			$scope.dataAddress = {
-				// Truyền thông tin địa chỉ vào yêu cầu
-				province_name: $scope.form.selectedProvince.ProvinceName,
-				district_name: $scope.form.selectedDistrict.DistrictName,
-				ward_name: $scope.form.selectedWard.WardName,
-				// Các thông tin khác cần thiết
-			}
+			// $scope.dataAddress = {
+			// 	// Truyền thông tin địa chỉ vào yêu cầu
+			// 	province_name: $scope.form.selectedProvince.ProvinceName,
+			// 	district_name: $scope.form.selectedDistrict.DistrictName,
+			// 	ward_name: $scope.form.selectedWard.WardName,
+			// 	// Các thông tin khác cần thiết
+			// }
 			
-			console.log($scope.dataAddress );
-			$http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
-				.then(resp => {
+			// console.log($scope.dataAddress );
+			// $http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
+			// 	.then(resp => {
 					
-					console.log("add");
-					$scope.reset()
-					$scope.initialize()
-				}).catch(function (error) {
-					console.error('Error fetching districts:', error);
+			// 		console.log("add");
+			// 		$scope.reset()
+			// 		$scope.initialize()
+			// 	}).catch(function (error) {
+			// 		console.error('Error fetching districts:', error);
 					
-				});
+			// 	});
 
-		
 	}
+	$scope.checkInput=function () {
+		
+	}()
 
 	//address load
 	$scope.loadDistricts = function () {

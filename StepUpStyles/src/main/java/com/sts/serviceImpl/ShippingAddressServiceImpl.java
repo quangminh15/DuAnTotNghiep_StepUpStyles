@@ -10,6 +10,7 @@ import com.sts.dao.UserDAO;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.service.ShippingAddressService;
+import com.sts.service.UserService;
 @Service
 public class ShippingAddressServiceImpl implements ShippingAddressService{
     
@@ -17,6 +18,8 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
     ShippingAddressDAO shipAddressDao;
     @Autowired
     UserDAO userDao;
+    @Autowired
+    UserService userService;
     @Override
     public List<ShippingAddress> findAddressByUser(Integer userId) {
       User user = userDao.findById(userId).get();
@@ -31,7 +34,9 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
 
     @Override
     public void updateDefault(Integer shipid) {
-      shipAddressDao.updateDefault(1, shipid);
+      Integer userId = userService.getUserIdCurrent();
+       
+      shipAddressDao.updateDefault(userId, shipid);
     }
 
     @Override
