@@ -1,5 +1,6 @@
 package com.sts.serviceImpl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.sts.dao.CartDetailDAO;
@@ -177,4 +179,26 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.findById(id).get();
     }
 
+    @Scheduled(cron = "* * * * * *")
+    @Override
+    public void updateOrderVoucher() {
+        List<Order> orders = orderDao.findAll();
+        List<VoucherUse> voucheruse = voucherUseDao.findAll();
+        // Calendar currentDate = Calendar.getInstance();
+
+        for (Order order : orders) {
+            VoucherUse voucherUse = order.getVoucherUse();
+
+            if (voucherUse != null && voucherUse.getVoucherUseId() != null) {
+                try {
+                    voucherUse.setSaved(false);
+                    voucherUseDao.save(voucherUse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Xử lý exception nếu cần thiết
+                }
+            }
+        }
+
+    }
 }

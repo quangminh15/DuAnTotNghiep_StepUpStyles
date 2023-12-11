@@ -44,15 +44,15 @@
             </div>
             <div class="template-demo text-right mb-3">
                 <button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-                    title="Thêm nhà cung cấp mới">
+                    title="Thêm nhà cung cấp mới" ng-disabled="editModeAdd">
                     <span class="fa fa-plus-circle"></span>
                 </button>
                 <button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-                    title="Cập nhật nhà cung cấp">
+                    title="Cập nhật nhà cung cấp" ng-disabled="editModeUpdate">
                     <span class="fa fa-wrench"></span>
                 </button>
                 <button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
-                    data-toggle="tooltip" title="Xóa nhà cung cấp">
+                    data-toggle="tooltip" title="Xóa nhà cung cấp" ng-disabled="editModeDelete">
                     <span class="ti-trash"></span>
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"

@@ -678,7 +678,66 @@ app.controller("brand-ctrl", function($scope, $http) {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 
-	$('.export').click(function() {
+	$scope.exportPdf = function () {
+		$http({
+		  method: "POST",
+		  url: "/brand-pdf",
+		  data: $scope.branditems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+			var blob = new Blob([response.data], { type: "application/pdf" });
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ a để tải xuống tệp PDF
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "DSBrand.pdf";
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất PDF thất bại:", error);
+		});
+	};
+
+	$scope.exportExcel = function () {
+		$http({
+		  method: "POST",
+		  url: "/export-excelBrand", // Thay thế với URL phía máy chủ đúng
+		  data: $scope.branditems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+			var blob = new Blob([response.data], {
+			  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			});
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ <a> để tải xuống tệp Excel
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "BrandStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất ra Excel thất bại:", error);
+		  });
+	  };
+
+	$('.exportPdf').click(function() {
+
 		let timerInterval
 		Swal.fire({
 			icon: 'info',
@@ -700,14 +759,17 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+
 				//code xuất file
-				var table2excel = new Table2Excel();
-				table2excel.export(document.querySelectorAll("table.table"));
+				$scope.exportPdf();
 			}
+
 		})
+
 	});
 
-	$('.pdf-file').click(function() {
+	$('.exportExcel').click(function() {
+
 		let timerInterval
 		Swal.fire({
 			icon: 'info',
@@ -729,18 +791,13 @@ app.controller("brand-ctrl", function($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+
 				//code xuất file
-				var elment = document.getElementById('sampleTable');
-				var opt = {
-					margin: 0.5,
-					filename: 'myfilepdf.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				};
-				html2pdf(elment, opt);
+				$scope.exportExcel();
 			}
+
 		})
+
 	});
 
 	var myApp1 = new function() {

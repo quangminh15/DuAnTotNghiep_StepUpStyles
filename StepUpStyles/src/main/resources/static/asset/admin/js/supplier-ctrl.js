@@ -2,6 +2,9 @@ app.controller("supplier-ctrl", function($scope, $http){
     $scope.items = [];
 	$scope.itemss = [];
 	$scope.itemsss = [];
+	$scope.editModeUpdate = true;
+	$scope.editModeAdd = false;
+	$scope.editModeDelete = true;
 	$scope.form = {
         supplierName: '',
         phone: '',
@@ -74,7 +77,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 			// Tạo một thẻ a để tải xuống tệp PDF
 			var a = document.createElement("a");
 			a.href = url;
-			a.download = "DSSupplier.pdf";
+			a.download = "DSSize.pdf";
 			document.body.appendChild(a);
 			a.click();
 			URL.revokeObjectURL(url);
@@ -145,6 +148,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 
     //ham create
     $scope.create = function (){
+		$scope.editModeAdd = false;
 		//bo trong ten
 		if (!$scope.form.supplierName) {	
 			Swal.fire({
@@ -247,6 +251,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 
     //ham update
     $scope.update = function () {
+		$scope.editModeUpdate = true;
 		//bo trong ten
 		if (!$scope.form.supplierName) {
 			Swal.fire({
@@ -453,11 +458,17 @@ app.controller("supplier-ctrl", function($scope, $http){
 		$scope.form = {
 			display: true
 		};
+		$scope.editModeUpdate = true;
+		$scope.editModeAdd = false;
+		$scope.editModeDelete = true;
 	}
 
     //hien thi len form
 	$scope.edit = function (item) {
 		$scope.form = angular.copy(item);
+		$scope.editModeUpdate = false;
+		$scope.editModeAdd = true;
+		$scope.editModeDelete = false;
 	}
 
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở Table)
@@ -501,6 +512,7 @@ app.controller("supplier-ctrl", function($scope, $http){
 
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
 	$scope.confirmHide = function() {
+		$scope.editModeDelete = false;
 		Swal.fire({
 			title: 'Thông báo',
 			text: "Bạn có chắc chắn muốn xóa nhà cung cấp này không?",
