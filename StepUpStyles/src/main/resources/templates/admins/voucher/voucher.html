@@ -32,15 +32,15 @@
             </div>
             <div class="template-demo text-right mb-3">
                 <button type="button" ng-click="create()" class="btn btn-outline-primary btn-fw" data-toggle="tooltip"
-                    title="Thêm giảm giá mới">
+                    title="Thêm voucher mới" ng-disabled="editModeAdd">
                     <span class="fa fa-plus-circle"></span>
                 </button>
                 <button type="button" ng-click="update()" class="btn btn-outline-warning btn-fw" data-toggle="tooltip"
-                    title="Cập nhật giảm giá">
+                    title="Cập nhật voucher" ng-disabled="editModeUpdate">
                     <span class="fa fa-wrench"></span>
                 </button>
                 <button type="button" ng-click="confirmHide()" type="submit" class="btn btn-outline-danger btn-fw"
-                    data-toggle="tooltip" title="Xóa giảm giá">
+                    data-toggle="tooltip" title="Xóa voucher" ng-disabled="editModeDelete">
                     <span class="ti-trash"></span>
                 </button>
                 <button type="button" ng-click="reset()" class="btn btn-outline-dark btn-fw" data-toggle="tooltip"

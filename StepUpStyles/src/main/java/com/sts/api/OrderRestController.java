@@ -133,5 +133,15 @@ public class OrderRestController {
         }
     }
     
-
+    @GetMapping("/updateOrderVoucher")
+    public ResponseEntity<String> updateOrderVoucher() {
+        try {
+            orderService.updateOrderVoucher();
+            return new ResponseEntity<>("Trạng thái đã được cập nhật thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            return new ResponseEntity<>("Lỗi khi cập nhật trạng thái: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

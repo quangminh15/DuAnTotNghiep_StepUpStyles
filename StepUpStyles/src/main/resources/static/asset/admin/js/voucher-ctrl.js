@@ -1,8 +1,11 @@
-app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
+app.controller("voucher-ctrl", function($scope, $http){
     $scope.voucherItem = [];
 	$scope.voucherNoDelItem = [];
 	$scope.voucherDelItem = [];
 	$scope.form = {};
+	$scope.editModeUpdate = true;
+	$scope.editModeAdd = false;
+	$scope.editModeDelete = true;
 
 	CKEDITOR.replace('description');
 
@@ -110,6 +113,9 @@ app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
 
 		$scope.form = {
 		};
+		$scope.editModeUpdate = true;
+		$scope.editModeAdd = false;
+		$scope.editModeDelete = true;
 	}
 
     $scope.initialize();
@@ -123,6 +129,9 @@ app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
 		$scope.form.discountAmount = $scope.form.discountAmount;
 		// Cập nhật giá trị CKEditor
 		CKEDITOR.instances.description.setData($scope.form.description);
+		$scope.editModeUpdate = false;
+		$scope.editModeAdd = true;
+		$scope.editModeDelete = false;
 	}
 
     //format tien te vnd
@@ -143,6 +152,7 @@ app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
 
 	//	Thêm mới 
 	$scope.create = function () {
+		$scope.editModeAdd = false;
 		//Không nhap don gia toi thieu
 		if (!$scope.form.total) {
 			Swal.fire({
@@ -266,6 +276,7 @@ app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
 
 	//	Cập nhật  
 	$scope.update = function () {
+		$scope.editModeUpdate = true;
 		//Không chọn sản phẩm
 		if (!$scope.form.total) {
 			Swal.fire({
@@ -401,6 +412,7 @@ app.controller("voucher-ctrl", ['ngSanitize'], function($scope, $http){
 
 	//sau khi xác nhận thành công thì xóa vào thùng rác (Nút xóa ở FORM) bắt đầu
 	$scope.confirmHide = function() {
+		$scope.editModeDelete = false;
 		Swal.fire({
 			title: 'Thông báo',
 			text: "Bạn có chắc chắn muốn xóa sản phẩm khuyến mãi này không?",

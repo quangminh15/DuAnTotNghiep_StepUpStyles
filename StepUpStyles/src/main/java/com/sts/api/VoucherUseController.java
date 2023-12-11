@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,5 +47,17 @@ public class VoucherUseController {
     @GetMapping("/check-saved/{userId}/{voucherId}")
     public Boolean checkVoucherSaved(@PathVariable Integer userId, @PathVariable Long voucherId) {
         return voucherUseService.isVoucherSaved(userId, voucherId);
+    }
+
+    @GetMapping("/updateSave")
+    public ResponseEntity<String> updateSave() {
+        try {
+            voucherUseService.updateVoucherSave();
+            return new ResponseEntity<>("Trạng thái đã được cập nhật thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            return new ResponseEntity<>("Lỗi khi cập nhật trạng thái: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

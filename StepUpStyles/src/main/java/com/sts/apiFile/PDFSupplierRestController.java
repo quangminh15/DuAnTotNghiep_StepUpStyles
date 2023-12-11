@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.config.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -90,7 +89,7 @@ public class PDFSupplierRestController {
         // tên cửa hàng
         Paragraph titleImport = new Paragraph();
         // Font vietnameseFont = new Font(baseFont, 22, Font.BOLD);
-        Chunk titChunk = new Chunk("STEP UP STYLE");
+        Chunk titChunk = new Chunk("FOURSHOE");
         titleImport.setAlignment(Element.ALIGN_LEFT);
         titleImport.add(titChunk);
 
