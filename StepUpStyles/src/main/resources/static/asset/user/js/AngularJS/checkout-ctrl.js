@@ -72,29 +72,33 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 					console.log("images", cartDetail.product.productImages);
 				})
 				$http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID).then(resp => {
-					cartDetail.product.directDiscount = resp.data.filter(directDiscounts => !directDiscounts.deleted);
+					cartDetail.product.directDiscounts = resp.data.filter(directDiscounts => !directDiscounts.deleted);
 					
 				})
 			})
 			setTongTien()
 		}
 	};
+	$scope.discount=[]
 	function setTongTien() {
         var tongTien = 0;
         angular.forEach($scope.cartIs, function (value, key) {
-			if (value.product.directDiscount.status=="Đang diễn ra") {
+			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
+				$scope.discount=resp.data
+				if ($scope.discount[0].status=="Đang diễn ra") {
+					
+					
+						tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
+					
+					$scope.tongTien = tongTien;
+				} else {
+					
+						console.log(value.isSelected);
+						tongTien += value.product.price * value.quantity;
 				
-				
-					tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
-				
-				$scope.tongTien = tongTien;
-			} else {
-				
-					console.log(value.isSelected);
-					tongTien += value.product.price * value.quantity;
-			
-				$scope.tongTien = tongTien;
-			}
+					$scope.tongTien = tongTien;
+				}
+			})
             // tongTien += value.product.price * value.quantity;
             
         });
@@ -120,7 +124,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 		.catch(function (error) {
 			console.error('Error:', error);
 		});
-		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien));
+		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien+$scope.shippingFee));
 		
 		window.location.href='/pay-cod-success'
 	};

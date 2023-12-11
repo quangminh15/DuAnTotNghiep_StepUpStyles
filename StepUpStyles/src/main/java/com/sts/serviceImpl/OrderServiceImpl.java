@@ -28,6 +28,8 @@ import com.sts.model.ShippingAddress;
 import com.sts.model.User;
 import com.sts.model.VoucherUse;
 import com.sts.model.DTO.OrderDetailDTO;
+import com.sts.service.FormSendMailHTML;
+import com.sts.service.MailerService;
 import com.sts.service.OrderService;
 import com.sts.service.UserService;
 
@@ -51,24 +53,24 @@ public class OrderServiceImpl implements OrderService {
     VoucherUseDAO voucherUseDao;
 
     @Autowired
-	UserService userService;
+    UserService userService;
+
 
     @Override
-    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId, boolean paymentStatus, double discountPrice,Long voucherId) {
+    public Order createOrder(List<OrderDetailDTO> cartDataList, double initialPrice, double fee, Integer addressId,
+            boolean paymentStatus, double discountPrice, Long voucherId) {
         Integer userID = userService.getUserIdCurrent();
         User user = userDao.findById(userID).get();
-       
-        
+
         ShippingAddress address = addressDao.findById(addressId).get();
         VoucherUse voucher = new VoucherUse();
-        if (voucherId==0) {
-            voucher=null;
-        }else{
+        if (voucherId == 0) {
+            voucher = null;
+        } else {
 
             voucher = voucherUseDao.findById(voucherId).get();
         }
         PaymentMenthod pay = payDao.findById(1).get();
-
 
         Order order = Order.builder()
                 .deliveryDate(formatDeliveryDate(calculateDeliveryDate()))
@@ -78,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatus(OrderStatus.Pending) // Set the initial order status
                 .paymentStatus(false)
                 .shippingFee(fee)
-                .totalAmount(initialPrice + fee- discountPrice)
+                .totalAmount(initialPrice + fee - discountPrice)
                 .discountPrice(discountPrice)
                 .voucherUse(voucher)
                 // Set the PaymentMethod, ShippingAddress, and User associations
@@ -127,25 +129,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> loadByUser(User user) {
-       return orderDao.findByUser(user);
+        return orderDao.findByUser(user);
     }
 
     @Override
     public List<Order> loadByStatus(OrderStatus status) {
-       return orderDao.findByOrderStatus(status);
+        return orderDao.findByOrderStatus(status);
     }
 
     @Override
     public List<OrderDetail> loadByOrder(Order order) {
-       return orderDetailDao.findByOrder(order);
+        return orderDetailDao.findByOrder(order);
     }
 
     @Override
     public List<Order> loadAll() {
-       return orderDao.findAll();
+        return orderDao.findAll();
     }
 
-    //Xài cái này linh
+    // Xài cái này linh
     @Override
     public Review findOrderDetailWithReviewByOrderIdAndUserId(Integer orderDetailId, Integer userId) {
         return orderDetailDao.findReviewByOrderDetailIdAndUserId(orderDetailId, userId);
@@ -155,19 +157,19 @@ public class OrderServiceImpl implements OrderService {
     public Review findByReviewWithOrderDetail(Integer orderDetailId) {
         return orderDetailDao.shoReviewDetail(orderDetailId);
     }
-    //linh
+    // linh
 
     @Override
     public void updateStatus(Integer id, OrderStatus status) {
         Order order = orderDao.findById(id).get();
         order.setOrderStatus(status);
-        if (status==OrderStatus.Delivered) {
+        if (status == OrderStatus.Delivered) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Define your desired date format
             String formattedDate = LocalDate.now().format(formatter);
             order.setDeliveryDate(formattedDate);
             order.setPaymentStatus(true);
         }
-       orderDao.save(order);
+        orderDao.save(order);
     }
 
     @Override
