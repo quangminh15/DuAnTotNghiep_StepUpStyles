@@ -126,7 +126,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbyproducts/" + $scope.productId).then(resp => {
 				$scope.reviewitems = resp.data;
-				$scope.dem = $scope.reviewitems.length
+				$scope.demSP = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
@@ -153,11 +153,12 @@ app.controller("review-ctrl", function ($scope, $http) {
 			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbyusers/" + $scope.usersId).then(resp => {
 				$scope.reviewitems = resp.data;
+				$scope.demND = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
-						text: 'Không tìm thấy người dùng phù hợp. Vui lòng chọn lại!',
+						text: 'Không tìm thấy khách hàng phù hợp. Vui lòng chọn lại!',
 					});
 					$scope.initialize();
 					$scope.usersId = ""
@@ -179,6 +180,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbystar/" + $scope.rating).then(resp => {
 				$scope.reviewitems = resp.data;
+				$scope.demStar = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
@@ -257,7 +259,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 	$scope.sortableColumns = [
 		{ name: 'orderDetail.orderDetailId', label: 'Mã đơn hàng' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
-		{ name: 'user.fullName', label: 'Tên người dùng' },
+		{ name: 'user.fullName', label: 'Tên khách hàng' },
 		{ name: 'title', label: 'Nội dung' },
 		{ name: 'rating', label: 'Sao đánh giá' },
 		{ name: 'reviewDate', label: 'Ngày đánh giá' },

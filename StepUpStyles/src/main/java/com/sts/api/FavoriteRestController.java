@@ -85,4 +85,8 @@ public class FavoriteRestController {
 	public List<Object[]> getTop1() {
 		return favoriteService.getTop1ProductFavorite();
 	}
+	@GetMapping("/rest/favorites/top5product")
+	public List<Object[]> getTop5() {
+		return favoriteService.getTop5ProductFavorite();
+	}
 }

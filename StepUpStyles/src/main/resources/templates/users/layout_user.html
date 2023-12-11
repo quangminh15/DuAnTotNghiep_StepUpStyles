@@ -1,208 +1,190 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-	th:fragment="content(view, title)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="content(view, title)">
 
 <head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" type="image/x-icon" href="\asset\user\img\banner\favicon.ico">
-<title th:replace="${title}"></title>
+	<title th:replace="${title}"></title>
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-<!-- Template CSS -->
-<link rel="stylesheet" href="/asset/user/css/style-liberty.css">
-<!-- Template CSS -->
-<link
-	href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap"
-	rel="stylesheet">
-<link
-	href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap"
-	rel="stylesheet">
-<!-- Template CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css"
-	rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+	<!-- Template CSS -->
+	<link rel="stylesheet" href="/asset/user/css/style-liberty.css">
+	<!-- Template CSS -->
+	<link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
+	<!-- Template CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
 
-<!-- <script
+	<!-- <script
 	src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script> -->
-<script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-<!-- angularJS -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-<script
-	src="https://rawgit.com/angular-ui/angular-ui/master/build/angular-ui.js"></script>
-<!-- New toolbar-->
-<link rel="stylesheet" href="/asset/user/css/style-menu.css">
-<script src="//m.servedby-buysellads.com/monetization.js"
-	type="text/javascript"></script>
-<meta name="robots" content="noindex">
-<link rel="stylesheet" href="/asset/user/css/font-awesome.min.css">
-<!-- Boostrap ICON -->
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	
+	<!-- angularJS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://rawgit.com/angular-ui/angular-ui/master/build/angular-ui.js"></script>
+	<!-- New toolbar-->
+	<link rel="stylesheet" href="/asset/user/css/style-menu.css">
+	<script src="//m.servedby-buysellads.com/monetization.js" type="text/javascript"></script>
+	<meta name="robots" content="noindex">
+	<link rel="stylesheet" href="/asset/user/css/font-awesome.min.css">
+	<!-- Boostrap ICON -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+		integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- splide bắt đầu -->
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css" />
-<!-- splide kết thúc -->
-<!-- Đoạn mã cấu hình Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
 
-<script type="text/javascript">
-	var firebaseConfig = {
-		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
-		authDomain : "stepupstyles-97319.firebaseapp.com",
-		projectId : "stepupstyles-97319",
-		storageBucket : "stepupstyles-97319.appspot.com",
-		messagingSenderId : "909443933158",
-		appId : "1:909443933158:web:17bce455b00fb707f12c27",
-		measurementId : "G-82K4Q2H6DF"
-	};
+	<!-- splide bắt đầu -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css" />
+	<!-- splide kết thúc -->
+	<!-- Đoạn mã cấu hình Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
 
-	// Khởi tạo Firebase
-	firebase.initializeApp(firebaseConfig);
-	firebase.analytics();
-</script>
-<!-- Đoạn mã cấu hình Firebase -->
-<style type="text/css">
-/* nút lọc của trang sản phẩm START */
-.custom-button-container {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-}
+	<script type="text/javascript">
+		var firebaseConfig = {
+			apiKey: "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+			authDomain: "stepupstyles-97319.firebaseapp.com",
+			projectId: "stepupstyles-97319",
+			storageBucket: "stepupstyles-97319.appspot.com",
+			messagingSenderId: "909443933158",
+			appId: "1:909443933158:web:17bce455b00fb707f12c27",
+			measurementId: "G-82K4Q2H6DF"
+		};
 
-.custom-button-container button {
-	flex: 1;
-	margin-right: 5px;
-	margin-left: 5px;
-}
+		// Khởi tạo Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
+	<!-- Đoạn mã cấu hình Firebase -->
+	<style type="text/css">
+		/* nút lọc của trang sản phẩm START */
+		.custom-button-container {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+		}
 
-a:hover, button:hover {
-	cursor: pointer;
-}
-/* nút lọc của trang sản phẩm END */
+		.custom-button-container button {
+			flex: 1;
+			margin-right: 5px;
+			margin-left: 5px;
+		}
 
-/* CSS phân trang trang chủ sản phẩm nổi bật Start */
-.custom-pagination {
-	display: flex;
-	justify-content: flex-end;
-	margin: 0px 10px 20px;
-}
+		a:hover,
+		button:hover {
+			cursor: pointer;
+		}
 
-.custom-pagination ul {
-	list-style-type: none;
-	padding: 0;
-	display: flex;
-}
+		/* nút lọc của trang sản phẩm END */
 
-.custom-pagination li {
-	display: inline;
-	margin-right: 10px;
-}
+		/* CSS phân trang trang chủ sản phẩm nổi bật Start */
+		.custom-pagination {
+			display: flex;
+			justify-content: flex-end;
+			margin: 0px 10px 20px;
+		}
 
-.custom-pagination a {
-	text-decoration: none;
-	padding: 10px 15px;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	color: orangered;
-}
+		.custom-pagination ul {
+			list-style-type: none;
+			padding: 0;
+			display: flex;
+		}
 
-.custom-pagination a:hover {
-	background: orangered;
-	border-color: orangered;
-	color: white;
-}
+		.custom-pagination li {
+			display: inline;
+			margin-right: 10px;
+		}
 
-.custom-pagination .custom-active a {
-	background: orangered;
-	border-color: orangered;
-	color: white;
-}
+		.custom-pagination a {
+			text-decoration: none;
+			padding: 10px 15px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			color: orangered;
+		}
 
-.custom-pagination .custom-prev a, .custom-pagination .custom-next a {
-	color: orangered;
-	border: none;
-}
+		.custom-pagination a:hover {
+			background: orangered;
+			border-color: orangered;
+			color: white;
+		}
 
-.custom-pagination .custom-prev a:hover, .custom-pagination .custom-next a:hover
-	{
-	background: none;
-	color: black;
-	border-color: none;
-}
+		.custom-pagination .custom-active a {
+			background: orangered;
+			border-color: orangered;
+			color: white;
+		}
 
-/* CSS phân trang trang chủ sản phẩm nổi bật END */
+		.custom-pagination .custom-prev a,
+		.custom-pagination .custom-next a {
+			color: orangered;
+			border: none;
+		}
 
-/* hiện phần trăm giảm giá START*/
-.discount-circle {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	width: 45px;
-	height: 45px;
-	border-radius: 50%;
-	background-color: orangered;
-	color: #dfdede;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 14px;
-	box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1)
-		0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
-	font-weight: 700;
-}
-/* hiện phần trăm giảm giá END*/
-.custom-modal-size {
-	max-width: 90%;
-	width: 90%;
-}
-</style>
-<!-- Đoạn mã cấu hình Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
-<script
-	src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+		.custom-pagination .custom-prev a:hover,
+		.custom-pagination .custom-next a:hover {
+			background: none;
+			color: black;
+			border-color: none;
+		}
 
-<script type="text/javascript">
-	var firebaseConfig = {
-		apiKey : "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
-		authDomain : "stepupstyles-97319.firebaseapp.com",
-		projectId : "stepupstyles-97319",
-		storageBucket : "stepupstyles-97319.appspot.com",
-		messagingSenderId : "909443933158",
-		appId : "1:909443933158:web:17bce455b00fb707f12c27",
-		measurementId : "G-82K4Q2H6DF"
-	};
+		/* CSS phân trang trang chủ sản phẩm nổi bật END */
 
-	// Khởi tạo Firebase
-	firebase.initializeApp(firebaseConfig);
-	firebase.analytics();
-</script>
-<!-- Đoạn mã cấu hình Firebase -->
+		/* hiện phần trăm giảm giá START*/
+		.discount-circle {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			width: 45px;
+			height: 45px;
+			border-radius: 50%;
+			background-color: orangered;
+			color: #dfdede;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 14px;
+			box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+			font-weight: 700;
+		}
 
-<!-- owl carousel đầu -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css" rel="stylesheet" />
-<!-- owl carousel end -->
+		/* hiện phần trăm giảm giá END*/
+		.custom-modal-size {
+			max-width: 90%;
+			width: 90%;
+		}
+	</style>
+	<!-- Đoạn mã cấu hình Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+
+	<script type="text/javascript">
+		var firebaseConfig = {
+			apiKey: "AIzaSyBDiATVoeNpnSkBLxOB_QPCeWZO-yIqCfg",
+			authDomain: "stepupstyles-97319.firebaseapp.com",
+			projectId: "stepupstyles-97319",
+			storageBucket: "stepupstyles-97319.appspot.com",
+			messagingSenderId: "909443933158",
+			appId: "1:909443933158:web:17bce455b00fb707f12c27",
+			measurementId: "G-82K4Q2H6DF"
+		};
+
+		// Khởi tạo Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
+	<!-- Đoạn mã cấu hình Firebase -->
+
+	<!-- owl carousel đầu -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css" rel="stylesheet" />
+	<!-- owl carousel end -->
 </head>
 
 <body ng-app="app">
@@ -217,13 +199,13 @@ a:hover, button:hover {
 	<!-- move top -->
 	<script>
 		// When the user scrolls down 20px from the top of the document, show the button
-		window.onscroll = function() {
+		window.onscroll = function () {
 			scrollFunction()
 		};
 
 		function scrollFunction() {
 			if (document.body.scrollTop > 20
-					|| document.documentElement.scrollTop > 20) {
+				|| document.documentElement.scrollTop > 20) {
 				document.getElementById("movetop").style.display = "block";
 			} else {
 				document.getElementById("movetop").style.display = "none";
@@ -245,18 +227,18 @@ a:hover, button:hover {
 			// Make an AJAX call to your API
 			var count = 0
 			$.ajax({
-				type : 'GET',
-				url : '/rest/cart', // Replace with the actual API endpoint
+				type: 'GET',
+				url: '/rest/cart', // Replace with the actual API endpoint
 
-				data : JSON.stringify(count),
-				contentType : "application/json",
-				success : function(data) {
+				data: JSON.stringify(count),
+				contentType: "application/json",
+				success: function (data) {
 					// Update the cart count with the received data
 					count = data.length
 					$('#cartCount').text(count);
 					console.log(data.length); // Assuming the API returns an array of cart items
 				},
-				error : function() {
+				error: function () {
 					// Handle errors here
 					console.log('Error fetching cart items.');
 				}
@@ -268,7 +250,7 @@ a:hover, button:hover {
 		// You can also set a timer to periodically update the cart count
 		// setInterval(updateCartCount, 60000); // Update every minute (for example)
 
-		$('.add-to-cart').click(function() {
+		$('.add-to-cart').click(function () {
 			updateCartCount();
 		})
 		updateCartCount();
@@ -276,15 +258,15 @@ a:hover, button:hover {
 	<script>
 		function updateFavoriteCount() {
 			$.ajax({
-				type : 'GET',
-				url : '/rest/favorites/getUserFavorite',
-				contentType : "application/json",
-				success : function(data) {
+				type: 'GET',
+				url: '/rest/favorites/getUserFavorite',
+				contentType: "application/json",
+				success: function (data) {
 					// Update the cart count with the received data
 					var count = data.length;
 					$('#favoriteCount').text(count);
 				},
-				error : function() {
+				error: function () {
 					// Handle errors here
 					console.log('Error fetching favorite items.');
 				}
@@ -293,56 +275,64 @@ a:hover, button:hover {
 
 		updateFavoriteCount();
 
-		function displayImage(input, imageId) {
-			var imageElement = document.getElementById(imageId);
+		function displayImage(input, imageId, nextLabelId) {
+        var imageElement = document.getElementById(imageId);
 
-			if (input.files && input.files[0]) {
-				var reader = new FileReader();
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-				reader.onload = function(e) {
-					imageElement.src = e.target.result;
-					imageElement.style.display = 'block';
-				};
+            reader.onload = function (e) {
+                imageElement.src = e.target.result;
+                imageElement.style.display = 'block';
+            };
 
-				reader.readAsDataURL(input.files[0]);
-			}
-		}
+            reader.readAsDataURL(input.files[0]);
+        }
+        toggleNextUpload(nextLabelId);
+    }
+
+    function toggleNextUpload(nextLabelId) {
+        var nextLabel = document.getElementById(nextLabelId);
+        if (nextLabel) {
+            nextLabel.style.display = "inline-block";
+        }
+    }
 		function removeImage(imageId, inputId) {
-    var imageElement = document.getElementById(imageId);
-    var inputElement = document.getElementById(inputId);
+			var selectedImage = document.getElementById(imageId);
+			var input = document.getElementById(inputId);
 
-    imageElement.src = '';
-    imageElement.style.display = 'none';
-    inputElement.value = ''; // Xóa giá trị của input file
-}
+			selectedImage.style.display = "none";
+			selectedImage.src = "#"; // Xóa đường dẫn hình ảnh để khi load lại không hiển thị ảnh cũ
+			input.value = ""; // Xóa đường dẫn file đã chọn
+		}
 
 
-// 		function displayImage(input, imageId) {
-//     var imageElement = document.querySelector('#' + imageId);
+		// 		function displayImage(input, imageId) {
+		//     var imageElement = document.querySelector('#' + imageId);
 
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
+		//     if (input.files && input.files[0]) {
+		//         var reader = new FileReader();
 
-//         reader.onload = function(e) {
-//             imageElement.src = e.target.result;
-//             imageElement.style.display = 'block';
-//             // Cập nhật trạng thái đã chọn ảnh tương ứng (giả sử bạn muốn theo dõi trạng thái này)
-//             if (imageId === 'image1') {
-//                 // Điều chỉnh trạng thái của ảnh 1
-//                 // Ví dụ: có thể sử dụng data attributes hoặc class để theo dõi trạng thái đã chọn ảnh
-//             } else if (imageId === 'image2') {
-//                 // Điều chỉnh trạng thái của ảnh 2
-//             } else if (imageId === 'image3') {
-//                 // Điều chỉnh trạng thái của ảnh 3
-//             }
-//         };
+		//         reader.onload = function(e) {
+		//             imageElement.src = e.target.result;
+		//             imageElement.style.display = 'block';
+		//             // Cập nhật trạng thái đã chọn ảnh tương ứng (giả sử bạn muốn theo dõi trạng thái này)
+		//             if (imageId === 'image1') {
+		//                 // Điều chỉnh trạng thái của ảnh 1
+		//                 // Ví dụ: có thể sử dụng data attributes hoặc class để theo dõi trạng thái đã chọn ảnh
+		//             } else if (imageId === 'image2') {
+		//                 // Điều chỉnh trạng thái của ảnh 2
+		//             } else if (imageId === 'image3') {
+		//                 // Điều chỉnh trạng thái của ảnh 3
+		//             }
+		//         };
 
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
+		//         reader.readAsDataURL(input.files[0]);
+		//     }
+		// }
 	</script>
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function () {
 			// $(".fancybox").fancybox();
 			$("[data-fancybox^='review-']").fancybox();
 		});
@@ -355,10 +345,10 @@ a:hover, button:hover {
 	<script src="/asset/user/js/jquery.flexslider.js"></script>
 	<script src="/asset/user/js/imagezoom.js"></script>
 	<script>
-		$(window).load(function() {
+		$(window).load(function () {
 			$('.flexslider1').flexslider({
-				animation : "slide",
-				controlNav : "thumbnails"
+				animation: "slide",
+				controlNav: "thumbnails"
 			});
 		});
 	</script>
@@ -378,26 +368,26 @@ a:hover, button:hover {
 	<script src="/asset/user/js/AngularJS/order-ctrl.js"></script>
 	<!--/login-->
 	<script>
-		$(document).ready(function() {
-			$(".button-log a").click(function() {
+		$(document).ready(function () {
+			$(".button-log a").click(function () {
 				$(".overlay-login").fadeToggle(200);
 				$(this).toggleClass('btn-open').toggleClass('btn-close');
 			});
 		});
 		$('.overlay-close1').on(
-				'click',
-				function() {
-					$(".overlay-login").fadeToggle(200);
-					$(".button-log a").toggleClass('btn-open').toggleClass(
-							'btn-close');
-					open = false;
-				});
+			'click',
+			function () {
+				$(".overlay-login").fadeToggle(200);
+				$(".button-log a").toggleClass('btn-open').toggleClass(
+					'btn-close');
+				open = false;
+			});
 	</script>
 	<!--//login-->
 	<script>
 		// optional
 		$('#customerhnyCarousel').carousel({
-			interval : 5000
+			interval: 5000
 		});
 	</script>
 	<!-- cart-js -->
@@ -405,7 +395,7 @@ a:hover, button:hover {
 	<script>
 		transmitv.render();
 
-		transmitv.cart.on('transmitv_checkout', function(evt) {
+		transmitv.cart.on('transmitv_checkout', function (evt) {
 			var items, len, i;
 
 			if (this.subtotal() > 0) {
@@ -419,24 +409,22 @@ a:hover, button:hover {
 	<!-- //cart-js -->
 	<!--pop-up-box-->
 	<script src="/asset/user/js/jquery.magnific-popup.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
-		
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+
 	<!--//pop-up-box-->
 	<script>
-		$(document).ready(function() {
+		$(document).ready(function () {
 			$('.popup-with-zoom-anim').magnificPopup({
-				type : 'inline',
-				fixedContentPos : false,
-				fixedBgPos : true,
-				overflowY : 'auto',
-				closeBtnInside : true,
-				preloader : false,
-				midClick : true,
-				removalDelay : 300,
-				mainClass : 'my-mfp-zoom-in'
+				type: 'inline',
+				fixedContentPos: false,
+				fixedBgPos: true,
+				overflowY: 'auto',
+				closeBtnInside: true,
+				preloader: false,
+				midClick: true,
+				removalDelay: 300,
+				mainClass: 'my-mfp-zoom-in'
 			});
 
 		});
@@ -444,8 +432,8 @@ a:hover, button:hover {
 	<!--//search-bar-->
 	<!-- disable body scroll which navbar is in active -->
 	<script>
-		$(function() {
-			$('.navbar-toggler').click(function() {
+		$(function () {
+			$('.navbar-toggler').click(function () {
 				$('body').toggleClass('noscroll');
 			})
 		});
@@ -453,7 +441,7 @@ a:hover, button:hover {
 	<!-- disable body scroll which navbar is in active -->
 	<!-- navbar scroll -->
 	<script>
-		window.addEventListener('scroll', function() {
+		window.addEventListener('scroll', function () {
 			const navbar = document.querySelector('.navbar');
 			const scrollY = window.scrollY;
 
@@ -472,7 +460,7 @@ a:hover, button:hover {
 	<!--Carousel linh-->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script> -->
 	<!--Carousel linh-->
 	<script>
 		// $(document).ready(function(){
@@ -496,22 +484,22 @@ a:hover, button:hover {
 		// 	}
 		// });
 		// })
-	// 	$(document).ready(function () {
-    //     $('.owl-carousel').owlCarousel({
-    //       items: 4,
-	// 	  padding: 100,
-    //       mouseDraggable: false,
-    //       navigation: true,
-    //       scrollPerPage: true,
-    //       rewindNav: false,
-    //       pagination: true,
-	// 	  autoplay: true,
-    //       navigationText: ['<span>&#60;</span>', '<span>&#62;</span>'],
-    //     })
-    //     $('.owl-carousel').on('click', '.owl-item>div', function () {
-    //       alert('click');
-    //     })
-    //   })
+		// 	$(document).ready(function () {
+		//     $('.owl-carousel').owlCarousel({
+		//       items: 4,
+		// 	  padding: 100,
+		//       mouseDraggable: false,
+		//       navigation: true,
+		//       scrollPerPage: true,
+		//       rewindNav: false,
+		//       pagination: true,
+		// 	  autoplay: true,
+		//       navigationText: ['<span>&#60;</span>', '<span>&#62;</span>'],
+		//     })
+		//     $('.owl-carousel').on('click', '.owl-item>div', function () {
+		//       alert('click');
+		//     })
+		//   })
 	</script>
 </body>
 

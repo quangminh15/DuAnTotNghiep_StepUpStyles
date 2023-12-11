@@ -3,7 +3,6 @@ package com.sts.apiFile;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,22 +22,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sts.model.OrderDetail;
-import com.sts.model.Product;
-import com.sts.model.Review;
-import com.sts.model.User;
+import com.sts.model.Favorite;
 
 @Controller
-public class ExcelReviewRestController {
-    @PostMapping("/export-excelReview")
+public class ExcelFavoriteRestController {
+    @PostMapping("/export-excelFavorite")
     @ResponseBody
-    public void exportExcel(HttpServletResponse response, @RequestBody List<Review> reviews)
+    public void exportExcel(HttpServletResponse response, @RequestBody List<Favorite> favorites)
             throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=ReviewStepUpStyle.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=FavoriteStepUpStyle.xlsx");
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Danh sách đánh giá");
+        Sheet sheet = workbook.createSheet("Danh sách yêu thích sản phẩm");
 
         /// Tạo một dòng mới ở đầu bảng
         Row titleRow = sheet.createRow(0);
@@ -81,7 +77,7 @@ public class ExcelReviewRestController {
 
         // Tạo một ô để đặt giá trị DSSupplier
         Cell supplierCell = suppRow.createCell(1);
-        supplierCell.setCellValue("Danh sách đánh giá ");
+        supplierCell.setCellValue("Danh sách yêu thích sản phẩm ");
 
 
         CellStyle supplierStyle = workbook.createCellStyle();
@@ -108,7 +104,7 @@ public class ExcelReviewRestController {
 
         // Tạo hàng tiêu đề và đặt CellStyle cho từng ô trong hàng
         Row headerRow = sheet.createRow(5);
-        String[] headers = { "Mã đơn hàng", "Tên sản phẩm", "Tên người dùng", "Nội dung", "Ngày đánh giá", "Sao đánh giá", "Ảnh 1", "Ảnh 2", "Ảnh 3"};
+        String[] headers = { "Mã yêu thích", "Tên sản phẩm", "Tên người dùng", "Ngày đánh giá"};
 
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -117,21 +113,16 @@ public class ExcelReviewRestController {
         }
 
         int rowNum = 6; // Bắt đầu từ hàng số 2 sau dòng tiêu đề
-        for (Review item : reviews) {
+        for (Favorite item : favorites) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(item.getOrderDetail().getOrderDetailId());
+            row.createCell(0).setCellValue(item.getFavoriteId());
             row.createCell(1).setCellValue(item.getProduct().getProductName());
             row.createCell(2).setCellValue(item.getUser().getFullName());
-            row.createCell(3).setCellValue(item.getTitle());
-            Cell dateCell = row.createCell(4);
-            if (item.getReviewDate() != null) {
+            Cell dateCell = row.createCell(3);
+            if (item.getDateLike() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateCell.setCellValue(dateFormat.format(item.getReviewDate()));
+                dateCell.setCellValue(dateFormat.format(item.getDateLike()));
             }
-            row.createCell(5).setCellValue(item.getRating());
-            row.createCell(6).setCellValue(item.getImage1());
-            row.createCell(7).setCellValue(item.getImage1());
-            row.createCell(8).setCellValue(item.getImage3());
             // Đặt CellStyle cho từng ô dữ liệu
             for (int i = 0; i < headers.length; i++) {
     Cell cell = row.getCell(i);

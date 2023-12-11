@@ -22,18 +22,18 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sts.model.Favorite;
 import com.sts.model.Review;
-import com.sts.model.Supplier;
 
 @Controller
-public class PDFReviewRestController {
-    @PostMapping("/review-pdf")
+public class PDFFavorteRestController {
+    @PostMapping("/favorite-pdf")
     @ResponseBody
-    public void exportPdf(HttpServletResponse response, @RequestBody List<Review> rvs)
+    public void exportPdf(HttpServletResponse response, @RequestBody List<Favorite> fvs)
             throws IOException, DocumentException {
         // Thiết lập response để trình duyệt hiểu rằng sẽ nhận tệp PDF
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=Review.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=Favorite.pdf");
 
         // Tạo một đối tượng Document của iText
         Document document = new Document();
@@ -47,30 +47,25 @@ public class PDFReviewRestController {
         Font font = new Font(baseFont);
         // Tạo đối tượng PdfWriter để ghi dữ liệu vào response OutputStream
         PdfWriter.getInstance(document, response.getOutputStream());
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(4);
 
         // Đặt tiêu đề cho từng cột
-        table.addCell(new PdfPCell(new Paragraph("Mã đơn hàng", font)));
+        table.addCell(new PdfPCell(new Paragraph("Mã yêu thích", font)));
         table.addCell(new PdfPCell(new Paragraph("Tên sản phẩm", font)));
         table.addCell(new PdfPCell(new Paragraph("Tên khách hàng", font)));
-        table.addCell(new PdfPCell(new Paragraph("Nội dung", font)));
-        table.addCell(new PdfPCell(new Paragraph("Sao đánh giá", font)));
-        table.addCell(new PdfPCell(new Paragraph("Ngày đánh giá", font)));
-        // table.addCell(new PdfPCell(new Paragraph("Ảnh 1", font)));
-        // table.addCell(new PdfPCell(new Paragraph("Ảnh 2", font)));
-        // table.addCell(new PdfPCell(new Paragraph("Ảnh 3", font)));
+        table.addCell(new PdfPCell(new Paragraph("Ngày thích sản phẩm", font)));
 
         document.open();
 
         float rowHeight = 30f;
         // Thêm nội dung vào tài liệu PDF từ danh sách chi tiết phiếu nhập
-        for (Review item : rvs) {
+        for (Favorite item : fvs) {
             font = new Font(baseFont);
 
-            float[] columnWidths = { 80f, 150f, 150f, 200f,70f,100f}; // Thiết lập chiều rộng cho từng cột
+            float[] columnWidths = { 90f, 150f, 150f, 150f}; // Thiết lập chiều rộng cho từng cột
             table.setWidths(columnWidths);
 
-            PdfPCell cell1 = new PdfPCell(new Paragraph(String.valueOf(item.getOrderDetail().getOrderDetailId()), font));
+            PdfPCell cell1 = new PdfPCell(new Paragraph(String.valueOf(item.getFavoriteId()), font));
             cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell1.setFixedHeight(rowHeight);
             table.addCell(cell1);
@@ -85,37 +80,12 @@ public class PDFReviewRestController {
             cell3.setFixedHeight(rowHeight);
             table.addCell(cell3);
 
-            PdfPCell cell4 = new PdfPCell(new Paragraph(item.getTitle(), font));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            PdfPCell cell4 = new PdfPCell(new Paragraph(dateFormat.format(item.getDateLike()), font));
             cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell4.setFixedHeight(rowHeight);
             table.addCell(cell4);
 
-            PdfPCell cell5 = new PdfPCell(new Paragraph(String.valueOf(item.getRating()), font));
-            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell1.setFixedHeight(rowHeight);
-            table.addCell(cell5);
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            PdfPCell cell6 = new PdfPCell(new Paragraph(dateFormat.format(item.getReviewDate()), font));
-            cell6.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell6.setFixedHeight(rowHeight);
-            table.addCell(cell6);
-
-
-            // PdfPCell cell7 = new PdfPCell(new Paragraph(item.getImage1(), font));
-            // cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
-            // cell3.setFixedHeight(rowHeight);
-            // table.addCell(cell7);
-
-            // PdfPCell cell8 = new PdfPCell(new Paragraph(item.getImage2(), font));
-            // cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
-            // cell4.setFixedHeight(rowHeight);
-            // table.addCell(cell8);
-
-            // PdfPCell cell9 = new PdfPCell(new Paragraph(item.getImage3(), font));
-            // cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
-            // cell4.setFixedHeight(rowHeight);
-            // table.addCell(cell9);
         }
 
         Font nghiengFont = new Font(baseFont, 10, Font.ITALIC);
@@ -129,7 +99,7 @@ public class PDFReviewRestController {
         // tên phiếu nhập
         Paragraph nameImport = new Paragraph();
         Font vietnameseFont = new Font(baseFont, 22, Font.BOLD);
-        Chunk idChunk = new Chunk("Danh sách đánh giá", vietnameseFont);
+        Chunk idChunk = new Chunk("Danh sách yêu thích sản phẩm", vietnameseFont);
         nameImport.setAlignment(Element.ALIGN_CENTER);
         nameImport.add(idChunk);
 

@@ -478,7 +478,7 @@
 			<div class="content-singlev-ecomm" ng-repeat="rv in reviewPager.allreviews">
 				<div class="row">
 					<div class="col-sm-1 text-center">
-						<img src="/asset/user/images/N5.jpg" alt="Hình" class="img-fluid rounded-circle" style="width: 50px; object-fit: cover;">
+						<img ng-src="{{rv.user.image}}" alt="Hình" class="img-fluid rounded-circle" style="width: 50px; object-fit: cover;">
 					</div>
 					<div class="col-sm-11">
 						<p class="mb-0">

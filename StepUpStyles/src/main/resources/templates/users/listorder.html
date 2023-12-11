@@ -187,38 +187,37 @@
 										</button>
 									</h2>
 								</div>
-								<div id="collapseOne" class="collapse" aria-labelledby="headingOne"
-									data-parent="#accordionExample">
+								<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="form-group">
 											<label for="image1" class="custom-file-upload">
 												<i class="fa fa-picture-o"> Ảnh 1</i>
 											</label>
-											<label for="image2" class="custom-file-upload">
+											<label for="image2" class="custom-file-upload" style="display: none;" id="label2">
 												<i class="fa fa-picture-o"> Ảnh 2</i>
 											</label>
-											<label for="image3" class="custom-file-upload">
+											<label for="image3" class="custom-file-upload" style="display: none;" id="label3">
 												<i class="fa fa-picture-o"> Ảnh 3</i>
 											</label>
 											<div class="d-flex">
 												<input type="file" id="image1" accept="image/*" style="display:none;"
-													onchange="displayImage(this, 'selectedImage1');">
+													onchange="displayImage(this, 'selectedImage1', 'label2');">
 												<img id="selectedImage1"
 													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-												<!-- <button class="btn-delete"
-													onclick="removeImage('selectedImage1', 'image1');">×</button> -->
-												<input type="file" id="image2" accept="image/*" style="display:none;"
-													onchange="displayImage(this, 'selectedImage2');">
+												<label for="image2" style="display:none;" id="fileLabel2">
+													<input type="file" id="image2" accept="image/*" style="display:none;"
+														onchange="displayImage(this, 'selectedImage2', 'label3');">
+													<i class="fa fa-picture-o"> Ảnh 2</i>
+												</label>
 												<img id="selectedImage2"
 													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover; margin-right: 5px;">
-												<!-- <button class="btn-delete"
-													onclick="removeImage('selectedImage2', 'image2');">×</button> -->
-												<input type="file" id="image3" accept="image/*" style="display:none;"
-													onchange="displayImage(this, 'selectedImage3');">
+												<label for="image3" style="display:none;" id="fileLabel3">
+													<input type="file" id="image3" accept="image/*" style="display:none;"
+														onchange="displayImage(this, 'selectedImage3', '');">
+													<i class="fa fa-picture-o"> Ảnh 3</i>
+												</label>
 												<img id="selectedImage3"
 													style="display:none; width: 100px; height: 100px; margin-top: 10px; object-fit: cover;">
-												<!-- <button class="btn-delete"
-													onclick="removeImage('selectedImage3', 'image3');">×</button> -->
 											</div>
 										</div>
 									</div>
@@ -254,7 +253,7 @@
 					<hr>
 					<div class="row mt-2">
 						<div class="col-sm-1 text-center">
-							<img src="/asset/user/images/N5.jpg" alt="Hình" class="img-fluid rounded-circle"
+							<img ng-src="{{reviewedOrder.user.image}}" alt="Hình" class="img-fluid rounded-circle"
 								style="width: 50px; object-fit: cover;">
 						</div>
 						<div class="col-sm-10">

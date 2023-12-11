@@ -10,7 +10,27 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 	$scope.userRatings = []
 	$scope.allreviews = []
 	$scope.check = function (product) {
-		$http.get('/rest/favorites/check/' + product.productID)
+		$http.get("/user/Idprofile").then((resp) =>{
+			var userId = resp.data;
+			if (!userId) {
+			  const Toast = Swal.mixin({
+				  toast: true,
+				  position: 'top',
+				  showConfirmButton: false,
+				  timer: 3000,
+				  timerProgressBar: true,
+				  didOpen: (toast) => {
+					  toast.addEventListener('mouseenter', Swal.stopTimer)
+					  toast.addEventListener('mouseleave', Swal.resumeTimer)
+				  }
+			  });
+			  Toast.fire({
+				  icon: 'error',
+				  title: 'Vui lòng đăng nhập để thực hiện thích sản phẩm',
+			  });
+			  return;
+		  }
+			$http.get('/rest/favorites/check/' + product.productID)
 			.then(function (response) {
 				$scope.productbyids = response.data;
 				console.log($scope.productbyids.favoriteId);
@@ -72,7 +92,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 			.catch(function (error) {
 				console.error('Error ' + error);
 			});
-
+		  })
 	}
 
 
@@ -212,7 +232,7 @@ app.controller("favorite-ctrl", function ($scope, $http) {
 	//Phân trang đánh giá sản phẩm
 	$scope.reviewPager = {
 		page: 0,
-		size: 4,
+		size: 5,
 		length: 0,
 		getReviewPageNumbers: function () {
 			var reviewPageCount = this.count;
