@@ -90,4 +90,8 @@ public class FavoriteServiceImpl implements FavoriteService{
         return favoriteDAO.findMostLikedProduct();
     }
     
+    @Override
+    public List<Object[]> getTop5ProductFavorite() {
+        return favoriteDAO.getFavoritesWithTotalLikes();
+    }
 }

@@ -9,6 +9,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 		//load review
 		$http.get("/rest/reviews/loadall").then(resp => {
 			$scope.reviewitems = resp.data;
+			$scope.reviewAll = $scope.reviewitems.length;
 			$scope.reviewitems.forEach(reviewitem => {
 				reviewitem.reviewDate = new Date(reviewitem.reviewDate)
 			})
@@ -33,6 +34,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 	$scope.pager = {
 		page: 0,
 		size: 8,
+		length : 0,
 		getPageNumbers: function () {
 			var pageCount = this.count;
 			var currentPage = this.page + 1;
@@ -58,7 +60,12 @@ app.controller("review-ctrl", function ($scope, $http) {
 			return $scope.reviewitems.slice(start, start + this.size);
 		},
 		get count() {
-			return Math.ceil(1.0 * $scope.reviewitems.length / this.size);
+			// if ($scope.filteredReviews) {
+			// 	length = $scope.filteredReviews.length;
+			// } else {
+				length = $scope.reviewitems.length
+			// }
+			return Math.ceil(1.0 * length / this.size);
 		},
 		first() {
 			this.page = 0;
@@ -116,8 +123,10 @@ app.controller("review-ctrl", function ($scope, $http) {
 		if ($scope.productId) {
 			$scope.usersId = ""
 			$scope.rating = ""
+			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbyproducts/" + $scope.productId).then(resp => {
 				$scope.reviewitems = resp.data;
+				$scope.demSP = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
@@ -141,13 +150,15 @@ app.controller("review-ctrl", function ($scope, $http) {
 		if ($scope.usersId) {
 			$scope.productId = ""
 			$scope.rating = ""
+			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbyusers/" + $scope.usersId).then(resp => {
 				$scope.reviewitems = resp.data;
+				$scope.demND = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
 						title: 'Thất bại',
-						text: 'Không tìm thấy người dùng phù hợp. Vui lòng chọn lại!',
+						text: 'Không tìm thấy khách hàng phù hợp. Vui lòng chọn lại!',
 					});
 					$scope.initialize();
 					$scope.usersId = ""
@@ -166,8 +177,10 @@ app.controller("review-ctrl", function ($scope, $http) {
 		if ($scope.rating) {
 			$scope.productId = ""
 			$scope.usersId = ""
+			$scope.dateFilter = ""
 			$http.get("/rest/reviews/loadbystar/" + $scope.rating).then(resp => {
 				$scope.reviewitems = resp.data;
+				$scope.demStar = $scope.reviewitems.length
 				if($scope.reviewitems.length == 0){
 					Swal.fire({
 						icon: 'error',
@@ -246,7 +259,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 	$scope.sortableColumns = [
 		{ name: 'orderDetail.orderDetailId', label: 'Mã đơn hàng' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
-		{ name: 'user.fullName', label: 'Tên người dùng' },
+		{ name: 'user.fullName', label: 'Tên khách hàng' },
 		{ name: 'title', label: 'Nội dung' },
 		{ name: 'rating', label: 'Sao đánh giá' },
 		{ name: 'reviewDate', label: 'Ngày đánh giá' },
@@ -299,7 +312,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 
-	$('.export').click(function () {
+	$('.exportExcel').click(function() {
 
 		let timerInterval
 		Swal.fire({
@@ -322,48 +335,42 @@ app.controller("review-ctrl", function ($scope, $http) {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
 				console.log('I was closed by the timer')
+
 				//code xuất file
-				var table2excel = new Table2Excel();
-				table2excel.export(document.querySelectorAll("table.table"));
+				$scope.exportExcel();
 			}
+
 		})
+
 	});
 
-	$('.pdf-file').click(function () {
-		let timerInterval
-		Swal.fire({
-			icon: 'info',
-			title: 'Đang xuất file',
-			html: 'Cần phải chờ trong <b></b>s.',
-			timer: 2000,
-			timerProgressBar: true,
-			didOpen: () => {
-				Swal.showLoading()
-				const b = Swal.getHtmlContainer().querySelector('b')
-				timerInterval = setInterval(() => {
-					b.textContent = Swal.getTimerLeft()
-				}, 100)
-			},
-			willClose: () => {
-				clearInterval(timerInterval)
-			}
-		}).then((result) => {
-			/* Read more about handling dismissals below */
-			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log('I was closed by the timer')
-				//code xuất file
-				var elment = document.getElementById('sampleTable');
-				var opt = {
-					margin: 0.5,
-					filename: 'myfilepdf.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				};
-				html2pdf(elment, opt);
-			}
+	$scope.exportPdf = function () {
+		$http({
+		  method: "POST",
+		  url: "/review-pdf",
+		  data: $scope.reviewitems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
 		})
-	});
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+			var blob = new Blob([response.data], { type: "application/pdf" });
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ a để tải xuống tệp PDF
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "Review.pdf";
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất PDF thất bại:", error);
+		});
+	};
 
 	var myApp1 = new function () {
 		this.printTable = function () {
@@ -375,5 +382,116 @@ app.controller("review-ctrl", function ($scope, $http) {
 		}
 
 	}
+
+	$scope.exportExcel = function () {
+		$http({
+		  method: "POST",
+		  url: "/export-excelReview", // Thay thế với URL phía máy chủ đúng
+		  data: $scope.reviewitems,
+		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		})
+		  .then(function (response) {
+			// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+			var blob = new Blob([response.data], {
+			  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			});
+			var url = URL.createObjectURL(blob);
+	
+			// Tạo một thẻ <a> để tải xuống tệp Excel
+			var a = document.createElement("a");
+			a.href = url;
+			a.download = "ReviewStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+		  })
+		  .catch(function (error) {
+			console.error("Xuất ra Excel thất bại:", error);
+		  });
+	  };
+
+	  $('.exportPdf').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportPdf();
+			}
+
+		})
+
+	});
+
+	$scope.applyDateFilter = function() {
+		$scope.productId = ""
+		$scope.usersId = ""
+		$scope.rating = ""
+		var today = new Date();
+		var filter = $scope.dateFilter;
+	
+		if (filter === 'today') {
+			// Lọc theo hôm nay
+			$scope.filteredReviews = $scope.reviewitems.filter(function(review) {
+				var reviewDate = new Date(review.reviewDate);
+				return reviewDate.toDateString() === today.toDateString();
+			});
+		} else if (filter === 'thisWeek') {
+			// Lọc theo tuần này
+			var startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+			var endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+	
+			$scope.filteredReviews = $scope.reviewitems.filter(function(review) {
+				var reviewDate = new Date(review.reviewDate);
+				return reviewDate >= startOfWeek && reviewDate <= endOfWeek;
+			});
+		} else if (filter === 'thisMonth') {
+			// Lọc theo tháng này
+			var startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+			var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+	
+			$scope.filteredReviews = $scope.reviewitems.filter(function(review) {
+				var reviewDate = new Date(review.reviewDate);
+				return reviewDate >= startOfMonth && reviewDate <= endOfMonth;
+			});
+		} else if (filter === 'thisYear') {
+			// Lọc theo năm nay
+			var startOfYear = new Date(today.getFullYear(), 0, 1);
+			var endOfYear = new Date(today.getFullYear(), 11, 31);
+	
+			$scope.filteredReviews = $scope.reviewitems.filter(function(review) {
+				var reviewDate = new Date(review.reviewDate);
+				return reviewDate >= startOfYear && reviewDate <= endOfYear;
+			});
+		} else {
+			// Hiển thị tất cả đánh giá nếu không có bộ lọc được chọn
+			$scope.filteredReviews = $scope.reviewitems;
+		}
+		$scope.pager.first();
+	};	
+
+	$scope.applyDateFilter()
 
 })

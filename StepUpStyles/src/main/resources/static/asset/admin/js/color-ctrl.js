@@ -580,7 +580,7 @@ app.controller("color-ctrl", function($scope, $http) {
 		$http({
 		  method: "POST",
 		  url: "/color-pdf",
-		  data: $scope.sizeitems,
+		  data: $scope.coloritems,
 		  responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
 		  headers: {
 			"Content-Type": "application/json",

@@ -31,7 +31,12 @@ public interface FavoriteDAO extends JpaRepository<Favorite, Integer>{
 
     @Query("SELECT f.product.productName, COUNT(f.product.productName) " +
            "FROM Favorite f " +
-           "GROUP BY f.product.productID, f.product.productName " +
+           "GROUP BY f.product.productName " +
            "ORDER BY COUNT(f.product.productName) DESC")
     List<Object[]> findMostLikedProduct();
+
+    @Query("SELECT f, (SELECT COUNT(*) FROM Favorite f2 WHERE f2.product.productID = f.product.productID) AS totalLikes " +
+           "FROM Favorite f " +
+           "ORDER BY totalLikes DESC")
+    List<Object[]> getFavoritesWithTotalLikes();
 }

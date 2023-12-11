@@ -8,7 +8,7 @@
 
 				<div class="d-flex">
 					<!-- Thẻ select box -->
-					<div class="col-sm-3">
+					<div class="col-sm-4">
                         <label for="productName" style="font-size: 15px">Tên sản phẩm:</label>
                         <select class="form-control mr-1 select2" ng-model="productId" id="productName" ng-change="filterByProduct()"
                             style="width: 200px; margin-bottom: 10px">
@@ -16,15 +16,15 @@
                             <option ng-repeat="product in prods" value="{{product.productID}}">{{product.productName}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-3">
-                        <label for="userId">Người dùng:</label>
+                    <div class="col-sm-4">
+                        <label for="userId">Tên khách hàng:</label>
                         <select class="form-control mr-1" ng-model="usersId" id="userId" ng-change="filterByUser()"
                         style="width: 200px; margin-bottom: 10px">
-                            <option value="">Chọn người dùng</option>
+                            <option value="">Chọn khách hàng</option>
                             <option ng-repeat="user in users" value="{{user.usersId}}">{{user.fullName}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="rating">Sao đánh giá:</label>
                         <select class="form-control mr-1" ng-model="rating" id="rating" ng-change="filterByStar()">
                             <option value="">Chọn sao</option>
@@ -35,7 +35,7 @@
                             <option value="5">5 sao</option>
                         </select>
                     </div>
-					<div class="col-sm-3">
+					<!-- <div class="col-sm-3">
 						<label for="dateFilter">Lọc theo:</label>
 						<select class="form-control" ng-model="dateFilter" id="dateFilter"
 								ng-change="applyDateFilter()">
@@ -45,25 +45,33 @@
 							<option value="thisMonth">Tháng này</option>
 							<option value="thisYear">Năm nay</option>
 						</select>
-					</div>
-                    <div class="col-sm-3 template-demo mt-3"  >
-                        <!-- <button ng-click="searchReviews()" class="btn btn-primary">Tìm kiếm</button> -->
-                        <!-- <button ng-click="reset()" class="btn btn-primary">Đặt lại</button> -->
+					</div> -->
+                    <div class="col-sm-4 template-demo mt-3"  >
 						<button type="button"
-						class="btn btn-outline-success btn-fw mr-2 export"
+						class="btn btn-outline-success btn-fw mr-2 exportExcel"
 						data-toggle="tooltip" title="Xuất file Excel">
 						<span class="fa fa-file-excel-o" aria-hidden="true"></span>
 						</button>
 						<button type="button"
-							class="btn btn-outline-danger btn-fw mr-2 pdf-file"
+							class="btn btn-outline-danger btn-fw mr-2 exportPdf"
 							data-toggle="tooltip" title="Xuất file PDF">
 							<span class="fa fa-file-pdf-o" aria-hidden="true"></span>
 						</button>
                     </div>					
 				</div>
 			</div>
-
-			<table class="table table-hover" id="sampleTable">
+			<hr>
+			<div class="row ml-2 mt-3 mb-3">
+				<div class="col-sm-2">
+					<p>Số đánh giá: <strong>{{reviewAll}}</strong></p>
+				</div>
+				<!-- <div class="col-sm-2">
+					<p ng-show="demSP > 0">Số sản phẩm: <strong>{{demSP}}</strong></p>
+					<p ng-show="demND > 0">Số khách hàng: <strong>{{demND}}</strong></p>
+					<p ng-show="demStar > 0">Số sao đánh giá: <strong>{{demStar}}</strong></p>
+				</div>					 -->
+			</div>
+			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th ng-repeat="column in sortableColumns"
@@ -194,7 +202,10 @@
 						</div>
 					</div>
 					<div class="row">
-						<h4 class="mb-2 ml-3"><strong>Ảnh sản phẩm từ người dùng:</strong></h4>
+						<h4 class="mb-2 ml-3"><strong>Ảnh sản phẩm từ khách hàng:</strong></h4>
+						<div class="d-flex col-sm-12" ng-if="!reviewdetails.image1 && !reviewdetails.image2 && !reviewdetails.image3">
+							<p>Không có ảnh từ khách hàng</p>
+						</div>
 						<div class="d-flex col-sm-12">
 							<div class="mr-5">
 								<div ng-if="reviewdetails.image1">
