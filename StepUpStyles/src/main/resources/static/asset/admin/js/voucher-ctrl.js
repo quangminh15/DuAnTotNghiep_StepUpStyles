@@ -7,8 +7,6 @@ app.controller("voucher-ctrl", function($scope, $http){
 	$scope.editModeAdd = false;
 	$scope.editModeDelete = true;
 
-	CKEDITOR.replace('description');
-
     $scope.sortableColumns = [
         { name: 'total', label: 'Đơn hàng tối thiểu' },
 		{ name: 'discountAmount', label: 'Mức giảm (%)' },
@@ -105,12 +103,6 @@ app.controller("voucher-ctrl", function($scope, $http){
 
 	//	Xóa form
 	$scope.reset = function () {
-		var ckeditor = CKEDITOR.instances.description;
-
-		if (ckeditor) {
-			ckeditor.setData('');
-		}
-
 		$scope.form = {
 		};
 		$scope.editModeUpdate = true;
@@ -127,8 +119,6 @@ app.controller("voucher-ctrl", function($scope, $http){
 		$scope.form.dateStart = new Date($scope.form.dateStart);
 		$scope.form.dateEnd = new Date($scope.form.dateEnd);
 		$scope.form.discountAmount = $scope.form.discountAmount;
-		// Cập nhật giá trị CKEditor
-		CKEDITOR.instances.description.setData($scope.form.description);
 		$scope.editModeUpdate = false;
 		$scope.editModeAdd = true;
 		$scope.editModeDelete = false;
@@ -220,9 +210,6 @@ app.controller("voucher-ctrl", function($scope, $http){
 		// 	});
 		// 	return;
 		// }
-
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData().trim();
 
 		if (!$scope.form.description) {
 			Swal.fire({
@@ -327,8 +314,7 @@ app.controller("voucher-ctrl", function($scope, $http){
 			return;
 		}
 
-		var descriptionEditor = CKEDITOR.instances.description;
-		$scope.form.description = descriptionEditor.getData();
+		
 
 		//format date
 		var dynamicDateValueS = $scope.form.dateStart;
