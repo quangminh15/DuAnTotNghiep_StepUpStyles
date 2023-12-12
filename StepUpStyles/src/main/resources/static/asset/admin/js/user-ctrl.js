@@ -31,7 +31,7 @@ app.controller("user-ctrl", function($scope, $http) {
 		$scope.form = {
 			  userID: 0,
 			  address: "",
-			  dateOfBirth: null,
+			  birthday: null,
 			  email: "",
 			  fullName: "",
 			  gender: false,
@@ -53,11 +53,33 @@ app.controller("user-ctrl", function($scope, $http) {
 	//	Hiển thị lên form
 	$scope.edit = function(user) {
 		$scope.form = angular.copy(user);
-		var formattedDate = moment($scope.form.dateOfBirth).format("yyyy-MM-DD");
-         //       $scope.form.dateOfBirth = formattedDate;
-                $scope.form.dateOfBirth = new Date(formattedDate);
+		$scope.form.birthday = $scope.convertDateFormat($scope.form.birthday);
+		console.log("cc :"+$scope.form.birthday);
 	}
-	
+
+	// convertDateFormat
+	$scope.convertDateFormat = function(input) {
+		if (!input) return '';
+		var date = new Date(input);
+		var formattedDate =
+			('0' + date.getDate()).slice(-2) +
+			'/' +
+			('0' + (date.getMonth() + 1)).slice(-2) +
+			'/' +
+			date.getFullYear();
+		return formattedDate;
+	};
+
+
+	$scope.changeDateFormat = function() {
+		var originalDate = new Date($scope.form.birthday);
+		if (!isNaN(originalDate.getTime())) {
+			var formattedDate = ('0' + (originalDate.getMonth() + 1)).slice(-2) + '/' + ('0' + originalDate.getDate()).slice(-2) + '/' + originalDate.getFullYear();
+			$scope.form.birthday = formattedDate;
+		}
+	};
+
+
 
 	//	Thêm sản phẩm mới 
 	$scope.create = function() {
