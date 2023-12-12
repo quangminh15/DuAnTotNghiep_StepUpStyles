@@ -55,4 +55,7 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
 
     @Query("SELECT u FROM User u WHERE u.role = 'CUSTOMER'")
     List<User> getUserByRoleUser();
+
+    @Query("SELECT r FROM Review r WHERE r.product.productName LIKE %:keyword%")
+    List<Review> searchTextProduct(@Param("keyword") String keyword);
 }

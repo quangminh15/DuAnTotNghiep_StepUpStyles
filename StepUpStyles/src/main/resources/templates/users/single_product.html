@@ -321,10 +321,10 @@
 					</div>
 				</div>
 				<!--Linh hiển thị sản phẩm vừa xem-->
-				<h3 class="hny-title mt-5 mb-5 text-center" ng-if="recentlyViewedProducts">
-					SẢN PHẨM <span>BẠN VỪA XEM</span>
+				<h3 class="hny-title mt-5 mb-5 text-center" ng-show="!userId">
+					SẢN PHẨM <span>BẠN ĐÃ XEM</span>
 				</h3>
-				<div class="ecom-products-grids row">
+				<div class="ecom-products-grids row text-center justify-content-center">
 					<div ng-repeat="p in recentlyViewedProducts"
 						class="col-lg-2 col-6 product-incfhny mb-4">
 						<div class="product-grid2 transmitv"

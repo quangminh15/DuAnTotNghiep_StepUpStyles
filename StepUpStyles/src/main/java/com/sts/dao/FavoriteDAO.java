@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.sts.model.Favorite;
 import com.sts.model.Product;
-import com.sts.model.Review;
 import com.sts.model.User;
 
 public interface FavoriteDAO extends JpaRepository<Favorite, Integer>{
@@ -39,4 +38,7 @@ public interface FavoriteDAO extends JpaRepository<Favorite, Integer>{
            "FROM Favorite f " +
            "ORDER BY totalLikes DESC")
     List<Object[]> getFavoritesWithTotalLikes();
+
+    @Query("SELECT f FROM Favorite f WHERE f.product.productName LIKE %:keyword%")
+    List<Favorite> searchTextProduct(@Param("keyword") String keyword);
 }
