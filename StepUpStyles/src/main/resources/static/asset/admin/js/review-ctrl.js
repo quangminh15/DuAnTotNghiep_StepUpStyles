@@ -5,6 +5,7 @@ app.controller("review-ctrl", function ($scope, $http) {
 	$scope.form = {};
 	$scope.reviewdetails = {}
 	$scope.showSelectBoxEmptyWarning = false;
+	$scope.reviewitemSearchs = []
 	$scope.initialize = function () {
 		//load review
 		$http.get("/rest/reviews/loadall").then(resp => {
@@ -494,4 +495,21 @@ app.controller("review-ctrl", function ($scope, $http) {
 
 	$scope.applyDateFilter()
 
+	$scope.searchProductName = function(){
+		if ($scope.keySearch && $scope.keySearch.trim() !== "") {
+			$http.get("/rest/reviews/searchProductName", {
+				params: { keyword: $scope.keySearch }
+			}).then(resp => {
+				$scope.reviewitems = resp.data;
+				$scope.pager.first();
+			}).catch(error => {
+				console.log("Error", error);
+				$scope.pager.first();
+			});
+		}else {
+			// Nếu không có từ khóa tìm kiếm, hiển thị tất cả danh mục
+			$scope.initialize();
+		}
+	}
+	
 })
