@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.Favorite;
@@ -85,4 +86,12 @@ public class FavoriteRestController {
 	public List<Object[]> getTop1() {
 		return favoriteService.getTop1ProductFavorite();
 	}
+	@GetMapping("/rest/favorites/top5product")
+	public List<Object[]> getTop5() {
+		return favoriteService.getTop5ProductFavorite();
+	}
+	@GetMapping("/rest/favorites/searchProductName")
+    public List<Favorite> getProductNameSearch(@RequestParam("keyword") String keyword) {
+        return favoriteService.searchProductName(keyword);
+    }
 }

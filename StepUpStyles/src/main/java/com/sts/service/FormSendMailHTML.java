@@ -457,7 +457,8 @@ public class FormSendMailHTML {
         return x;
     }
 
-    public static String sendHTMLWhenndHTMLWhenOrder(String code, String name) {
+
+    public static String sendHTMLWhenCreateOrder( String name) {
         String x = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n"
                 + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\r\n"
                 + "\r\n"
@@ -727,7 +728,7 @@ public class FormSendMailHTML {
                 + "\r\n"
                 + "\r\n"
                 + "                                        <div style=\"line-height: 26px;\">\r\n"
-                + "                                            <b style=\"color: #ffffff; text-decoration: none;\">"+code+"</b>\r\n"
+                + "                                            <b style=\"color: #ffffff; text-decoration: none;\"></b>\r\n"
                 + "                                        </div>\r\n"
                 + "                                    </td>\r\n"
                 + "                                </tr>\r\n"

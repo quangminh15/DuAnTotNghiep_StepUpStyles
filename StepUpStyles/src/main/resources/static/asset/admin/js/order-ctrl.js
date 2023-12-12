@@ -102,7 +102,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					} else {
 						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
 						
-						if ((statusPriorityA==3 && statusPriorityB==3 )|| (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
+						if (statusPriorityA==3 || statusPriorityB==3 ) {
 							
 							return new Date(a.orderDate) - new Date(b.orderDate);
 						}else{
@@ -458,7 +458,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					} else {
 						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
 						
-						if ((statusPriorityA==3 && statusPriorityB==3 )|| (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
+						if (statusPriorityA==3 || statusPriorityB==3 ) {
 							
 							return new Date(b.orderDate) - new Date(a.orderDate);
 						}else{

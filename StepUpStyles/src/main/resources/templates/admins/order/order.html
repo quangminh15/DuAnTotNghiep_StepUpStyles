@@ -1,4 +1,50 @@
 <div class="content-wrapper">
+	<style>
+		 .badge-primary:hover{
+			color: #4B49AC !important;
+			border: 2px solid #4B49AC;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		} .badge-success:hover{
+			color: #57B657 !important;
+			border: 2px solid #57B657;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		} .badge-danger:hover{
+			color: #FF4747 !important;
+			border: 2px solid #FF4747;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		} .badge-warning:hover{
+			color: #FFC100 !important;
+			border: 2px solid #FFC100;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		} .badge-info:hover{
+			color: #248AFD !important;
+			border: 2px solid #248AFD;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		} .badge-secondary:hover{
+			color: #a3a4a5 !important;
+			border: 2px solid #a3a4a5;
+			background-color: #fff;
+			transition: ease-in-out 0.5s;
+			/* background-color: #fff; */
+		}
+		
+		.badge{
+			color: #fff !important;
+			border: 2px solid #fff;
+		}
+		
+	</style>
 	<div class="card"
 		style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
 		<div class="card-header bg-primary rounded-top">
@@ -7,7 +53,7 @@
 		</div>
 		<div class="card-body" style="text-align: center;">
 			<div class="d-flex justify-content-between align-items-center">
-				<button class="border-0 card-title d-flex py-3 badge badge-secondary text-white font-weight-bolder" ng-click="filterByStatus('all')">
+				<button class=" card-title d-flex py-3 badge badge-secondary text-white font-weight-bolder" ng-click="filterByStatus('all')">
 					<i class="ti-package mr-1"></i>
 					<span >
 						Tổng số Đơn hàng : {{allOrders.length}}
@@ -15,17 +61,14 @@
 					</span>
 
 				</button>
-				<button class="border-0 card-title d-flex py-3  badge badge-primary text-white font-weight-bolder"ng-click="filterByStatus('pending')" >
+				<button class=" card-title d-flex py-3  badge badge-primary font-weight-bolder "  ng-click="filterByStatus('pending')" >
 					<!-- Thẻ select box -->
 					<i class="fa fa-hourglass-2 mr-1"></i>
-					<span >
 						
 						Chờ xác nhận : {{ordersPending}}
 
-					</span>
-
 				</button>
-				<button class="border-0 card-title d-flex py-3  badge badge-info text-white font-weight-bolder" ng-click="filterByStatus('confirmed')">
+				<button class=" card-title d-flex py-3  badge badge-info text-white font-weight-bolder" ng-click="filterByStatus('confirmed')">
 					
 					<i class="fa fa-check-square-o mr-1"></i>
 					<span >
@@ -34,21 +77,21 @@
 					</span>
 
 				</button>
-				<button class="border-0 card-title d-flex py-3  badge badge-warning text-white font-weight-bolder"ng-click="filterByStatus('shipping')">
+				<button class=" card-title d-flex py-3  badge badge-warning text-white font-weight-bolder"ng-click="filterByStatus('shipping')">
 					<i class="fa fa-truck mr-1"></i>
 					<span >
 						Đang  giao : {{ordersShipping}}
 
 					</span>
 
-				</button><button class="border-0 card-title d-flex py-3  badge badge-success text-white font-weight-bolder"ng-click="filterByStatus('shipped')">
+				</button><button class=" card-title d-flex py-3  badge badge-success text-white font-weight-bolder"ng-click="filterByStatus('shipped')">
 						<i class="fa fa-inbox mr-1"></i>
 					<span >
 						Đã giao : {{ordersDelivered}}
 					</span>
 
 				</buttonv>
-				<button class="border-0 card-title d-flex py-3  badge badge-danger text-white font-weight-bolder"ng-click="filterByStatus('cancel')">
+				<button class=" card-title d-flex py-3  badge badge-danger text-white font-weight-bolder"ng-click="filterByStatus('cancel')">
 					<!-- Thẻ select box -->
 					<i class="fa fa-times-circle-o mr-1"></i>
 					<span >

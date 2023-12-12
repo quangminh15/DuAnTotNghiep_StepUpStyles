@@ -168,5 +168,10 @@ public class ReviewServiceImpl implements ReviewService{
     public List<User> getUserRoleUser() {
         return reviewDAO.getUserByRoleUser();
     }
+
+    @Override
+    public List<Review> searchProductName(String keyword) {
+        return reviewDAO.searchTextProduct(keyword);
+    }
     }    
     

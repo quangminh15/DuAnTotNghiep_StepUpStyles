@@ -7,6 +7,9 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	$scope.form.directdiscounts = {};
 	$scope.errorMessage = '';
 	$scope.selectedItems = [];
+	$scope.editModeUpdate = true;
+	$scope.editModeAdd = false;
+	$scope.editModeDelete = true;
 
 	$scope.sortableColumns = [
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
@@ -279,6 +282,9 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 	$scope.reset = function () {
 		$scope.form = {
 		};
+		$scope.editModeUpdate = true;
+		$scope.editModeAdd = false;
+		$scope.editModeDelete = true;
 	}
 	
 	//	Khởi đầu
@@ -290,12 +296,17 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 		$scope.form = angular.copy(ddI);
 		$scope.form.startDate = new Date($scope.form.startDate);
 		$scope.form.endDate = new Date($scope.form.endDate);
-		$scope.form.directDiscount = $scope.form.directDiscount
+		$scope.form.directDiscount = $scope.form.directDiscount;
+
+		$scope.editModeUpdate = false;
+		$scope.editModeAdd = true;
+		$scope.editModeDelete = false;
 	}
 
 
 	//	Thêm mới 
 	$scope.create = function () {
+		$scope.editModeAdd = false;
 		//Không chọn sản phẩm
 		if (!$scope.form.product || !$scope.form.product.productID) {
 			Swal.fire({
@@ -433,6 +444,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 
 	//	Cập nhật  
 	$scope.update = function () {
+		$scope.editModeUpdate = true;
 		//Không chọn sản phẩm
 		if (!$scope.form.directDiscount) {
 			Swal.fire({

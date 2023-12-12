@@ -31,7 +31,7 @@ public class PDFImportRestController {
             throws IOException, DocumentException {
         // Thiết lập response để trình duyệt hiểu rằng sẽ nhận tệp PDF
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=PhieuNhapStepUpStyle.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=PhieuNhapFourshoe.pdf");
 
         // Tạo một đối tượng Document của iText
         Document document = new Document();
@@ -94,7 +94,7 @@ public class PDFImportRestController {
         // tên cửa hàng
         Paragraph titleImport = new Paragraph();
         // Font vietnameseFont = new Font(baseFont, 22, Font.BOLD);
-        Chunk titChunk = new Chunk("STEP UP STYLE");
+        Chunk titChunk = new Chunk("FOURSHOE");
         titleImport.setAlignment(Element.ALIGN_LEFT);
         titleImport.add(titChunk);
 

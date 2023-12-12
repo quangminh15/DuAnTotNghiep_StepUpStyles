@@ -132,4 +132,9 @@ public class ReviewRestController {
     public List<User> getUserRoleUsers() {
         return reviewService.getUserRoleUser();
     }
+    @GetMapping("/rest/reviews/searchProductName")
+    public List<Review> getProductNameSearch(@RequestParam("keyword") String keyword) {
+        return reviewService.searchProductName(keyword);
+    }
+    
 }

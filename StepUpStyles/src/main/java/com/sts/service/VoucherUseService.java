@@ -14,4 +14,6 @@ public interface VoucherUseService {
 
     Boolean isVoucherSaved(Integer userId, Long voucherId);
 
+    void updateVoucherSave();
+
 }
