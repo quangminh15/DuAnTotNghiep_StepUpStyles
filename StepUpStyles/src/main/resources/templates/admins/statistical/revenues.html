@@ -1,28 +1,29 @@
 <style>
-/* CSS cho table */
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+	/* CSS cho table */
+	.table {
+		width: 100%;
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
 
-/* CSS cho các hàng chẵn */
-tr:nth-child(even) {
-	background-color: #f2f2f2;
-}
+	/* CSS cho các hàng chẵn */
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
 
-/* CSS cho header của bảng */
-.table th {
-	background-color: #4CAF50;
-	color: white;
-	text-align: left;
-}
+	/* CSS cho header của bảng */
+	.table th {
+		background-color: #4CAF50;
+		color: white;
+		text-align: left;
+	}
 
-/* CSS cho các ô trong bảng */
-.table td, .table th {
-	padding: 12px 15px;
-	border-bottom: 1px solid #ddd;
-}
+	/* CSS cho các ô trong bảng */
+	.table td,
+	.table th {
+		padding: 12px 15px;
+		border-bottom: 1px solid #ddd;
+	}
 </style>
 <div class="content-wrapper">
 	<div class="row">
@@ -40,254 +41,254 @@ tr:nth-child(even) {
 		</div>
 
 		<div class="col-md-6">
-			<div class="card mb-5" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
-				<div class="rounded-top bg-primary card-header card-header-divider d-flex justify-content-between align-items-center">
-					<span class="title text-white">Thống kê doanh thu năm <span class="font-weight-bolder">{{presentYear}}</span></span> 
-					
+			<div class="card mb-5"
+				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+				<div
+					class="rounded-top bg-primary card-header card-header-divider d-flex justify-content-between align-items-center">
+					<span class="title text-white">Thống kê doanh thu năm <span
+							class="font-weight-bolder">{{presentYear}}</span></span>
+
 				</div>
 				<div class="card-body">
 					<canvas id="monthlyChart" width="400" height="200"></canvas>
 				</div>
 			</div>
 		</div>
-		
+
+	</div>
+	<div class="row d-flex justify-content-center">
+		<div class="card"
+			style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; width: 97%;">
+			<div class="rounded-top bg-primary card-header card-header-divider">
+				<span class="title text-white">Danh sách đơn hàng trong năm <span
+						class="font-weight-bolder">{{presentYear}}</span></span>
 			</div>
-			<div class="row d-flex justify-content-center">
-				<div class="card"
-				style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; width: 97%;">
-				<div class="rounded-top bg-primary card-header card-header-divider">
-					<span class="title text-white">Danh sách đơn hàng trong năm <span class="font-weight-bolder">{{presentYear}}</span></span>
-				</div>
-				<div class="card-body ">
-					<table class="table table-hover" id="sampleTable">
-						<thead>
-							<tr>
-								<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{ column.label
-									}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
-											class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
-											class="mdi mdi-long-arrow-up"></span>
-									</span>
-								</th>
-								<th class="actions"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="order in pager.filteredOrders">
-								<td>{{$index +1}}</td>
-								<td>{{order.shippingAddress.nameReceiver}} </td>
-								<td>{{order.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
-								<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
-								<td>{{order.totalAmount | number: 0 }} đ</td>
-								<td>{{order.paymentMenthod.paymentMenthodName }} <button
-										class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
-										data-placement="top" title="Thanh Toán Khi Nhận Hàng"
-										ng-if="order.paymentMenthod.paymentMenthodName==='COD'">!</button></td>
-								<td>
-								<div class="badge badge-primary " ng-if="order.orderStatus === 'Pending'">Chờ xác nhận</div>
-								<div class="badge badge-info " ng-if="order.orderStatus === 'Confirmed'">Đã xác nhận</div>
-								<div class="badge badge-warning " ng-if="order.orderStatus === 'Shipping'">Đang giao</div>
-								<div class="badge badge-success " ng-if="order.orderStatus === 'Delivered'">Đã giao</div>
-								<div class="badge badge-danger " ng-if="order.orderStatus === 'Cancel'">Đã Hủy</div>
-									
-		
-		
-								</td>
-								<td class="actions">
-									<button ng-click="viewDetail(order.orderId)"
-										class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="modal"
-										data-target=".bd-example-modal-xl">
-										<i class="ti-eye"></i>
-									</button>
-									
-								</td>
-							</tr>
-		
-						</tbody>
-					</table>
-					<div class="d-flex justify-content-end">
-						<div>
-							<ul class="pagination">
-								<li class="page-item">
-									<button ng-click="pager.first()" class="page-link">
-										<span class="ti-angle-double-left"></span>
-									</button>
-								</li>
-		
-								<li class="page-item" ng-repeat="page in visiblePages"
-									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
-									class="page-link" href="" ng-click="pager.goto(page.value)">{{
-										page.value }}</a></li>
-		
-								<li class="page-item">
-									<button ng-click="pager.last()" class="page-link">
-										<span class="ti-angle-double-right"></span>
-									</button>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-
-					<!-- modal chi tiêt đơn hàng -->
-					<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
-				aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-xl">
-					<div class="modal-content">
-						<div class="container py-md-3 ">
-							<div class="card">
-								<h3 class="card-header bg-primary text-white text-left">Đơn hàng #{{singleOrder.orderId}}</h3>
-								
-								<div class="card-body text-left row">
-									
-									<div class="col-md-2">
-										
-										<img class="rounded-pill" width="80%" src="https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid4.jpg?alt=media&amp;token=127d7bd7-808d-407a-8fbc-11a1f697f21c" alt="">
-									</div>
-									<div class="col-md-4">
-										<p>Khách hàng:</p>
-										<div class="d-flex">
-											<span class="mr-1">Họ và tên: </span><h4> {{singleOrder.user.fullName}}</h4>
-
-										</div>
-										<div class="d-flex">
-											<span class="mr-1">Số điện thoại: </span><h4> {{singleOrder.user.phone}}</h4>
-
-										</div>
-										<div class="d-flex">
-											<span class="mr-1">Email: </span><h4> {{singleOrder.user.email}}</h4>
-
-										</div>
-										
-									</div>
-									<div class="col-md-6">
-										<h3>Trạng thái đơn hàng:</h3>
-										<div class="dropdown " >
-											<button class="font-weight-bolder btn btn-danger" ng-if=" singleOrder.orderStatus === 'Cancel'">
-												Đã Hủy</button>
-											<button class="font-weight-bolder btn btn-success" ng-if=" singleOrder.orderStatus === 'Delivered'">
-												Đã Giao</button>
-											<button ng-if=" singleOrder.orderStatus !== 'Cancel' && singleOrder.orderStatus !== 'Delivered'"
-												class="font-weight-bolder btn dropdown-toggle" type="button" id="dropdownMenuLink"
-												data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-class="{
-												'bg-primary': singleOrder.orderStatus === 'Pending',
-												'bg-info': singleOrder.orderStatus === 'Confirmed',
-												'bg-secondary': singleOrder.orderStatus === 'Shipping',
-											  }" style="color: white;">
-												<span ng-if="singleOrder.orderStatus === 'Pending'">Chờ xác nhận</span>
-												<span ng-if="singleOrder.orderStatus === 'Confirmed'">Đã xác nhận</span>
-												<span ng-if="singleOrder.orderStatus === 'Shipping'">Đang giao</span>
-												<span ng-if="singleOrder.orderStatus === 'Delivered'">Đã giao</span>
-												<span ng-if="singleOrder.orderStatus === 'Cacel'">Đã Hủy</span>
-											</button>
-			
-											<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"
-												style="padding: 0 !important; ;">
-			
-												<button class="dropdown-item" style="color: black; padding:1rem !important; "
-													ng-if="singleOrder.orderStatus === 'Pending'"
-													ng-click="updateStatus(singleOrder.orderId,'Cancel')">
-													Hủy Đơn
-												</button>
-												<button class="dropdown-item"
-													style="color: black;width:100% ;padding:1rem !important; "
-													ng-if="singleOrder.orderStatus === 'Pending'"
-													ng-click="updateStatus(singleOrder.orderId,'Confirmed')">
-													Xác Nhận Đơn hàng
-												</button>
-												<button class="dropdown-item" style="color: black;padding:1rem !important;"
-													ng-if="singleOrder.orderStatus === 'Confirmed'"
-													ng-click="updateStatus(singleOrder.orderId,'Shipping')">
-													Vận Chuyển
-												</button>
-												<button class="dropdown-item" style="color: black;padding:1rem !important;"
-													ng-if="singleOrder.orderStatus === 'Shipping'"
-													ng-click="updateStatus(singleOrder.orderId,'Delivered')">
-													Đã Giao 
-												</button>
-			
-												<!-- Add other status items here -->
-											</div>
-										</div>
-									</div>
-								  
+			<div class="card-body ">
+				<table class="table table-hover" id="sampleTable">
+					<thead>
+						<tr>
+							<th ng-repeat="column in sortableColumns" ng-click="sortByColumn(column.name)">{{
+								column.label
+								}} <span ng-if="sortColumn === column.name"> <span ng-if="sortReverse"
+										class="mdi mdi-long-arrow-down"></span> <span ng-if="!sortReverse"
+										class="mdi mdi-long-arrow-up"></span>
+								</span>
+							</th>
+							<th class="actions"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="order in pager.filteredOrders">
+							<td>{{$index +1}}</td>
+							<td>{{order.shippingAddress.nameReceiver}} </td>
+							<td>{{order.orderDate | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+							<td>{{order.paymentStatus?"Đã thanh toán" : "Chưa thanh toán"}}</td>
+							<td>{{order.totalAmount | number: 0 }} đ</td>
+							<td>{{order.paymentMenthod.paymentMenthodName }} <button
+									class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="tooltip"
+									data-placement="top" title="Thanh Toán Khi Nhận Hàng"
+									ng-if="order.paymentMenthod.paymentMenthodName==='COD'">!</button></td>
+							<td>
+								<div class="badge badge-primary " ng-if="order.orderStatus === 'Pending'">Chờ xác nhận
 								</div>
-							  </div>
-							<div class=" row d-flex justify-content-center mb-2">
-						
+								<div class="badge badge-info " ng-if="order.orderStatus === 'Confirmed'">Đã xác nhận
+								</div>
+								<div class="badge badge-warning " ng-if="order.orderStatus === 'Shipping'">Đang giao
+								</div>
+								<div class="badge badge-success " ng-if="order.orderStatus === 'Delivered'">Đã giao
+								</div>
+								<div class="badge badge-danger " ng-if="order.orderStatus === 'Cancel'">Đã Hủy</div>
 
-									<div class="card col-md-6" >
+
+
+							</td>
+							<td class="actions">
+								<button ng-click="viewDetail(order.orderId)"
+									class="btn btn-inverse-primary btn-rounded btn-icon" data-toggle="modal"
+									data-target=".bd-example-modal-xl">
+									<i class="ti-eye"></i>
+								</button>
+
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+				<div class="d-flex justify-content-end">
+					<div>
+						<ul class="pagination">
+							<li class="page-item">
+								<button ng-click="pager.first()" class="page-link">
+									<span class="ti-angle-double-left"></span>
+								</button>
+							</li>
+
+							<li class="page-item" ng-repeat="page in visiblePages"
+								ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link" href=""
+									ng-click="pager.goto(page.value)">{{
+									page.value }}</a></li>
+
+							<li class="page-item">
+								<button ng-click="pager.last()" class="page-link">
+									<span class="ti-angle-double-right"></span>
+								</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+
+				<!-- modal chi tiêt đơn hàng -->
+				<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+					aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl">
+						<div class="modal-content">
+							<div class="container py-md-3 ">
+								<div class="card">
+									<h3 class="card-header bg-primary text-white text-left">Đơn hàng
+										#{{singleOrder.orderId}}</h3>
+
+									<div class="card-body text-left row">
+
+										<div class="col-md-2">
+
+											<img class="rounded-pill" width="80%"
+												src="https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/Category%2Fgrid4.jpg?alt=media&amp;token=127d7bd7-808d-407a-8fbc-11a1f697f21c"
+												alt="">
+										</div>
+										<div class="col-md-4">
+											<p>Khách hàng:</p>
+											<div class="d-flex">
+												<span class="mr-1">Họ và tên: </span>
+												<h4> {{singleOrder.user.fullName}}</h4>
+
+											</div>
+											<div class="d-flex">
+												<span class="mr-1">Số điện thoại: </span>
+												<h4> {{singleOrder.user.phone}}</h4>
+
+											</div>
+											<div class="d-flex">
+												<span class="mr-1">Email: </span>
+												<h4> {{singleOrder.user.email}}</h4>
+
+											</div>
+
+										</div>
+										<div class="col-md-6">
+											<h3>Trạng thái đơn hàng:</h3>
+											
+											<div class="badge badge-primary py-3 font-weight-bold" style="width: 40%;font-size: larger;"
+												ng-if="singleOrder.orderStatus === 'Pending'">Chờ xác nhận</div>
+											<div class="badge badge-info py-3 font-weight-bold" style="width: 40%;font-size: larger;"
+												ng-if="singleOrder.orderStatus === 'Confirmed'">Đã xác nhận</div>
+											<div class="badge badge-warning py-3 font-weight-bold" style="width: 40%;font-size: larger;"
+												ng-if="singleOrder.orderStatus === 'Shipping'">Đang giao</div>
+											<div class="badge badge-success py-3 font-weight-bold" style="width: 40%;font-size: larger;"
+												ng-if="singleOrder.orderStatus === 'Delivered'">Đã giao</div>
+											<div class="badge badge-danger py-3 font-weight-bold" style="width: 40%;font-size: larger;"
+												ng-if="singleOrder.orderStatus === 'Cancel'">Đã Hủy</div>
+										</div>
+
+									</div>
+								</div>
+								<div class=" row d-flex justify-content-center mb-2">
+
+
+									<div class="card col-md-6">
 										<h5 class="card-header bg-primary text-white">Thông tin giao hàng</h5>
-										<div class="card-body text-left row " >
-											<span class="col-md-4">Tên người nhận:</span><h5 class="card-title col-md-8">{{singleOrder.shippingAddress.nameReceiver}}</h5>
-											<span class="col-md-4">Số điện thoại:</span><h5 class="card-title col-md-8">{{singleOrder.shippingAddress.phoneReceiver}}</h5>
-											<span class="col-md-4">Địa chỉ giao hàng:</span><h5 class="card-title col-md-8">{{singleOrder.shippingAddress.addressDetails}}, {{singleOrder.shippingAddress.ward}}, {{singleOrder.shippingAddress.district}}, {{singleOrder.shippingAddress.province}}</h5>
+										<div class="card-body text-left row ">
+											<span class="col-md-4">Tên người nhận:</span>
+											<h5 class="card-title col-md-8">{{singleOrder.shippingAddress.nameReceiver}}
+											</h5>
+											<span class="col-md-4">Số điện thoại:</span>
+											<h5 class="card-title col-md-8">
+												{{singleOrder.shippingAddress.phoneReceiver}}</h5>
+											<span class="col-md-4">Địa chỉ giao hàng:</span>
+											<h5 class="card-title col-md-8">
+												{{singleOrder.shippingAddress.addressDetails}},
+												{{singleOrder.shippingAddress.ward}},
+												{{singleOrder.shippingAddress.district}},
+												{{singleOrder.shippingAddress.province}}</h5>
 										</div>
 										<div class="card-footer border-bottom border-top-0 bg-white"></div>
-										
+
 									</div>
-						
-									
+
+
 
 									<div class="card col-md-6">
 										<h5 class="card-header bg-primary text-white">Thông tin thanh toán</h5>
 										<div class="card-body text-left row">
-											<span class="col-md-5">Phương thức thanh toán:</span><h5 class="card-title col-md-7">{{singleOrder.paymentMenthod.paymentMenthodName}}</h5>
-											<span class="col-md-5">Tổng số lượng sản phẩm:</span><h5 class="card-title col-md-7">{{calculateItemTotal(item)}} </h5>
-											<span class="col-md-5">Tổng tiền hàng:</span><h5 class="card-title col-md-7 ">{{singleOrder.initialPrice|number :0}} ₫</h5>
-											<span class="col-md-5">Phí vận chuyển:</span><h5 class="card-title col-md-7 ">{{singleOrder.shippingFee|number :0}} ₫</h5>
-											<span class="col-md-5">Tổng thanh toán:</span><h3 class="col-md-7 text-danger font-weight-bolder">{{singleOrder.totalAmount|number :0}} ₫</h3>
+											<span class="col-md-5">Phương thức thanh toán:</span>
+											<h5 class="card-title col-md-7">
+												{{singleOrder.paymentMenthod.paymentMenthodName}}</h5>
+											<span class="col-md-5">Tổng số lượng sản phẩm:</span>
+											<h5 class="card-title col-md-7">{{calculateItemTotal(item)}} </h5>
+											<span class="col-md-5">Tổng tiền hàng:</span>
+											<h5 class="card-title col-md-7 ">{{singleOrder.initialPrice|number :0}} ₫
+											</h5>
+											<span class="col-md-5">Phí vận chuyển:</span>
+											<h5 class="card-title col-md-7 ">{{singleOrder.shippingFee|number :0}} ₫
+											</h5>
+											<span class="col-md-5">Tổng thanh toán:</span>
+											<h3 class="col-md-7 text-danger font-weight-bolder">
+												{{singleOrder.totalAmount|number :0}} ₫</h3>
 										</div>
 										<div class="card-footer border-bottom border-top-0 bg-white"></div>
+									</div>
+
+
 								</div>
-							
-						
-							</div>
-							<div class="card">
-								<h5 class="card-header bg-primary text-white">Sản phẩm được mua</h5>
-								<div class="card-body">
-									<div class="d-flex row p-2 align-items-center subcard text-left border-bottom" ng-repeat="item in orderDetail">
-										<img class=" col-md-2 pic-2 img-fluid"
-											ng-src="{{item.image[1].imagePath}}">
-										<div class="col-md-6">
-											<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
+								<div class="card">
+									<h5 class="card-header bg-primary text-white">Sản phẩm được mua</h5>
+									<div class="card-body">
+										<div class="d-flex row p-2 align-items-center subcard text-left border-bottom"
+											ng-repeat="item in orderDetail">
+											<img class=" col-md-2 pic-2 img-fluid" ng-src="{{item.image[1].imagePath}}">
+											<div class="col-md-6">
+												<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 														-webkit-box-orient: vertical;
 														-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
-												ut libero! Impedit omnis porro iusto sequi quia!</p>
-											<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} | Size:
-												{{item.productDetail.size.sizeNumber}}</p>
-											<p class="text-dark">Số lượng: X {{item.quantity}}</p>
-				
-										</div>
-										<div class="col-md-4 d-flex justify-content-start ">
-											<div class="mr-5 ">
-												<h4 class="font-weight-bolder ">Đơn giá</h4>
-												<div class="text-danger font-weight-bolder">{{item.price|number:0}} ₫</div>
+													ut libero! Impedit omnis porro iusto sequi quia!</p>
+												<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} |
+													Size:
+													{{item.productDetail.size.sizeNumber}}</p>
+												<p class="text-dark">Số lượng: X {{item.quantity}}</p>
 
 											</div>
-											<div>
-												<h4 class="font-weight-bolder">Thành tiền</h4>
-												<div class="text-danger font-weight-bolder">{{item.price*item.quantity|number:0}} ₫</div>
+											<div class="col-md-4 d-flex justify-content-start ">
+												<div class="mr-5 ">
+													<h4 class="font-weight-bolder ">Đơn giá</h4>
+													<div class="text-danger font-weight-bolder">{{item.price|number:0}}
+														₫</div>
+
+												</div>
+												<div>
+													<h4 class="font-weight-bolder">Thành tiền</h4>
+													<div class="text-danger font-weight-bolder">
+														{{item.price*item.quantity|number:0}} ₫</div>
+
+												</div>
 
 											</div>
-											
 										</div>
+
+									</div>
+
 								</div>
-						
+							</div>
 						</div>
-							
-						</div>
+
+
 					</div>
 				</div>
 
-				
+
 			</div>
 		</div>
 
-
-				</div>
-			</div>
-				
-			</div>
-		</div>
 	</div>
+</div>
+</div>
 </div>

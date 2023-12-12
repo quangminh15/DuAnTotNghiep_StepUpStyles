@@ -353,35 +353,92 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			});
 
 	}
-	$scope.createAddress = function (checked, name, phone, detail) {
-		// alert(checked)
-		$scope.test=false
+	$scope.toast = function(title){
+		const Toast = Swal.mixin({
+			toast: true,
+			position: 'top',
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer)
+				toast.addEventListener('mouseleave', Swal.resumeTimer)
+			}
+		})
+
+		Toast.fire({
+			icon: 'error',
+			title: title,
+
+		})
+
 		
-			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
-			// $scope.dataAddress = {
-			// 	// Truyền thông tin địa chỉ vào yêu cầu
-			// 	province_name: $scope.form.selectedProvince.ProvinceName,
-			// 	district_name: $scope.form.selectedDistrict.DistrictName,
-			// 	ward_name: $scope.form.selectedWard.WardName,
-			// 	// Các thông tin khác cần thiết
-			// }
+	}
+	$scope.checkName = true
+	$scope.checkPhone=true
+	$scope.checkParttenPhone=true
+	$scope.checkAddressDetail=true
+	$scope.createAddress = function (checked, name, phone, detail) {
+		var phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+		if(!name){
+			$scope.toast("Vui Lòng nhập họ và tên")
+			$scope.checkName=false
+		}else if(!phone){
+			$scope.toast("Vui Lòng nhập số điện thoại")
+			$scope.checkName=true
+			$scope.checkPhone=false
+		}else if (!phonePattern.test(phone)) {
+			$scope.toast("Số điện thoại không hợp lệ");
+			$scope.checkPhone=true
+			$scope.checkParttenPhone=false
+		}else if(!$scope.form.selectedProvince){
+			$scope.checkParttenPhone=true
+			$scope.toast("Chưa chọn tỉnh");
+		}
+		else if(!$scope.form.selectedDistrict){
+			// $scope.checkParttenPhone=true
+			$scope.toast("Chưa chọn huyện");
+		}
+		else if(!$scope.form.selectedWard){
+			// $scope.checkParttenPhone=true
+			$scope.toast("Chưa chọn xã");
+		}else if (!detail) {
+			$scope.toast("Vui lòng nhập Địa chỉ cụ thể");
 			
-			// console.log($scope.dataAddress );
-			// $http.post(`/rest/address/create?defaultCheck=${true}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
-			// 	.then(resp => {
+			$scope.checkAddressDetail=false
+		}else{
+			$scope.checkAddressDetail=true
+			
+				// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
+				$scope.dataAddress = {
+					// Truyền thông tin địa chỉ vào yêu cầu
+					province_name: $scope.form.selectedProvince.ProvinceName,
+					district_name: $scope.form.selectedDistrict.DistrictName,
+					ward_name: $scope.form.selectedWard.WardName,
+					// Các thông tin khác cần thiết
+				}
+				
+				
+				if ($scope.addressDefault.length <1) {
 					
-			// 		console.log("add");
-			// 		$scope.reset()
-			// 		$scope.initialize()
-			// 	}).catch(function (error) {
-			// 		console.error('Error fetching districts:', error);
-					
-			// 	});
+					checked=true
+				} 
+				
+				console.log($scope.dataAddress );
+				$http.post(`/rest/address/create?defaultCheck=${checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
+					.then(resp => {
+						
+						console.log("add");
+						$scope.reset()
+						$scope.initialize()
+					}).catch(function (error) {
+						console.error('Error fetching districts:', error);
+						
+					});
+		}
 
 	}
-	$scope.checkInput=function () {
-		
-	}()
+	
 
 	//address load
 	$scope.loadDistricts = function () {

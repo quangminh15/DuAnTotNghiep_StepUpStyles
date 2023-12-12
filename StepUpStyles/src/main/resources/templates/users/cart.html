@@ -113,7 +113,7 @@
 										<td>
 											<div class="row text-left">
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1">
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.colors.length > 1">
 
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
 														data-toggle="dropdown" aria-haspopup="true"
@@ -122,8 +122,8 @@
 													</a>
 
 
-													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-														<a class="dropdown-item" style="color: black; width: 20px;"
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+														<a class="dropdown-item" style="color: black; width: 100%; "
 															ng-repeat="c in item.colors| unique:'colorName' "
 															ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
 															ng-show="item.productDetail.color.colorID != c.colorID && !isColorDisabled(item.product.productID, c.colorID, item.productDetail.size.sizeID)">
@@ -132,9 +132,15 @@
 
 													</div>
 												</div>
+												<!-- khong hien dropdown khi chi co 1 mau -->
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.colors.length == 1">
+
+													<div >Màu: {{item.productDetail.color.colorName}}</div>
+												</div>
+										
 
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1">
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1" ng-show="item.sizes.length > 1">
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
 														data-toggle="dropdown" aria-haspopup="true"
 														aria-expanded="false">
@@ -142,7 +148,7 @@
 													</a>
 
 													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-														<a class="dropdown-item" style="color: black;"
+														<a class="dropdown-item" style="color: black; width: 100%;"
 															ng-repeat="s in item.sizes| unique:'sizeNumber'"
 															ng-click="updateCartItemBySize(s.sizeID,item.cartDetailId,$parent.$index)"
 															ng-show="item.productDetail.size.sizeID != s.sizeID && !isSizeDisabled(item.product.productID, s.sizeID, item.productDetail.color.colorID)">
@@ -150,6 +156,11 @@
 														</a>
 
 													</div>
+												</div>
+												<!-- khong hien dropdown khi chi co 1 size -->
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.sizes.length == 1">
+
+													<div >Size: {{item.productDetail.size.sizeNumber}}</div>
 												</div>
 											</div>
 										</td>

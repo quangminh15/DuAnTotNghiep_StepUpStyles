@@ -555,17 +555,17 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 		console.log("pd", cartDetail.productDetail.productDetailID)
 
-		// Make an HTTP PUT request to the API endpoint
+		
 		$http.put(`/rest/cart/updateCartItem?cartDetailID=${cartDetailID}&prodID=${prodID}&size=${sizeID}&color=${colorID}`)
 			.then(function (response) {
 				//cartDetail.productDetail.color.colorID = colorID
 				console.log('Updated cart item:', response.data);
 				$scope.initialize()
-				// 		// Handle success, if needed
+				
 			})
 			.catch(function (error) {
 				console.error('Failed to update cart item:', error);
-				// 		// Handle error, if needed
+				
 			});
 	};
 
@@ -579,11 +579,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// cartDetail.productDetail.szie.sizeID = sizeID
 				console.log('Updated cart item:', response.data);
 				$scope.initialize()
-				// 		// Handle success, if needed
+				
 			})
 			.catch(function (error) {
 				console.error('Failed to update cart item:', error);
-				// 		// Handle error, if needed
+				
 			});
 	};
 
@@ -618,7 +618,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				console.log(newValue);
 			}
 
-			// Make an HTTP PUT request to update the quantity on the server
+			
 			$http.put("/rest/cart/updateQuantity", item)
 				.then(resp => {
 					$scope.items[index].quantity = item.quantity;
@@ -644,12 +644,12 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	}
 
 	$scope.updatetest = function (index) {
-		// The updated value of item.quantity is available here in real-time
+		// The updated value of item.quantity real-time
 		var newValue = $scope.items[index].quantity;
 		console.log("New value:", newValue);
 		$scope.$apply();
 
-		// You can perform additional actions with the new value here
+		
 	};
 	$scope.discount=[]
 	function setTongTien() {
@@ -755,7 +755,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				province_id: $scope.selectedProvince.ProvinceID,
 				district_id: $scope.selectedDistrict.DistrictID,
 				ward_id: $scope.selectedWard.WardID,
-				// Các thông tin khác cần thiết
+				
 			}
 
 			$scope.data1 = {
@@ -772,7 +772,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			}
 			$http({
 
-				method: 'POST', // Hoặc phương thức GET tùy theo yêu cầu của API
+				method: 'POST', 
 				url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
 				data: $scope.data1,
 				headers: {
