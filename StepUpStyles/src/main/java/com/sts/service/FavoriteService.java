@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.sts.model.Favorite;
 import com.sts.model.Product;
-import com.sts.model.Review;
 import com.sts.model.User;
 
 public interface FavoriteService {
@@ -31,4 +30,6 @@ public interface FavoriteService {
     List<Object[]> getTop1ProductFavorite();
 
     List<Object[]> getTop5ProductFavorite();
+
+    List<Favorite> searchProductName(String keyword);
 }

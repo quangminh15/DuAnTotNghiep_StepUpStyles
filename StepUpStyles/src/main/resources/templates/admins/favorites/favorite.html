@@ -48,12 +48,19 @@
 			</div>
 			<hr>
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-2 mt-2">
 					<p>Số yêu thích: <strong>{{countF}}</strong></p>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-4 mt-2">
 					<p>Sản phẩm được yêu thích nhiều nhất: <strong>{{mostLikedProduct[0]}} ({{mostLikedProduct[1]}})</strong></p>
 				</div>
+				<div class="col-sm-3"></div>
+				<div class="input-group mb-3 col-sm-3">
+					<div class="input-group-prepend">
+					  <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
+					</div>
+					<input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" ng-model="keySearch" ng-change="searchProductName()">
+				  </div>
 			</div>
 			<table class="table table-hover" id="sampleTable">
 				<thead>

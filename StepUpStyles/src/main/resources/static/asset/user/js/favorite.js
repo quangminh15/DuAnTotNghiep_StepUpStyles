@@ -426,30 +426,58 @@ app.controller("favorite-ctrl", function($scope, $http) {
 	};
 
 	//Sản phẩm vừa xem
-	$scope.recentlyViewedProducts = []
-	// Lấy dữ liệu từ localStorage khi trang được tải lần đầu
-	$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
-	// localStorage.removeItem('recentlyViewedProducts')
-	// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
-	$scope.addToRecentlyViewed = function(product) {
-		var index = $scope.recentlyViewedProducts.indexOf(product);
-		var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
+	// $scope.recentlyViewedProducts = []
+	// // Lấy dữ liệu từ localStorage khi trang được tải lần đầu
+	// $scope.recentlyViewedProducts = JSON.parse(localStorage.getItem('recentlyViewedProducts')) || [];
+	// // localStorage.removeItem('recentlyViewedProducts')
+	// // Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
+	// $scope.addToRecentlyViewed = function(product) {
+	// 	var index = $scope.recentlyViewedProducts.indexOf(product);
+	// 	var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
 
-		if (index === -1) {
-			// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
-			$scope.recentlyViewedProducts.unshift(product);
-		} else {
-			// Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
-			var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
-			$scope.recentlyViewedProducts.unshift(viewedProduct);
-		}
-		var maxItems = 6;
-		if ($scope.recentlyViewedProducts.length > maxItems) {
-			$scope.recentlyViewedProducts.splice(maxItems);
-		}
-		// Lưu danh sách sản phẩm vừa xem vào localStorage
-		localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
-	};
+	// 	if (index === -1) {
+	// 		// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
+	// 		$scope.recentlyViewedProducts.unshift(product);
+	// 	} else {
+	// 		// Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
+	// 		var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
+	// 		$scope.recentlyViewedProducts.unshift(viewedProduct);
+	// 	}
+	// 	var maxItems = 6;
+	// 	if ($scope.recentlyViewedProducts.length > maxItems) {
+	// 		$scope.recentlyViewedProducts.splice(maxItems);
+	// 	}
+	// 	// Lưu danh sách sản phẩm vừa xem vào localStorage
+	// 	localStorage.setItem('recentlyViewedProducts', JSON.stringify($scope.recentlyViewedProducts));
+	// };
+	$http.get("/user/Idprofile").then((resp) => {
+		var userId = resp.data;
+	
+		// Lấy danh sách sản phẩm vừa xem từ Local Storage của người dùng
+		var userKey = 'recentlyViewed_' + userId;
+		$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem(userKey)) || [];
+	
+		// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
+		$scope.addToRecentlyViewed = function(product) {
+			var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
+	
+			if (index === -1) {
+				// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
+				$scope.recentlyViewedProducts.unshift(product);
+			} else {
+				// Nếu sản phẩm đã tồn tại, di chuyển lên đầu danh sách
+				var viewedProduct = $scope.recentlyViewedProducts.splice(index, 1)[0];
+				$scope.recentlyViewedProducts.unshift(viewedProduct);
+			}
+			var maxItems = 6;
+			if ($scope.recentlyViewedProducts.length > maxItems) {
+				$scope.recentlyViewedProducts.splice(maxItems);
+			}
+			// Lưu danh sách sản phẩm vừa xem vào Local Storage của người dùng
+			localStorage.setItem(userKey, JSON.stringify($scope.recentlyViewedProducts));
+		};
+	});
+	
 
 
 	//Linh end 

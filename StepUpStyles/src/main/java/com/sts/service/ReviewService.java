@@ -18,4 +18,5 @@ public interface ReviewService {
     List<Review> searchs(Integer productId, Integer usersId, Integer rating);
     Review getByOrderDetailId(Integer orderDetailId);
     List<User> getUserRoleUser();
+    List<Review> searchProductName(String keyword);
 }
