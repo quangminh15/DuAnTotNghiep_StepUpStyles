@@ -651,23 +651,28 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 		// You can perform additional actions with the new value here
 	};
+	$scope.discount=[]
 	function setTongTien() {
 		var tongTien = 0;
 		angular.forEach($scope.items, function (value, key) {
-			if (value.product.directDiscount.status=="Đang diễn ra") {
-				
-				if (value.isSelected == true) {
-					console.log(value.isSelected);
-					tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
+			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
+				$scope.discount = resp.data
+				if ($scope.discount[0].status=="Đang diễn ra") {
+					
+					if (value.isSelected == true) {
+						console.log(value.isSelected);
+						tongTien += $scope.discount[0].priceDiscount * value.quantity;
+					}
+					$scope.tongTien = tongTien;
+				} 
+				else {
+					if (value.isSelected == true) {
+						console.log(value.isSelected);
+						tongTien += value.product.price * value.quantity;
+					}
+					$scope.tongTien = tongTien;
 				}
-				$scope.tongTien = tongTien;
-			} else {
-				if (value.isSelected == true) {
-					console.log(value.isSelected);
-					tongTien += value.product.price * value.quantity;
-				}
-				$scope.tongTien = tongTien;
-			}
+			})
 		});
 		console.log(tongTien);
 		

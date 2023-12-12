@@ -29,7 +29,10 @@ import com.sts.model.OrderStatus;
 import com.sts.model.Review;
 import com.sts.model.ShippingAddress;
 import com.sts.model.User;
+import com.sts.model.VerificationCode;
 import com.sts.model.DTO.OrderDetailDTO;
+import com.sts.service.FormSendMailHTML;
+import com.sts.service.MailerService;
 import com.sts.service.OrderService;
 import com.sts.service.UserService;
 
@@ -47,31 +50,33 @@ public class OrderRestController {
     @Autowired
     OrderDetailDAO orderDtdao;
 
-     @Autowired
+    @Autowired
     UserService uService;
+
+	@Autowired
+	MailerService mailerService;
 
     @PostMapping("/receiveCartData")
     public ResponseEntity<Map<String, String>> receiveCartData(@RequestBody List<OrderDetailDTO> cartDataList,
             @RequestParam("initialPrice") double initialPrice,
             @RequestParam("fee") double fee,
             @RequestParam("addressId") int addressId,
-            @RequestParam( "discountPrice") Double discountPrice,
-            @RequestParam("voucherUseId")Long voucherUID) {
+            @RequestParam("discountPrice") Double discountPrice,
+            @RequestParam("voucherUseId") Long voucherUID) {
         try {
             // Handle the list of CartData objects
             // System.out.println(fee);
             // System.out.println(initialPrice);
             // System.out.println(addressId);
-
-            
-           
-    
+            String email = uService.getUserEmailCurrent();
             Order order = orderService.createOrder(cartDataList, initialPrice, fee, addressId, false,
                     discountPrice, voucherUID);
             // Create a success response
+            mailerService.queue(email, "ĐĂNG KÝ TÀI KHOẢN StepUpStyle",
+            FormSendMailHTML.sendHTMLWhenCreateOrder( "name"));
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");
-
+          
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,7 +122,7 @@ public class OrderRestController {
 
     @GetMapping("/find")
     public ResponseEntity<Boolean> checkIfOrderDetailIsReviewed(@RequestParam("orderDetailId") Integer orderDetailId) {
-    	Integer userId = uService.getUserIdCurrent();
+        Integer userId = uService.getUserIdCurrent();
         Review review = orderService.findOrderDetailWithReviewByOrderIdAndUserId(orderDetailId, userId);
         boolean isReviewed = review != null;
         return ResponseEntity.ok(isReviewed);
@@ -133,5 +138,15 @@ public class OrderRestController {
         }
     }
     
-
+    @GetMapping("/updateOrderVoucher")
+    public ResponseEntity<String> updateOrderVoucher() {
+        try {
+            orderService.updateOrderVoucher();
+            return new ResponseEntity<>("Trạng thái đã được cập nhật thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            return new ResponseEntity<>("Lỗi khi cập nhật trạng thái: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
