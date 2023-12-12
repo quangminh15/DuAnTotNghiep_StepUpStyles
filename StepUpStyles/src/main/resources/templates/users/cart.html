@@ -36,7 +36,11 @@
 	<link rel="stylesheet" href="/asset/user/css/cart/style.css">
 	<!-- END nav -->
 
-
+	<style>
+		.containerPopup {
+			width: 35%;
+		}
+	</style>
 	<div ng-show="page==true">
 		<section class="ftco-section ftco-cart">
 			<div class="container ">
@@ -77,16 +81,19 @@
 								<tbody>
 
 
-<style>
-	.out-of-stock{
-		background-color: #eeeeee;
-	}
-</style>
-									<tr class="text-left" ng-repeat="item in items" ng-class="{'out-of-stock ': item.quantity > item.productDetail.quantity}">
+									<style>
+										.out-of-stock {
+											background-color: #eeeeee;
+										}
+									</style>
+									<tr class="text-left" ng-repeat="item in items"
+										ng-class="{'out-of-stock ': item.quantity > item.productDetail.quantity}">
 										<td>
 											<input ng-if="item.quantity <= item.productDetail.quantity" type="checkbox"
 												ng-checked="item.isSelected" ng-click="checkOne($index)" />
-											<span ng-if="item.quantity > item.productDetail.quantity" class="badge badge-pill badge-secondary font-weight-bolder ">Hết hàng</span>
+											<span ng-if="item.quantity > item.productDetail.quantity"
+												class="badge badge-pill badge-secondary font-weight-bolder ">Hết
+												hàng</span>
 										</td>
 
 										<td class="image-prod ">
@@ -108,12 +115,13 @@
 										<!-- <td class="product-name">
 											<h3>{{item.product.productName}}</h3>
 											 <p>Far far away, behind the word mountains, far from the countries</p> -->
-										
+
 										</td>
 										<td>
 											<div class="row text-left">
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.colors.length > 1">
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
+													ng-show="item.colors.length > 1">
 
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
 														data-toggle="dropdown" aria-haspopup="true"
@@ -122,7 +130,7 @@
 													</a>
 
 
-													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 														<a class="dropdown-item" style="color: black; width: 100%; "
 															ng-repeat="c in item.colors| unique:'colorName' "
 															ng-click="updateCartItemByColor(c.colorID,item.cartDetailId,$parent.$index)"
@@ -133,14 +141,16 @@
 													</div>
 												</div>
 												<!-- khong hien dropdown khi chi co 1 mau -->
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.colors.length == 1">
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
+													ng-show="item.colors.length == 1">
 
-													<div >Màu: {{item.productDetail.color.colorName}}</div>
+													<div>Màu: {{item.productDetail.color.colorName}}</div>
 												</div>
-										
 
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1" ng-show="item.sizes.length > 1">
+
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1"
+													ng-show="item.sizes.length > 1">
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
 														data-toggle="dropdown" aria-haspopup="true"
 														aria-expanded="false">
@@ -158,9 +168,10 @@
 													</div>
 												</div>
 												<!-- khong hien dropdown khi chi co 1 size -->
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1" ng-show="item.sizes.length == 1">
+												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
+													ng-show="item.sizes.length == 1">
 
-													<div >Size: {{item.productDetail.size.sizeNumber}}</div>
+													<div>Size: {{item.productDetail.size.sizeNumber}}</div>
 												</div>
 											</div>
 										</td>
@@ -192,43 +203,44 @@
 										<!-- </td> -->
 
 										<td class="price text-left"><span class="price"
-											ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
+												ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
 												item.product.price | number:0 }} ₫</span> <span class="price"
-											ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
-											<del class="text-secondary">{{item.product.price | number:0 }} ₫</del> {{
+												ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
+												<del class="text-secondary">{{item.product.price | number:0 }} ₫</del>
+												{{
 												item.product.directDiscount[0].priceDiscount | number:0 }} ₫
-										</span> <span class="price"
-											ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
-											{{ item.product.price | number:0 }} ₫ </span>
+											</span> <span class="price"
+												ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
+												{{ item.product.price | number:0 }} ₫ </span>
 										</td>
 
 										<td class=" ftco-cart quantity ">
-											<div ng-if=" item.productDetail.quantity > 0" 
-												style="width: 60%;" class="text-center">
+											<div ng-if=" item.productDetail.quantity > 0" style="width: 60%;"
+												class="text-center">
 												<div class="input-group  d-flex">
 
 													<button class="btn btn-primary quantity-left-minus"
-														ng-click="updateQuantity($index, 0)"
-														ng-disabled="item.quantity==1"><span>
-	
+														ng-click="updateQuantity($index, 0)"><span>
+
 															<i class="fas fa-minus"></i>
 														</span>
 													</button>
 													<input type="number" name="quantity"
-														class="quantity form-control input-number" ng-model="item.quantity"
-														ng-value="item.quantity" min="1" max="100"
-														ng-change="updateQuantity($index, 2)">
+														class="quantity form-control input-number"
+														ng-model="item.quantity" ng-value="item.quantity" min="1"
+														max="100" ng-change="updateQuantity($index, 2)">
 													<button class="btn btn-primary quantity-right-plus"
 														ng-click="updateQuantity($index, 1)"
 														ng-disabled="item.quantity==item.productDetail.quantity"><span>
-	
+
 															<i class="fas fa-plus"></i>
 														</span>
 													</button>
 												</div>
-												<p class="mt-1 text-secondary">{{item.productDetail.quantity}} sản phẩm có sẵn</p>
+												<p class="mt-1 text-secondary">{{item.productDetail.quantity}} sản phẩm
+													có sẵn</p>
 											</div>
-											
+
 											<div ng-if="item.productDetail.quantity<=0"
 												class="d-flex align-items-center justify-content-start ml-3">
 												<p class="text-danger">
@@ -240,14 +252,16 @@
 										<td class="total text-left">
 
 											<span class="price"
-											ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
-												item.product.price*item.quantity| number:0 }} ₫</span> <span class="price"
-											ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
-											{{
-												item.product.directDiscount[0].priceDiscount*item.quantity | number:0 }} ₫
-										</span> <span class="price"
-											ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
-											{{ item.product.price*item.quantity | number:0 }} ₫ </span>
+												ng-if="item.product.directDiscount[0].priceDiscount == null"> {{
+												item.product.price*item.quantity| number:0 }} ₫</span> <span
+												class="price"
+												ng-if="item.product.directDiscount[0].status === 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
+												{{
+												item.product.directDiscount[0].priceDiscount*item.quantity | number:0 }}
+												₫
+											</span> <span class="price"
+												ng-if="item.product.directDiscount[0].status !== 'Đang diễn ra' && item.product.directDiscount[0].priceDiscount">
+												{{ item.product.price*item.quantity | number:0 }} ₫ </span>
 										</td>
 										<td class="product-remove "><a ng-click="delete(item.cartDetailId)">X</a></td>
 									</tr><!-- END TR-->
@@ -411,7 +425,7 @@
 										<span class="font-weight-bolder">Phí Ship</span>
 										<span class="text-right">{{!shippingFee?0: shippingFee| number:0 }} ₫</span>
 									</p>
-									
+
 									<hr>
 									<p class="d-lg-flex total-price">
 										<span class="font-weight-bolder">Tổng Tiền</span>
@@ -442,10 +456,11 @@
 			<div class="px-5 py-5 rounded-pill" style="background-color: rgba(174, 174, 174, 0.109);">
 				<img src="/asset/user/img/emptyorder.png" class="mb-2" alt="">
 				<h3>Giỏ hàng của bạn đang trống</h3>
-				<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;">Tiếp tục mua sắm</a>
+				<a href="/list_products" class="btn" style="background-color: #ff7315; color: white;">Tiếp tục mua
+					sắm</a>
 			</div>
 		</div>
-		
+
 	</div>
 
 

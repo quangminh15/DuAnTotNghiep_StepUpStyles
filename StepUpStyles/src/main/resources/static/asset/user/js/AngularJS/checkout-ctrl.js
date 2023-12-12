@@ -84,8 +84,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
         var tongTien = 0;
         angular.forEach($scope.cartIs, function (value, key) {
 			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
-				$scope.discount=resp.data
-				if ($scope.discount[0].status=="Đang diễn ra") {
+				value.product.directDiscount=resp.data
+				if (value.product.directDiscount[0].status=="Đang diễn ra") {
 					
 					
 						tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
