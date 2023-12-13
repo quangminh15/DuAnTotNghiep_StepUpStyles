@@ -27,9 +27,6 @@ app.controller("index-ctrl", function($scope, $http) {
 		}, 1000);
 	};
 
-
-
-
 	$http.get("/rest/products/loadDiscountedProducts").then(resp => {
 		$scope.discountedProducts = resp.data;
 		$scope.discountedProducts.forEach(items => {
@@ -51,6 +48,69 @@ app.controller("index-ctrl", function($scope, $http) {
 		$scope.pager.first(); $scope.DiscountPager.first();
 		$scope.FeaturedPager.first();
 	});
+	
+	//phân trang trang chủ product discount START
+	$scope.DiscountPager = {
+		page: 0,
+		size: 8,
+		getDiscountPageNumbers: function() {
+			var DiscountPageCount = this.count;
+			var DiscountCurrentPage = this.page + 1;
+			var DiscountVisiblePages = [];
+
+			if (DiscountPageCount <= 3) {
+				for (var i = 1; i <= DiscountPageCount; i++) {
+					DiscountVisiblePages.push({ value: i });
+				}
+			} else {
+				if (DiscountCurrentPage <= 2) {
+					DiscountVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (DiscountCurrentPage >= DiscountPageCount - 1) {
+					DiscountVisiblePages.push({ value: '...' }, { value: DiscountPageCount - 2 }, { value: DiscountPageCount - 1 }, { value: DiscountPageCount });
+				} else {
+					DiscountVisiblePages.push({ value: '...' }, { value: DiscountCurrentPage - 1 }, { value: DiscountCurrentPage }, { value: DiscountCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return DiscountVisiblePages;
+		},
+		get discountedProducts() {
+			var start = this.page * this.size;
+			return $scope.discountedProducts.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.discountedProducts.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		DiscountGoto(DiscountPageNumber) {
+			if (DiscountPageNumber >= 1 && DiscountPageNumber <= this.count) {
+				this.page = DiscountPageNumber - 1;
+				$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+			}
+		},
+	};
+	//phân trang trang chủ product discount END
+	
 	//sản phẩm sắp giảm giá kết thúc
 	//HAI End
 
@@ -1217,67 +1277,7 @@ app.controller("index-ctrl", function($scope, $http) {
 	};
 	//phân trang trang chủ product featureds END
 
-	//phân trang trang chủ product discount START
-	$scope.DiscountPager = {
-		page: 0,
-		size: 8,
-		getDiscountPageNumbers: function() {
-			var DiscountPageCount = this.count;
-			var DiscountCurrentPage = this.page + 1;
-			var DiscountVisiblePages = [];
-
-			if (DiscountPageCount <= 3) {
-				for (var i = 1; i <= DiscountPageCount; i++) {
-					DiscountVisiblePages.push({ value: i });
-				}
-			} else {
-				if (DiscountCurrentPage <= 2) {
-					DiscountVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
-				} else if (DiscountCurrentPage >= DiscountPageCount - 1) {
-					DiscountVisiblePages.push({ value: '...' }, { value: DiscountPageCount - 2 }, { value: DiscountPageCount - 1 }, { value: DiscountPageCount });
-				} else {
-					DiscountVisiblePages.push({ value: '...' }, { value: DiscountCurrentPage - 1 }, { value: DiscountCurrentPage }, { value: DiscountCurrentPage + 1 }, { value: '...' });
-				}
-			}
-			return DiscountVisiblePages;
-		},
-		get discountedProducts() {
-			var start = this.page * this.size;
-			return $scope.discountedProducts.slice(start, start + this.size);
-		},
-		get count() {
-			return Math.ceil(1.0 * $scope.discountedProducts.length / this.size);
-		},
-		first() {
-			this.page = 0;
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		prev() {
-			this.page--;
-			if (this.page < 0) {
-				this.last();
-			}
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		next() {
-			this.page++;
-			if (this.page >= this.count) {
-				this.first();
-			}
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		last() {
-			this.page = this.count - 1;
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		DiscountGoto(DiscountPageNumber) {
-			if (DiscountPageNumber >= 1 && DiscountPageNumber <= this.count) {
-				this.page = DiscountPageNumber - 1;
-				$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-			}
-		},
-	};
-	//phân trang trang chủ product discount END
+	
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
