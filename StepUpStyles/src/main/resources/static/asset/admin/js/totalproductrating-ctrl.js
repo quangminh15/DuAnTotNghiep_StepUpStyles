@@ -41,20 +41,15 @@ app.controller("totalproductrating-ctrl", function($scope, $http) {
                     plugins: {
                         tooltip: {
                             callbacks: {
-                                label: function (context) {
+                                label: function(context) {
                                     var label = context.dataset.label || '';
                                     if (label) {
                                         label += ': ';
                                     }
                                     if (context.parsed.y !== null) {
-                                        label += context.parsed.y + ' đánh giá'; // Thêm đơn vị đánh giá (hoặc tùy chỉnh theo dữ liệu của bạn)
+                                        label += context.parsed.y + ' đánh giá';
                                     }
                                     return label;
-                                },
-                                title: function (tooltipItem) {
-                                    var dataIndex = tooltipItem[0].dataIndex;
-                                    var dataPoint = $scope.chartData[dataIndex]; // Lấy dữ liệu của điểm đang được chọn
-                                    return 'Tháng ' + dataPoint.month + ': ' + dataPoint.productName;
                                 },
                             }
                         }

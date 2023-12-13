@@ -130,7 +130,7 @@ public class ExcelReviewRestController {
             }
             row.createCell(5).setCellValue(item.getRating());
             row.createCell(6).setCellValue(item.getImage1());
-            row.createCell(7).setCellValue(item.getImage1());
+            row.createCell(7).setCellValue(item.getImage2());
             row.createCell(8).setCellValue(item.getImage3());
             // Đặt CellStyle cho từng ô dữ liệu
             for (int i = 0; i < headers.length; i++) {
