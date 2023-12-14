@@ -26,12 +26,15 @@
                         <h2 class="text-center">Đổi mật khẩu?</h2>
                         <p>Hãy nhập mật khẩu hiện tại của bạn vào đây.</p>
                         <div class="panel-body">
-                            <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                            <div th:if="${emailValidation}">
+                                <h5 class="text-center" th:text="${emailValidation}"></h5>
+                            </div>
+                            <form action="/change-pass-check" id="register-form" role="form" autocomplete="off" class="form" method="post">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i
                                                 class="input-icon uil uil-lock-alt"></i></span>
-                                        <input id="email" name="email" placeholder="Mật khẩu hiện tại"
+                                        <input id="email" name="pass" placeholder="Mật khẩu hiện tại"
                                                class="form-control ipEmail" type="password">
                                     </div>
                                 </div>

@@ -5,6 +5,7 @@ import com.sts.dao.UserDAO;
 import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.DataOTP;
 import com.sts.model.Cart;
+import com.sts.model.DTO.LResponseUser;
 import com.sts.model.OgirinAccount;
 import com.sts.model.Role;
 import com.sts.model.User;
@@ -225,6 +226,12 @@ public class UserController {
 			return "users/reset-pass";
 		}
 //        userService.updatePass(this.emailResetPass, bCryptPasswordEncoder.encode(pass));
+		if(this.emailResetPass.equals("jqk")){
+			User u = userService.findById(userService.getUserIdCurrent());
+			u.setPassword(bCryptPasswordEncoder.encode(pass));
+			userDAO.save(u);
+			return "redirect:/loginSTS";
+		}
 		User u = userDAO.findByEmailU(this.emailResetPass);
 		u.setPassword(bCryptPasswordEncoder.encode(pass));
 		userDAO.save(u);
@@ -235,6 +242,22 @@ public class UserController {
 	public String changepass(Model model) {
 		return "users/change-pass";
 	}
+
+	@PostMapping("/change-pass-check")
+	public String hand(Model model, @RequestParam("pass") String pass) {
+		User u = userService.findById(userService.getUserIdCurrent());
+	//	String passCheck = bCryptPasswordEncoder.;
+	//	System.out.println("cc: "+passCheck);
+		if (!pass.equals("123")){
+			model.addAttribute("emailValidation", "Mật khẩu không trùng khớp!");
+			return "users/change-pass";
+		}
+		this.emailResetPass = "jqk";
+		sendCodetoEmail_VforgotPass(userService.getUserEmailCurrent(), userService.getUserByEmail(userService.getUserEmailCurrent()).getFullName());
+		return "redirect:/otpforgotpass";
+	}
+
+
 
 	@PostMapping("/signup")
 	public String validDangNhap(Model model, @ModelAttribute("Customer") User c) {
@@ -257,7 +280,7 @@ public class UserController {
 				return "users/LoginSTS";
 			}
 			if (!checkPhoneAlreadyExists(c.getPhone())) {
-				model.addAttribute("phoneValidation", "Số điẹn thoại đã tồn tại!");
+				model.addAttribute("phoneValidation", "Số điện thoại đã tồn tại!");
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
@@ -268,6 +291,11 @@ public class UserController {
 			}
 			if (!checkEmailAlreadyExists(c.getEmail())) {
 				model.addAttribute("emailValidation", "Email đã tồn tại!");
+				model.addAttribute("checked", "checked");
+				return "users/LoginSTS";
+			}
+			if (PassCheck(c.getPassword()) != null) {
+				model.addAttribute("passValidation", PassCheck(c.getPassword()));
 				model.addAttribute("checked", "checked");
 				return "users/LoginSTS";
 			}
@@ -302,12 +330,12 @@ public class UserController {
 	public String NameCheck(String name) {
 		// Name check
 		if (name.equals("")) {
-			return "Họ tên phải từ 8-50 ký tự và không chứ ký tự đặc biệt!";
+			return "8-50 ký tự và không chứa ký tự đặc biệt!";
 		}
 		String regexName = "^[A-Za-z0-9\\p{L}\\s]{8,50}$";
 		boolean isValidName = Pattern.matches(regexName, name);
 		if (!isValidName) {
-			return "Họ tên phải từ 8-50 ký tự và không chứ ký tự đặc biệt!";
+			return "8-50 ký tự và không chứa ký tự đặc biệt!";
 		}
 		return null;
 	}
@@ -333,7 +361,7 @@ public class UserController {
 		String regexEmail = "^(\\\\+?84|0)(3[2-9]|5[2689]|7[06-9]|8[1-689]|9[0-9])[0-9]{7}$";
 		Pattern EMAIL_PATTERN = Pattern.compile(regexEmail);
 		if (!(EMAIL_PATTERN.matcher(phone).matches()) || phone.length() > 15) {
-			return "Số điện thoại không hợp lệ";
+			return "Phải là 10 ký tự số";
 		}
 		return null;
 	}
@@ -341,12 +369,12 @@ public class UserController {
 	public String PassCheck(String pass) {
 		// Pass check
 		if (pass.equals("")) {
-			return "Mật khẩu phải từ 9-50 ký tự. Có it nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
+			return "9-50 ký tự. Ít nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
 		}
 		String regexPass = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=])(?=.*[a-zA-Z]).{9,50}$";
 		boolean isValidPass = Pattern.matches(regexPass, pass);
 		if (!isValidPass) {
-			return "Mật khẩu phải từ 9-50 ký tự. Có it nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
+			return "9-50 ký tự. Ít nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!";
 		}
 		return null;
 	}

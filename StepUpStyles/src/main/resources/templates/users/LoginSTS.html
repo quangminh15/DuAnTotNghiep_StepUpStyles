@@ -90,10 +90,12 @@
                                                        th:field="*{fullName}">
                                                 <i class="input-icon uil uil-user"></i>
                                                 <div th:if="${nameValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center" th:text="${nameValidation}"></h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; color: red;"
+                                                        class="text-center" th:text="${nameValidation}"></h6>
                                                 </div>
                                                 <div th:unless="${nameValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center">8-50 ký tự và không chứ ký tự đặc biệt!</h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; "
+                                                        class="text-center">8-50 ký tự và không chứ ký tự đặc biệt!</h6>
                                                 </div>
                                             </div>
                                             <div class="form-group mt-2">
@@ -101,10 +103,12 @@
                                                        th:field="*{phone}">
                                                 <i class="input-icon uil uil-phone"></i>
                                                 <div th:if="${phoneValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center" th:text="${phoneValidation}"></h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; color: red;"
+                                                        class="text-center" th:text="${phoneValidation}"></h6>
                                                 </div>
                                                 <div th:unless="${phoneValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center">Phải là 10 ký tự số</h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; "
+                                                        class="text-center">Phải là 10 ký tự số</h6>
                                                 </div>
                                             </div>
                                             <div class="form-group mt-2">
@@ -112,11 +116,13 @@
                                                        th:field="*{email}">
                                                 <i class="input-icon uil uil-at"></i>
                                                 <div th:if="${emailValidation}">
-                                                    <h6 class="text-center" style=" display: flex; justify-content: flex-start; margin-top: 2%; "
+                                                    <h6 class="text-center"
+                                                        style=" display: flex; justify-content: flex-start; margin-top: 2%; color: red;"
                                                         th:text="${emailValidation}"></h6>
                                                 </div>
                                                 <div th:unless="${emailValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center" >----------</h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; "
+                                                        class="text-center">----------</h6>
                                                 </div>
                                             </div>
                                             <div class="form-group mt-2">
@@ -124,10 +130,12 @@
                                                        th:field="*{password}">
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                                 <div th:if="${passValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center" th:text="${passValidation}"></h6>
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; color: red;"
+                                                        class="text-center" th:text="${passValidation}"></h6>
                                                 </div>
                                                 <div th:unless="${passValidation}">
-                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; " class="text-center">9-50 ký tự. Có it nhất 1
+                                                    <h6 style=" display: flex; justify-content: flex-start; margin-top: 2%; "
+                                                        class="text-center">9-50 ký tự. Có it nhất 1
                                                         số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!</h6>
                                                 </div>
                                             </div>
