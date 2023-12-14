@@ -7,7 +7,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
-	// localStorage.removeItem('selectedItems');
+	localStorage.removeItem('selectedItems');
 
 
 	$scope.index_of_province = function (address) {
@@ -169,6 +169,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.delete = function (id) {
 		$http.delete(`/rest/cart/delete?cartId=${id}`).then(function (respone) {
 
+			$scope.countcartItems()
+			updateCartCount()
 			$scope.initialize()
 		})
 			.catch(function (error) {
@@ -555,17 +557,17 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 		console.log("pd", cartDetail.productDetail.productDetailID)
 
-		
+
 		$http.put(`/rest/cart/updateCartItem?cartDetailID=${cartDetailID}&prodID=${prodID}&size=${sizeID}&color=${colorID}`)
 			.then(function (response) {
 				//cartDetail.productDetail.color.colorID = colorID
 				console.log('Updated cart item:', response.data);
 				$scope.initialize()
-				
+
 			})
 			.catch(function (error) {
 				console.error('Failed to update cart item:', error);
-				
+
 			});
 	};
 
@@ -579,11 +581,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				// cartDetail.productDetail.szie.sizeID = sizeID
 				console.log('Updated cart item:', response.data);
 				$scope.initialize()
-				
+
 			})
 			.catch(function (error) {
 				console.error('Failed to update cart item:', error);
-				
+
 			});
 	};
 
@@ -600,7 +602,48 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			}
 		} else if (method == 0) {
 			item.quantity -= 1
-			console.log(item.quantity);
+			if (item.quantity < 1) {
+				item.quantity = 1
+				Swal.fire({
+					title: `<h2 class="text-danger">Bạn có chắc muốn xóa sản phẩm này</h2>`,
+					html: `<h3>${item.product.productName} (Màu:${item.productDetail.color.colorName}, Size:${item.productDetail.size.sizeNumber}) </h3>`,
+
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Có",
+					cancelButtonText: "Hủy",
+					customClass: {
+						title: 'my-title-class',
+						popup: 'containerPopup'
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+
+						$scope.delete(item.cartDetailId)
+
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+								toast.addEventListener('mouseenter', Swal.stopTimer)
+								toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Xóa thành công',
+
+						})
+						$scope.initialize()
+
+					}
+				});
+			}
 		} else {
 			var maxQuantity = item.productDetail.quantity;
 			console.log(maxQuantity);
@@ -613,12 +656,14 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			if (newValue > maxQuantity) {
 				item.quantity = maxQuantity;
 				console.log(item.quantity);
+			} else if (newValue < 1 || isNaN(newValue)) {
+				item.quantity = 1
 			} else {
 				item.quantity = newValue;
 				console.log(newValue);
 			}
 
-			
+
 			$http.put("/rest/cart/updateQuantity", item)
 				.then(resp => {
 					$scope.items[index].quantity = item.quantity;
@@ -649,33 +694,49 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		console.log("New value:", newValue);
 		$scope.$apply();
 
-		
+
 	};
-	$scope.discount=[]
+	$scope.discount = []
 	function setTongTien() {
 		var tongTien = 0;
 		angular.forEach($scope.items, function (value, key) {
 			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
-				$scope.discount = resp.data
-				if ($scope.discount[0].status=="Đang diễn ra") {
+				value.product.directDiscounts = resp.data
+				if (!value.product.directDiscounts.length>0) {
 					
-					if (value.isSelected == true) {
-						console.log(value.isSelected);
-						tongTien += $scope.discount[0].priceDiscount * value.quantity;
+					
+						if (value.isSelected == true) {
+							console.log("e",value.product.price);
+							console.log(value.isSelected);
+							tongTien += value.product.price * value.quantity;
+							
+						}
+						$scope.tongTien = tongTien;
+				}else{
+
+					if (value.product.directDiscounts[0].status=="Đang diễn ra") {
+						
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien +=value.product.directDiscounts[0].priceDiscount * value.quantity;
+						}
+						$scope.tongTien = tongTien;
+					} 
+					else {
+						
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien += value.product.price * value.quantity;
+						}
+						$scope.tongTien = tongTien;
 					}
-					$scope.tongTien = tongTien;
-				} 
-				else {
-					if (value.isSelected == true) {
-						console.log(value.isSelected);
-						tongTien += value.product.price * value.quantity;
-					}
-					$scope.tongTien = tongTien;
 				}
+					
+				
 			})
 		});
 		console.log(tongTien);
-		
+
 	}
 
 	//ADDRESS load -------------
@@ -755,7 +816,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				province_id: $scope.selectedProvince.ProvinceID,
 				district_id: $scope.selectedDistrict.DistrictID,
 				ward_id: $scope.selectedWard.WardID,
-				
+
 			}
 
 			$scope.data1 = {
@@ -772,7 +833,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			}
 			$http({
 
-				method: 'POST', 
+				method: 'POST',
 				url: 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
 				data: $scope.data1,
 				headers: {

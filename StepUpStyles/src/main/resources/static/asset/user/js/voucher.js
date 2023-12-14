@@ -81,15 +81,37 @@ app.controller("voucher-ctrl", function ($scope, $http) {
     });
   };
 
+  $scope.formatDate = function (startDate) {
+    // Parse the input date string
+    const inputDate = new Date(startDate);
+
+    // Format options
+    const options = {
+        weekday: 'long', // 'long' for the full weekday name
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        // hour: '2-digit',
+        // minute: '2-digit',
+        // second: '2-digit',
+        hour12: false, // 24-hour format
+        timeZone: 'Asia/Ho_Chi_Minh', // Time zone
+    };
+
+    // Format the date using Intl.DateTimeFormat
+    const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
+
+    return formattedDate;
+}
+
   $scope.openModal = function (voucherId) {
     // Make an HTTP request to your API endpoint
     $http
       .get("/rest/voucher/getIdVoucher/" + voucherId)
       .then(function (response) {
         // Handle the response and display details in the modal
-        var getVoucher = response.data; // Assuming the response contains voucher details
-        console.log(getVoucher);
-
+         var getVoucher = response.data; // Assuming the response contains voucher details
+        console.log("Voucher",getVoucher);
         // Update the modal content with the voucher details
         var modalBody = document.querySelector("#voucherModalBody");
         // Example: Display details in the modal
@@ -110,12 +132,12 @@ app.controller("voucher-ctrl", function ($scope, $http) {
                                                 <div class="card-body">
                                                     <div>Giảm: ${getVoucher.discountAmount}%</div>
                                                     <div>Đơn tối thiểu: ${$scope.formatToVND(getVoucher.total)}</div>
-                                                    <div style="font-size: 11px; color: red;">Áp dụng: Thứ năm, ${getVoucher.dateStart} - Thứ hai, ${getVoucher.dateEnd}</div>
+                                                    <div style="font-size: 11px; color: red;">Áp dụng: ${$scope.formatDate(getVoucher.dateStart)} - ${$scope.formatDate(getVoucher.dateEnd)}</div>
                                                 </div>
                                             </div>
                                         </div>
-                            <b>Thời hạn sử dụng</b>
-                            <p class="date">${getVoucher.dateStart} - ${getVoucher.dateEnd}</p>
+                            <b>Thời hạn sử dụng:</b>
+                            <p class="date">${$scope.formatDate(getVoucher.dateStart)} - ${$scope.formatDate(getVoucher.dateEnd)}</p>
                             <b>Sản phẩm áp dụng</b>
                             <p class="sp">Tất cả sản phẩm</p>
                             <b>Chi tiết</b>
@@ -125,6 +147,8 @@ app.controller("voucher-ctrl", function ($scope, $http) {
 
         // Open the modal
         $("#voucherModal").modal("show");
+
+        
       })
       .catch(function (error) {
         // Handle error

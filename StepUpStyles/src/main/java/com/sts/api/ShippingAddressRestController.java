@@ -6,14 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sts.model.Product;
 import com.sts.model.ShippingAddress;
 
 import com.sts.service.ShippingAddressService;
@@ -53,7 +56,10 @@ public class ShippingAddressRestController {
 		shippingAddressService.updateDefault(id);
 
 	}
-
+@PutMapping("/update")
+	public void update( @RequestBody ShippingAddress ship) {
+		 shippingAddressService.update(ship);
+	}
 	@GetMapping
 	public ResponseEntity<List<ShippingAddress>> getAddressShip() {
 		; // Same static customer ID as set in the UserDetails service
@@ -67,5 +73,11 @@ public class ShippingAddressRestController {
 		Integer userID = userService.getUserIdCurrent();
 		return shippingAddressService.findAddressDefaultByUser(userID);
 	}
+
+	@DeleteMapping("/delete")
+	public void delete(@RequestParam("id") Integer addressId) {
+		shippingAddressService.deletedShippingAddress(addressId);
+	}
+
 
 }

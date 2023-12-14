@@ -261,12 +261,12 @@ app.controller("review-ctrl", function ($scope, $http) {
 		{ name: 'orderDetail.orderDetailId', label: 'Mã đơn hàng' },
 		{ name: 'product.productName', label: 'Tên sản phẩm' },
 		{ name: 'user.fullName', label: 'Tên khách hàng' },
-		{ name: 'title', label: 'Nội dung' },
+		// { name: 'title', label: 'Nội dung' },
 		{ name: 'rating', label: 'Sao đánh giá' },
 		{ name: 'reviewDate', label: 'Ngày đánh giá' },
-		{ name: 'image1', label: 'Ảnh 1' },
-		{ name: 'image2', label: 'Ảnh 2' },
-		{ name: 'image3', label: 'Ảnh 3' },
+		// { name: 'image1', label: 'Ảnh 1' },
+		// { name: 'image2', label: 'Ảnh 2' },
+		// { name: 'image3', label: 'Ảnh 3' },
 	];
 
 

@@ -72,7 +72,14 @@ public class OrderServiceImpl implements OrderService {
 
             voucher = voucherUseDao.findById(voucherId).get();
         }
-        PaymentMenthod pay = payDao.findById(1).get();
+
+        PaymentMenthod pay = new PaymentMenthod();
+        if (paymentStatus==true) {
+              pay = payDao.findById(2).get();
+        }else{
+
+            pay = payDao.findById(1).get();
+        }
 
         Order order = Order.builder()
                 .deliveryDate(formatDeliveryDate(calculateDeliveryDate()))
@@ -80,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
                 .initialPrice(initialPrice)
                 .orderDate(getCurrentDateTime()) // Set the order date to the current date
                 .orderStatus(OrderStatus.Pending) // Set the initial order status
-                .paymentStatus(false)
+                .paymentStatus(paymentStatus)
                 .shippingFee(fee)
                 .totalAmount(initialPrice + fee - discountPrice)
                 .discountPrice(discountPrice)
@@ -170,6 +177,13 @@ public class OrderServiceImpl implements OrderService {
             String formattedDate = LocalDate.now().format(formatter);
             order.setDeliveryDate(formattedDate);
             order.setPaymentStatus(true);
+        }
+         if (status == OrderStatus.Cancel) {
+            List<OrderDetail> listItem = orderDetailDao.findByOrder(order);
+             for (OrderDetail detailRequest : listItem)
+            prodDetailDao.updatePDQuantiy(detailRequest.getProductDetail().getQuantity() +detailRequest.getQuantity(),
+                    detailRequest.getProductDetail().getProductDetailID());
+            
         }
         orderDao.save(order);
     }

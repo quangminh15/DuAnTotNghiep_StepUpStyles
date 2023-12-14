@@ -1,10 +1,10 @@
 
-app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', function ($scope, $http, $timeout,$location) {
+app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', function ($scope, $http, $timeout, $location) {
 	$scope.address = []
 	$scope.cartDetails = []
-	$scope.discouted=0
-	
-	$scope.selectedVoucher={}
+	$scope.discouted = 0
+
+	$scope.selectedVoucher = {}
 
 	$scope.index_of_province = function (address) {
 		return $scope.province.findIndex(a => a.ProvinceName === address);
@@ -23,7 +23,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 		$http.get(`/rest/address/default`)
 			.then(resp => {
 				$scope.addressDefault = resp.data
-				
+
 				$scope.getAddressToShippingFee($scope.addressDefault.province, $scope.addressDefault.district, $scope.addressDefault.ward)
 
 			})
@@ -35,9 +35,9 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			.then(response => {
 				$scope.check = true
 				$scope.address = response.data
-				
+
 				if (Array.isArray(response.data) && response.data.length === 0) {
-					
+
 					$scope.check = false
 					$('#ModalAddress').modal('show');
 				} else {
@@ -51,8 +51,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);
 			});
-			
-			
+
+			$scope.checkEdit=false
 	}
 	$scope.loadFromLocalStorage = function () {
 		var storedItems = localStorage.getItem('selectedItems');
@@ -73,39 +73,89 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 				})
 				$http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID).then(resp => {
 					cartDetail.product.directDiscounts = resp.data.filter(directDiscounts => !directDiscounts.deleted);
-					
+
 				})
 			})
 			setTongTien()
 		}
 	};
-	$scope.discount=[]
+	$scope.discount = []
 	function setTongTien() {
-        var tongTien = 0;
-        angular.forEach($scope.cartIs, function (value, key) {
+		var tongTien = 0;
+		angular.forEach($scope.cartIs, function (value, key) {
 			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
-				$scope.discount=resp.data
-				if ($scope.discount[0].status=="Đang diễn ra") {
-					
-					
-						tongTien += value.product.directDiscount[0].priceDiscount * value.quantity;
-					
-					$scope.tongTien = tongTien;
-				} else {
-					
+				value.product.directDiscounts = resp.data
+				if (!value.product.directDiscounts.length > 0) {
+
+
+					if (value.isSelected == true) {
+						console.log("e", value.product.price);
 						console.log(value.isSelected);
 						tongTien += value.product.price * value.quantity;
-				
+
+					}
 					$scope.tongTien = tongTien;
+				} else {
+
+					if (value.product.directDiscounts[0].status == "Đang diễn ra") {
+
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien += value.product.directDiscounts[0].priceDiscount * value.quantity;
+						}
+						$scope.tongTien = tongTien;
+					}
+					else {
+
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien += value.product.price * value.quantity;
+						}
+						$scope.tongTien = tongTien;
+					}
+				}
+
+
+			})
+		});
+		console.log(tongTien);
+
+		// tongTien += value.product.price * value.quantity;
+
+
+		$scope.tongTien = tongTien;
+	}
+	$scope.delete = function (id) {
+		$http.delete(`/rest/address/delete?id=${id}`).then(function (respone) {
+			const Toast = Swal.mixin({
+				toast: true,
+				position: 'top-right',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				},
+				customClass: {
+					// Add your custom CSS class here
+					popup: 'custom-toast-class',
 				}
 			})
-            // tongTien += value.product.price * value.quantity;
-            
-        });
-		
-        $scope.tongTien = tongTien;
-    }
-	
+			Toast.fire({
+				icon: 'success',
+				title: 'Xóa thành công',
+
+			})
+			$('#ModalAddress').modal('hide');
+					$('#ModalAddress1').modal('show');
+			$scope.initialize()
+		})
+			.catch(function (error) {
+				console.error('Failed to delete:', error);
+			});
+	}
+
 	$scope.sendDataToJava = function () {
 
 		const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
@@ -115,39 +165,41 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			data: $scope.cartIs, // Assuming $scope.cartIs is an array
 			headers: { 'Content-Type': 'application/json' }
 		})
-		.then(function (response) {
-			console.log('Order created:', response.data);
-			localStorage.removeItem('selectedItems');
+			.then(function (response) {
+				console.log('Order created:', response.data);
+				localStorage.removeItem('selectedItems');
 
-			
-		})
-		.catch(function (error) {
-			console.error('Error:', error);
-		});
-		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien+$scope.shippingFee));
-		
-		window.location.href='/pay-cod-success'
+
+			})
+			.catch(function (error) {
+				console.error('Error:', error);
+			});
+		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee));
+
+		window.location.href = '/pay-cod-success'
 	};
 	$scope.loadTongTienFromLocal = function () {
-		$scope.total=localStorage.getItem('totalAmount');
-		
+		$scope.total = localStorage.getItem('totalAmount');
+
 	};
 	$scope.loadTongTienFromLocal()
 
 	$scope.getDataPayment = function () {
+		const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
 		$http({
 			method: 'POST',
-			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${$scope.selectedVoucher.voucherUseId}`,
+			url: `/payment/getdata?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
 			data: $scope.cartIs, // Assuming $scope.cartIs is an array
 			headers: { 'Content-Type': 'application/json' }
 		})
-		.then(function (response) {
-			console.log('done:', response.data);
-			
-		})
-		.catch(function (error) {
-			console.error('Error:', error);
-		});
+			.then(function (response) {
+				console.log('done:', response.data);
+
+			})
+			.catch(function (error) {
+				console.error('Error:', error);
+			});
+			localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee))
 	}
 
 	$scope.removeDataPayment = function () {
@@ -156,13 +208,13 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			url: `/payment/removedata`,
 			headers: { 'Content-Type': 'application/json' }
 		})
-		.then(function (response) {
-			localStorage.removeItem('selectedItems');
-			console.log("remove");
-		})
-		.catch(function (error) {
-			console.error('Error:', error);
-		});
+			.then(function (response) {
+				localStorage.removeItem('selectedItems');
+				console.log("remove");
+			})
+			.catch(function (error) {
+				console.error('Error:', error);
+			});
 	}
 
 	// Function to create an order
@@ -185,7 +237,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			discountPrice: 0,
 			shippingAddress: $scope.addressDefault,
 			cartDetails: cartDetails,
-			
+
 		};
 		console.log($scope.cartDetails);
 		//Send the order object to your Spring Boot service
@@ -277,75 +329,169 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	}
 	$scope.initialize()
 
+	
+	
+	$scope.checkButton=function(io){
+		$scope.checkEdit = io
+	}
 	// clearForm
 	$scope.reset = function () {
 		$scope.form = {
 
-			checked: false
+			defaultAddress: false
 		}
-		$scope.current_province = {}
+		$scope.checkEdit=false
+		$('#ModalAddress').modal('show');
 	}
 
 	$scope.edit = function (addr) {
-		//console.log(addr.province);
+		$scope.checkEdit=true
+		
+		console.log(addr.province);
 		if (addr) {
-
+			
 
 			$('#ModalAddress').modal('show');
 			$scope.form = angular.copy(addr);
+			
 
 
-			$http({
-				method: 'GET',
-				url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
-				headers: {
-					'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
-				}
-			}).then(function successCallback(response) {
-				$scope.province = response.data.data;
-				// console.log($scope.province);
-				$scope.current_province = $scope.province[$scope.index_of_province(addr.province)]
+			// $http({
+			// 	method: 'GET',
+			// 	url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+			// 	headers: {
+			// 		'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+			// 	}
+			// }).then(function successCallback(response) {
+			// 	$scope.province = response.data.data;
+			// 	// console.log($scope.province);
+			// 	$scope.current_province = $scope.province[$scope.index_of_province(addr.province)]
 
-				// $scope.form.selectedProvince = $scope.current_province
+			// 	// $scope.form.selectedProvince = $scope.current_province
 
-				console.log("Selected Province:", $scope.form.selectedProvince);
+			// 	console.log("Selected Province:", $scope.form.selectedProvince);
 
-				$http({
-					method: 'GET',
-					url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
-					headers: {
-						'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
-						'ShopId': '4551956'
-					}
-				}).then(function successCallback(response) {
-					$scope.district = response.data.data;
-					console.log($scope.district);
-					$scope.current_district = $scope.district[$scope.index_of_district(addr.district)]
-					$scope.form.selectedDistrict = $scope.current_district
-					$http({
-						method: 'GET',
-						url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.current_district.DistrictID,
-						headers: {
-							'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
-						}
-					}).then(function successCallback(response) {
-						$scope.ward = response.data.data
-						$scope.current_ward = $scope.ward[$scope.index_of_ward(addr.ward)]
-						$scope.form.selectedWard = $scope.current_ward
-					})
-				})
-			})
+			// 	$http({
+			// 		method: 'GET',
+			// 		url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=' + $scope.current_province.ProvinceID,
+			// 		headers: {
+			// 			'Token': 'da60559e-557a-11ee-af43-6ead57e9219a',
+			// 			'ShopId': '4551956'
+			// 		}
+			// 	}).then(function successCallback(response) {
+			// 		$scope.district = response.data.data;
+			// 		console.log($scope.district);
+			// 		$scope.current_district = $scope.district[$scope.index_of_district(addr.district)]
+			// 		$scope.form.selectedDistrict = $scope.current_district
+			// 		$http({
+			// 			method: 'GET',
+			// 			url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=' + $scope.current_district.DistrictID,
+			// 			headers: {
+			// 				'Token': 'da60559e-557a-11ee-af43-6ead57e9219a'
+			// 			}
+			// 		}).then(function successCallback(response) {
+			// 			$scope.ward = response.data.data
+			// 			$scope.current_ward = $scope.ward[$scope.index_of_ward(addr.ward)]
+			// 			$scope.form.selectedWard = $scope.current_ward
+			// 		})
+			// 	})
+			// })
 		}
 		else {
 			return
 		}
 	}
 
+
+	$scope.update = function () {
+		var object = $scope.form
+
+		var phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+		if (!object.nameReceiver) {
+			$scope.toast("Vui Lòng nhập họ và tên")
+			$scope.checkName = false
+		} else if (!object.phoneReceiver) {
+			$scope.toast("Vui Lòng nhập số điện thoại")
+			$scope.checkName = true
+			$scope.checkPhone = false
+		} else if (!phonePattern.test(object.phoneReceiver)) {
+			$scope.toast("Số điện thoại không hợp lệ");
+			$scope.checkPhone = true
+			$scope.checkParttenPhone = false
+		} else if (!$scope.form.selectedProvince) {
+			$scope.checkParttenPhone = true
+			$scope.toast("Chưa chọn tỉnh");
+		}
+		else if (!$scope.form.selectedDistrict) {
+			// $scope.checkParttenPhone=true
+			$scope.toast("Chưa chọn huyện");
+		}
+		else if (!$scope.form.selectedWard) {
+			// $scope.checkParttenPhone=true
+			$scope.toast("Chưa chọn xã");
+		} else if (!object.addressDetails) {
+			$scope.toast("Vui lòng nhập Địa chỉ cụ thể");
+
+			$scope.checkAddressDetail = false
+		} else {
+			$scope.checkAddressDetail = true
+
+			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
+			$scope.dataAddress = {
+				// Truyền thông tin địa chỉ vào yêu cầu
+				province_name: $scope.form.selectedProvince.ProvinceName,
+				district_name: $scope.form.selectedDistrict.DistrictName,
+				ward_name: $scope.form.selectedWard.WardName,
+				// Các thông tin khác cần thiết
+			}
+		
+
+
+		
+		object.province = $scope.dataAddress.province_name
+		object.district = $scope.dataAddress.district_name
+		object.ward = $scope.dataAddress.ward_name
+		
+		$http.put('/rest/address/update', object)
+			.then(resp => {
+				console.log("updated");
+				$scope.initialize();
+				$('#ModalAddress').modal('hide');
+				$('#ModalAddress1').modal('show');
+				// $scope.form = angular.copy(addr);
+				const Toast = Swal.mixin({
+					toast: true,
+					position: 'top-right',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					},
+					customClass: {
+						// Add your custom CSS class here
+						popup: 'custom-toast-class',
+					}
+				})
+				Toast.fire({
+					icon: 'success',
+					title: 'Cập nhật địa chỉ thành công',
+
+				})
+			}).catch(function (error) {
+				console.error('Error fetching cart items:', error);
+
+			});
+		}
+
+	}
+
 	$scope.updateDefault = function (id) {
 
 		$http.put(`/rest/address/updateDefault?shipid=${id}`)
 			.then(resp => {
-				console.log("shipaddres",id);
+				console.log("shipaddres", id);
 				$scope.initialize();
 			}).catch(function (error) {
 				console.error('Error fetching cart items:', error);
@@ -353,7 +499,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 			});
 
 	}
-	$scope.toast = function(title){
+	$scope.toast = function (title) {
 		const Toast = Swal.mixin({
 			toast: true,
 			position: 'top',
@@ -372,73 +518,103 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 
 		})
 
-		
+
 	}
+	$scope.hideModal = function() {
+		$('#ModalAddress1').modal('hide');
+		$('#ModalAddress').modal('hide');
+	};
 	$scope.checkName = true
-	$scope.checkPhone=true
-	$scope.checkParttenPhone=true
-	$scope.checkAddressDetail=true
+	$scope.checkPhone = true
+	$scope.checkParttenPhone = true
+	$scope.checkAddressDetail = true
 	$scope.createAddress = function (checked, name, phone, detail) {
 		var phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-		if(!name){
+		if (!name) {
 			$scope.toast("Vui Lòng nhập họ và tên")
-			$scope.checkName=false
-		}else if(!phone){
+			$scope.checkName = false
+		} else if (!phone) {
 			$scope.toast("Vui Lòng nhập số điện thoại")
-			$scope.checkName=true
-			$scope.checkPhone=false
-		}else if (!phonePattern.test(phone)) {
+			$scope.checkName = true
+			$scope.checkPhone = false
+		} else if (!phonePattern.test(phone)) {
 			$scope.toast("Số điện thoại không hợp lệ");
-			$scope.checkPhone=true
-			$scope.checkParttenPhone=false
-		}else if(!$scope.form.selectedProvince){
-			$scope.checkParttenPhone=true
+			$scope.checkPhone = true
+			$scope.checkParttenPhone = false
+		} else if (!$scope.form.selectedProvince) {
+			$scope.checkParttenPhone = true
 			$scope.toast("Chưa chọn tỉnh");
 		}
-		else if(!$scope.form.selectedDistrict){
+		else if (!$scope.form.selectedDistrict) {
 			// $scope.checkParttenPhone=true
 			$scope.toast("Chưa chọn huyện");
 		}
-		else if(!$scope.form.selectedWard){
+		else if (!$scope.form.selectedWard) {
 			// $scope.checkParttenPhone=true
 			$scope.toast("Chưa chọn xã");
-		}else if (!detail) {
+		} else if (!detail) {
 			$scope.toast("Vui lòng nhập Địa chỉ cụ thể");
-			
-			$scope.checkAddressDetail=false
-		}else{
-			$scope.checkAddressDetail=true
-			
-				// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
-				$scope.dataAddress = {
-					// Truyền thông tin địa chỉ vào yêu cầu
-					province_name: $scope.form.selectedProvince.ProvinceName,
-					district_name: $scope.form.selectedDistrict.DistrictName,
-					ward_name: $scope.form.selectedWard.WardName,
-					// Các thông tin khác cần thiết
-				}
-				
-				
-				if ($scope.addressDefault.length <1) {
+
+			$scope.checkAddressDetail = false
+		} else {
+			$scope.checkAddressDetail = true
+
+			// Gửi yêu cầu tính tiền ship dựa trên địa chỉ đã chọn
+			$scope.dataAddress = {
+				// Truyền thông tin địa chỉ vào yêu cầu
+				province_name: $scope.form.selectedProvince.ProvinceName,
+				district_name: $scope.form.selectedDistrict.DistrictName,
+				ward_name: $scope.form.selectedWard.WardName,
+				// Các thông tin khác cần thiết
+			}
+
+
+			if ($scope.addressDefault.length < 1) {
+
+				checked = true
+			}$scope.checkParttenPhone = true
+
+			console.log($scope.dataAddress);
+			$http.post(`/rest/address/create?defaultCheck=${checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
+				.then(resp => {
+					console.log("add");
 					
-					checked=true
-				} 
-				
-				console.log($scope.dataAddress );
-				$http.post(`/rest/address/create?defaultCheck=${checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
-					.then(resp => {
-						
-						console.log("add");
-						$scope.reset()
-						$scope.initialize()
-					}).catch(function (error) {
-						console.error('Error fetching districts:', error);
-						
-					});
+					$('#ModalAddress').modal('hide');
+					$('#ModalAddress1').modal('show');
+					$scope.initialize();
+					
+					
+					$scope.reset()
+					const Toast = Swal.mixin({
+						toast: true,
+						position: 'top-right',
+						showConfirmButton: false,
+						timer: 3000,
+						timerProgressBar: true,
+						didOpen: (toast) => {
+							toast.addEventListener('mouseenter', Swal.stopTimer)
+							toast.addEventListener('mouseleave', Swal.resumeTimer)
+						},
+						customClass: {
+							// Add your custom CSS class here
+							popup: 'custom-toast-class',
+						}
+					})
+					Toast.fire({
+						icon: 'success',
+						title: 'Thêm địa chỉ thành công',
+
+					})
+					
+					
+				}).catch(function (error) {
+					console.error('Error fetching districts:', error);
+
+				});
 		}
 
 	}
-	
+
 
 	//address load
 	$scope.loadDistricts = function () {
@@ -553,30 +729,30 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 
 	//select voucher
 	$scope.selectedVoucher = null;
-	$scope.showVoucher = function(item) {
+	$scope.showVoucher = function (item) {
 
-		$http.get(`/rest/voucher/getIdVoucher/`+item).then(function (response) {
-			$scope.vocherSelect= response.data
+		$http.get(`/rest/voucher/getIdVoucher/` + item).then(function (response) {
+			$scope.vocherSelect = response.data
 			console.log($scope.vocherSelect);
 		}).catch(function (error) {
 			console.error('Error calculating shipping:', error);
 		});
-		 console.log("item",item);
-		$scope.selectedVoucher= item
+		console.log("item", item);
+		$scope.selectedVoucher = item
 		console.log("Voucher selected:", item); // Hoặc thực hiện các thao tác khác với giá trị item được chọn
 		return $scope.selectedVoucher
 	};
 
-	$scope.caculatorDiscount=function(item){
+	$scope.caculatorDiscount = function (item) {
 		var discountRate = 0
-		$scope.selectedVoucher=item
+		$scope.selectedVoucher = item
 		if ($scope.selectedVoucher) {
-			discountRate = $scope.selectedVoucher.voucher.discountAmount/100
-		}else{
-			discountRate=0
+			discountRate = $scope.selectedVoucher.voucher.discountAmount / 100
+		} else {
+			discountRate = 0
 		}
 
-		$scope.discouted = $scope.tongTien *discountRate 
+		$scope.discouted = $scope.tongTien * discountRate
 
 	}
 	$scope.caculatorDiscount()
@@ -587,82 +763,82 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout','$location', func
 	$scope.filteredVouchers = [];
 
 	$scope.getVoucher = function () {
-		$http.get("/user/Idprofile").then((resp) =>{
+		$http.get("/user/Idprofile").then((resp) => {
 			var userId = resp.data;
-			$http.get("/user/" + userId).then(userResp =>{
-			  console.log(userId);
-			  var fullUserData = userResp.data;
-			  // Thực hiện HTTP GET request đến API
-			$http.get('/rest/voucherUse/getTrue/' + userId)
-				.then(function (response) {
-			// Xử lý dữ liệu trả về từ API
-			$scope.voucherUseTrue = response.data;
-			console.log($scope.voucherUseTrue);
+			$http.get("/user/" + userId).then(userResp => {
+				console.log(userId);
+				var fullUserData = userResp.data;
+				// Thực hiện HTTP GET request đến API
+				$http.get('/rest/voucherUse/getTrue/' + userId)
+					.then(function (response) {
+						// Xử lý dữ liệu trả về từ API
+						$scope.voucherUseTrue = response.data;
+						console.log($scope.voucherUseTrue);
 
-			$scope.voucherUseTrue.forEach(function (item) {
-				
-				item.formattedStartDate = formatDate(item.voucher.dateStart);
-				item.formattedEndDate = formatDate(item.voucher.dateEnd);
-				item.isExpired = isVoucherExpired(item.voucher.dateEnd) || $scope.tongTien < item.voucher.total;
-				$scope.voucherUseTrue.sort(function (a, b) {
-                    return a.isExpired - b.isExpired;
-                });
-				console.log($scope.tongtien);
-				console.log(item.voucher.total)
-			  });
-			  function formatDate(startDate) {
-				// Parse the input date string
-				const inputDate = new Date(startDate);
-			
-				// Format options
-				const options = {
-					weekday: 'long', // 'long' for the full weekday name
-					day: '2-digit',
-					month: '2-digit',
-					year: 'numeric',
-					// hour: '2-digit',
-					// minute: '2-digit',
-					// second: '2-digit',
-					hour12: false, // 24-hour format
-					timeZone: 'Asia/Ho_Chi_Minh', // Time zone
-				};
-			
-				// Format the date using Intl.DateTimeFormat
-				const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
-			
-				return formattedDate;
-			}
+						$scope.voucherUseTrue.forEach(function (item) {
 
-			function isVoucherExpired(endDate) {
-				// Phân tích chuỗi ngày kết thúc
-				const voucherEndDate = new Date(endDate);
+							item.formattedStartDate = formatDate(item.voucher.dateStart);
+							item.formattedEndDate = formatDate(item.voucher.dateEnd);
+							item.isExpired = isVoucherExpired(item.voucher.dateEnd) || $scope.tongTien < item.voucher.total;
+							$scope.voucherUseTrue.sort(function (a, b) {
+								return a.isExpired - b.isExpired;
+							});
+							console.log($scope.tongtien);
+							console.log(item.voucher.total)
+						});
+						function formatDate(startDate) {
+							// Parse the input date string
+							const inputDate = new Date(startDate);
 
-				// Lấy ngày hiện tại
-				const currentDate = new Date();
+							// Format options
+							const options = {
+								weekday: 'long', // 'long' for the full weekday name
+								day: '2-digit',
+								month: '2-digit',
+								year: 'numeric',
+								// hour: '2-digit',
+								// minute: '2-digit',
+								// second: '2-digit',
+								hour12: false, // 24-hour format
+								timeZone: 'Asia/Ho_Chi_Minh', // Time zone
+							};
 
-				// So sánh ngày kết thúc với ngày hiện tại
-				return voucherEndDate < currentDate;
-			}
+							// Format the date using Intl.DateTimeFormat
+							const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(inputDate);
 
-		})
-		
+							return formattedDate;
+						}
+
+						function isVoucherExpired(endDate) {
+							// Phân tích chuỗi ngày kết thúc
+							const voucherEndDate = new Date(endDate);
+
+							// Lấy ngày hiện tại
+							const currentDate = new Date();
+
+							// So sánh ngày kết thúc với ngày hiện tại
+							return voucherEndDate < currentDate;
+						}
+
+					})
+
 			})
-		  })
-		
-			
+		})
+
+
 	};
 
 	$scope.formatToVND = function (amount) {
 		// Logic để định dạng số amount sang định dạng VND
 		return amount.toLocaleString("vi-VN", {
-		  style: "currency",
-		  currency: "VND",
+			style: "currency",
+			currency: "VND",
 		});
-	  };
+	};
 
 	$scope.getVoucher();
 
-	$scope.openRecycleBinForm = function() {
+	$scope.openRecycleBinForm = function () {
 		// Reset searchKeyword
 		searchValue = '';
 		$('#recycleBinModal').modal('show');

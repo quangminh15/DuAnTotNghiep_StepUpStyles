@@ -45,5 +45,16 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
       // TODO Auto-generated method stub
       shipAddressDao.createAddress(userId, defaultCheck, province, district, ward,addressDetail, nameReceiver, phoneReceiver);
     }
+
+    @Override
+    public void update(ShippingAddress ship) {
+      shipAddressDao.save(ship);
+    }
+
+    @Override
+    public void deletedShippingAddress(Integer id) {
+         shipAddressDao.deleteById(id);
+          
+    }
     
 }
