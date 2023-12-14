@@ -171,20 +171,21 @@
 
 				</div>
 				<div class="welcome-grids row mt-5 justify-content-center d-flex">
-    <div ng-repeat="brand in brans" class="col-lg-2 col-md-4 col-6 welcome-image">
-        <div class="boxhny13">
-            <a ng-click="getProductsAndNavigate(brand.brandID)">
-                <img ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
-                <div class="boxhny-content">
-                    <h3 class="title">Xem</h3>
-                </div>
-            </a>
-        </div>
-        <h4>
-            <a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
-        </h4>
-    </div>
-</div>
+					<div ng-repeat="brand in brans"
+						class="col-lg-2 col-md-4 col-6 welcome-image">
+						<div class="boxhny13">
+							<a ng-click="getProductsAndNavigate(brand.brandID)"> <img
+								ng-src="{{brand.brandImage}}" class="img-fluid" alt="" />
+								<div class="boxhny-content">
+									<h3 class="title">Xem</h3>
+								</div>
+							</a>
+						</div>
+						<h4>
+							<a ng-click="getProductsAndNavigate(brand.brandID)">{{brand.brandName}}</a>
+						</h4>
+					</div>
+				</div>
 
 			</div>
 		</div>
@@ -277,8 +278,7 @@
 								Sản phẩm tiêu biểu <span>HOT</span>
 							</h3>
 							<p>Xem video để hiểu rõ hơn về sản phẩm.</p>
-							<a href="/list_products" class="read-more btn"> Xem ngay
-							</a>
+							<a href="/list_products" class="read-more btn"> Xem ngay </a>
 						</div>
 					</div>
 				</div>
@@ -296,7 +296,8 @@
 				<p class="text-center">Sản phẩm được săn đón nhiều nhất</p>
 				<!-- /row-->
 				<div class="ecom-products-grids row ">
-					<div ng-repeat="p in FeaturedPager.featureds" ng-click="addToRecentlyViewed(p)"
+					<div ng-repeat="p in FeaturedPager.featureds"
+						ng-click="addToRecentlyViewed(p)"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv"
 							ng-click="saveProductID(p.productID)">
@@ -386,7 +387,8 @@
 					deal shock nhé!</p>
 				<!-- /row-->
 				<div class="ecom-products-grids row ">
-					<div ng-repeat="p in DiscountPager.discountedProducts" ng-click="addToRecentlyViewed(p)"
+					<div ng-repeat="p in DiscountPager.discountedProducts"
+						ng-click="addToRecentlyViewed(p)"
 						class="col-lg-3 col-6 product-incfhny mt-4">
 						<div class="product-grid2 transmitv"
 							ng-click="saveProductID(p.productID)">
@@ -431,9 +433,11 @@
 									ng-if="p.discount[0].status !== 'Chưa diễn ra' && p.discount[0].priceDiscount">
 									{{ p.price | number:0 }} ₫ </span>
 								<h3 class="title">
-									Còn lại: <span class="title" id="countdown_{{$index}}"></span>
+									Còn lại: <span class="title" id="countdown_{{p.productID}}"></span>
 								</h3>
-
+								<script>
+									$scope.startCountdown(startDate, p);
+								</script>
 							</div>
 						</div>
 					</div>
@@ -486,7 +490,7 @@
 	<!-- //content-6-section -->
 
 	<!-- //post-grids-->
-	
+
 	<!-- //customers-->
 
 	<!-- //customers-6-->
