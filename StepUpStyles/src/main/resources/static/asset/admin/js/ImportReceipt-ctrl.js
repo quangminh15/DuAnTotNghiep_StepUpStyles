@@ -3,6 +3,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.importReceipt = [];
   $scope.importSup = [];
   $scope.form = {};
+  $scope.formDetal = {};
   $scope.form.supplier = {};
   $scope.form.user = {};
   $scope.importDetail = [];
@@ -194,6 +195,10 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.reset = function () {
     $scope.form = {};
     $scope.form.totalAmount = 0;
+  };
+
+  $scope.resetDetail = function () {
+    $scope.formDetal = {};
   };
 
   //load chi tiết phiếu nhập
