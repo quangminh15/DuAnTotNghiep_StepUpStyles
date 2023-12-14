@@ -54,7 +54,7 @@ app.controller("user-ctrl", function($scope, $http) {
 	$scope.edit = function(user) {
 		$scope.form = angular.copy(user);
 		$scope.form.birthday = $scope.convertDateFormat($scope.form.birthday);
-		console.log("cc :"+$scope.form.birthday);
+
 	}
 
 	// convertDateFormat

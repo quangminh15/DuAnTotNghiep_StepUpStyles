@@ -60,64 +60,71 @@
             <div class="row">
 
                 <div class="form-group col-md-6">
-                    <label for="inputPassword3">Hình ảnh</label> <input
-                        class="form-control" id="photo" type="file">
+                    <label for="inputPassword3">Hình ảnh</label> <input class="form-control" id="photo" type="file"
+                                                                        onchange="previewImage(event)">
+
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label class="col-form-label text-sm-left" style="padding: 0">Quyền</label>
-                    <div class="form-check mt-1">
-                        <label class="custom-control custom-radio custom-control-inline">
-                            <input ng-model="form.role" class="custom-control-input"
-                                   ng-value="User" type="radio" name="available" checked=""><span
-                                class="custom-control-label custom-control-color">CUSTOMER</span>
-                        </label> <label class="custom-control custom-radio custom-control-inline">
-                        <input ng-model="form.role" class="custom-control-input"
-                               ng-value="Employee" type="radio" name="available"><span
-                            class="custom-control-label custom-control-color">EMPLOYEE</span>
-                    </label>
-                        <label class="custom-control custom-radio custom-control-inline">
-                            <input ng-model="form.role" class="custom-control-input"
-                                   ng-value="Admin" type="radio" name="available"><span
-                                class="custom-control-label custom-control-color">ADMIN</span>
-                        </label>
-<!--                        <label class="custom-control custom-radio custom-control-inline">-->
-<!--                            <input ng-model="form.status" class="custom-control-input"-->
-<!--                                   ng-value="true" type="radio" name="available" checked><span-->
-<!--                                class="custom-control-label custom-control-color">User</span>-->
-<!--                        </label>-->
-                    </div>
+                    <label for="inputUserName">Địa chỉ</label> <textarea rows="4" cols="50"
+                                                                         class="form-control" id="" type="text"
+                                                                         ng-model="form.address"></textarea>
                 </div>
 
 
             </div>
 
-<!--            <div class="row">-->
+            <!--            <div class="row">-->
 
 
-<!--                <div class="form-group col-md-6">-->
-<!--                    <label class="col-form-label text-sm-left" style="padding: 0">Trạng-->
-<!--                        thái</label>-->
-<!--                    <div class="form-check mt-1">-->
-<!--                        <label class="custom-control custom-radio custom-control-inline">-->
-<!--                            <input ng-model="form.status" class="custom-control-input"-->
-<!--                                   ng-value="true" type="radio" name="available" checked=""><span-->
-<!--                                class="custom-control-label custom-control-color">Bật</span>-->
-<!--                        </label> <label class="custom-control custom-radio custom-control-inline">-->
-<!--                        <input ng-model="form.status" class="custom-control-input"-->
-<!--                               ng-value="false" type="radio" name="available"><span-->
-<!--                            class="custom-control-label custom-control-color">Tắt</span>-->
-<!--                    </label>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--                <div class="form-group col-md-6">-->
+            <!--                    <label class="col-form-label text-sm-left" style="padding: 0">Trạng-->
+            <!--                        thái</label>-->
+            <!--                    <div class="form-check mt-1">-->
+            <!--                        <label class="custom-control custom-radio custom-control-inline">-->
+            <!--                            <input ng-model="form.status" class="custom-control-input"-->
+            <!--                                   ng-value="true" type="radio" name="available" checked=""><span-->
+            <!--                                class="custom-control-label custom-control-color">Bật</span>-->
+            <!--                        </label> <label class="custom-control custom-radio custom-control-inline">-->
+            <!--                        <input ng-model="form.status" class="custom-control-input"-->
+            <!--                               ng-value="false" type="radio" name="available"><span-->
+            <!--                            class="custom-control-label custom-control-color">Tắt</span>-->
+            <!--                    </label>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
 
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="inputUserName">Địa chỉ</label> <textarea rows="4" cols="50"
-                                                                         class="form-control" id="" type="text"
-                                                                         ng-model="form.address"></textarea>
+                    <img style=" max-width: 30%; " ng-src="{{form.image}}">
+                </div>
+                <div class="form-group col-md-6">
+
+                    <label class="col-form-label text-sm-left" style="padding: 0">Quyền</label>
+                    <div class="form-check mt-1">
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input ng-model="form.role" class="custom-control-input" ng-value="CUSTOMER" type="radio"
+                                   name="available" ng-checked="form.role === 'CUSTOMER'"><span
+                                class="custom-control-label custom-control-color">CUSTOMER</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input ng-model="form.role" class="custom-control-input" ng-value="EMPLOYEE" type="radio"
+                                   name="available" ng-checked="form.role === 'EMPLOYEE'"><span
+                                class="custom-control-label custom-control-color">EMPLOYEE</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input ng-model="form.role" class="custom-control-input" ng-value="ADMIN" type="radio"
+                                   name="available" ng-checked="form.role === 'ADMIN'"><span
+                                class="custom-control-label custom-control-color">ADMIN</span>
+                        </label>
+
+                        <!--                        <label class="custom-control custom-radio custom-control-inline">-->
+                        <!--                            <input ng-model="form.status" class="custom-control-input"-->
+                        <!--                                   ng-value="true" type="radio" name="available" checked><span-->
+                        <!--                                class="custom-control-label custom-control-color">User</span>-->
+                        <!--                        </label>-->
+                    </div>
                 </div>
             </div>
 
@@ -246,13 +253,6 @@
                 <h4 class="mb-0">Danh sách người dùng</h4>
                 <div class="d-flex">
                     <!-- Thẻ select box -->
-                    <select class="form-control mr-2" ng-model="selectedActivity"
-                            data-toggle="tooltip" title="Lọc theo trạng thái thương hiệu"
-                            ng-change="filterByActivities()" style="width: 200px;">
-                        <option value="all">Tất cả</option>
-                        <option value="true">Đang bật</option>
-                        <option value="false">Đang tắt</option>
-                    </select>
                     <button type="button" class="btn btn-outline-success btn-fw mr-2 exportExcel" data-toggle="tooltip"
                             title="Xuất file Excel">
                         <span class="fa fa-file-excel-o" aria-hidden="true"></span>
