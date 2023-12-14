@@ -138,8 +138,6 @@ app.controller("voucher-ctrl", function ($scope, $http) {
                                         </div>
                             <b>Thời hạn sử dụng:</b>
                             <p class="date">${$scope.formatDate(getVoucher.dateStart)} - ${$scope.formatDate(getVoucher.dateEnd)}</p>
-                            <b>Sản phẩm áp dụng</b>
-                            <p class="sp">Tất cả sản phẩm</p>
                             <b>Chi tiết</b>
                             <p class="ct">${getVoucher.description}</p>
                         </div>
