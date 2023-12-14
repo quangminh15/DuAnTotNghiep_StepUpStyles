@@ -193,6 +193,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   //	Xóa form
   $scope.reset = function () {
     $scope.form = {};
+    $scope.form.totalAmount = 0;
   };
 
   //load chi tiết phiếu nhập
