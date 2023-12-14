@@ -47,8 +47,6 @@ public class DirectDiscountRestController {
 
     @PostMapping("/createDiscount")
     public DirectDiscount createDiscount(@RequestBody DirectDiscount directDis) {
-        // Nhận thông tin khuyến mãi từ yêu cầu POST
-
         // Lấy giá sản phẩm từ cơ sở dữ liệu (hoặc từ đối tượng directDis nếu có)
         Product product = productService.getProductById(directDis.getProduct().getProductID());
 
@@ -65,6 +63,14 @@ public class DirectDiscountRestController {
 
     @PutMapping("/updateDiscount/{ddid}")
     public DirectDiscount update(@PathVariable("ddid") Long ddid, @RequestBody DirectDiscount directDis) {
+         // Lấy giá sản phẩm từ cơ sở dữ liệu (hoặc từ đối tượng directDis nếu có)
+        Product product = productService.getProductById(directDis.getProduct().getProductID());
+
+        // Tính toán priceDiscount
+        double priceDiscount = product.getPrice() - ((directDis.getDirectDiscount() / 100) * product.getPrice());
+        directDis.setPriceDiscount(priceDiscount);
+
+        // Lưu DirectDiscount vào cơ sở dữ liệu
         discountService.saveStatus(directDis);
         DirectDiscount updateDiscount = discountService.update(directDis);
         return updateDiscount;
