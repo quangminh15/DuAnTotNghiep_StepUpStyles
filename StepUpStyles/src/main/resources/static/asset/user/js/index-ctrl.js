@@ -7,7 +7,7 @@ app.controller("index-ctrl", function($scope, $http) {
 	};
 
 	// Tạo danh sách sản phẩm sắp giảm giá bắt đầu
-	$scope.startCountdown = function(startDate, index) {
+	$scope.startCountdown = function(startDate, product) {
 		var x = setInterval(function() {
 			var now = new Date().getTime();
 			var distance = startDate - now;
@@ -17,18 +17,21 @@ app.controller("index-ctrl", function($scope, $http) {
 			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-			// Sử dụng id duy nhất cho mỗi phần tử trong vòng lặp
-			document.getElementById("countdown_" + index).innerHTML = days + " ngày " + hours + "h " + minutes + "m " + seconds + "s ";
+			var countdownId = "countdown_" + product.productID;
+			var countdownElement = document.getElementById(countdownId);
 
-			if (distance < 0) {
-				clearInterval(x);
-				document.getElementById("countdown_" + index).innerHTML = "Đã bắt đầu!";
+			if (countdownElement) {
+				countdownElement.innerHTML = days + " ngày " + hours + "h " + minutes + "m " + seconds + "s ";
+
+				if (distance < 0) {
+					clearInterval(x);
+					countdownElement.innerHTML = "Đã bắt đầu!";
+				}
+			} else {
+				console.error("Element with ID " + countdownId + " not found.");
 			}
 		}, 1000);
 	};
-
-
-
 
 	$http.get("/rest/products/loadDiscountedProducts").then(resp => {
 		$scope.discountedProducts = resp.data;
@@ -38,19 +41,82 @@ app.controller("index-ctrl", function($scope, $http) {
 			})
 		})
 
-		$scope.discountedProducts.forEach((item, index) => {
+		$scope.discountedProducts.forEach((item) => {
 			$http.get("/rest/discount/loadbyproduct/" + item.productID).then(resp => {
 				item.discount = resp.data.filter(discount => discount.status === "Chưa diễn ra");
 
-				// Đếm ngược thời gian giảm giá bắt đầu
 				var startDate = new Date(item.discount[0].startDate).getTime();
-				$scope.startCountdown(startDate, index);
+				$scope.startCountdown(startDate, item);
 			});
 		});
+
 		console.log("$scope.discountedProducts: ", $scope.discountedProducts)
 		$scope.pager.first(); $scope.DiscountPager.first();
 		$scope.FeaturedPager.first();
 	});
+
+	//phân trang trang chủ product discount START
+	$scope.DiscountPager = {
+		page: 0,
+		size: 8,
+		getDiscountPageNumbers: function() {
+			var DiscountPageCount = this.count;
+			var DiscountCurrentPage = this.page + 1;
+			var DiscountVisiblePages = [];
+
+			if (DiscountPageCount <= 3) {
+				for (var i = 1; i <= DiscountPageCount; i++) {
+					DiscountVisiblePages.push({ value: i });
+				}
+			} else {
+				if (DiscountCurrentPage <= 2) {
+					DiscountVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (DiscountCurrentPage >= DiscountPageCount - 1) {
+					DiscountVisiblePages.push({ value: '...' }, { value: DiscountPageCount - 2 }, { value: DiscountPageCount - 1 }, { value: DiscountPageCount });
+				} else {
+					DiscountVisiblePages.push({ value: '...' }, { value: DiscountCurrentPage - 1 }, { value: DiscountCurrentPage }, { value: DiscountCurrentPage + 1 }, { value: '...' });
+				}
+			}
+			return DiscountVisiblePages;
+		},
+		get discountedProducts() {
+			var start = this.page * this.size;
+			return $scope.discountedProducts.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.discountedProducts.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+		},
+		DiscountGoto(DiscountPageNumber) {
+			if (DiscountPageNumber >= 1 && DiscountPageNumber <= this.count) {
+				this.page = DiscountPageNumber - 1;
+				$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
+			}
+		},
+	};
+	//phân trang trang chủ product discount END
+
 	//sản phẩm sắp giảm giá kết thúc
 	//HAI End
 
@@ -1217,67 +1283,7 @@ app.controller("index-ctrl", function($scope, $http) {
 	};
 	//phân trang trang chủ product featureds END
 
-	//phân trang trang chủ product discount START
-	$scope.DiscountPager = {
-		page: 0,
-		size: 8,
-		getDiscountPageNumbers: function() {
-			var DiscountPageCount = this.count;
-			var DiscountCurrentPage = this.page + 1;
-			var DiscountVisiblePages = [];
 
-			if (DiscountPageCount <= 3) {
-				for (var i = 1; i <= DiscountPageCount; i++) {
-					DiscountVisiblePages.push({ value: i });
-				}
-			} else {
-				if (DiscountCurrentPage <= 2) {
-					DiscountVisiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
-				} else if (DiscountCurrentPage >= DiscountPageCount - 1) {
-					DiscountVisiblePages.push({ value: '...' }, { value: DiscountPageCount - 2 }, { value: DiscountPageCount - 1 }, { value: DiscountPageCount });
-				} else {
-					DiscountVisiblePages.push({ value: '...' }, { value: DiscountCurrentPage - 1 }, { value: DiscountCurrentPage }, { value: DiscountCurrentPage + 1 }, { value: '...' });
-				}
-			}
-			return DiscountVisiblePages;
-		},
-		get discountedProducts() {
-			var start = this.page * this.size;
-			return $scope.discountedProducts.slice(start, start + this.size);
-		},
-		get count() {
-			return Math.ceil(1.0 * $scope.discountedProducts.length / this.size);
-		},
-		first() {
-			this.page = 0;
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		prev() {
-			this.page--;
-			if (this.page < 0) {
-				this.last();
-			}
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		next() {
-			this.page++;
-			if (this.page >= this.count) {
-				this.first();
-			}
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		last() {
-			this.page = this.count - 1;
-			$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-		},
-		DiscountGoto(DiscountPageNumber) {
-			if (DiscountPageNumber >= 1 && DiscountPageNumber <= this.count) {
-				this.page = DiscountPageNumber - 1;
-				$scope.DiscountVisiblePages = this.getDiscountPageNumbers();
-			}
-		},
-	};
-	//phân trang trang chủ product discount END
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
@@ -1288,90 +1294,90 @@ app.controller("index-ctrl", function($scope, $http) {
 	$scope.userRatings = []
 	$scope.allreviews = []
 	$scope.averageRating = []
-	$scope.check = function (product) {
-		$http.get("/user/Idprofile").then((resp) =>{
+	$scope.check = function(product) {
+		$http.get("/user/Idprofile").then((resp) => {
 			var userId = resp.data;
 			if (!userId) {
-			  const Toast = Swal.mixin({
-				  toast: true,
-				  position: 'top',
-				  showConfirmButton: false,
-				  timer: 3000,
-				  timerProgressBar: true,
-				  didOpen: (toast) => {
-					  toast.addEventListener('mouseenter', Swal.stopTimer)
-					  toast.addEventListener('mouseleave', Swal.resumeTimer)
-				  }
-			  });
-			  Toast.fire({
-				  icon: 'error',
-				  title: 'Vui lòng đăng nhập để thực hiện thích sản phẩm',
-			  });
-			  return;
-		  }
+				const Toast = Swal.mixin({
+					toast: true,
+					position: 'top',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				});
+				Toast.fire({
+					icon: 'error',
+					title: 'Vui lòng đăng nhập để thực hiện thích sản phẩm',
+				});
+				return;
+			}
 			$http.get('/rest/favorites/check/' + product.productID)
-			.then(function (response) {
-				$scope.productbyids = response.data;
-				console.log($scope.productbyids.favoriteId);
-				console.log($scope.productbyids);
-				if (!$scope.productbyids) {
-					$http.post('/rest/favorites/' + product.productID)
-						.then(function (response) {
-							const Toast = Swal.mixin({
-								toast: true,
-								position: 'top',
-								showConfirmButton: false,
-								timer: 3000,
-								timerProgressBar: true,
-								didOpen: (toast) => {
-									toast.addEventListener('mouseenter', Swal.stopTimer)
-									toast.addEventListener('mouseleave', Swal.resumeTimer)
-								}
-							})
+				.then(function(response) {
+					$scope.productbyids = response.data;
+					console.log($scope.productbyids.favoriteId);
+					console.log($scope.productbyids);
+					if (!$scope.productbyids) {
+						$http.post('/rest/favorites/' + product.productID)
+							.then(function(response) {
+								const Toast = Swal.mixin({
+									toast: true,
+									position: 'top',
+									showConfirmButton: false,
+									timer: 3000,
+									timerProgressBar: true,
+									didOpen: (toast) => {
+										toast.addEventListener('mouseenter', Swal.stopTimer)
+										toast.addEventListener('mouseleave', Swal.resumeTimer)
+									}
+								})
 
-							Toast.fire({
-								icon: 'success',
-								title: 'Đã thêm sản phẩm ' + product.productName + ' vào danh sách yêu thích',
+								Toast.fire({
+									icon: 'success',
+									title: 'Đã thêm sản phẩm ' + product.productName + ' vào danh sách yêu thích',
 
+								})
+								$scope.getAllUserFavorite();
+								updateFavoriteCount();
 							})
-							$scope.getAllUserFavorite();
-							updateFavoriteCount();
-						})
-						.catch(function (error) {
-							console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
-						});
-				} else {
-					$http.delete('/rest/favorites/delete/' + product.productID)
-						.then(function (response) {
-							const Toast = Swal.mixin({
-								toast: true,
-								position: 'top',
-								showConfirmButton: false,
-								timer: 3000,
-								timerProgressBar: true,
-								didOpen: (toast) => {
-									toast.addEventListener('mouseenter', Swal.stopTimer)
-									toast.addEventListener('mouseleave', Swal.resumeTimer)
-								}
-							})
+							.catch(function(error) {
+								console.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích: ' + error);
+							});
+					} else {
+						$http.delete('/rest/favorites/delete/' + product.productID)
+							.then(function(response) {
+								const Toast = Swal.mixin({
+									toast: true,
+									position: 'top',
+									showConfirmButton: false,
+									timer: 3000,
+									timerProgressBar: true,
+									didOpen: (toast) => {
+										toast.addEventListener('mouseenter', Swal.stopTimer)
+										toast.addEventListener('mouseleave', Swal.resumeTimer)
+									}
+								})
 
-							Toast.fire({
-								icon: 'error',
-								title: 'Đã xóa sản phẩm ' + $scope.productbyids.product.productName + ' khỏi danh sách yêu thích',
+								Toast.fire({
+									icon: 'error',
+									title: 'Đã xóa sản phẩm ' + $scope.productbyids.product.productName + ' khỏi danh sách yêu thích',
 
+								})
+								$scope.getAllUserFavorite();
+								updateFavoriteCount();
 							})
-							$scope.getAllUserFavorite();
-							updateFavoriteCount();
-						})
-						.catch(function (error) {
-							console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
-						});
-				}
-			})
-			.catch(function (error) {
-				console.error('Error ' + error);
-			});
-		  })
+							.catch(function(error) {
+								console.error('Lỗi khi xóa sản phẩm khỏi danh sách yêu thích: ' + error);
+							});
+					}
+				})
+				.catch(function(error) {
+					console.error('Error ' + error);
+				});
+		})
 	}
 
 	$scope.getAllUserFavorite = function() {
@@ -1424,15 +1430,15 @@ app.controller("index-ctrl", function($scope, $http) {
 
 	$http.get("/user/Idprofile").then((resp) => {
 		var userId = resp.data;
-	
+
 		// Lấy danh sách sản phẩm vừa xem từ Local Storage của người dùng
 		var userKey = 'recentlyViewed_' + userId;
 		$scope.recentlyViewedProducts = JSON.parse(localStorage.getItem(userKey)) || [];
-	
+
 		// Hàm để thêm sản phẩm vào danh sách sản phẩm vừa xem
 		$scope.addToRecentlyViewed = function(product) {
 			var index = $scope.recentlyViewedProducts.findIndex(item => item.productID === product.productID);
-	
+
 			if (index === -1) {
 				// Nếu sản phẩm chưa tồn tại, thêm vào đầu danh sách
 				$scope.recentlyViewedProducts.unshift(product);
@@ -1451,7 +1457,7 @@ app.controller("index-ctrl", function($scope, $http) {
 	});
 
 	$scope.top5Product = []
-	$scope.topProductFavorite = function(){
+	$scope.topProductFavorite = function() {
 		$http.get("/rest/favorites/top5product").then(resp => {
 			$scope.top5Product = resp.data;
 			$scope.top5Product.forEach(items => {

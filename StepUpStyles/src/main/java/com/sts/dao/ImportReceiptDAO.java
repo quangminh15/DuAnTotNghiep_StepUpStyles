@@ -16,6 +16,9 @@ public interface ImportReceiptDAO extends JpaRepository<ImportReceipt, Long> {
    @Query(value = "EXEC GetProductQuantityByMonthAndYear :month, :year", nativeQuery = true)
     List<Object[]> getProductQuantityByMonthAndYear(@Param("month") Integer month, @Param("year") Integer year);
 
+    @Query(value = "EXEC GetProductQuantityByMonthAndYearDetail :month, :year", nativeQuery = true)
+    List<Object[]> getProductQuantityByMonthAndYearDetail(@Param("month") Integer month, @Param("year") Integer year);
+
     @Query("SELECT i FROM ImportReceipt i WHERE i.user.fullName LIKE %:keyword% OR i.supplier.supplierName LIKE %:keyword% OR i.importReceiptId LIKE %:keyword% OR i.totalAmount LIKE %:keyword%")
     List<ImportReceipt> findByImportReceiptContaining(@Param("keyword") String keyword);
 }

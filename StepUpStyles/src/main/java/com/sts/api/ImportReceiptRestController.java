@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.model.ImportReceipt;
 import com.sts.model.DTO.ProductQuantityDTO;
+import com.sts.model.DTO.ProductQuantityDetailDTO;
 import com.sts.service.ImportReceiptService;
 
 @CrossOrigin("*")
@@ -67,6 +68,14 @@ public class ImportReceiptRestController {
         @RequestParam Integer year
     ) {
         return importService.getProductQuantityByMonthAndYear(month, year);
+    }
+
+    @GetMapping("/productQuantityDetails")
+    public List<ProductQuantityDetailDTO> getProductQuantityDetails(
+        @RequestParam Integer month,
+        @RequestParam Integer year
+    ) {
+        return importService.getProductQuantityByMonthAndYearDetails(month, year);
     }
 
     @GetMapping("/searchImport")

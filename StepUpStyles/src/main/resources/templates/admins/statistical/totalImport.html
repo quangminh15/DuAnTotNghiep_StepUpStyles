@@ -94,6 +94,54 @@
                 </div>
             </div>
             <canvas id="column-chart" height="80"></canvas>
+
+            <!-- Thêm bảng dưới đây để hiển thị sản phẩm -->
+            <table class="table table-bordered mt-3" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align: center;">Tên sản phẩm</th>
+                        <th scope="col" style="text-align: center;">Người nhập</th>
+                        <th scope="col" style="text-align: center;">Số lượng</th>
+                        <th scope="col" style="text-align: center;">Size</th>
+                        <th scope="col" style="text-align: center;">Màu sắc</th>
+                        <th scope="col" style="text-align: center;">Đơn giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dùng AngularJS để lặp qua danh sách sản phẩm và hiển thị dữ liệu -->
+                    <tr ng-repeat="product in pager.productList">
+                        <td>{{ product.productName }}</td>
+                        <td>{{ product.fullName }}</td>
+                        <td>{{ product.totalQuantity }}</td>
+                        <td>{{ product.sizeNumber }}</td>
+                        <td>{{ product.colorName }}</td>
+                        <td>{{ formatToVND(product.price) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Kết thúc bảng -->
+            <div class="d-flex justify-content-end" style="margin-top: 10px;">
+                <div>
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <button ng-click="pager.first()" class="page-link">
+                                <span class="ti-angle-double-left"></span>
+                            </button>
+                        </li>
+
+                        <li class="page-item" ng-repeat="page in visiblePages"
+                            ng-class="{ 'active': (page.value === pager.page + 1) }"><a class="page-link"
+                                href="" ng-click="pager.goto(page.value)">{{
+                                page.value }}</a></li>
+
+                        <li class="page-item">
+                            <button ng-click="pager.last()" class="page-link">
+                                <span class="ti-angle-double-right"></span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

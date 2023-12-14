@@ -14,6 +14,7 @@ import com.sts.dao.ImportReceiptDetailDAO;
 import com.sts.model.ImportReceipt;
 import com.sts.model.ImportReceiptDetail;
 import com.sts.model.DTO.ProductQuantityDTO;
+import com.sts.model.DTO.ProductQuantityDetailDTO;
 import com.sts.service.ImportReceiptService;
 
 @Service
@@ -90,5 +91,14 @@ public class ImportReceiptServiceImp implements ImportReceiptService{
     @Override
     public List<ImportReceipt> findByImportNameContaining(String keyword) {
         return importDao.findByImportReceiptContaining(keyword);
+    }
+
+    @Override
+    public List<ProductQuantityDetailDTO> getProductQuantityByMonthAndYearDetails(Integer month, Integer year) {
+        List<Object[]> result = importDao.getProductQuantityByMonthAndYearDetail(month, year);
+
+        return result.stream()
+            .map(arr -> new ProductQuantityDetailDTO((String) arr[0], (Double) arr[1], (String) arr[2], (String) arr[3],  (Double) arr[4],(Integer) arr[5]))
+            .collect(Collectors.toList());
     }
 }
