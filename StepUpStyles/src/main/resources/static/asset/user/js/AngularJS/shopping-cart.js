@@ -7,7 +7,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
-	localStorage.removeItem('selectedItems');
+	
 
 
 	$scope.index_of_province = function (address) {
@@ -142,7 +142,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			.catch(function (error) {
 				console.error('Error fetching cart items:', error);
 			});
-
+			localStorage.removeItem('selectedItems');
 
 	}
 	$scope.singleProd = []
