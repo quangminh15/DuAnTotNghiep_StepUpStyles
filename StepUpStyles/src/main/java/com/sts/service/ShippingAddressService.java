@@ -13,4 +13,8 @@ public interface ShippingAddressService {
     public void createAddress(int userId, boolean defaultCheck, String province, String district, String ward, String addressDetail,String nameReceiver, String phoneReceiver) ;
 
     void updateDefault(Integer shipid);
+
+    void update(ShippingAddress ship);
+
+    void deletedShippingAddress(Integer id);
 }

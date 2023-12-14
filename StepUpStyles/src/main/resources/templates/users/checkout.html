@@ -40,8 +40,14 @@
 
 	<!--  style -->
 	<style>
-		.form-group input,.form-group textarea,.form-group select{
+		.form-group input,
+		.form-group textarea,
+		.form-group select {
 			background-color: rgb(248, 248, 248) !important;
+		}
+
+		span .btn-primary:hover {
+			color: orangered !important;
 		}
 	</style>
 	<!--  -->
@@ -152,6 +158,7 @@
 								<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
 									Địa Chỉ Giao Hàng</h3>
 
+
 								<h3>{{addressDefault.nameReceiver}} | {{addressDefault.phoneReceiver}} <span
 										class="badge badge-danger">Mặc
 										Định</span></h3> <span>{{addressDefault.addressDetails}},
@@ -163,6 +170,7 @@
 										data-target="#ModalAddress1" class="btn btn-primary py-3 px-4"><i
 											class="fas fa-edit"></i> Thay
 										Đổi</a></span>
+
 							</div>
 						</div>
 					</div>
@@ -171,18 +179,20 @@
 			<!-- ------------------------------------------------------------------------ -->
 			<div class="container ">
 				<!-- The Modal -->
-				<div class="modal fade" id="ModalAddress1" data-keyboard="false" data-backdrop="static">
+				<div class="modal fade" style="overflow-y:scroll" id="ModalAddress1" data-keyboard="false"
+					data-backdrop="static">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 
 							<!-- Modal Header -->
 							<div class="modal-header">
-								<h4 class="modal-title">Địa Chỉ Của Tôi</h4>
+								<h4 class="modal-title ">Địa Chỉ Của Tôi</h4>
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
 							</div>
 
 							<!-- Modal body -->
 							<div class="modal-body">
+
 								<div class="row card-body" ng-repeat="addr in address ">
 									<div class="form-check col-lg-1">
 										<input class="form-check-input mg-2" ng-checked="addr.defaultAddress"
@@ -192,20 +202,22 @@
 									</div>
 									<div class="col-lg-8">
 
-										<h4 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
-											Địa Chỉ Giao Hàng</h3>
-											<h4>{{addr.nameReceiver}} |{{addr.phoneReceiver}} <span
-													ng-show="addr.defaultAddress" class="badge badge-danger">Mặc
-													Định</span></h3>
-												<span>{{addr.addressDetails}}, {{addr.ward}}, {{addr.district}},
-													{{addr.province}}</span>
+										<h3 style="color: tomato;"><i class="fas fa-map-marker-alt"></i>
+											Địa Chỉ Giao Hàng<span ng-show="addr.defaultAddress"
+												class="badge badge-danger ml-1">Mặc
+												Định </span></h3>
+
+										<h3>{{addr.nameReceiver}} |{{addr.phoneReceiver}}
+										</h3>
+										<span>{{addr.addressDetails}}, {{addr.ward}}, {{addr.district}},
+											{{addr.province}}</span>
 									</div>
 
-									<div class="col-lg-3">
+									<div class="col-lg-3 text-center" >
+										<a type="button"  data-dismiss="modal" ng-show="addr.addressDefault==false" ng-click="delete(addr.shippingAddressId)"><h5 class="text-danger">Xóa</h5> </a>
 										<span><a style="color: white;" type="button" data-toggle="modal"
-												data-target="#ModalAdress" data-dismiss="modal"
-												class="btn btn-primary py-3 px-4" ng-click="edit(addr)"><i
-													class="fas fa-edit"></i> Thay Đổi</a></span>
+												data-dismiss="modal" class="btn btn-primary btnEdit py-3 px-4"
+												ng-click="edit(addr)"><i class="fas fa-edit"></i> Cập nhật</a></span>
 									</div>
 									<hr>
 
@@ -216,8 +228,8 @@
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
 								<div style=" justify-content: start">
-									<a type="button" class="btn btn-success" data-toggle="modal"
-										data-target="#ModalAddress" ng-click="reset()" data-dismiss="modal"><i
+
+									<a type="button" class="btn btn-success" data-dismiss="modal" ng-click="reset()"><i
 											class="fa fa-plus"></i> Tạo Mới</a>
 								</div>
 								<div style=" justify-content: start">
@@ -232,7 +244,8 @@
 			<!-- *************************************Form address************************************* -->
 			<div class="container ">
 				<!-- The Modal -->
-				<div class="modal fade addressform" id="ModalAddress" data-keyboard="false" data-backdrop="static" style="overflow-y: scroll;">
+				<div class="modal fade addressform" id="ModalAddress" data-keyboard="false" data-backdrop="static"
+					style="overflow-y: scroll;">
 					<div class="modal-dialog modal-md">
 						<div class="modal-content">
 
@@ -255,21 +268,22 @@
 										<div class="row form-group">
 
 											<div class="form-group  col-sm-12">
-											
+
 
 												<label for="">Họ tên người nhận</label>
 												<input ng-model="form.nameReceiver" type="text"
 													class="form-control bg-secondary text-left px-3" placeholder="">
-												<div class="text-danger "  ng-show="!checkName">Vui Lòng không bỏ trống
+												<div class="text-danger " ng-show="!checkName">Vui Lòng không bỏ trống
 													tên người nhận.</div>
 											</div>
 											<div class="form-group  col-sm-12">
 												<label for="">Số Điện Thoại</label>
-												<input ng-model="form.phone" type="text"
+												<input ng-model="form.phoneReceiver" type="text"
 													class="form-control text-left px-3" placeholder="">
-												<div  class="text-danger "  ng-show="!checkPhone">Vui Lòng không bỏ trống
+												<div class="text-danger " ng-show="!checkPhone">Vui Lòng không bỏ trống
 													số điện thoại người nhận.</div>
-												<div class="text-danger "  ng-show="!checkParttenPhone">Số điện thoại không đúng định dạng.</div>
+												<div class="text-danger " ng-show="!checkParttenPhone">Số điện thoại
+													không đúng định dạng.</div>
 											</div>
 
 										</div>
@@ -307,12 +321,14 @@
 											<label for="comment">Địa chỉ cụ thể:</label>
 											<textarea ng-model="form.addressDetails" class="form-control text-left px-3"
 												rows="5" id="comment"></textarea>
-												<div class="text-danger "  ng-show="!checkAddressDetail">Vui lòng không bỏ trống địa chỉ cụ thể.</div>
+											<div class="text-danger " ng-show="!checkAddressDetail">Vui lòng không bỏ
+												trống địa chỉ cụ thể.</div>
 										</div>
 
-										<input ng-model="form.checked" ng-disabled="check!=true" class="check"
-											type="checkbox" ng-checked="check==false">
-										<label data-toggle="tooltip" data-placement="top"
+										<input ng-model="form.defaultAddress" ng-disabled="check!=true"
+											ng-show="checkEdit==false" class="check" type="checkbox"
+											ng-checked="check==false">
+										<label data-toggle="tooltip" data-placement="top" ng-show="checkEdit==false"
 											title="Địa chỉ đầu tiên của bạn sẽ được đặt làm mặc định, nếu bạn đã lưu 2 địa chỉ trở lên có thể thay đổi giá trị này"
 											for="check"> Đặt Làm Mặc Định</label>
 
@@ -322,14 +338,19 @@
 
 							<!-- Modal footer -->
 							<div class="modal-footer" style=" justify-content: start">
-								<div style=" justify-content: start">
+								<div style=" justify-content: start" ng-show="checkEdit==false||check==false">
 									<a type="submit" class="btn btn-success"
-										ng-click="createAddress(form.checked,form.nameReceiver,form.phone,form.addressDetails)"><i
-											class="fa fa-plus"></i> Luu</a>
+										ng-click="createAddress(form.defaultAddress,form.nameReceiver,form.phoneReceiver,form.addressDetails)"><i
+											class="fa fa-plus"></i> lưu</a>
+								</div>
+								<div style=" justify-content: start" ng-show="checkEdit==true">
+									<a type="submit" class="btn btn-success" ng-click="update()"><i
+											class="fa fa-plus"></i> Lưushdjkhf</a>
 								</div>
 								<div style="justify-content: start">
 									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal"
-										data-target="#ModalAddress1" data-dismiss="modal">Close</a>
+										data-target="#ModalAddress1" data-dismiss="modal"
+										ng-click="checkButton(false)">Đóng</a>
 								</div>
 
 							</div>

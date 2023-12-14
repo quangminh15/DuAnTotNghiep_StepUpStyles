@@ -7,7 +7,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	$scope.selectedColors = {};
 	$scope.cout = 0
 	//Load data
-	// localStorage.removeItem('selectedItems');
+	localStorage.removeItem('selectedItems');
 
 
 	$scope.index_of_province = function (address) {
@@ -701,22 +701,38 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 		var tongTien = 0;
 		angular.forEach($scope.items, function (value, key) {
 			$http.get("/rest/discount/loadbyproduct/" + value.product.productID).then(resp => {
-				$scope.discount = resp.data
-				if ($scope.discount[0].status == "Đang diễn ra") {
+				value.product.directDiscounts = resp.data
+				if (!value.product.directDiscounts.length>0) {
+					
+					
+						if (value.isSelected == true) {
+							console.log("e",value.product.price);
+							console.log(value.isSelected);
+							tongTien += value.product.price * value.quantity;
+							
+						}
+						$scope.tongTien = tongTien;
+				}else{
 
-					if (value.isSelected == true) {
-						console.log(value.isSelected);
-						tongTien += $scope.discount[0].priceDiscount * value.quantity;
+					if (value.product.directDiscounts[0].status=="Đang diễn ra") {
+						
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien +=value.product.directDiscounts[0].priceDiscount * value.quantity;
+						}
+						$scope.tongTien = tongTien;
+					} 
+					else {
+						
+						if (value.isSelected == true) {
+							console.log(value.isSelected);
+							tongTien += value.product.price * value.quantity;
+						}
+						$scope.tongTien = tongTien;
 					}
-					$scope.tongTien = tongTien;
 				}
-				else {
-					if (value.isSelected == true) {
-						console.log(value.isSelected);
-						tongTien += value.product.price * value.quantity;
-					}
-					$scope.tongTien = tongTien;
-				}
+					
+				
 			})
 		});
 		console.log(tongTien);

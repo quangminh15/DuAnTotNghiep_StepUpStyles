@@ -394,13 +394,19 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 
 					return order.orderStatus == 'Delivered';
-				})
+				}).sort(function(a, b) {
+				
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				});
 
 			} else if (status == 'cancel') {
 				$scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
 					
 					return order.orderStatus == 'Cancel';
-				})
+				}).sort(function(a, b) {
+				
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				});
 
 			} else {
 				$scope.filteredOrders.sort((a, b) => {
