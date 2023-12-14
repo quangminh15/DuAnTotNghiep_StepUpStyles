@@ -120,7 +120,7 @@
 						<div ng-show="userItemsFavorite">
 							<!-- Hiển thị danh sách sản phẩm yêu thích -->
 							<div class="ecom-products-grids row">
-								<div ng-repeat="item in favoritePager.userItemsFavorite" class="col-lg-3 col-6 product-incfhny mb-4">
+								<div ng-repeat="item in favoritePager.userItemsFavorite" class="col-lg-3 col-6 product-incfhny mb-4" ng-click="addToRecentlyViewed(item.product)">
 									<div class="product-grid2 transmitv" ng-click="saveProductID(item.product.productID)">
 										<div class="product-image2">
 											<div class="discount-circle"
