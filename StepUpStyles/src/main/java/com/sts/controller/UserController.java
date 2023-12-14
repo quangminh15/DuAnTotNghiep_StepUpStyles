@@ -87,6 +87,7 @@ public class UserController {
 
 	@RequestMapping("/cart")
 	public String cart(Model model) {
+		loadstatuslogin(model);
 		return "users/cart";
 	}
 
