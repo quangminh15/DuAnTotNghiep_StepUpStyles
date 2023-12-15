@@ -3,6 +3,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
   $scope.importReceipt = [];
   $scope.importSup = [];
   $scope.form = {};
+  $scope.formDetal = {};
   $scope.form.supplier = {};
   $scope.form.user = {};
   $scope.importDetail = [];
@@ -196,6 +197,10 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
     $scope.form.totalAmount = 0;
   };
 
+  $scope.resetDetail = function () {
+    $scope.formDetal = {};
+  };
+
   //load chi tiết phiếu nhập
   $scope.loadImportDetail = function (importReceiptId) {
     $http
@@ -294,7 +299,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       Swal.fire({
         icon: "error",
         title: "Thất bại",
-        text: "Vui lòng nhập số lượng!",
+        text: "Vui lòng nhập số lượng là số lớn hơn 0!",
       });
       return;
     }
@@ -314,7 +319,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       Swal.fire({
         icon: "error",
         title: "Thất bại",
-        text: "Vui lòng nhập giá!!",
+        text: "Vui lòng nhập đơn giá là số lớn hơn 0!!",
       });
       return;
     }

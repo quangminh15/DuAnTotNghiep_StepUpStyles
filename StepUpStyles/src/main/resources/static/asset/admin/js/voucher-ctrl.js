@@ -148,7 +148,7 @@ app.controller("voucher-ctrl", function($scope, $http){
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập một số lớn hơn 0 cho mức giá tối thiểu của đơn hàng!',
+				text: 'Vui lòng nhập một số lớn hơn 0 cho đơn hàng tối thiểu!',
 			})
 			return;
 		}
