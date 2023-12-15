@@ -131,43 +131,44 @@ app.controller("revenues-ctrl", function ($scope, $http) {
 
 
     function updateMonthlyChart(selectedYear) {
-        $scope.pager.first()    
+        $scope.pager.first();
         if (!selectedYear) {
             selectedYear = new Date().getFullYear();
             $scope.presentYear = selectedYear;
         }
         $scope.presentYear = selectedYear;
-
+    
         $http.get(`/rest/order/listOrder/all`)
             .then(resp => {
                 const orders = resp.data;
-
-
-
-                // Filter orders for the selected year
-                const ordersInSelectedYear = orders.filter(order => {
-                    return new Date(order.orderDate).getFullYear() === parseInt(selectedYear);
+    
+                // Filter orders for the selected year and status 'Delivered'
+                const ordersInSelectedYearDelivered = orders.filter(order => {
+                    return (
+                        new Date(order.orderDate).getFullYear() === parseInt(selectedYear) &&
+                        order.orderStatus === 'Delivered'
+                    );
                 });
-
+    
                 // Initialize an array to hold monthly revenue data
                 const monthlyRevenue = Array.from({ length: 12 }, () => 0); // 12 months, initialized with 0s
-
+    
                 // Calculate revenue for each month
-                ordersInSelectedYear.forEach(order => {
+                ordersInSelectedYearDelivered.forEach(order => {
                     const orderMonth = new Date(order.orderDate).getMonth();
                     monthlyRevenue[orderMonth] += order.totalAmount; // Assuming totalAmount is the revenue
                 });
-
+    
                 // Update chart data
                 const monthNames = [
                     'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
                     'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
                 ];
-
+    
                 // Update monthlyData with new values
                 $scope.monthlyData.labels = monthNames;
                 $scope.monthlyData.datasets[0].data = monthlyRevenue;
-
+    
                 // Render chart
                 var ctx = document.getElementById('monthlyChart').getContext('2d');
                 if ($scope.monthlyChart) {
@@ -202,6 +203,7 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                 console.error('Error fetching orders:', error);
             });
     }
+    
 
     $scope.pager = {
 		page: 0,
