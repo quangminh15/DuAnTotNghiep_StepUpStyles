@@ -330,7 +330,7 @@ app.controller("directdiscount-ctrl", function ($scope, $http) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Vui lòng nhập mức giảm giá!',
+				text: 'Vui lòng nhập giảm giá là số!',
 			})
 			return;
 		}

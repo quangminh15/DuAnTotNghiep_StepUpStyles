@@ -299,7 +299,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       Swal.fire({
         icon: "error",
         title: "Thất bại",
-        text: "Vui lòng nhập số lượng!",
+        text: "Vui lòng nhập số lượng là số lớn hơn 0!",
       });
       return;
     }
@@ -319,7 +319,7 @@ app.controller("ImportReceipt-ctrl", function ($scope, $http) {
       Swal.fire({
         icon: "error",
         title: "Thất bại",
-        text: "Vui lòng nhập giá!!",
+        text: "Vui lòng nhập đơn giá là số lớn hơn 0!!",
       });
       return;
     }

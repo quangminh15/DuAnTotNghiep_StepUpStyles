@@ -3,7 +3,7 @@
         style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
         <!--Form phiếu nhập-->
         <div class="card-body" ng-show="showPhieuNhapForm">
-            <h4 class="card-title">Form phiếu nhập</h4>
+            <h4 class="card-title">Quản lý phiếu nhập</h4>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="inputUserName">Tên người nhập:</label>
@@ -51,7 +51,7 @@
 
         <!--Form chi tiết phiếu nhập-->
         <div class="card-body" ng-show="showChiTietForm">
-            <h4 class="card-title">Form chi tiết phiếu nhập</h4>
+            <h4 class="card-title">Quản lý chi tiết phiếu nhập</h4>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Phiếu nhập</label>
@@ -79,13 +79,13 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="inputPassword3">Số lượng</label>
-                    <input class="form-control" id="inputPassword3" type="text" placeholder="Số lượng" required=""
+                    <input class="form-control" id="inputPassword3" type="number" placeholder="Số lượng" required=""
                         ng-model="formDetal.quantity">
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="inputPassword4">Đơn giá</label>
-                    <input class="form-control" id="inputPassword4" type="text" placeholder="Đơn giá" required=""
+                    <input class="form-control" id="inputPassword4" type="number" placeholder="Đơn giá" required=""
                         ng-model="formDetal.price" ng-model-options="{ updateOn: 'blur' }" ng-change="formDetal.price = formatToVND(formDetal.price)">
                 </div>
             </div>
