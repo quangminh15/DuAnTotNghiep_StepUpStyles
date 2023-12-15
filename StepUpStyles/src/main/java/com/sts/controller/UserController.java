@@ -165,7 +165,6 @@ public class UserController {
 		String img = getUserImageURL();
 		Integer id = userService.getUserIdCurrent();
 		String address = user.getAddress();
-		System.out.println(name+birthday+phone+img+"ID: "+id);
 // check point
 		if(birthday==null){
 			userService.updateProfile_noBirthday(name,phone,img, address, id);
@@ -451,7 +450,7 @@ public class UserController {
 	@PostMapping("/otpAccessForgotPass")
 	public String handleLinkData2(Model model, @RequestBody DataOTP data, HttpServletResponse response) {
 		String codeFromView = data.toString();
-
+		System.out.println("cc: "+codeFromView);
 		try {
 			// Thực hiện xử lý dữ liệu và trả về status 200 OK nếu thành công
 			// Hoặc trả về status 500 Internal Server Error nếu có lỗi xảy ra
