@@ -46,7 +46,8 @@
         </div>
 </div>
 <div class="content-wrapper">
-    <div class="card" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+    <div class="row">
+        <div class="card col-sm-6" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
         <div class="card-header bg-primary text-center">
             <span class="title text-white">BẢNG SỐ LIỆU NĂM {{selectedYear}} </span>
         </div>
@@ -68,17 +69,53 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="monthData in chartData"> <!-- Assuming your data is structured accordingly -->
-                            <td class="text-center">Tháng {{monthData.month}}</td>
-                            <td class="text-center">Có {{monthData.ratings['1 sao']}} đánh giá</td>
-                            <td class="text-center">Có {{monthData.ratings['2 sao']}} đánh giá</td>
-                            <td class="text-center">Có {{monthData.ratings['3 sao']}} đánh giá</td>
-                            <td class="text-center">Có {{monthData.ratings['4 sao']}} đánh giá</td>
-                            <td class="text-center">Có {{monthData.ratings['5 sao']}} đánh giá</td>
+                            <td class="text-center" ng-click="getMonthDetails(monthData.month)">Tháng {{monthData.month}}</td>
+                            <td class="text-center">{{monthData.ratings['1 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['2 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['3 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['4 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['5 sao']}} đánh giá</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <div class="card col-sm-6" style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+        <div class="card-header bg-primary text-center">
+            <span class="title text-white">BẢNG SỐ LIỆU THÁNG {{month}} </span>
+        </div>
+        <div class="card-body container">
+            <div class="row">
+                <table class="table table-striped mt-2" border="1">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="text-center">Tên sản phẩm</th>
+                            <th colspan="5" class="text-center">Sao</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">1 sao</th>
+                            <th class="text-center">2 sao</th>
+                            <th class="text-center">3 sao</th>
+                            <th class="text-center">4 sao</th>
+                            <th class="text-center">5 sao</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="monthData in chartData"> <!-- Assuming your data is structured accordingly -->
+                            <td class="text-center">{{monthData.month}}</td>
+                            <td class="text-center">{{monthData.ratings['1 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['2 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['3 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['4 sao']}} đánh giá</td>
+                            <td class="text-center">{{monthData.ratings['5 sao']}} đánh giá</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+    
 </div>
 

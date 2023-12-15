@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.sts.model.Review;
 import com.sts.model.User;
+import com.sts.model.DTO.ReviewSumary;
 import com.sts.model.DTO.TotalProductRatingDTO;
 
 public interface ReviewDAO extends JpaRepository<Review, Integer>{
@@ -58,4 +59,15 @@ public interface ReviewDAO extends JpaRepository<Review, Integer>{
 
     @Query("SELECT r FROM Review r WHERE r.product.productName LIKE %:keyword%")
     List<Review> searchTextProduct(@Param("keyword") String keyword);
+
+    @Query("SELECT r.product.productName AS productName, " +
+    "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
+    "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
+    "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
+    "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
+    "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
+    "FROM Review r JOIN Product p on r.product.productID = p.productID " +
+    "WHERE MONTH(r.reviewDate) = :month AND YEAR(r.reviewDate) = :year " +
+    "GROUP BY r.product.productName")
+    List<ReviewSumary> getProductReviewsForMonthAndYear(@Param("month") Integer month, @Param("year") Integer year);
 }

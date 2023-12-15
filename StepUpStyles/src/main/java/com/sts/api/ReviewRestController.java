@@ -18,6 +18,7 @@ import com.sts.model.OrderDetail;
 import com.sts.model.Product;
 import com.sts.model.Review;
 import com.sts.model.User;
+import com.sts.model.DTO.ReviewSumary;
 import com.sts.model.DTO.TotalProductRatingDTO;
 import com.sts.service.OrderDetailService;
 import com.sts.service.ProductService;
@@ -135,6 +136,10 @@ public class ReviewRestController {
     @GetMapping("/rest/reviews/searchProductName")
     public List<Review> getProductNameSearch(@RequestParam("keyword") String keyword) {
         return reviewService.searchProductName(keyword);
+    }
+    @GetMapping("/rest/reviews/month-year")
+    public List<ReviewSumary> getProductByMonthYear(@RequestParam("month") Integer month, @RequestParam("year") Integer year) {
+        return reviewService.getReviewByMonth(month, year);
     }
     
 }

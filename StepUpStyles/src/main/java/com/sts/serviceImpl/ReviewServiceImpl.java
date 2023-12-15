@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.sts.dao.ReviewDAO;
 import com.sts.model.Review;
 import com.sts.model.User;
+import com.sts.model.DTO.ReviewSumary;
 import com.sts.model.DTO.TotalProductRatingDTO;
 import com.sts.service.ReviewService;
 
@@ -172,6 +173,42 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<Review> searchProductName(String keyword) {
         return reviewDAO.searchTextProduct(keyword);
+    }
+
+    @Override
+    public List<ReviewSumary> getReviewByMonth(Integer month, Integer year) {
+       String sql = "SELECT r.product.productName AS productName, " +
+    "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
+    "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
+    "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
+    "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
+    "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
+    "FROM Review r JOIN Product p on r.product.productID = p.productID " +
+    "WHERE MONTH(r.reviewDate) = :month AND YEAR(r.reviewDate) = :year " +
+    "GROUP BY r.product.productName";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("month", month);
+        parameters.addValue("year", year);
+
+        List<ReviewSumary> reviewList = new ArrayList<>();
+
+        List<Map<String, Object>> rows = namedParameterJdbcTemplate.queryForList(sql, parameters);
+
+        for (Map<String, Object> row : rows) {
+            String name = (String) row.get("productName");
+
+            Map<String, Integer> ratings = new HashMap<>();
+            ratings.put("1 sao", (int) row.get("oneStar"));
+            ratings.put("2 sao", (int) row.get("twoStar"));
+            ratings.put("3 sao", (int) row.get("threeStar"));
+            ratings.put("4 sao", (int) row.get("fourStar"));
+            ratings.put("5 sao", (int) row.get("fiveStar"));
+
+            ReviewSumary review = new ReviewSumary(name, ratings);
+            reviewList.add(review);
+        }
+
+        return reviewList;
     }
     }    
     
