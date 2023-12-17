@@ -247,7 +247,7 @@ public class UserController {
 		User u = userService.findById(userService.getUserIdCurrent());
 	//	String passCheck = bCryptPasswordEncoder.;
 	//	System.out.println("cc: "+passCheck);
-		if (!pass.equals("123")){
+		if (!pass.equals("123456789Minh@")){
 			model.addAttribute("emailValidation", "Mật khẩu không trùng khớp!");
 			return "users/change-pass";
 		}

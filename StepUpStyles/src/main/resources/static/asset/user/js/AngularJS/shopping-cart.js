@@ -177,8 +177,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				console.error('Failed to delete:', error);
 			});
 	}
-	$scope.checkQuantity = function (qty) {
-
+	$scope.checkQuantity = function (index,qty) {
+		var item = angular.copy($scope.items[index])
 		if ($scope.singleProd.quantity < qty) {
 
 			console.log("qty", $scope.qty, $scope.singleProd.quantity);
@@ -202,6 +202,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 			$scope.qty = $scope.singleProd.quantity
 		}
+		if (qty<1) {
+			$scope.qty=1
+		}else if ( isNaN(qty)) {
+			$scope.qty = 1
+		} 
 	}
 
 
@@ -657,18 +662,19 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				item.quantity = maxQuantity;
 				console.log(item.quantity);
 			} else if (newValue < 1 || isNaN(newValue)) {
+				
 				item.quantity = 1
 			} else {
 				item.quantity = newValue;
 				console.log(newValue);
 			}
 
-
 			$http.put("/rest/cart/updateQuantity", item)
 				.then(resp => {
 					$scope.items[index].quantity = item.quantity;
 					console.log($scope.items[index].quantity);
 					setTongTien()
+				
 					console.log("ok");
 				}).catch(error => {
 					console.log("Error update", error);
