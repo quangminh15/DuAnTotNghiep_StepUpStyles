@@ -26,7 +26,10 @@
                                         <div class="section text-center">
                                             <h4 class="mb-4 pb-3">Đặt lại mật khẩu</h4>
                                             <div th:if="${passValidation}">
-                                                <h5 class="text-center" th:text="${passValidation}"></h5>
+                                                <h5 style="color: red" class="text-center" th:text="${passValidation}"></h5>
+                                            </div>
+                                            <div th:unless="${passValidation}">
+                                                <h5 class="text-center">9-50 ký tự. Ít nhất 1 số , 1 chữ cái viết hoa, 1 ký tự đặc biệt!</h5>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" name="pass" class="form-style" placeholder="Mật khẩu mới">
