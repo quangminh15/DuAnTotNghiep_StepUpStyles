@@ -90,7 +90,7 @@
 							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;"
 								ng-class="{'disabled-voucher': item.isExpired}">
 								<div class="card boxvou"
-									style="height: 134px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
+									style="height: 161px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
 									<div class="row">
 										<div class="col-md-3"
 											style="background-color:  #ff7315; justify-content: center; align-items: center;">
@@ -110,6 +110,7 @@
 											<div class="card-body">
 												<div>Giảm: {{item.voucher.discountAmount}}%</div>
 												<div>Đơn tối thiểu: {{formatToVND(item.voucher.total)}}</div>
+												<div>Giảm tối đa: {{formatToVND(item.voucher.miniOrder)}}</div>
 												<div style="font-size: 11px; color: red;">Áp dụng:
 													{{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
 											</div>
@@ -472,6 +473,7 @@
 											<div class="card-body">
 												<div>Giảm: {{selectedVoucher.voucher.discountAmount}}%</div>
 												<div>Đơn tối thiểu: {{formatToVND(selectedVoucher.voucher.total)}}</div>
+												<div>Giảm tối đa: {{formatToVND(selectedVoucher.voucher.miniOrder)}}</div>
 												<div style="font-size: 11px; color: red;">Áp dụng:
 													{{selectedVoucher.formattedStartDate}} -
 													{{selectedVoucher.formattedEndDate}}

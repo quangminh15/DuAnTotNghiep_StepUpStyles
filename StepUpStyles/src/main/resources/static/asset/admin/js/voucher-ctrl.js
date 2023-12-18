@@ -10,6 +10,7 @@ app.controller("voucher-ctrl", function($scope, $http){
     $scope.sortableColumns = [
         { name: 'total', label: 'Đơn hàng tối thiểu' },
 		{ name: 'discountAmount', label: 'Mức giảm (%)' },
+		{ name: 'miniOrder', label: 'Giảm tối đa' },
 		{ name: 'formattedStartDate', label: 'Thời gian bắt đầu' },
 		{ name: 'formattedEndDate', label: 'Thời gian kết thúc' },
 		{ name: 'description', label: 'Mô tả' },
@@ -57,7 +58,7 @@ app.controller("voucher-ctrl", function($scope, $http){
         //load voucher no delete
 		$http.get("/rest/voucher/noDeletedVoucher").then(resp => {
 			$scope.voucherNoDelItem = resp.data
-			console.log(resp.data);
+			console.log("Voucher ây da",resp.data);
 			$scope.voucherNoDelItem.forEach(function(ddI) {
 				ddI.formattedStartDate = formatDate(ddI.dateStart);
 				ddI.formattedEndDate = formatDate(ddI.dateEnd);
@@ -163,6 +164,15 @@ app.controller("voucher-ctrl", function($scope, $http){
 			return;
 		}
 
+		if ($scope.form.discountAmount < 0 || $scope.form.discountAmount > 100) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giảm giá từ 1 đến 100 (%)!',
+			})
+			return;
+		}
+
 		if (!$scope.form.dateStart) {
 			Swal.fire({
 				icon: 'error',
@@ -177,6 +187,16 @@ app.controller("voucher-ctrl", function($scope, $http){
 				icon: 'error',
 				title: 'Thất bại',
 				text: 'Vui lòng chọn thời gian kết thúc!',
+			})
+			return;
+		}
+
+		//bo trong giam toi da
+		if (!$scope.form.miniOrder) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập một số lớn hơn 0 cho giảm tối đa!',
 			})
 			return;
 		}
@@ -284,6 +304,15 @@ app.controller("voucher-ctrl", function($scope, $http){
 			return;
 		}
 
+		if ($scope.form.discountAmount < 0 || $scope.form.discountAmount > 100) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập giảm giá từ 1 đến 100 (%)!',
+			})
+			return;
+		}
+
 		if (!$scope.form.dateStart) {
 			Swal.fire({
 				icon: 'error',
@@ -298,6 +327,16 @@ app.controller("voucher-ctrl", function($scope, $http){
 				icon: 'error',
 				title: 'Thất bại',
 				text: 'Vui lòng chọn thời gian kết thúc!',
+			})
+			return;
+		}
+
+		//bo trong giam toi da
+		if (!$scope.form.miniOrder) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Vui lòng nhập một số lớn hơn 0 cho giảm tối đa!',
 			})
 			return;
 		}

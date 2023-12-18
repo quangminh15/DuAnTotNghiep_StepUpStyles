@@ -38,6 +38,9 @@ public class Voucher implements Serializable {
 
     private Boolean deleted;
 
+    @Column(name="mini_order")
+    private Double miniOrder;
+
     @JsonIgnore
     @OneToMany(mappedBy = "voucher")
     private List<VoucherUse> voucherUse;
