@@ -52,7 +52,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 				console.error('Error fetching cart items:', error);
 			});
 
-			$scope.checkEdit=false
+		$scope.checkEdit = false
 	}
 	$scope.loadFromLocalStorage = function () {
 		var storedItems = localStorage.getItem('selectedItems');
@@ -150,7 +150,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 			})
 			$('#ModalAddress').modal('hide');
-					$('#ModalAddress1').modal('show');
+			$('#ModalAddress1').modal('show');
 			$scope.initialize()
 		})
 			.catch(function (error) {
@@ -160,25 +160,43 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 	$scope.sendDataToJava = function () {
 
-		const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
-		$http({
-			method: 'POST',
-			url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
-			data: $scope.cartIs, // Assuming $scope.cartIs is an array
-			headers: { 'Content-Type': 'application/json' }
-		})
-			.then(function (response) {
-				console.log('Order created:', response.data);
-				localStorage.removeItem('selectedItems');
+		var promises = [];
+
+		$scope.cartIs.forEach(cartDetail => {
+			var promise = $http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID)
+				.then(resp => {
+					cartDetail.product.directDiscounts = resp.data.filter(directDiscounts => !directDiscounts.deleted);
+					cartDetail.price = cartDetail.product.directDiscounts[0].priceDiscount;
+					console.log("sadfsad", cartDetail.price);
+				});
+
+			promises.push(promise);
+		});
+
+		// Đợi tất cả các promises hoàn tất trước khi thực hiện các thao tác tiếp theo
+		Promise.all(promises).then(() => {
 
 
+			const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
+			$http({
+				method: 'POST',
+				url: `/rest/order/receiveCartData?initialPrice=${$scope.tongTien}&fee=${$scope.shippingFee}&addressId=${$scope.addressDefault.shippingAddressId}&discountPrice=${$scope.discouted}&voucherUseId=${voucherUseId}`,
+				data: $scope.cartIs, // Assuming $scope.cartIs is an array
+				headers: { 'Content-Type': 'application/json' }
 			})
-			.catch(function (error) {
-				console.error('Error:', error);
-			});
-		localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee));
+				.then(function (response) {
+					console.log('Order created:', response.data);
+					localStorage.removeItem('selectedItems');
+					localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien - $scope.discouted) + $scope.shippingFee));
 
-		window.location.href = '/pay-cod-success'
+					window.location.href = '/pay-cod-success'
+
+				})
+				.catch(function (error) {
+					console.error('Error:', error);
+				});
+		});
+
 	};
 	$scope.loadTongTienFromLocal = function () {
 		$scope.total = localStorage.getItem('totalAmount');
@@ -201,7 +219,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-			localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee))
+		localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien - $scope.discouted) + $scope.shippingFee))
 	}
 
 	$scope.removeDataPayment = function () {
@@ -331,9 +349,9 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 	}
 	$scope.initialize()
 
-	
-	
-	$scope.checkButton=function(io){
+
+
+	$scope.checkButton = function (io) {
 		$scope.checkEdit = io
 	}
 	// clearForm
@@ -342,20 +360,20 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 			defaultAddress: false
 		}
-		$scope.checkEdit=false
+		$scope.checkEdit = false
 		$('#ModalAddress').modal('show');
 	}
 
 	$scope.edit = function (addr) {
-		$scope.checkEdit=true
-		
+		$scope.checkEdit = true
+
 		console.log(addr.province);
 		if (addr) {
-			
+
 
 			$('#ModalAddress').modal('show');
 			$scope.form = angular.copy(addr);
-			
+
 
 
 			// $http({
@@ -446,45 +464,45 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 				ward_name: $scope.form.selectedWard.WardName,
 				// Các thông tin khác cần thiết
 			}
-		
 
 
-		
-		object.province = $scope.dataAddress.province_name
-		object.district = $scope.dataAddress.district_name
-		object.ward = $scope.dataAddress.ward_name
-		
-		$http.put('/rest/address/update', object)
-			.then(resp => {
-				console.log("updated");
-				$scope.initialize();
-				$('#ModalAddress').modal('hide');
-				$('#ModalAddress1').modal('show');
-				// $scope.form = angular.copy(addr);
-				const Toast = Swal.mixin({
-					toast: true,
-					position: 'top-right',
-					showConfirmButton: false,
-					timer: 3000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.addEventListener('mouseenter', Swal.stopTimer)
-						toast.addEventListener('mouseleave', Swal.resumeTimer)
-					},
-					customClass: {
-						// Add your custom CSS class here
-						popup: 'custom-toast-class',
-					}
-				})
-				Toast.fire({
-					icon: 'success',
-					title: 'Cập nhật địa chỉ thành công',
 
-				})
-			}).catch(function (error) {
-				console.error('Error fetching cart items:', error);
 
-			});
+			object.province = $scope.dataAddress.province_name
+			object.district = $scope.dataAddress.district_name
+			object.ward = $scope.dataAddress.ward_name
+
+			$http.put('/rest/address/update', object)
+				.then(resp => {
+					console.log("updated");
+					$scope.initialize();
+					$('#ModalAddress').modal('hide');
+					$('#ModalAddress1').modal('show');
+					// $scope.form = angular.copy(addr);
+					const Toast = Swal.mixin({
+						toast: true,
+						position: 'top-right',
+						showConfirmButton: false,
+						timer: 3000,
+						timerProgressBar: true,
+						didOpen: (toast) => {
+							toast.addEventListener('mouseenter', Swal.stopTimer)
+							toast.addEventListener('mouseleave', Swal.resumeTimer)
+						},
+						customClass: {
+							// Add your custom CSS class here
+							popup: 'custom-toast-class',
+						}
+					})
+					Toast.fire({
+						icon: 'success',
+						title: 'Cập nhật địa chỉ thành công',
+
+					})
+				}).catch(function (error) {
+					console.error('Error fetching cart items:', error);
+
+				});
 		}
 
 	}
@@ -522,7 +540,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 
 	}
-	$scope.hideModal = function() {
+	$scope.hideModal = function () {
 		$('#ModalAddress1').modal('hide');
 		$('#ModalAddress').modal('hide');
 	};
@@ -574,18 +592,18 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			if ($scope.addressDefault.length < 1) {
 
 				checked = true
-			}$scope.checkParttenPhone = true
+			} $scope.checkParttenPhone = true
 
 			console.log($scope.dataAddress);
 			$http.post(`/rest/address/create?defaultCheck=${checked}&province=${$scope.dataAddress.province_name}&district=${$scope.dataAddress.district_name}&ward=${$scope.dataAddress.ward_name}&addressDtail=${detail}&nameReceiver=${name}&phoneReceiver=${phone}`)
 				.then(resp => {
 					console.log("add");
-					
+
 					$('#ModalAddress').modal('hide');
 					$('#ModalAddress1').modal('show');
 					$scope.initialize();
-					
-					
+
+
 					$scope.reset()
 					const Toast = Swal.mixin({
 						toast: true,
@@ -607,8 +625,8 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 						title: 'Thêm địa chỉ thành công',
 
 					})
-					
-					
+
+
 				}).catch(function (error) {
 					console.error('Error fetching districts:', error);
 
@@ -756,17 +774,17 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			discountRate = 0;
 			miniOrder = 0;
 		}
-		
+
 		$scope.discouted = $scope.tongTien * discountRate;
 
-		if($scope.discouted >= maxOrder) {
+		if ($scope.discouted >= maxOrder) {
 			$scope.discouted = maxOrder;
-			
-		}else{
+
+		} else {
 			$scope.discouted = $scope.tongTien * discountRate;
-			
+
 		}
-		
+
 
 	}
 	$scope.caculatorDiscount()

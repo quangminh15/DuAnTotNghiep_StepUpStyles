@@ -28,6 +28,7 @@ public class OrderDetailDTO {
     private Integer quantity;
     private Cart cart;
     private Product product;
+    private Double price;
     private ProductDetail productDetail;
     private List<Color> colors;
     private List<Size> sizes;

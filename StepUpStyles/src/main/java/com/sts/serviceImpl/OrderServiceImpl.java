@@ -103,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setProductDetail(detailRequest.getProductDetail());
             orderDetail.setQuantity(detailRequest.getQuantity());
-            orderDetail.setPrice(detailRequest.getProduct().getPrice());
+            orderDetail.setPrice(detailRequest.getPrice());
             orderDetail.setOrder(order); // Associate the order with the order detail
             orderDetailDao.save(orderDetail);
 
