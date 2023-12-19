@@ -147,9 +147,9 @@ public class UserController {
 			if (id == null) {
 				return "redirect:/loginSTS";
 			}
-			User user = userService.findById(id);
-			DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
-			model.addAttribute("UserProfile", dResponseUser);
+//			User user = userService.findById(id);
+//			DResponseUser dResponseUser = userService.getUserByEmail(user.getEmail());
+//			model.addAttribute("UserProfile", dResponseUser);
 		} catch (Exception exception) {
 			return "redirect:/loginSTS";
 		}

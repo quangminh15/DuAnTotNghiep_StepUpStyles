@@ -81,6 +81,10 @@ app.config(function($routeProvider) {
 			templateUrl: "/templates/admins/user/user.html",
 			controller: "user-ctrl"
 		})
+		.when("/user2", {
+			templateUrl: "/templates/admins/user/user2.html",
+			controller: "user-ctrl2"
+		})
 		.when("/order", {
 			templateUrl: "/templates/admins/order/order.html",
 			controller: "order-ctrl"

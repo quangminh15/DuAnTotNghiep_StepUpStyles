@@ -16,6 +16,7 @@ import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.SqlResultSetMapping;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 public interface UserDAO extends JpaRepository<User, Integer>{
@@ -55,4 +56,16 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 	@Transactional
 	@Query(value = "Update users  set full_name = ?1,   phone = ?2,  image = ?3, address = ?4 where  users_id = ?5", nativeQuery = true)
 	void updateProfile_noBirthday(String fullname, String phone, String img, String address, Integer userId);
+
+
+	@Query(value = "select count(*) from users", nativeQuery = true)
+	Integer  sumU();
+
+	@Query(value = "select u from User u where u.role = 'CUSTOMER' order by u.createdDate DESC ", nativeQuery = false)
+	List<LResponseUser> findAllUserForIndexAdmin();
+
+	@Query(value = "select u from User u where u.role = 'CUSTOMER'")
+	List<User> findCUSTOMER();
+
+	List<User> findByRoleIn(List<String> roles);
 }

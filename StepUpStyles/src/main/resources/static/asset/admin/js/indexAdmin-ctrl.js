@@ -354,6 +354,8 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 
 	//tien sờ ta
 
+
+
 	$scope.itemss = [];
 	$scope.initializeSupp = function () {
 		//load supplier no deleted
@@ -362,8 +364,61 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 			$scope.totalSuppliers = $scope.itemss.length;
 			console.log("Tổng toàn bộ nhà cung cấp:", $scope.totalSuppliers);
 		});
+
+
 	}
     $scope.initializeSupp();
 
 	// tien en
+
+
+	$scope.lResponseUsers = [];
+	$scope.initializeBTB = function () {
+		$http.get("/user/dkgn").then(resp => {
+			$scope.lResponseUsers = resp.data;
+			// angular.forEach($scope.lResponseUsers.createdDate, function(date, index) {
+			// 		$scope.dateList[index] = $filter('date')(date, 'dd-MM-yyyy');
+			// });
+		});
+	}
+	$scope.initializeBTB();
+
+	// date format
+	$scope.convertDateFormat = function(input) {
+		if (!input) return '';
+		var date = new Date(input);
+		var formattedDate =
+			('0' + date.getDate()).slice(-2) +
+			'/' +
+			('0' + (date.getMonth() + 1)).slice(-2) +
+			'/' +
+			date.getFullYear();
+		return formattedDate;
+	};
+
+
+	$scope.sumUser = 0;
+	$scope.initializeBTB2 = function () {
+		$http.get("/user/sumUser").then(resp => {
+			$scope.sumUser = resp.data;
+		});
+	}
+	$scope.initializeBTB2();
+
+
+	$scope.role = '';
+	$scope.initializeBTB_Role = function () {
+		// Gọi API bằng AngularJS
+		$http.get('/user/getRole')
+			.then(function(response) {
+				$scope.role = response.data.role;
+				console.log("role: |"+$scope.role+'|');
+			})
+			.catch(function(error) {
+				console.log('Error getting role:', error);
+				// Xử lý khi gặp lỗi khi gọi API
+			});
+	}
+	$scope.initializeBTB_Role();
+
 });

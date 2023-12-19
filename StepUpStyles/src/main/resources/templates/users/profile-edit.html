@@ -26,9 +26,9 @@
             <div class="panel">
                 <div class="user-heading round">
                     <a href="">
-                        <img th:src="${UserProfile.image}"  alt="" id="userImage">
+                        <img ng-src="{{ user.image }}" alt="" id="userImage">
                     </a>
-                    <h1 th:text="${UserProfile.fullName}">---</h1>
+                    <h1>---</h1>
                     <!--                    <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d1c001d1c00390d111c3c14181015571a1614">[email&#160;protected]</a></p>-->
                 </div>
                 <ul class="nav nav-pills nav-
@@ -48,42 +48,42 @@
             <div class="panel">
                 <div class="panel-body bio-graph-info">
                     <h1>Thông tin</h1>
-                    <form th:object="${UserProfile}" method="post">
+                    <form  method="post">
                         <div class="row">
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Họ và tên</span>
-                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{fullName}">
+                                    <input ng-model="user.fullName" type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;"  >
                                 </div>
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Ngày sinh</span>
-                                    <input type="date" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{birthday}" id="birthday">
+                                    <input ng-model="user.birthday" type="date" aria-label="First name" class="form-control" style="font-size: 1.4em;"   id="birthday">
                                 </div>
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Email</span>
-                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{email}" readonly>
+                                    <input ng-model="user.email" type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;"   readonly>
                                 </div>
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Số điện thoại</span>
-                                    <input type="number" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{phone}">
+                                    <input ng-model="user.phone" type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;"  >
                                 </div>
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Ngày tạo</span>
-                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{createdDate}" readonly>
+                                    <input ng-model="user.createdDate" type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;"   readonly>
                                 </div>
                             </div>
                             <div class="bio-row">
                                 <div class="input-group">
                                     <span class="input-group-text" style="font-size: 1.4em;">Địa chỉ</span>
-                                    <input type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" th:field="*{address}">
+                                    <input ng-model="user.address" type="text" aria-label="First name" class="form-control" style="font-size: 1.4em;" >
                                 </div>
                             </div>
                             <div class="bio-row">
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="bio-row">
-                                <button type="submit" class="btn btn-primary" style="font-size: 1.5em;" ng-click="uploadImage()">Cập nhật</button>
+                                <button ng-click="submitForm()" type="submit" class="btn btn-primary" style="font-size: 1.5em;">Cập nhật</button>
                             </div>
 
                             <!--                        <div class="bio-row">-->
