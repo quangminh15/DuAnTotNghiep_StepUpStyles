@@ -177,15 +177,15 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewSumary> getReviewByMonth(Integer month, Integer year) {
-       String sql = "SELECT r.product.productName AS productName, " +
+       String sql = "SELECT p.product_name AS productName, " +
     "SUM(CASE WHEN r.rating = 1 THEN 1 ELSE 0 END) AS oneStar, " +
     "SUM(CASE WHEN r.rating = 2 THEN 1 ELSE 0 END) AS twoStar, " +
     "SUM(CASE WHEN r.rating = 3 THEN 1 ELSE 0 END) AS threeStar, " +
     "SUM(CASE WHEN r.rating = 4 THEN 1 ELSE 0 END) AS fourStar, " +
     "SUM(CASE WHEN r.rating = 5 THEN 1 ELSE 0 END) AS fiveStar " +
-    "FROM Review r JOIN Product p on r.product.productID = p.productID " +
-    "WHERE MONTH(r.reviewDate) = :month AND YEAR(r.reviewDate) = :year " +
-    "GROUP BY r.product.productName";
+    "FROM Review r JOIN Product p on r.product_id = p.product_id " +
+    "WHERE MONTH(r.review_date) = :month AND YEAR(r.review_date) = :year " +
+    "GROUP BY p.product_name";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("month", month);
         parameters.addValue("year", year);

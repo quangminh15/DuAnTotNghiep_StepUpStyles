@@ -20,6 +20,8 @@ import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.model.DTO.ReviewSumary;
 import com.sts.model.DTO.TotalProductRatingDTO;
+import com.sts.service.FormSendMailHTML;
+import com.sts.service.MailerService;
 import com.sts.service.OrderDetailService;
 import com.sts.service.ProductService;
 import com.sts.service.ReviewService;
@@ -40,6 +42,9 @@ public class ReviewRestController {
     @Autowired
     OrderDetailService odService;
 
+    @Autowired
+	MailerService mailerService;
+
     @GetMapping("/rest/reviews/loadall")
     public List<Review> getAll(){
         return reviewService.findAll();
@@ -48,7 +53,9 @@ public class ReviewRestController {
     @PostMapping("/rest/reviews/create/{productID}/{orderDetailId}")
     public ResponseEntity<?> createReview(@RequestBody Review review, @PathVariable("productID") Integer productID,
     @PathVariable("orderDetailId") Integer orderDetailId) {
+        int star = review.getRating();
     try {
+        String email = uService.getUserEmailCurrent();
         Product product = pService.findById(productID);
         if (product == null) {
             return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
@@ -62,6 +69,11 @@ public class ReviewRestController {
         if (orderDT == null) {
             return new ResponseEntity<>("Không tìm thấy sản phẩm.", HttpStatus.NOT_FOUND);
         }
+        if(star == 1 || star == 2){
+            mailerService.queue(email, "Xin lỗi về trải nghiệm của bạn về sản phẩm",
+            FormSendMailHTML.sendHTMLReview( currentUser.getFullName(), product.getProductName()));
+        }
+        
         review.setUser(currentUser);
         review.setProduct(product);
         review.setOrderDetail(orderDT);

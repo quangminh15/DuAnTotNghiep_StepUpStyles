@@ -1,9 +1,14 @@
 app.controller("totalproductrating-ctrl", function ($scope, $http) {
     $scope.chartData = {}
+    $scope.monthss = [];
     var currentYear = new Date().getFullYear();
     $scope.years = [];
     for (var i = 2020; i <= currentYear; i++) {
         $scope.years.push(i);
+    }
+
+    for (var i = 1; i <= 12; i++) {
+        $scope.monthss.push(i);
     }
 
     $scope.selectedYear = currentYear;
@@ -43,25 +48,29 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
                     }
                 }
             },
-            // onClick: function (event, elements) {
-            //     if (elements && elements.length > 0) {
-            //         var clickedElement = elements[0];
-            //         var monthIndex = clickedElement.index;
-            //         var selectedMonth = chart.data.labels[monthIndex];
-            //         console.log("clickedElement: ", clickedElement);
-            //         console.log("Clicked Month Index: ", monthIndex);
-            //         console.log("Selected Month: ", selectedMonth); // Log selected month
-            //     }
-            // }
         }
     });
-
 
     // Hàm cập nhật biểu đồ dựa trên năm được chọn
     $scope.updateChartData = function () {
         $http.get('/api/total-product-rating?year=' + $scope.selectedYear)
             .then(function (response) {
                 $scope.chartData = response.data;
+
+                // Lấy danh sách các tháng có đánh giá từ dữ liệu biểu đồ
+            var ratedMonths = $scope.chartData.map(function (item) {
+                return parseInt(item.month);
+            });
+
+            // Lọc và cập nhật danh sách các tháng có đánh giá vào select box
+            $scope.ratedMonths = $scope.monthss.filter(function (month) {
+                return ratedMonths.includes(month);
+            });
+            if ($scope.ratedMonths.length > 0) {
+                $scope.selectedMonth = $scope.ratedMonths[0];
+                $scope.getMonthDetails($scope.selectedMonth);
+            }
+
                 var labels = [];
                 var datasets = [];
 
@@ -99,10 +108,9 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
 
                 // Cập nhật dữ liệu cho biểu đồ
                 chart.data.labels = monthLabels;
-                var months = chart.data.labels.map(function (label) {
+                $scope.months = chart.data.labels.map(function (label) {
                     return parseInt(label.substring(6)); // Lấy ký tự từ vị trí thứ 6 trong chuỗi và chuyển về kiểu int
                 });
-                console.log("Months: ", months);
                 chart.data.datasets = datasets;
                 chart.update();
             });
@@ -111,17 +119,13 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
     // Cập nhật biểu đồ ban đầu
     $scope.updateChartData();
 
-    $scope.getMonthDetails = function(month) {
+    $scope.getMonthDetails = function (month) {
         $http.get(`/rest/reviews/month-year?month=${month}&year=${$scope.selectedYear}`)
             .then((res) => {
                 $scope.monthYear = res.data;
-                console.log("djdjdjd", $scope.monthYear);
             }).catch((err) => {
-                
+
             });
         $scope.month = month
-        console.log('Bạn đã chọn tháng ' + month);
     };
-    
-
 });
