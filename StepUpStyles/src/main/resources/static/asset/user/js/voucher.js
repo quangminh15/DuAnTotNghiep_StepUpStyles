@@ -7,6 +7,7 @@ app.controller("voucher-ctrl", function ($scope, $http) {
     $http.get("/rest/voucher/valid").then((resp) => {
       $scope.voucher = resp.data;
       console.log($scope.voucher)
+      $scope.pager.first();
       $scope.voucher.forEach(function (ddI) {
         ddI.formattedStartDate = formatDate(ddI.dateStart);
         ddI.formattedEndDate = formatDate(ddI.dateEnd);
@@ -132,6 +133,7 @@ app.controller("voucher-ctrl", function ($scope, $http) {
                                                 <div class="card-body">
                                                     <div>Giảm: ${getVoucher.discountAmount}%</div>
                                                     <div>Đơn tối thiểu: ${$scope.formatToVND(getVoucher.total)}</div>
+                                                    <div>Giảm tối đa: ${$scope.formatToVND(getVoucher.miniOrder)}</div>
                                                     <div style="font-size: 11px; color: red;">Áp dụng: ${$scope.formatDate(getVoucher.dateStart)} - ${$scope.formatDate(getVoucher.dateEnd)}</div>
                                                 </div>
                                             </div>
@@ -211,6 +213,69 @@ app.controller("voucher-ctrl", function ($scope, $http) {
       })
     })
     };
+
+    //phân trang voucher bắt đầu
+	$scope.pager = {
+		page: 0,
+		size: 6,
+		getPageNumbers: function() {
+			var pageCount = this.count;
+			var currentPage = this.page + 1;
+			var voucherPage = [];
+
+			if (pageCount <= 3) {
+				for (var i = 1; i <= pageCount; i++) {
+					voucherPage.push({ value: i });
+				}
+			} else {
+				if (currentPage <= 2) {
+					voucherPage.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+				} else if (currentPage >= pageCount - 1) {
+					voucherPage.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+				} else {
+					voucherPage.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+				}
+			}
+			return voucherPage;
+		},
+		get voucher() {
+			var start = this.page * this.size;
+      console.log("bat dau", start);
+			return $scope.voucher.slice(start, start + this.size);
+		},
+		get count() {
+			return Math.ceil(1.0 * $scope.voucher.length / this.size);
+		},
+		first() {
+			this.page = 0;
+			$scope.voucherPage = this.getPageNumbers();
+		},
+		prev() {
+			this.page--;
+			if (this.page < 0) {
+				this.last();
+			}
+			$scope.voucherPage = this.getPageNumbers();
+		},
+		next() {
+			this.page++;
+			if (this.page >= this.count) {
+				this.first();
+			}
+			$scope.voucherPage = this.getPageNumbers();
+		},
+		last() {
+			this.page = this.count - 1;
+			$scope.voucherPage = this.getPageNumbers();
+		},
+		goto(pageNumber) {
+			if (pageNumber >= 1 && pageNumber <= this.count) {
+				this.page = pageNumber - 1;
+				$scope.voucherPage = this.getPageNumbers();
+			}
+		},
+	};
+	//phân trang voucher kết thúc
 
     $scope.getAllVoucher();
 });

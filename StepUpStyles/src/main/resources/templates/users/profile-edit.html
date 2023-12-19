@@ -48,7 +48,7 @@
             <div class="panel">
                 <div class="panel-body bio-graph-info">
                     <h1>Thông tin</h1>
-                    <form th:object="${UserProfile}" method="post">
+                    <form th:object="${UserProfile}" method="post" th:action="@{/profile-update-data}">
                         <div class="row">
                             <div class="bio-row">
                                 <div class="input-group">
