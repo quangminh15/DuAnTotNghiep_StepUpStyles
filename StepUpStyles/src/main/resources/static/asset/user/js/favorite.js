@@ -167,7 +167,7 @@ app.controller("favorite-ctrl", function($scope, $http) {
 		$http.get("/rest/reviews/loadbyproducts/" + productID).then(resp => {
 			$scope.allreviews = resp.data;
 			$scope.allreviews.forEach(rvitem => {
-				rvitem.dateLike = new Date(rvitem.dateLike)
+				rvitem.reviewDate = new Date(rvitem.reviewDate)
 			})
 			$scope.allreviews.sort((a, b) => b.reviewDate - a.reviewDate);
 			$scope.reviewPager.first()

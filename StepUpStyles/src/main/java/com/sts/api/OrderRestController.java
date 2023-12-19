@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sts.dao.OrderDAO;
 import com.sts.dao.OrderDetailDAO;
+import com.sts.dao.ProductDetailDAO;
 import com.sts.dao.UserDAO;
 import com.sts.model.Order;
 import com.sts.model.OrderDetail;
@@ -49,6 +50,8 @@ public class OrderRestController {
     UserDAO userdao;
     @Autowired
     OrderDetailDAO orderDtdao;
+    @Autowired
+    ProductDetailDAO prodDetailDao;
 
     @Autowired
     UserService uService;
@@ -72,8 +75,9 @@ public class OrderRestController {
             Order order = orderService.createOrder(cartDataList, initialPrice, fee, addressId, false,
                     discountPrice, voucherUID);
             // Create a success response
-            mailerService.queue(email, "ĐĂNG KÝ TÀI KHOẢN StepUpStyle",
-            FormSendMailHTML.sendHTMLWhenCreateOrder( "name"));
+            User user = userdao.findByEmailU(email);
+            mailerService.queue(email, "ĐƠN HÀNG #"+order.getOrderId()+" được đặt thành công",
+            FormSendMailHTML.sendHTMLWhenCreateOrder( user.getFullName(),order.getOrderId()));
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Data received successfully");
           
@@ -149,4 +153,23 @@ public class OrderRestController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/profitsYear/{year}")
+    public ResponseEntity<List<Object[]>> getYearlyProfits(@PathVariable("year") Integer year) {
+        List<Object[]> yearlyProfits = orderdao.calculateOneYearlyProfits(year);
+        return ResponseEntity.ok(yearlyProfits);
+    }
+
+    @GetMapping("/profitsMonthAndYear")
+    public ResponseEntity<List<Object[]>> getMonhtYearlyProfits(@RequestParam("year") Integer year,@RequestParam("month") Integer month) {
+        List<Object[]> yearlyProfits = orderdao.calculateOneMonthYearlyProfits(year,month);
+        return ResponseEntity.ok(yearlyProfits);
+    }
+
+    @GetMapping("/totalprofit")
+    public ResponseEntity<List<Object[]>> getTotalProfits() {
+        List<Object[]> yearlyProfits = orderdao.calculateYearlyProfits();
+        return ResponseEntity.ok(yearlyProfits);
+    }
+
+    
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.sts.model.Review;
 import com.sts.model.User;
 import com.sts.model.DTO.TotalProductRatingDTO;
+import com.sts.model.DTO.ReviewSumary;
 
 public interface ReviewService {
     List<Review> findAll();
@@ -19,4 +20,5 @@ public interface ReviewService {
     Review getByOrderDetailId(Integer orderDetailId);
     List<User> getUserRoleUser();
     List<Review> searchProductName(String keyword);
+    List<ReviewSumary> getReviewByMonth(Integer month, Integer year);
 }

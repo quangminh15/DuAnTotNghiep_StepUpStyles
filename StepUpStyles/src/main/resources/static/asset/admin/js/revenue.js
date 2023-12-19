@@ -24,17 +24,63 @@ app.controller("revenues-ctrl", function ($scope, $http) {
         ]
     };
 
+
+    $scope.profitThisYear = 0
+    $scope.getYearlyProfit = function (selectedYear) {
+
+        $http.get('/rest/order/profitsYear/' + selectedYear)
+            .then(function (response) {
+                const yearlyProfits = response.data;
+                yearlyProfits.forEach(item => {
+                    const year = item[0]; // Năm
+                    const totalProfit = item[1]; // Tổng lợi nhuận
+
+
+                    console.log("year", year);
+                    $scope.profitThisYear = totalProfit;
+
+                    const profitThisYearFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($scope.profitThisYear);
+
+                    $scope.profitThisYearFormatted = profitThisYearFormatted;
+
+
+
+                    console.log("profit", $scope.profitThisYear);
+                });
+
+                // Other parts of your code...
+            })
+            .catch(function (error) {
+                console.error('Lỗi khi lấy dữ liệu tổng lợi nhuận của từng năm:', error);
+            });
+    };
+
     const currentYear = new Date().getFullYear();
     $scope.allOrders = []
     // bieu do doanh thu theo  nam 
-    
+
+
     $http.get(`/rest/order/listOrder/all`)
         .then(resp => {
             const orders = resp.data;
             $scope.allOrders = resp.data
-           
+
+            const sumRevenuesAllYears = orders.reduce((acc, order) => {
+                if (order.orderStatus === 'Delivered') {
+                    acc += order.totalAmount; // tính tổng doanh thu 
+                }
+                return acc;
+            }, 0);
+
+            // khai báo biến tổng doanh thu của năm
+            $scope.sumRevenuesAllYears = sumRevenuesAllYears;
+
+            const sumRevenuesAllYearsFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(sumRevenuesAllYears);
+
+            $scope.sumRevenuesAllYearsFormatted = sumRevenuesAllYearsFormatted;
+
             $scope.filterOrdersByYear(currentYear);
-            // Extract years and calculate revenue for each year
+            // tính toán dữ liệu mỗi năm
             const yearlyRevenue = orders.reduce((acc, order) => {
                 if (order.orderStatus === 'Delivered') {
                     const orderYear = new Date(order.orderDate).getFullYear();
@@ -48,7 +94,7 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                 return acc;
             }, {});
 
-            // Populate chart data
+            // đẩy dữ liệu lên biểu đồ
             for (const year in yearlyRevenue) {
                 if (yearlyRevenue.hasOwnProperty(year)) {
                     $scope.yearlyData.labels.push(year);
@@ -59,9 +105,10 @@ app.controller("revenues-ctrl", function ($scope, $http) {
             const years = Object.keys(yearlyRevenue);
             const newestYear = Math.max(...years);
 
-            // Set the default year for the monthly chart
-            $scope.filterOrdersByYear(newestYear); // This will filter orders for the newest year
+            // năm mặc cho biểu đồ tháng là năm hiện tại
+            $scope.filterOrdersByYear(newestYear);
             updateMonthlyChart(newestYear);
+            $scope.getYearlyProfit(newestYear);
 
             // Render chart
             var ctx = document.getElementById('yearlyChart').getContext('2d');
@@ -72,8 +119,10 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                     onClick: function (event, chartElement) {
                         if (chartElement.length > 0) {
                             const selectedYear = $scope.yearlyData.labels[chartElement[0]._index];
-                            $scope.filterOrdersByYear(selectedYear); // Filter orders for the selected year
+                            $scope.filterOrdersByYear(selectedYear);
+                            $scope.getYearlyProfit(selectedYear); // Filter orders for the selected year
                             updateMonthlyChart(selectedYear); // Update the monthly chart based on the selected year
+
                         }
                     },
                     scales: {
@@ -104,6 +153,8 @@ app.controller("revenues-ctrl", function ($scope, $http) {
             console.error('Error fetching orders:', error);
         });
 
+
+
     $scope.monthlyData = {
         labels: [], // Months will go here
         datasets: [
@@ -120,7 +171,7 @@ app.controller("revenues-ctrl", function ($scope, $http) {
     };
     $scope.filteredOrders = []
 
-    
+
     $scope.filterOrdersByYear = function (selectedYear) {
 
         // Assuming your orders have an 'orderDate' attribute containing the order date
@@ -131,7 +182,8 @@ app.controller("revenues-ctrl", function ($scope, $http) {
 
 
     function updateMonthlyChart(selectedYear) {
-        $scope.pager.first()    
+
+        $scope.pager.first();
         if (!selectedYear) {
             selectedYear = new Date().getFullYear();
             $scope.presentYear = selectedYear;
@@ -142,21 +194,28 @@ app.controller("revenues-ctrl", function ($scope, $http) {
             .then(resp => {
                 const orders = resp.data;
 
-
-
-                // Filter orders for the selected year
-                const ordersInSelectedYear = orders.filter(order => {
-                    return new Date(order.orderDate).getFullYear() === parseInt(selectedYear);
+                // Filter orders for the selected year and status 'Delivered'
+                const ordersInSelectedYearDelivered = orders.filter(order => {
+                    return (
+                        new Date(order.orderDate).getFullYear() === parseInt(selectedYear) &&
+                        order.orderStatus === 'Delivered'
+                    );
                 });
 
                 // Initialize an array to hold monthly revenue data
                 const monthlyRevenue = Array.from({ length: 12 }, () => 0); // 12 months, initialized with 0s
 
                 // Calculate revenue for each month
-                ordersInSelectedYear.forEach(order => {
+                ordersInSelectedYearDelivered.forEach(order => {
                     const orderMonth = new Date(order.orderDate).getMonth();
                     monthlyRevenue[orderMonth] += order.totalAmount; // Assuming totalAmount is the revenue
                 });
+                const sumRevenueThisYear = monthlyRevenue.reduce((total, revenue) => total + revenue, 0);
+                $scope.sumRevenueThisYear = sumRevenueThisYear;
+
+                const sumRevenueThisYearFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($scope.sumRevenueThisYear);
+
+                $scope.sumRevenueThisYearFormatted = sumRevenueThisYearFormatted;
 
                 // Update chart data
                 const monthNames = [
@@ -164,9 +223,13 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                     'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
                 ];
 
+
+
                 // Update monthlyData with new values
                 $scope.monthlyData.labels = monthNames;
                 $scope.monthlyData.datasets[0].data = monthlyRevenue;
+
+
 
                 // Render chart
                 var ctx = document.getElementById('monthlyChart').getContext('2d');
@@ -203,65 +266,66 @@ app.controller("revenues-ctrl", function ($scope, $http) {
             });
     }
 
-    $scope.pager = {
-		page: 0,
-		size: 10,
-		getPageNumbers: function () {
-			var pageCount = this.count;
-			var currentPage = this.page + 1;
-			var visiblePages = [];
 
-			if (pageCount <= 3) {
-				for (var i = 1; i <= pageCount; i++) {
-					visiblePages.push({ value: i });
-				}
-			} else {
-				if (currentPage <= 2) {
-					visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
-				} else if (currentPage >= pageCount - 1) {
-					visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
-				} else {
-					visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
-				}
-			}
-			return visiblePages;
-		},
-		get filteredOrders() {
-			var start = this.page * this.size;
-			return $scope.filteredOrders.slice(start, start + this.size);
-		},
-		get count() {
-			return Math.ceil(1.0 * $scope.filteredOrders.length / this.size);
-		},
-		first() {
-			this.page = 0;
-			$scope.visiblePages = this.getPageNumbers();
-		},
-		prev() {
-			this.page--;
-			if (this.page < 0) {
-				this.last();
-			}
-			$scope.visiblePages = this.getPageNumbers();
-		},
-		next() {
-			this.page++;
-			if (this.page >= this.count) {
-				this.first();
-			}
-			$scope.visiblePages = this.getPageNumbers();
-		},
-		last() {
-			this.page = this.count - 1;
-			$scope.visiblePages = this.getPageNumbers();
-		},
-		goto(pageNumber) {
-			if (pageNumber >= 1 && pageNumber <= this.count) {
-				this.page = pageNumber - 1;
-				$scope.visiblePages = this.getPageNumbers();
-			}
-		},
-	};
+    $scope.pager = {
+        page: 0,
+        size: 10,
+        getPageNumbers: function () {
+            var pageCount = this.count;
+            var currentPage = this.page + 1;
+            var visiblePages = [];
+
+            if (pageCount <= 3) {
+                for (var i = 1; i <= pageCount; i++) {
+                    visiblePages.push({ value: i });
+                }
+            } else {
+                if (currentPage <= 2) {
+                    visiblePages.push({ value: 1 }, { value: 2 }, { value: 3 }, { value: '...' });
+                } else if (currentPage >= pageCount - 1) {
+                    visiblePages.push({ value: '...' }, { value: pageCount - 2 }, { value: pageCount - 1 }, { value: pageCount });
+                } else {
+                    visiblePages.push({ value: '...' }, { value: currentPage - 1 }, { value: currentPage }, { value: currentPage + 1 }, { value: '...' });
+                }
+            }
+            return visiblePages;
+        },
+        get filteredOrders() {
+            var start = this.page * this.size;
+            return $scope.filteredOrders.slice(start, start + this.size);
+        },
+        get count() {
+            return Math.ceil(1.0 * $scope.filteredOrders.length / this.size);
+        },
+        first() {
+            this.page = 0;
+            $scope.visiblePages = this.getPageNumbers();
+        },
+        prev() {
+            this.page--;
+            if (this.page < 0) {
+                this.last();
+            }
+            $scope.visiblePages = this.getPageNumbers();
+        },
+        next() {
+            this.page++;
+            if (this.page >= this.count) {
+                this.first();
+            }
+            $scope.visiblePages = this.getPageNumbers();
+        },
+        last() {
+            this.page = this.count - 1;
+            $scope.visiblePages = this.getPageNumbers();
+        },
+        goto(pageNumber) {
+            if (pageNumber >= 1 && pageNumber <= this.count) {
+                this.page = pageNumber - 1;
+                $scope.visiblePages = this.getPageNumbers();
+            }
+        },
+    };
     //chạy biểu đồ tháng từ đầu với năm hiện tại
     updateMonthlyChart()
 
@@ -298,4 +362,20 @@ app.controller("revenues-ctrl", function ($scope, $http) {
                 })
             })
     }
+
+    $scope.totalProfit = 0;
+
+    $http.get('/rest/order/totalprofit')
+        .then(function (response) {
+            const profits = response.data;
+            profits.forEach(function (item) {
+                $scope.totalProfit += item[1]; // Sum up all the profits
+            });
+            const sumsumProfitFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($scope.totalProfit);
+
+                $scope.sumsumProfitFormatted = sumsumProfitFormatted;
+        })
+        .catch(function (error) {
+            console.error('Error fetching total profits:', error);
+        });
 })

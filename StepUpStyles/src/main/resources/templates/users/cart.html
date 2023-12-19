@@ -120,7 +120,7 @@
 										<td>
 											<div class="row text-left">
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
+												<!-- <div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
 													ng-show="item.colors.length > 1">
 
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
@@ -139,17 +139,17 @@
 														</a>
 
 													</div>
-												</div>
+												</div> -->
 												<!-- khong hien dropdown khi chi co 1 mau -->
 												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
-													ng-show="item.colors.length == 1">
+													>
 
 													<div>Màu: {{item.productDetail.color.colorName}}</div>
 												</div>
 
 
 
-												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1"
+												<!-- <div class="dropdown col-md-lg-5 col-md-12 col-sm-12 mt-1"
 													ng-show="item.sizes.length > 1">
 													<a class=" dropdown-toggle" role="button" id="dropdownMenuLink"
 														data-toggle="dropdown" aria-haspopup="true"
@@ -166,10 +166,10 @@
 														</a>
 
 													</div>
-												</div>
+												</div> -->
 												<!-- khong hien dropdown khi chi co 1 size -->
 												<div class="dropdown col-md-lg-5 col-md-12 col-sm-12  mt-1"
-													ng-show="item.sizes.length == 1">
+													>
 
 													<div>Size: {{item.productDetail.size.sizeNumber}}</div>
 												</div>
@@ -228,7 +228,7 @@
 													<input type="number" name="quantity"
 														class="quantity form-control input-number"
 														ng-model="item.quantity" ng-value="item.quantity" min="1"
-														max="100" ng-change="updateQuantity($index, 2)">
+														 ng-change="updateQuantity($index, 2)">
 													<button class="btn btn-primary quantity-right-plus"
 														ng-click="updateQuantity($index, 1)"
 														ng-disabled="item.quantity==item.productDetail.quantity"><span>

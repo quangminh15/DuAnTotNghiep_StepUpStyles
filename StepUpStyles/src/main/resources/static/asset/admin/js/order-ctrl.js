@@ -444,13 +444,64 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 				});
 			}
 		} else {
-			if ($scope.selectedActivity === "newest" || $scope.selectedActivity === "all") {
+			if ($scope.selectedActivity === "newest" ) {
+				// $scope.filteredOrders.sort((a, b) => {
+
+				// 	const statusPriority = {
+				// 		'Pending': 3,
+				// 		'Confirmed': 2,
+				// 		'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+				// 		// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
+				// 	};
+
+				// 	// Xác định mức độ ưu tiên cho từng order
+				// 	const statusPriorityA = statusPriority[b.orderStatus] || 0;
+				// 	const statusPriorityB = statusPriority[a.orderStatus] || 0;
+
+				// 	if (statusPriorityA !== statusPriorityB) {
+						
+				// 		return statusPriorityA - statusPriorityB;
+				// 	} else {
+				// 		// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
+						
+				// 		if (statusPriorityA==3 || statusPriorityB==3 ) {
+							
+				// 			return new Date(b.orderDate) - new Date(a.orderDate);
+				// 		}else{
+
+							// return new Date(a.orderDate) - new Date(b.orderDate);
+						
+				// 	}
+				// });
+				$scope.filteredOrders.sort((b, a) => {
+
+					return new Date(a.orderDate) - new Date(b.orderDate);
+				});
+			} else if ($scope.selectedActivity === "oldest") {
+				$scope.filteredOrders.sort((b, a) => {
+
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				});
+			} else if ($scope.selectedActivity === "totalBigest") {
+				$scope.filteredOrders.sort((b, a) => {
+
+					return new Date(b.totalAmount) - new Date(a.totalAmount);
+				});
+			}else if ($scope.selectedActivity === "totalSmallest") {
+				$scope.filteredOrders.sort((b, a) => {
+
+					return new Date(a.totalAmount) - new Date(b.totalAmount);
+				});
+			}else if($scope.selectedActivity === "all"){
 				$scope.filteredOrders.sort((a, b) => {
 
+
 					const statusPriority = {
-						'Pending': 3,
-						'Confirmed': 2,
-						'Shipping': 1, // Đặt ưu tiên cho orderStatus 'pending'
+						'Pending': 5,
+						'Confirmed': 4,
+						'Shipping': 3, 
+						'Delivered': 2,
+						'Cancel': 1,// Đặt ưu tiên cho orderStatus 'pending'
 						// Định nghĩa mức độ ưu tiên cho các orderStatus khác nếu cần
 					};
 
@@ -464,7 +515,7 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 					} else {
 						// Nếu cả hai đơn hàng có cùng mức độ ưu tiên, sắp xếp theo ngày
 						
-						if (statusPriorityA==3 || statusPriorityB==3 ) {
+						if ((statusPriorityA==3 && statusPriorityB==3) || (statusPriorityA==2 && statusPriorityB==2)||(statusPriorityA==1 && statusPriorityB==1)) {
 							
 							return new Date(b.orderDate) - new Date(a.orderDate);
 						}else{
@@ -472,12 +523,8 @@ app.controller("order-ctrl", ['$scope', '$http', '$timeout', function ($scope, $
 							return new Date(a.orderDate) - new Date(b.orderDate);
 						}
 					}
-				});
 
-			} else if ($scope.selectedActivity === "oldest") {
-				$scope.filteredOrders.sort((b, a) => {
 
-					return new Date(b.orderDate) - new Date(a.orderDate);
 				});
 			} else {
 

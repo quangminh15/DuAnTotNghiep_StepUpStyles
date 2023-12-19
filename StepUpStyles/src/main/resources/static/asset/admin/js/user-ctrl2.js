@@ -1,4 +1,4 @@
-app.controller("user-ctrl", function($scope, $http) {
+app.controller("user-ctrl2", function($scope, $http) {
 	$scope.uList = [];
 	$scope.prodcates = [];
 	$scope.subcates = [];
@@ -11,7 +11,7 @@ app.controller("user-ctrl", function($scope, $http) {
 
 	$scope.initialize = function() {
 		//load user
-		$http.get("/user/loadallEAA").then(resp => {
+		$http.get("/user/loadallCUSTOMER").then(resp => {
 			$scope.uList = resp.data;
 			$scope.pager.first();
 		});

@@ -1,9 +1,14 @@
 app.controller("totalproductrating-ctrl", function ($scope, $http) {
     $scope.chartData = {}
+    $scope.monthss = [];
     var currentYear = new Date().getFullYear();
     $scope.years = [];
-    for (var i = 2015; i <= currentYear; i++) {
+    for (var i = 2020; i <= currentYear; i++) {
         $scope.years.push(i);
+    }
+
+    for (var i = 1; i <= 12; i++) {
+        $scope.monthss.push(i);
     }
 
     $scope.selectedYear = currentYear;
@@ -21,6 +26,10 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
                 y: {
                     beginAtZero: true,
                     stepSize: 1,
+                    title: {
+                        display: true,
+                        text: 'Lượt đánh giá' // Nhãn trục y
+                    }
                 },
             },
             plugins: {
@@ -39,39 +48,29 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
                     }
                 }
             },
-            onClick: function (event, elements) {
-                if (elements && elements.length > 0) {
-                    var clickedElement = elements[0];
-                    var monthIndex = clickedElement.index;
-                    var selectedMonth = chart.data.labels[monthIndex];
-
-                    console.log("click Month: ", clickedElement);
-                    console.log(" Month index: ", monthIndex);
-                    console.log("Selected Month: ", selectedMonth); // Log selected month
-
-                    var selectedMonthData = $scope.chartData.find(function (data) {
-                        return data.month === selectedMonth;
-                    });
-
-                    console.log("Selected Month Data: ", selectedMonthData); // Log selected month data
-
-                    if (selectedMonthData) {
-                        var productReviewsInSelectedMonth = selectedMonthData.productReviews;
-                        console.log(productReviewsInSelectedMonth);
-                    } else {
-                        console.log("Không có dữ liệu cho tháng này");
-                    }
-                }
-            }
         }
     });
-
 
     // Hàm cập nhật biểu đồ dựa trên năm được chọn
     $scope.updateChartData = function () {
         $http.get('/api/total-product-rating?year=' + $scope.selectedYear)
             .then(function (response) {
                 $scope.chartData = response.data;
+
+                // Lấy danh sách các tháng có đánh giá từ dữ liệu biểu đồ
+            var ratedMonths = $scope.chartData.map(function (item) {
+                return parseInt(item.month);
+            });
+
+            // Lọc và cập nhật danh sách các tháng có đánh giá vào select box
+            $scope.ratedMonths = $scope.monthss.filter(function (month) {
+                return ratedMonths.includes(month);
+            });
+            if ($scope.ratedMonths.length > 0) {
+                $scope.selectedMonth = $scope.ratedMonths[0];
+                $scope.getMonthDetails($scope.selectedMonth);
+            }
+
                 var labels = [];
                 var datasets = [];
 
@@ -109,6 +108,9 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
 
                 // Cập nhật dữ liệu cho biểu đồ
                 chart.data.labels = monthLabels;
+                $scope.months = chart.data.labels.map(function (label) {
+                    return parseInt(label.substring(6)); // Lấy ký tự từ vị trí thứ 6 trong chuỗi và chuyển về kiểu int
+                });
                 chart.data.datasets = datasets;
                 chart.update();
             });
@@ -117,4 +119,13 @@ app.controller("totalproductrating-ctrl", function ($scope, $http) {
     // Cập nhật biểu đồ ban đầu
     $scope.updateChartData();
 
+    $scope.getMonthDetails = function (month) {
+        $http.get(`/rest/reviews/month-year?month=${month}&year=${$scope.selectedYear}`)
+            .then((res) => {
+                $scope.monthYear = res.data;
+            }).catch((err) => {
+
+            });
+        $scope.month = month
+    };
 });
