@@ -35,6 +35,8 @@
 					<span class="title text-white">Thống kê doanh thu theo năm</span>
 				</div>
 				<div class="card-body">
+					<h5><i class="fa fa-bar-chart" aria-hidden="true"></i> Tổng doanh thu: {{ sumRevenuesAllYearsFormatted }}</h5>
+					<h5><i class="fa fa-money" aria-hidden="true"></i> Tổng lợi nhuận: {{ sumsumProfitFormatted }}</h5>
 					<canvas id="yearlyChart" width="400" height="200"></canvas>
 				</div>
 			</div>
@@ -50,6 +52,8 @@
 
 				</div>
 				<div class="card-body">
+					<div><i class="fa fa-bar-chart" aria-hidden="true"></i> Tổng doanh thu: {{ sumRevenueThisYearFormatted}}</div>
+					<div><i class="fa fa-money" aria-hidden="true"></i> Tổng lợi nhuận: {{profitThisYearFormatted }}</div>
 					<canvas id="monthlyChart" width="400" height="200"></canvas>
 				</div>
 			</div>
@@ -250,7 +254,7 @@
 												<p style="max-width: 500px; overflow: hidden;display: -webkit-box;
 														-webkit-box-orient: vertical;
 														-webkit-line-clamp: 1;" class="mb-3 text-dark">{{item.productDetail.product.productName}}
-													ut libero! Impedit omnis porro iusto sequi quia!</p>
+													</p>
 												<p class="text-dark mb-3">Màu: {{item.productDetail.color.colorName}} |
 													Size:
 													{{item.productDetail.size.sizeNumber}}</p>

@@ -228,7 +228,7 @@
 													<input type="number" name="quantity"
 														class="quantity form-control input-number"
 														ng-model="item.quantity" ng-value="item.quantity" min="1"
-														max="100" ng-change="updateQuantity($index, 2)">
+														 ng-change="updateQuantity($index, 2)">
 													<button class="btn btn-primary quantity-right-plus"
 														ng-click="updateQuantity($index, 1)"
 														ng-disabled="item.quantity==item.productDetail.quantity"><span>

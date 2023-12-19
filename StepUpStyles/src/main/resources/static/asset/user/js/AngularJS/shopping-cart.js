@@ -178,7 +178,8 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			});
 	}
 	$scope.checkQuantity = function (index,qty) {
-		var item = angular.copy($scope.items[index])
+		// var item = angular.copy($scope.items[index])
+		
 		if ($scope.singleProd.quantity < qty) {
 
 			console.log("qty", $scope.qty, $scope.singleProd.quantity);
@@ -202,11 +203,14 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 
 			$scope.qty = $scope.singleProd.quantity
 		}
-		if (qty<1) {
-			$scope.qty=1
-		}else if ( isNaN(qty)) {
-			$scope.qty = 1
-		} 
+		// if (qty<1) {
+		// 	$scope.qty=1
+		// }else if(qty==null){
+		// 	alert("gohere")
+		// }
+		// else if ( isNaN(qty)) {
+		// 	$scope.qty = 1
+		// } 
 	}
 
 
@@ -439,7 +443,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 	};
 	// Data modification
 	$scope.addToCart = function (id, size, color, qty) {
-
+		const quantityType = qty ? qty : 1;
 		if (!size || !color) {
 			const Toast = Swal.mixin({
 				toast: true,
@@ -475,7 +479,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					confirmButtonText: "Thêm Vào Giỏ Hàng!"
 				}).then((result) => {
 					if (result.isConfirmed) {
-						$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
+						$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${quantityType}`)
 
 							.then(function (response) {
 								console.log('Added to cart: ');
@@ -512,7 +516,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 					}
 				});
 			} else {
-				$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${qty}`)
+				$http.post(`/rest/cart?id=${id}&size=${size.sizeID}&color=${color.colorID}&qty=${quantityType}`)
 
 					.then(function (response) {
 						console.log('Added to cart: ');
@@ -650,6 +654,7 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 				});
 			}
 		} else {
+			// var item = angular.copy($scope.items[index])
 			var maxQuantity = item.productDetail.quantity;
 			console.log(maxQuantity);
 			// var qty = item.quantity;
@@ -661,10 +666,11 @@ app.controller("cart-ctrl", ['$scope', '$http', '$timeout', function ($scope, $h
 			if (newValue > maxQuantity) {
 				item.quantity = maxQuantity;
 				console.log(item.quantity);
-			} else if (newValue < 1 || isNaN(newValue)) {
+			} else if (newValue < 1 ) {
 				
 				item.quantity = 1
-			} else {
+			} 
+			else {
 				item.quantity = newValue;
 				console.log(newValue);
 			}

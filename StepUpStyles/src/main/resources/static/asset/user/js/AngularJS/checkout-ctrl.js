@@ -63,6 +63,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			// Update the isSelected property of items based on the loaded data
 			$scope.cartIs.forEach(function (item) {
 				item.isSelected = selectedItems.some(function (selectedItem) {
+					item.quantity = selectedItem.quantity ? selectedItem.quantity : 1;
 					return selectedItem.id === item.id; // Adjust the condition as per your data structure
 				});
 			});
