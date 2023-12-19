@@ -59,8 +59,10 @@ public class UserRestController {
 		return userService.create(user);
 	}
 
-	@PutMapping("/{userID}")
-	public User update(@PathVariable("userID") Integer userID, @RequestBody User user) {
+	@PutMapping("/update")
+	public User update(@RequestBody User user) {
+		System.out.println("id: "+user.getUsersId());
+		System.out.println("img: "+user.getImage());
 		return userService.update(user);
 	}
 
@@ -160,4 +162,5 @@ public class UserRestController {
 		lResponseUsers = userDAO.findAllUserForIndexAdmin();
 		return ResponseEntity.ok(lResponseUsers);
 	}
+
 }
