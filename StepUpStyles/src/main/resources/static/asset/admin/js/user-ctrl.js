@@ -41,8 +41,8 @@ app.controller("user-ctrl", function($scope, $http) {
 			  phoneNumber: "",
 			  registrationDate: null,
 			  username: "",
-			  role: ""
-
+			  role: "",
+			  image: ""
 		};
 	}
 	
@@ -337,5 +337,183 @@ app.controller("user-ctrl", function($scope, $http) {
 		$('#searchModal').modal('hide');
 	};
 
+	$scope.update = async function() {
+		var user = angular.copy($scope.form);
+		user.birthday = convertDateFormat(user.birthday);
 
+		console.log(user.birthday)
+
+		await $scope.uploadImage();
+		user.image = $scope.form.image;
+		// Gọi API POST để tạo sản phẩm mới với thông tin sản phẩm đã chỉnh sửa
+		$http.put('/user/update', user).then(resp => {
+			Swal.fire({
+				icon: 'success',
+				title: 'Thành công',
+				text: 'Cập nhật thành công!',
+			});
+			console.log("cc:: ", user);
+			$scope.reset();
+			$scope.initialize();
+		}).catch(error => {
+			// Xử lý lỗi khi không thể tạo mới sản phẩm
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Cập nhật mới thất bại!',
+			});
+			$scope.initialize();
+			console.log("Error", error);
+		});
+	}
+
+	// date format
+	function convertDateFormat(inputDate) {
+		// Tách ngày, tháng, năm từ chuỗi ngày tháng đầu vào
+		var parts = inputDate.split('/');
+		// Chuyển đổi sang định dạng mới: yyyy-MM-dd
+		var outputDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+		return outputDate;
+	}
+
+	$scope.uploadImage = function() {
+		var ref = firebase.storage().ref();
+		var folder = 'users';
+		var file = document.querySelector('#photo').files[0];
+		var metadata = {
+			contentType: file.type
+		};
+		var name = folder + '/' + file.name; // Tạo tên file với thư mục
+
+		var uploadIMG = ref.child(name).put(file, metadata);
+
+		return uploadIMG.then(snapshot => snapshot.ref.getDownloadURL())
+			.then(url => {
+				// Lưu đường dẫn ảnh vào biến $scope.form.imagePath
+				$scope.form.image = url;
+				console.log("cc1: "+$scope.form.image);
+			});
+	};
+
+	$('.exportExcel').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportExcel();
+			}
+
+		})
+
+	});
+
+	$scope.exportExcel = function () {
+		$http({
+			method: "POST",
+			url: "/export-excelCustomer", // Thay thế với URL phía máy chủ đúng
+			data: $scope.uList,
+			responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then(function (response) {
+				// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+				var blob = new Blob([response.data], {
+					type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+				});
+				var url = URL.createObjectURL(blob);
+
+				// Tạo một thẻ <a> để tải xuống tệp Excel
+				var a = document.createElement("a");
+				a.href = url;
+				a.download = "AdminEmployeeStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+				document.body.appendChild(a);
+				a.click();
+				URL.revokeObjectURL(url);
+			})
+			.catch(function (error) {
+				console.error("Xuất ra Excel thất bại:", error);
+			});
+	};
+
+	$('.exportPdf').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportPdf();
+			}
+
+		})
+
+	});
+
+	$scope.exportPdf = function () {
+		$http({
+			method: "POST",
+			url: "/customer-pdf",
+			data: $scope.uList,
+			responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then(function (response) {
+				// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+				var blob = new Blob([response.data], { type: "application/pdf" });
+				var url = URL.createObjectURL(blob);
+
+				// Tạo một thẻ a để tải xuống tệp PDF
+				var a = document.createElement("a");
+				a.href = url;
+				a.download = "DSAdminEmployee.pdf";
+				document.body.appendChild(a);
+				a.click();
+				URL.revokeObjectURL(url);
+			})
+			.catch(function (error) {
+				console.error("Xuất PDF thất bại:", error);
+			});
+	};
 })
