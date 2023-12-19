@@ -99,7 +99,7 @@
                                     aria-expanded="false"> <i class="icon-heart menu-icon"></i> <span
                     class="menu-title">Xem danh sách yêu thích</span>
             </a></li>
-            <li class="nav-item"><a class="nav-link no-default-action"
+            <li ng-if="role === 'ADMIN'" class="nav-item"><a class="nav-link no-default-action"
                                     data-toggle="collapse" href="#thongke" aria-expanded="false"
                                     aria-controls="thongke"> <i class="icon-paper menu-icon"></i> <span
                                      class="menu-title">Thống kê</span> <i class="menu-arrow"></i>
