@@ -205,6 +205,21 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 	$scope.loadTongTienFromLocal()
 
 	$scope.getDataPayment = function () {
+		var promises = [];
+
+		$scope.cartIs.forEach(cartDetail => {
+			var promise = $http.get("/rest/discount/loadbyproduct/" + cartDetail.product.productID)
+				.then(resp => {
+					cartDetail.product.directDiscounts = resp.data.filter(directDiscounts => !directDiscounts.deleted);
+					cartDetail.price = cartDetail.product.directDiscounts[0].priceDiscount;
+					console.log("sadfsad", cartDetail.price);
+				});
+
+			promises.push(promise);
+		});
+
+		// Đợi tất cả các promises hoàn tất trước khi thực hiện các thao tác tiếp theo
+		Promise.all(promises).then(() => {
 		const voucherUseId = $scope.selectedVoucher ? $scope.selectedVoucher.voucherUseId : 0;
 		$http({
 			method: 'POST',
@@ -215,11 +230,12 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.then(function (response) {
 				console.log('done:', response.data);
 
+				localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien - $scope.discouted) + $scope.shippingFee))
 			})
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-		localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien - $scope.discouted) + $scope.shippingFee))
+	});
 	}
 
 	$scope.removeDataPayment = function () {
