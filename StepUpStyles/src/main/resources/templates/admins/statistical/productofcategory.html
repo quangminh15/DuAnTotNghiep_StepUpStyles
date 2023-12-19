@@ -56,8 +56,8 @@ tr:nth-child(even) {
 							ng-model="selectedCategory" ng-change="loadProductsByCategory()"
 							style="width: 230px; height: 35px;" data-toggle="tooltip"
 							title="Chọn danh mục để lọc">
-							<option value="" disabled selected>Vui lòng chọn danh
-								mục</option>
+<!-- 							<option value="" disabled selected>Vui lòng chọn danh -->
+<!-- 								mục</option> -->
 							<option ng-repeat="category in categories"
 								value="{{category.categoryID}}">{{category.categoryName}}</option>
 						</select>
@@ -138,8 +138,8 @@ tr:nth-child(even) {
 							ng-model="selectedBrand" ng-change="loadProductsByBrand()"
 							style="width: 230px; height: 35px;" data-toggle="tooltip"
 							title="Chọn thương hiệu để lọc">
-							<option value="" disabled selected>Vui lòng chọn thương
-								hiệu</option>
+<!-- 							<option value="" disabled selected>Vui lòng chọn thương -->
+<!-- 								hiệu</option> -->
 							<option ng-repeat="brand in brands" value="{{brand.brandID}}">{{brand.brandName}}</option>
 						</select>
 					</div>
