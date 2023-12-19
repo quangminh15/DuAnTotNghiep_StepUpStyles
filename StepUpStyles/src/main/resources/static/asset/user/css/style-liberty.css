@@ -3768,7 +3768,7 @@ Author URL: http://w3layouts.com
  
  .w3l-banner-slider-main .navbar-expand-lg .navbar-nav .dropdown-menu {
    transform: translateX(-50px);
-     font-size: 1.5rem;
+     /*font-size: 1.5rem;*/
  }
  
  .w3l-banner-slider-main .navbar-expand-lg .navbar-nav .dropdown-menu:before {
