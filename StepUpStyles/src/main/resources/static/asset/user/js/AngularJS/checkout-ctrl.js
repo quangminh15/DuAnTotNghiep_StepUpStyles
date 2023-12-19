@@ -77,6 +77,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 				})
 			})
 			setTongTien()
+			localStorage.removeItem('selectedItems');
 		}
 	};
 	$scope.discount = []
@@ -174,7 +175,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee));
+		localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee));
 
 		window.location.href = '/pay-cod-success'
 	};
@@ -199,7 +200,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-			localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee))
+			localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee))
 	}
 
 	$scope.removeDataPayment = function () {

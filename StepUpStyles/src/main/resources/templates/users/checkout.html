@@ -213,7 +213,7 @@
 									</div>
 
 									<div class="col-lg-3 text-center" >
-										<a type="button"  data-dismiss="modal" ng-show="addr.addressDefault==false" ng-click="delete(addr.shippingAddressId)"><h5 class="text-danger">Xóa</h5> </a>
+										<a type="button"  data-dismiss="modal" ng-show="addr.defaultAddress==false" ng-click="delete(addr.shippingAddressId)"><h5 class="text-danger">Xóa</h5> </a>
 										<span><a style="color: white;" type="button" data-toggle="modal"
 												data-dismiss="modal" class="btn btn-primary btnEdit py-3 px-4"
 												ng-click="edit(addr)"><i class="fas fa-edit"></i> Cập nhật</a></span>
@@ -344,7 +344,7 @@
 								</div>
 								<div style=" justify-content: start" ng-show="checkEdit==true">
 									<a type="submit" class="btn btn-success" ng-click="update()"><i
-											class="fa fa-plus"></i> Lưushdjkhf</a>
+											class="fa fa-plus"></i> Lưu</a>
 								</div>
 								<div style="justify-content: start">
 									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal"
