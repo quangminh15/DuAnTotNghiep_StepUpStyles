@@ -19,12 +19,11 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 	// Load danh sách sản phẩm và tính tổng quantity
 	$http.get("/rest/productdetails/loadall").then(resp => {
 		$scope.productdetailitemss = resp.data;
+		// Tính số lượng sản phẩm gần hết hàng (quantity nhỏ hơn 10)
+		$scope.nearlyOutOfStockCount = $scope.productdetailitemss.filter(item => item.quantity > 0 && item.quantity <= 10).length;
 
 		// Tính số lượng sản phẩm hết hàng (quantity = 0)
-		$scope.outOfStockCount = $scope.productdetailitemss.filter(item => item.quantity === 0).length;
-
-		// Tính số lượng sản phẩm gần hết hàng (quantity nhỏ hơn 10)
-		$scope.nearlyOutOfStockCount = $scope.productdetailitemss.filter(item => item.quantity > 0 && item.quantity < 10).length;
+		$scope.outOfStockCount = $scope.productdetailitemss.filter(item => item.quantity === 0).length + $scope.nearlyOutOfStockCount;
 
 		// Tính tổng quantity từ danh sách sản phẩm
 		//		$scope.totalQuantity = SumQuantity(resp.data);
@@ -36,14 +35,8 @@ app.controller("indexAdmin-ctrl", function ($scope, $http, $interval) {
 		$scope.totalProductCount = $scope.productdetailitemss.length;
 
 		// Đếm tổng số sản phẩm tồn kho
-		$scope.TonKho = $scope.totalProductCount - $scope.nearlyOutOfStockCount - $scope.outOfStockCount;
+		$scope.TonKho = $scope.totalProductCount - $scope.outOfStockCount;
 	});
-
-	// Tính số lượng sản phẩm hết hàng (quantity = 0)
-	$scope.outOfStockCount = $scope.productdetailitemss.filter(item => item.quantity === 0).length;
-
-	// Tính số lượng sản phẩm gần hết hàng (quantity nhỏ hơn 10)
-	$scope.nearlyOutOfStockCount = $scope.productdetailitemss.filter(item => item.quantity > 0 && item.quantity < 10).length;
 
 
 	//thời gian hiển thị start

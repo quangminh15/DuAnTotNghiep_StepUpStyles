@@ -18,12 +18,12 @@ app.controller("user-ctrl2", function($scope, $http) {
 	}
 
 	$scope.sortableColumns = [
-		{ name: 'categoryID', label: 'Mã người dùng' },
-		{ name: 'categoryName', label: 'Họ và tên' },
-		{ name: 'categoryID', label: 'Hình ảnh' },
-		{ name: 'categoryImage', label: 'Email' },
-		{ name: 'modifyDate', label: 'Số điện thoại' },
-		{ name: 'activities', label: 'Quyền' },
+		{ name: 'usersId', label: 'Mã người dùng' },
+		{ name: 'fullName', label: 'Họ và tên' },
+		{ name: 'image', label: 'Hình ảnh' },
+		{ name: 'email', label: 'Email' },
+		{ name: 'phone', label: 'Số điện thoại' },
+		{ name: 'role', label: 'Quyền' },
 	];
 
 	//	Xóa form
@@ -335,6 +335,129 @@ app.controller("user-ctrl2", function($scope, $http) {
 			$('#errorModal').modal('show'); // Hiển thị modal lỗi
 		}
 		$('#searchModal').modal('hide');
+	};
+
+	$('.exportExcel').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportExcel();
+			}
+
+		})
+
+	});
+
+	$scope.exportExcel = function () {
+		$http({
+			method: "POST",
+			url: "/export-excelCustomer", // Thay thế với URL phía máy chủ đúng
+			data: $scope.uList,
+			responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu Excel dưới dạng ArrayBuffer
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then(function (response) {
+				// Tạo một đối tượng Blob từ dữ liệu Excel và tạo URL để tải xuống
+				var blob = new Blob([response.data], {
+					type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+				});
+				var url = URL.createObjectURL(blob);
+
+				// Tạo một thẻ <a> để tải xuống tệp Excel
+				var a = document.createElement("a");
+				a.href = url;
+				a.download = "CustomerStepUpStyle.xlsx"; // Đặt tên tệp Excel mong muốn
+				document.body.appendChild(a);
+				a.click();
+				URL.revokeObjectURL(url);
+			})
+			.catch(function (error) {
+				console.error("Xuất ra Excel thất bại:", error);
+			});
+	};
+
+
+	$('.exportPdf').click(function() {
+
+		let timerInterval
+		Swal.fire({
+			icon: 'info',
+			title: 'Đang xuất file',
+			html: 'Cần phải chờ trong <b></b>s.',
+			timer: 2000,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading()
+				const b = Swal.getHtmlContainer().querySelector('b')
+				timerInterval = setInterval(() => {
+					b.textContent = Swal.getTimerLeft()
+				}, 100)
+			},
+			willClose: () => {
+				clearInterval(timerInterval)
+			}
+		}).then((result) => {
+			/* Read more about handling dismissals below */
+			if (result.dismiss === Swal.DismissReason.timer) {
+				console.log('I was closed by the timer')
+
+				//code xuất file
+				$scope.exportPdf();
+			}
+
+		})
+
+	});
+
+	$scope.exportPdf = function () {
+		$http({
+			method: "POST",
+			url: "/customer-pdf",
+			data: $scope.uList,
+			responseType: "arraybuffer", // Đặt responseType thành 'arraybuffer' để nhận dữ liệu PDF dưới dạng ArrayBuffer
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then(function (response) {
+				// Tạo một đối tượng Blob từ dữ liệu PDF và tạo URL để tải xuống
+				var blob = new Blob([response.data], { type: "application/pdf" });
+				var url = URL.createObjectURL(blob);
+
+				// Tạo một thẻ a để tải xuống tệp PDF
+				var a = document.createElement("a");
+				a.href = url;
+				a.download = "DSCustomer.pdf";
+				document.body.appendChild(a);
+				a.click();
+				URL.revokeObjectURL(url);
+			})
+			.catch(function (error) {
+				console.error("Xuất PDF thất bại:", error);
+			});
 	};
 
 
