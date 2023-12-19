@@ -477,7 +477,7 @@ app.controller("product-ctrl", function($scope, $http) {
 				$http.post('/rest/products/create', productitem).then(resp => {
 					resp.data.modifyDate = new Date(resp.data.modifyDate);
 					$scope.productitems.push(resp.data);
-					$scope.reeset();
+					$scope.reset();
 					$scope.initialize();
 
 					Swal.fire({
