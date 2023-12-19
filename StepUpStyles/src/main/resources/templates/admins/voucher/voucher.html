@@ -29,7 +29,7 @@
                     <label for="inputPassword4">Giảm tối đa</label>
                     <input class="form-control" id="" type="number" required="" ng-model="form.miniOrder">
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                     <label class="control-label">Mô tả</label>
                     <textarea class="form-control" id="inputTextarea3" ng-model="form.description" rows="5"></textarea>
                 </div>
@@ -79,7 +79,7 @@
                                     <th>Giảm tối đa</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th>Mô tả</th>
+                                    <!-- <th>Mô tả</th> -->
                                     <th class="actions"></th>
                                 </tr>
                             </thead>
@@ -95,8 +95,8 @@
                                         {{ddI.formattedStartDate }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
                                     </td>
-                                    <td data-toggle="tooltip" title="{{ddI.description}}">
-                                        {{formatDescription(ddI.description)}}</td>
+                                    <!-- <td data-toggle="tooltip" title="{{ddI.description}}">
+                                        {{formatDescription(ddI.description)}}</td> -->
                                     <td class="actions">
                                         <button class="btn btn-space btn btn-primary " ng-click="restore(ddI)">
                                             <i class="ti-back-right"></i>
