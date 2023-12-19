@@ -4,7 +4,7 @@ app.controller("totalImport-ctrl", function($scope, $http) {
 
     var currentYear = new Date().getFullYear();
     $scope.years = [];
-    for (var i = 2023; i <= currentYear; i++) {
+    for (var i = 2021; i <= currentYear; i++) {
         $scope.years.push(i);
     }
 
@@ -47,6 +47,9 @@ app.controller("totalImport-ctrl", function($scope, $http) {
 
     // Hàm cập nhật biểu đồ dựa trên năm được chọn
     $scope.updateChartData = function () {
+        var selectedMonth = 1; // Thay đổi giá trị theo tháng bạn muốn
+        var selectedYear = 2023; // Thay đổi giá trị theo năm bạn muốn
+
         $http.get('rest/importReceipt/productQuantity?month=' + $scope.selectedMonth + '&year=' + $scope.selectedYear)
         .then(function (response) {
             var data = response.data;
@@ -59,6 +62,9 @@ app.controller("totalImport-ctrl", function($scope, $http) {
             var productQuantities = data.map(function (item) {
                 return item.totalQuantity; // Giả sử dữ liệu của bạn có thuộc tính 'quantity'
             });
+
+            // Kiểm tra và cập nhật mảng năm có dữ liệu
+
             console.log(productQuantities)
 
             var dataset = {

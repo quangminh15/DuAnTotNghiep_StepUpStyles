@@ -747,14 +747,26 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 	$scope.caculatorDiscount = function (item) {
 		var discountRate = 0
+		var maxOrder = 0;
 		$scope.selectedVoucher = item
 		if ($scope.selectedVoucher) {
-			discountRate = $scope.selectedVoucher.voucher.discountAmount / 100
+			discountRate = $scope.selectedVoucher.voucher.discountAmount / 100;
+			maxOrder = $scope.selectedVoucher.voucher.miniOrder;
 		} else {
-			discountRate = 0
+			discountRate = 0;
+			miniOrder = 0;
 		}
+		
+		$scope.discouted = $scope.tongTien * discountRate;
 
-		$scope.discouted = $scope.tongTien * discountRate
+		if($scope.discouted >= maxOrder) {
+			$scope.discouted = maxOrder;
+			
+		}else{
+			$scope.discouted = $scope.tongTien * discountRate;
+			
+		}
+		
 
 	}
 	$scope.caculatorDiscount()

@@ -25,6 +25,10 @@
                     <label for="inputPassword4">Thời gian kết thúc</label>
                     <input class="form-control" id="" type="datetime-local" required="" ng-model="form.dateEnd">
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Giảm tối đa</label>
+                    <input class="form-control" id="" type="number" required="" ng-model="form.miniOrder">
+                </div>
                 <div class="form-group col-md-12">
                     <label class="control-label">Mô tả</label>
                     <textarea class="form-control" id="inputTextarea3" ng-model="form.description" rows="5"></textarea>
@@ -72,6 +76,7 @@
                                 <tr>
                                     <th>Đơn hàng tối thiểu</th>
                                     <th>Mức giảm (%)</th>
+                                    <th>Giảm tối đa</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
                                     <th>Mô tả</th>
@@ -84,6 +89,8 @@
                                         formatToVND(ddI.total) }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
                                         {{ddI.discountAmount|number}}%</td>
+                                    <td data-toggle="tooltip" title="{{formatToVND(ddI.miniOrder)}}">{{
+                                            formatToVND(ddI.miniOrder) }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">
                                         {{ddI.formattedStartDate }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
@@ -175,6 +182,8 @@
                                     }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
                                     {{ddI.discountAmount|number}}%</td>
+                                <td data-toggle="tooltip" title="{{formatToVND(ddI.miniOrder)}}">{{
+                                    formatToVND(ddI.miniOrder) }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate
                                     }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
