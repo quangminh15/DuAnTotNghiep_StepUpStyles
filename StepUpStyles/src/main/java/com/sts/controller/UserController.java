@@ -80,10 +80,10 @@ public class UserController {
 		return "users/blog-single";
 	}
 
-	@RequestMapping("/contact")
+	@RequestMapping("/voucher")
 	public String contact(Model model) {
 		loadstatuslogin(model);
-		return "users/contact";
+		return "users/voucher";
 	}
 
 	@RequestMapping("/cart")
