@@ -63,6 +63,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			// Update the isSelected property of items based on the loaded data
 			$scope.cartIs.forEach(function (item) {
 				item.isSelected = selectedItems.some(function (selectedItem) {
+					item.quantity = selectedItem.quantity ? selectedItem.quantity : 1;
 					return selectedItem.id === item.id; // Adjust the condition as per your data structure
 				});
 			});
@@ -77,6 +78,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 				})
 			})
 			setTongTien()
+			localStorage.removeItem('selectedItems');
 		}
 	};
 	$scope.discount = []
@@ -174,7 +176,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-		localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee));
+		localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee));
 
 		window.location.href = '/pay-cod-success'
 	};
@@ -199,7 +201,7 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 			.catch(function (error) {
 				console.error('Error:', error);
 			});
-			localStorage.setItem('totalAmount', JSON.stringify($scope.tongTien + $scope.shippingFee))
+			localStorage.setItem('totalAmount', JSON.stringify(($scope.tongTien-$scope.discouted) + $scope.shippingFee))
 	}
 
 	$scope.removeDataPayment = function () {
@@ -745,14 +747,26 @@ app.controller("checkout-ctrl", ['$scope', '$http', '$timeout', '$location', fun
 
 	$scope.caculatorDiscount = function (item) {
 		var discountRate = 0
+		var maxOrder = 0;
 		$scope.selectedVoucher = item
 		if ($scope.selectedVoucher) {
-			discountRate = $scope.selectedVoucher.voucher.discountAmount / 100
+			discountRate = $scope.selectedVoucher.voucher.discountAmount / 100;
+			maxOrder = $scope.selectedVoucher.voucher.miniOrder;
 		} else {
-			discountRate = 0
+			discountRate = 0;
+			miniOrder = 0;
 		}
+		
+		$scope.discouted = $scope.tongTien * discountRate;
 
-		$scope.discouted = $scope.tongTien * discountRate
+		if($scope.discouted >= maxOrder) {
+			$scope.discouted = maxOrder;
+			
+		}else{
+			$scope.discouted = $scope.tongTien * discountRate;
+			
+		}
+		
 
 	}
 	$scope.caculatorDiscount()

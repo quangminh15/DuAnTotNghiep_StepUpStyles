@@ -2,7 +2,7 @@
     <div class="card mb-5"
         style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
         <div class="card-body">
-            <h4 class="card-title">Form voucher</h4>
+            <h4 class="card-title">Quản lý voucher</h4>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Đơn hàng tối thiểu</label>
@@ -25,7 +25,11 @@
                     <label for="inputPassword4">Thời gian kết thúc</label>
                     <input class="form-control" id="" type="datetime-local" required="" ng-model="form.dateEnd">
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Giảm tối đa</label>
+                    <input class="form-control" id="" type="number" required="" ng-model="form.miniOrder">
+                </div>
+                <div class="form-group col-md-6">
                     <label class="control-label">Mô tả</label>
                     <textarea class="form-control" id="inputTextarea3" ng-model="form.description" rows="5"></textarea>
                 </div>
@@ -72,9 +76,10 @@
                                 <tr>
                                     <th>Đơn hàng tối thiểu</th>
                                     <th>Mức giảm (%)</th>
+                                    <th>Giảm tối đa</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th>Mô tả</th>
+                                    <!-- <th>Mô tả</th> -->
                                     <th class="actions"></th>
                                 </tr>
                             </thead>
@@ -84,12 +89,14 @@
                                         formatToVND(ddI.total) }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
                                         {{ddI.discountAmount|number}}%</td>
+                                    <td data-toggle="tooltip" title="{{formatToVND(ddI.miniOrder)}}">{{
+                                            formatToVND(ddI.miniOrder) }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">
                                         {{ddI.formattedStartDate }}</td>
                                     <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}
                                     </td>
-                                    <td data-toggle="tooltip" title="{{ddI.description}}">
-                                        {{formatDescription(ddI.description)}}</td>
+                                    <!-- <td data-toggle="tooltip" title="{{ddI.description}}">
+                                        {{formatDescription(ddI.description)}}</td> -->
                                     <td class="actions">
                                         <button class="btn btn-space btn btn-primary " ng-click="restore(ddI)">
                                             <i class="ti-back-right"></i>
@@ -175,6 +182,8 @@
                                     }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.discountAmount|number}}%">
                                     {{ddI.discountAmount|number}}%</td>
+                                <td data-toggle="tooltip" title="{{formatToVND(ddI.miniOrder)}}">{{
+                                    formatToVND(ddI.miniOrder) }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.formattedStartDate }}">{{ddI.formattedStartDate
                                     }}</td>
                                 <td data-toggle="tooltip" title="{{ddI.formattedEndDate }}">{{ddI.formattedEndDate}}

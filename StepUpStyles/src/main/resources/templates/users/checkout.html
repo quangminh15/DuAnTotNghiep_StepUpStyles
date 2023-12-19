@@ -82,7 +82,7 @@
 						style="text-align: center; justify-content: center; margin: 10px;">
 						<i class="fa fa-ticket" style="font-size: 100px; color:  #ff7315;"></i>
 						<p>Hiện tại bạn chưa chọn voucher nào</p>
-						<a href="/contact" class="btn" style="background-color:  #ff7315; color: white;"><i
+						<a href="/voucher" class="btn" style="background-color:  #ff7315; color: white;"><i
 								class="fa fa-ticket" style="margin-right: 10px;"></i>Chọn voucher</a>
 					</div>
 					<div class="container" ng-show="voucherUseTrue">
@@ -90,7 +90,7 @@
 							<div class="col-md-12" ng-repeat="item in voucherUseTrue" style="margin-bottom: 20px;"
 								ng-class="{'disabled-voucher': item.isExpired}">
 								<div class="card boxvou"
-									style="height: 134px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
+									style="height: 161px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; position: relative;">
 									<div class="row">
 										<div class="col-md-3"
 											style="background-color:  #ff7315; justify-content: center; align-items: center;">
@@ -110,6 +110,7 @@
 											<div class="card-body">
 												<div>Giảm: {{item.voucher.discountAmount}}%</div>
 												<div>Đơn tối thiểu: {{formatToVND(item.voucher.total)}}</div>
+												<div>Giảm tối đa: {{formatToVND(item.voucher.miniOrder)}}</div>
 												<div style="font-size: 11px; color: red;">Áp dụng:
 													{{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
 											</div>
@@ -213,7 +214,7 @@
 									</div>
 
 									<div class="col-lg-3 text-center" >
-										<a type="button"  data-dismiss="modal" ng-show="addr.addressDefault==false" ng-click="delete(addr.shippingAddressId)"><h5 class="text-danger">Xóa</h5> </a>
+										<a type="button"  data-dismiss="modal" ng-show="addr.defaultAddress==false" ng-click="delete(addr.shippingAddressId)"><h5 class="text-danger">Xóa</h5> </a>
 										<span><a style="color: white;" type="button" data-toggle="modal"
 												data-dismiss="modal" class="btn btn-primary btnEdit py-3 px-4"
 												ng-click="edit(addr)"><i class="fas fa-edit"></i> Cập nhật</a></span>
@@ -288,7 +289,7 @@
 										</div>
 										<div class="form-group">
 											<label for="">Tỉnh/Thành Phố</label>
-											<select class="form-control form-control-lg address" id="province"
+											<select class="form-control form-control-lg address text-left" id="province"
 												ng-model="form.selectedProvince"
 												ng-options="province.ProvinceName for province in provinces"
 												ng-change="loadDistricts()" ng-selected="current_province">
@@ -298,7 +299,7 @@
 										</div>
 										<div class="form-group">
 											<label for="">Quận/Huyện</label>
-											<select class="form-control form-control-kkllg" id="district"
+											<select class="form-control form-control-lg text-left" id="district"
 												ng-model="form.selectedDistrict"
 												ng-options="district.DistrictName for district in form.selectedProvince.Districts"
 												ng-change="loadWards()"
@@ -308,7 +309,7 @@
 										</div>
 										<div class="form-group">
 											<label for="">Phường/Xã</label>
-											<select class="form-control form-control-lg" id="ward"
+											<select class="form-control form-control-lg text-left" id="ward"
 												ng-model="form.selectedWard"
 												ng-options="ward.WardName for ward in form.selectedDistrict.Wards"
 												ng-disabled="form.selectedDistrict.Wards==null">
@@ -344,7 +345,7 @@
 								</div>
 								<div style=" justify-content: start" ng-show="checkEdit==true">
 									<a type="submit" class="btn btn-success" ng-click="update()"><i
-											class="fa fa-plus"></i> Lưushdjkhf</a>
+											class="fa fa-plus"></i> Lưu</a>
 								</div>
 								<div style="justify-content: start">
 									<a type="button" ng-if="check != false" class="btn btn-danger" data-toggle="modal"
@@ -472,6 +473,7 @@
 											<div class="card-body">
 												<div>Giảm: {{selectedVoucher.voucher.discountAmount}}%</div>
 												<div>Đơn tối thiểu: {{formatToVND(selectedVoucher.voucher.total)}}</div>
+												<div>Giảm tối đa: {{formatToVND(selectedVoucher.voucher.miniOrder)}}</div>
 												<div style="font-size: 11px; color: red;">Áp dụng:
 													{{selectedVoucher.formattedStartDate}} -
 													{{selectedVoucher.formattedEndDate}}
@@ -529,7 +531,7 @@
 
 								<a ng-click="sendDataToJava()"
 									class="btn py-3 px-4 ml-3 mr-2 bg-success text-white font-weight-bolder "><img
-										width="40px" src="/asset/user/img/cod.png" />Thanht toán
+										width="40px" src="/asset/user/img/cod.png" />Thanh toán
 									khi nhận hàng</a>
 								<a ng-click="getDataPayment()" th:href="@{/submitOrder} "
 									class="btn py-3 px-4 mr-2 bg-info text-white font-weight-bolder"><img width="50px"

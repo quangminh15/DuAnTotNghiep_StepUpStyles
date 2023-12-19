@@ -51,7 +51,7 @@
                         <!-- Hiển thị danh sách voucher -->
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-4" ng-repeat="item in voucher" style="margin-bottom: 20px;">
+                                <div class="col-md-4" ng-repeat="item in pager.voucher" style="margin-bottom: 20px;">
                                     <div class="card boxvou">
                                         <div class="row">
                                             <div class="col-md-4"
@@ -67,7 +67,9 @@
                                             <div class="col-md-8">
                                                 <div class="card-body">
                                                     <div>Giảm: {{item.discountAmount}}%</div>
-                                                    <div>Đơn tối thiểu: {{formatToVND(item.total)}}</div>
+                                                    <div>Đơn tối thiểu: </div>
+                                                    <div>{{formatToVND(item.total)}}</div>
+                                                    <div>Giảm tối đa: {{formatToVND(item.miniOrder)}}</div>
                                                     <div style="font-size: 11px; color: red;">Áp dụng:
                                                         {{item.formattedStartDate}} - {{item.formattedEndDate}}</div>
                                                     <div class="but">
@@ -97,6 +99,23 @@
 
                             <!-- Add more rows as needed -->
                         </div>
+                        <!--/pagination-->
+						<div class="pagination" style="margin: 0px 10px 20px;">
+							<ul>
+								<li class="prev"><a ng-click="pager.first()"><span
+										class="fa fa-angle-double-left"></span></a></li>
+								<li class="page-item" ng-repeat="page in voucherPage"
+									ng-class="{ 'active': (page.value === pager.page + 1) }"><a
+									class="page-link" href="" ng-click="pager.goto(page.value)"
+									ng-style="page.value === (pager.page + 1) ? { 'background': 'orangered', 'border-color': 'orangered' } : {}">
+										{{ page.value }} </a></li>
+
+
+								<li class="next"><a ng-click="pager.last()"><span
+										class="fa fa-angle-double-right"></span></a></li>
+							</ul>
+						</div>
+						<!--//pagination-->
                     </div>
                 </div>
             </div>
