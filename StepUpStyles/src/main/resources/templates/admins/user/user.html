@@ -104,12 +104,12 @@
                     <label class="col-form-label text-sm-left" style="padding: 0">Quyền</label>
                     <div class="form-check mt-1">
                         <label class="custom-control custom-radio custom-control-inline">
-                            <input ng-model="form.role" class="custom-control-input" ng-value="EMPLOYEE" type="radio"
+                            <input ng-model="form.role" class="custom-control-input" value="EMPLOYEE" type="radio"
                                    name="available" ng-checked="form.role === 'EMPLOYEE'"><span
                                 class="custom-control-label custom-control-color">EMPLOYEE</span>
                         </label>
                         <label class="custom-control custom-radio custom-control-inline">
-                            <input ng-model="form.role" class="custom-control-input" ng-value="ADMIN" type="radio"
+                            <input ng-model="form.role" class="custom-control-input" value="ADMIN" type="radio"
                                    name="available" ng-checked="form.role === 'ADMIN'"><span
                                 class="custom-control-label custom-control-color">ADMIN</span>
                         </label>
@@ -141,11 +141,11 @@
                         title="Cập nhật người dùng">
                     <span class="fa fa-wrench"></span>
                 </button>
-                <button type="button" ng-click="confirmHide()" type="submit"
-                        class="btn btn-outline-danger btn-fw" data-toggle="tooltip"
-                        title="Xóa người dùng">
-                    <span class="ti-trash"></span>
-                </button>
+<!--                <button type="button" ng-click="confirmHide()" type="submit"-->
+<!--                        class="btn btn-outline-danger btn-fw" data-toggle="tooltip"-->
+<!--                        title="Xóa người dùng">-->
+<!--                    <span class="ti-trash"></span>-->
+<!--                </button>-->
                 <button type="button" ng-click="reset()"
                         class="btn btn-outline-dark btn-fw" data-toggle="tooltip"
                         title="Làm mới form">

@@ -54,7 +54,7 @@ app.controller("user-ctrl", function($scope, $http) {
 	$scope.edit = function(user) {
 		$scope.form = angular.copy(user);
 		$scope.form.birthday = $scope.convertDateFormat($scope.form.birthday);
-
+		console.log("quyền: "+$scope.form.role);
 	}
 
 	// convertDateFormat
@@ -340,31 +340,45 @@ app.controller("user-ctrl", function($scope, $http) {
 	$scope.update = async function() {
 		var user = angular.copy($scope.form);
 		user.birthday = convertDateFormat(user.birthday);
-
-		console.log(user.birthday)
-
-		await $scope.uploadImage();
-		user.image = $scope.form.image;
-		// Gọi API POST để tạo sản phẩm mới với thông tin sản phẩm đã chỉnh sửa
-		$http.put('/user/update', user).then(resp => {
-			Swal.fire({
-				icon: 'success',
-				title: 'Thành công',
-				text: 'Cập nhật thành công!',
-			});
-			console.log("cc:: ", user);
-			$scope.reset();
-			$scope.initialize();
-		}).catch(error => {
-			// Xử lý lỗi khi không thể tạo mới sản phẩm
+		if($scope.idc == user.usersId && user.role == 'EMPLOYEE'){
 			Swal.fire({
 				icon: 'error',
 				title: 'Thất bại',
-				text: 'Cập nhật mới thất bại!',
+				text: 'Bạn không thể tự chuyển mình thành nhân viên!',
 			});
-			$scope.initialize();
-			console.log("Error", error);
-		});
+		}else if($scope.idc != user.usersId && $scope.form.role == 'ADMIN'){
+			Swal.fire({
+				icon: 'error',
+				title: 'Thất bại',
+				text: 'Bạn không thể thao tác đến các Admin khác!',
+			});
+		}
+		else{
+			console.log(user.birthday)
+			await $scope.uploadImage();
+			user.image = $scope.form.image;
+			// Gọi API POST để tạo sản phẩm mới với thông tin sản phẩm đã chỉnh sửa
+			$http.put('/user/update', user).then(resp => {
+				Swal.fire({
+					icon: 'success',
+					title: 'Thành công',
+					text: 'Cập nhật thành công!',
+				});
+				console.log("cc:: ", user);
+				$scope.reset();
+				$scope.initialize();
+			}).catch(error => {
+				// Xử lý lỗi khi không thể tạo mới sản phẩm
+				Swal.fire({
+					icon: 'error',
+					title: 'Thất bại',
+					text: 'Cập nhật mới thất bại!',
+				});
+				$scope.initialize();
+				console.log("Error", error);
+			});
+		}
+
 	}
 
 	// date format
@@ -394,6 +408,22 @@ app.controller("user-ctrl", function($scope, $http) {
 				console.log("cc1: "+$scope.form.image);
 			});
 	};
+
+
+	$scope.idc = 0;
+	$scope.initializeBTB_idc = function () {
+		// Gọi API bằng AngularJS
+		$http.get('/user/Idprofile')
+			.then(function(response) {
+				$scope.idc = response.data;
+				console.log("idc: |"+$scope.idc+'|');
+			})
+			.catch(function(error) {
+				console.log('Error getting role:', error);
+				// Xử lý khi gặp lỗi khi gọi API
+			});
+	}
+	$scope.initializeBTB_idc();
 
 	$('.exportExcel').click(function() {
 
