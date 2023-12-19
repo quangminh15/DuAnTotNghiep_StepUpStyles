@@ -82,10 +82,21 @@ app.controller("profile-ctrl", ['$scope', '$filter', '$http', function ($scope, 
 
         $http.put(`/user/updateProfile?fullName=${data.fullName}&birthday=${data.birthday}&phone=${data.phone}&image=${data.image}&address=${data.address}`, data)
             .then(function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật thành công!',
+                });
                 console.log('User updated successfully');
                 // Xử lý kết quả sau khi cập nhật thành công
             })
             .catch(function (error) {
+                // Xử lý lỗi khi không thể tạo mới sản phẩm
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Thất bại',
+                    text: 'Cập nhật mới thất bại!',
+                });
                 console.log('Error updating user:', error);
                 // Xử lý khi gặp lỗi
             });

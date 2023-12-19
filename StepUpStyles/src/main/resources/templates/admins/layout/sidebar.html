@@ -32,8 +32,10 @@
 
             <!-- Nội dung hiển thị khi roleNow là 'ADMIN' -->
             <li ng-if="role === 'ADMIN'" class="nav-item"><a class="nav-link no-default-action"
-                                    data-toggle="collapse" href="#form-elements" aria-expanded="false"
-                                    aria-controls="form-elements"> <i class="icon-columns menu-icon"></i>
+                                                             data-toggle="collapse" href="#form-elements"
+                                                             aria-expanded="false"
+                                                             aria-controls="form-elements"> <i
+                    class="icon-columns menu-icon"></i>
                 <span class="menu-title">Giảm giá</span> <i class="menu-arrow"></i>
             </a>
                 <div class="collapse" id="form-elements">
@@ -84,82 +86,52 @@
                 <div class="collapse" id="user">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a class="nav-link" href="#!user2">Khách hàng</a></li>
-                        <li ng-if="role === 'ADMIN'" class="nav-item"><a class="nav-link" href="#!user">Quản trị viên</a></li>
+                        <li ng-if="role === 'ADMIN'" class="nav-item"><a class="nav-link" href="#!user">Quản trị
+                            viên</a></li>
                     </ul>
                 </div>
             </li>
-        <li class="nav-item"><a class="nav-link" href="#!review"
-                                aria-expanded="false"> <i class="icon-star menu-icon"></i> <span
-                class="menu-title">Xem đánh giá</span>
-        </a></li>
-        <li class="nav-item"><a class="nav-link" href="#!favorite"
-                                aria-expanded="false"> <i class="icon-heart menu-icon"></i> <span
-                class="menu-title">Xem danh sách yêu thích</span>
-        </a></li>
-        <li class="nav-item"><a class="nav-link no-default-action"
-                                data-toggle="collapse" href="#thongke" aria-expanded="false"
-                                aria-controls="thongke"> <i class="icon-paper menu-icon"></i> <span
-                class="menu-title">Thống kê</span> <i class="menu-arrow"></i>
-        </a>
-            <div class="collapse" id="thongke">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link"
-                                            href="#!productOFcategory"> Sản phẩm theo <br> danh mục
-                    </a></li>
-                    <li class="nav-item"><a class="nav-link"
-                                            href="#!totalproductrating"> Tổng lượt đánh giá<br> của mỗi tháng theo<br> sao
-                    </a></li>
-                    <li class="nav-item"><a class="nav-link"
-                                            href="#!revenue"> Doanh thu
-
-
             <li class="nav-item"><a class="nav-link" href="#!review"
                                     aria-expanded="false"> <i class="icon-star menu-icon"></i> <span
-                    class="menu-title">Quản lý đánh giá</span>
+                    class="menu-title">Xem đánh giá</span>
             </a></li>
             <li class="nav-item"><a class="nav-link" href="#!favorite"
                                     aria-expanded="false"> <i class="icon-heart menu-icon"></i> <span
-                    class="menu-title">Quản lý yêu thích</span>
+                    class="menu-title">Xem danh sách yêu thích</span>
             </a></li>
-            <li ng-if="role === 'ADMIN'" class="nav-item"><a class="nav-link no-default-action"
+            <li class="nav-item"><a class="nav-link no-default-action"
                                     data-toggle="collapse" href="#thongke" aria-expanded="false"
                                     aria-controls="thongke"> <i class="icon-paper menu-icon"></i> <span
-                    class="menu-title">Thống kê</span> <i class="menu-arrow"></i>
-            </a>
+                                     class="menu-title">Thống kê</span> <i class="menu-arrow"></i>
+                                </a>
                 <div class="collapse" id="thongke">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a class="nav-link"
                                                 href="#!productOFcategory"> Sản phẩm theo <br> danh mục
                         </a></li>
                         <li class="nav-item"><a class="nav-link"
-                                                href="#!totalproductrating"> Tổng sản phẩm theo<br> sao
-                            đánh giá
+                                                href="#!totalproductrating"> Tổng lượt đánh giá<br> của mỗi tháng
+                            theo<br> sao
                         </a></li>
                         <li class="nav-item"><a class="nav-link"
                                                 href="#!revenue"> Doanh thu
 
-                        </a></li>
-                        </a></li>
-                        <li class="nav-item"><a class="nav-link"
 
-                                                href="#!totalImport"> Tổng sản phẩm đã <br> nhập
-                        </a></li>
-                    </ul>
-                </div>
-            </li>
 
-            <li class="nav-item"><a class="nav-link"
-                                    href="/auth/logoff" aria-expanded="false" aria-controls="auth"> <i
-                    class="menu-icon"></i> <span class="menu-title">Đăng xuất</span>
-            </a>
-            </li>
+
+
+                    </ul><li class="nav-item"><a class="nav-link"
+                                                 href="/auth/logoff" aria-expanded="false" aria-controls="auth"> <i
+                class="ti-control-backward menu-icon"></i> <span class="menu-title">Đăng xuất</span>
+        </a>
+        </li>
 
             <li class="nav-item"><a class="nav-link"
                                     href="/index" aria-expanded="false" aria-controls="auth"> <i
-                    class="menu-icon"></i> <span class="menu-title">Trang khách hàng</span>
+                    class="ti-bookmark-alt menu-icon"></i> <span class="menu-title">Trang khách hàng</span>
             </a>
             </li>
-        </ul>
+                </div>
 
     </nav>
 </div>
