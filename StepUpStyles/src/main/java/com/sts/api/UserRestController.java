@@ -14,6 +14,7 @@ import com.sts.model.DTO.DResponseUser;
 import com.sts.model.DTO.LResponseUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -159,7 +160,7 @@ public class UserRestController {
 	@GetMapping("/dkgn")
 	public ResponseEntity<List<LResponseUser>> dangkygannhat(){
 		List<LResponseUser> lResponseUsers = new ArrayList<>();
-		lResponseUsers = userDAO.findAllUserForIndexAdmin();
+		lResponseUsers = userDAO.findAllUserForIndexAdmin(PageRequest.of(0, 10));
 		return ResponseEntity.ok(lResponseUsers);
 	}
 

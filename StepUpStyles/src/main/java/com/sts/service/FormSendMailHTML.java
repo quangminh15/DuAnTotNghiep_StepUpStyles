@@ -197,7 +197,7 @@ public class FormSendMailHTML {
                 + "                    <tr>\r\n"
                 + "\r\n"
                 + "                        <td align=\"center\" class=\"section-img\">\r\n"
-                + "                            <a href=\"\" style=\" border-style: none !important; display: block; border: 0 !important;\"><img src=\"https://images.hdqwalls.com/download/lucyna-kushinada-cyberpunk-edgerunners-hp-1024x768.jpg\" style=\"display: block; width: 590px;\" width=\"590\" border=\"0\" alt=\"\" /></a>\r\n"
+                + "                            <a href=\"\" style=\" border-style: none !important; display: block; border: 0 !important;\"><img src=\"https://firebasestorage.googleapis.com/v0/b/stepupstyles-97319.appspot.com/o/users%2F9899434.jpg?alt=media&token=20f2b8c9-9148-4aa9-bcab-8e7fea8c800b\" style=\"display: block; width: 590px;\" width=\"590\" border=\"0\" alt=\"\" /></a>\r\n"
                 + "\r\n"
                 + "\r\n"
                 + "\r\n"

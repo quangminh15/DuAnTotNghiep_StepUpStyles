@@ -6,6 +6,7 @@ import com.sts.model.User;
 import com.sts.model.DTO.OneUserForSecurity;
 import com.sts.model.DTO.UserForSecurity;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -62,7 +63,7 @@ public interface UserDAO extends JpaRepository<User, Integer>{
 	Integer  sumU();
 
 	@Query(value = "select u from User u where u.role = 'CUSTOMER' order by u.createdDate DESC ", nativeQuery = false)
-	List<LResponseUser> findAllUserForIndexAdmin();
+	List<LResponseUser> findAllUserForIndexAdmin(Pageable pageable);
 
 	@Query(value = "select u from User u where u.role = 'CUSTOMER'")
 	List<User> findCUSTOMER();
